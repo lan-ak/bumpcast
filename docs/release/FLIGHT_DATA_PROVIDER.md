@@ -88,4 +88,6 @@ Monthly cost (assuming half of searches are for flights more than 2 days out):
 ## Decision
 
 **Chosen (2026-10-18): AeroDataBox, direct Starter ($19/mo).** Build waits for design approval. Check US live coverage during the trial before launch.
+
+Also decided: search (by number and by route list) is free for everyone; live status and delay pushes are Pro or flight pass. We set no search horizon of our own: search reaches as far ahead as airlines publish (confirm how far the provider's listings go on Starter in the trial). A flight number entered for a date that isn't scheduled yet is saved with the user's manual airports and times, and the worker retries the lookup until the schedule appears, then fills it in.
 - [ ] Other
