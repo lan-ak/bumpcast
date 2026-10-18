@@ -80,6 +80,7 @@ struct TurbulenceMapView: View {
                     selectedReport = nil
                     router.openFlight(id)
                 }
+                .font(.bcBody)
                 .presentationDetents([.medium, .large])
             }
             .sheet(isPresented: $showTeaser) {
@@ -87,6 +88,7 @@ struct TurbulenceMapView: View {
                     showTeaser = false
                     paywalls.unlock(.pilotReportsLocked) { showReports = true }
                 }
+                .font(.bcBody)
                 .presentationDetents([.medium])
             }
         }

@@ -515,6 +515,7 @@ private struct WhenStep: View {
                     ToolbarItem(placement: .confirmationAction) { Button("Done") { isPickingDate = false } }
                 }
             }
+            .font(.bcBody)
             .presentationDetents([.fraction(0.72), .large])
         }
     }

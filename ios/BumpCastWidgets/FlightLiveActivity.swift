@@ -262,7 +262,7 @@ private struct CompactTimerBody: View {
                 timerInterval: countdown(to: inProgress ? attributes.end(of: stretch, state) : attributes.start(of: stretch, state)),
                 countsDown: true, showsHours: !limited
             )
-            .monospacedDigit()
+            .font(.bcCaptionStrong.monospacedDigit())
             .frame(maxWidth: limited ? 36 : 52)
             .foregroundStyle(inProgress ? Theme.color(stretch.level) : Theme.color(.smooth))
         } else {

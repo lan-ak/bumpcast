@@ -15,7 +15,7 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("BumpCast Pro") {
+                Section {
                     if paywalls.isPro {
                         Label("You have Pro", systemImage: "checkmark.seal.fill").foregroundStyle(Theme.accent)
                         // Easy cancel: straight to Apple's subscription management.
@@ -34,6 +34,8 @@ struct SettingsView: View {
                             restoreMessage = await paywalls.restorePurchases() ? "Purchases restored." : "Nothing to restore."
                         }
                     }
+                } header: {
+                    Text("BumpCast Pro").eyebrow()
                 }
                 Section {
                     LabeledContent("Notifications", value: push.isEnabled ? "On" : "Off")
@@ -54,7 +56,7 @@ struct SettingsView: View {
                 } footer: {
                     Text("Soft taps for breathing and when a forecast is confirmed. Never used as a warning.")
                 }
-                Section("How accurate are we?") {
+                Section {
                     if let stats, let exact = stats.exactPercent, let close = stats.withinOnePercent {
                         LabeledContent("Flights checked", value: "\(stats.reports)")
                         LabeledContent("Felt about right", value: "\(exact)%")
@@ -63,6 +65,8 @@ struct SettingsView: View {
                         Text("Not enough landed flights yet. Rate your flights after landing to help.")
                             .foregroundStyle(.secondary)
                     }
+                } header: {
+                    Text("How accurate are we?").eyebrow()
                 }
                 Section {
                     LabeledContent("Version", value: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")

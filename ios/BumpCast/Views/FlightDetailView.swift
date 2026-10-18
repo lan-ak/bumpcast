@@ -13,7 +13,16 @@ struct FlightDetailView: View {
         if let flight = store.flight(flightID) {
             content(flight)
         } else {
-            ContentUnavailableView("Flight removed", systemImage: "airplane")
+            // Brand type, not ContentUnavailableView's system fonts.
+            VStack(spacing: 10) {
+                Image(systemName: "airplane").font(.bcTitle).foregroundStyle(.secondary).accessibilityHidden(true)
+                Text("Flight removed").font(.bcTitle2)
+                Text("It's no longer in your flights.").font(.bcSubheadline).foregroundStyle(.secondary)
+            }
+            .multilineTextAlignment(.center)
+            .padding()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background { SkyBackground(sky: Sky(date: .now)) }
         }
     }
 

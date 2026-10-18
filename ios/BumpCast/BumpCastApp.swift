@@ -95,7 +95,7 @@ struct RootView: View {
         .tint(Theme.accent)
         .overlay(alignment: .top) { ToastView(text: router.toast) }
         .fullScreenCover(isPresented: $router.showBreathing) { BreathingView().font(.bcBody) }
-        .overlay { OnboardingCover() }
+        .overlay { OnboardingCover().font(.bcBody) }
     }
 }
 
