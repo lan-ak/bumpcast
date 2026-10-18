@@ -6,6 +6,7 @@ export const PLACEMENTS = [
   "updates_locked",
   "live_activity_locked",
   "pilot_reports_locked",
+  "live_status_locked",
   "flight_limit_reached",
   "upgrade_from_settings",
 ] as const;

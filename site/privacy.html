@@ -19,7 +19,7 @@
 
 <h2>What we store</h2>
 <ul>
-  <li><strong>Flights you add:</strong> departure and arrival airports, date and time. We use them to compute and update your forecast.</li>
+  <li><strong>Flights you add:</strong> flight number, departure and arrival airports, date and time, and the flight's live status (delays, gate and terminal). We use them to find your flight and to compute and update your forecast.</li>
   <li><strong>Forecasts and notifications</strong> we've made for your flights, so the app can show what changed.</li>
   <li><strong>Push notification token,</strong> if you allow notifications, so we can send forecast updates. Turn notifications off at any time in iOS Settings.</li>
   <li><strong>After-landing ratings</strong> ("How bumpy was it?"). We use them, without your identity, to measure and improve forecast accuracy and to publish accuracy stats.</li>
@@ -32,6 +32,7 @@
 <ul>
   <li><strong>Supabase</strong> hosts our database and anonymous sign-in.</li>
   <li><strong>Fly.io</strong> runs the forecast engine.</li>
+  <li><strong>AeroDataBox</strong> receives the flight numbers, airports and dates you search for, so we can find your flight and its live status. It doesn't receive your anonymous ID.</li>
   <li><strong>Superwall</strong> runs our onboarding and subscription screens. With your anonymous ID it receives basic device details (model, iOS version, language, region, time zone and an app-specific device identifier), which screens you see and what you buy, your onboarding answers, and a summary of your flights (how many you've saved, and your next flight's route, hours to departure and forecast grade). We use this to choose which screen or offer to show and to measure how well they work.</li>
   <li><strong>Apple</strong> processes purchases and delivers push notifications.</li>
 </ul>

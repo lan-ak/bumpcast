@@ -13,6 +13,7 @@ export default {
       updates_locked: "Know the moment your forecast changes.",
       live_activity_locked: "A countdown to every bump.",
       pilot_reports_locked: "See what pilots are feeling now.",
+      live_status_locked: "Know about delays and gate changes first.",
       flight_limit_reached: "Keep every flight covered.",
       upgrade_from_settings: "Fly knowing what's coming.",
       fallback: "Fly knowing what's coming.",
@@ -21,6 +22,7 @@ export default {
     featureTimeline: "Exactly when the bumps are, and for how long",
     featureUpdates: "Updates at 24, 6 and 2 hours, and when it's confirmed",
     featureLive: "A countdown to each bump on your Lock Screen, offline",
+    featureStatus: "Live delays, gates and terminals for your flight",
     featurePilots: "Live pilot reports on the map",
     featureFlights: "As many upcoming flights as you like",
 
