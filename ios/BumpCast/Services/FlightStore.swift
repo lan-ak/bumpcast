@@ -1,5 +1,6 @@
 import Foundation
 import Observation
+import Supabase
 
 @Observable @MainActor
 final class FlightStore {
@@ -13,6 +14,8 @@ final class FlightStore {
     private(set) var reports: [UUID: LandingReport] = [:]
     private(set) var waitlist: Set<String> = []
     private(set) var syncedAt: Date?
+    /// Flights added offline that haven't reached the server yet.
+    private(set) var pendingAdds: [FlightDraft] = []
     private(set) var isLoading = false
     /// True when the last sync failed (usually no connection); the UI says it's showing saved data.
     private(set) var isOffline = false
@@ -36,6 +39,7 @@ final class FlightStore {
             reports = saved.reports
             waitlist = saved.waitlist
             syncedAt = saved.syncedAt
+            pendingAdds = saved.pendingAdds ?? []
         }
     }
 
@@ -57,6 +61,7 @@ final class FlightStore {
             isLoading = true
             defer { isLoading = false }
             do {
+                try await flushPendingAdds()
                 let fetched = try await service.flights()
                 async let passIDs = service.passFlightIDs()
                 async let landed = service.landingReports()
@@ -97,8 +102,25 @@ final class FlightStore {
         }
     }
 
+    /// Whether a flight is only on this phone so far (added offline).
+    func isPending(_ id: UUID) -> Bool { pendingAdds.contains { $0.id == id } }
+
+    private func flushPendingAdds() async throws {
+        for draft in pendingAdds {
+            do {
+                _ = try await service.add(draft)
+            } catch let error as PostgrestError where error.code == "23505" {
+                // Already saved by an earlier attempt.
+            }
+            pendingAdds.removeAll { $0.id == draft.id }
+            await persist()
+        }
+    }
+
     @discardableResult
     func save(_ draft: FlightDraft, editing id: UUID? = nil) async -> Flight? {
+        var draft = draft
+        if id == nil, draft.id == nil { draft.id = UUID() }
         do {
             let flight = if let id { try await service.update(id, draft) } else { try await service.add(draft) }
             if let id, let old = self.flight(id),
@@ -116,10 +138,25 @@ final class FlightStore {
             await persist()
             onSync?()
             return flight
+        } catch where id == nil && Self.isOffline(error) {
+            // Keep it on the phone and save it when the connection returns.
+            let flight = draft.asFlight
+            pendingAdds.append(draft)
+            flights.append(flight)
+            flights.sort { $0.departureAt < $1.departureAt }
+            await persist()
+            onSync?()
+            return flight
         } catch {
             report(error)
             return nil
         }
+    }
+
+    static func isOffline(_ error: Error) -> Bool {
+        guard let urlError = error as? URLError else { return false }
+        return [.notConnectedToInternet, .networkConnectionLost, .timedOut, .cannotFindHost, .dataNotAllowed, .cannotConnectToHost]
+            .contains(urlError.code)
     }
 
     func delete(_ id: UUID) async {
@@ -192,7 +229,7 @@ final class FlightStore {
         await local.save(
             Snapshot(
                 flights: flights, forecasts: forecasts, updates: updates, passes: passes,
-                reports: reports, waitlist: waitlist, syncedAt: syncedAt))
+                reports: reports, waitlist: waitlist, syncedAt: syncedAt, pendingAdds: pendingAdds))
     }
 
     private func report(_ error: Error, quietlyIfOffline: Bool = false) {

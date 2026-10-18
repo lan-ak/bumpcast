@@ -75,7 +75,7 @@ struct FlightDetailView: View {
                 }
             }
         }
-        .sheet(isPresented: $isEditing) { FlightEditorView(flight: flight).font(.bcBody) }
+        .sheet(isPresented: $isEditing) { AddFlightView(flight: flight).font(.bcBody) }
         .refreshable { await store.reload() }
         .task(id: state == .building) {
             // While the worker is building the forecast, check back every 30 seconds.

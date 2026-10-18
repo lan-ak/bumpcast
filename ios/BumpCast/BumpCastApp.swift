@@ -89,6 +89,33 @@ struct RootView: View {
             }
         }
         .tint(Theme.accent)
+        .overlay(alignment: .top) { ToastView(text: router.toast) }
         .fullScreenCover(isPresented: $router.showBreathing) { BreathingView().font(.bcBody) }
+    }
+}
+
+/// Brief confirmation at the top of the screen. Slides in with the house spring; fades with
+/// Reduce Motion. Read out by VoiceOver.
+private struct ToastView: View {
+    let text: String?
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    var body: some View {
+        ZStack {
+            if let text {
+                Label(text, systemImage: "checkmark.circle.fill")
+                    .font(.bcSubheadlineStrong)
+                    .foregroundStyle(Theme.ink)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+                    .background(.regularMaterial, in: .capsule)
+                    .padding(.horizontal)
+                    .padding(.top, 8)
+                    .transition(reduceMotion ? .opacity : .move(edge: .top).combined(with: .opacity))
+                    .allowsHitTesting(false)
+                    .onAppear { AccessibilityNotification.Announcement(text).post() }
+            }
+        }
+        .animation(Theme.motion(reduceMotion), value: text)
     }
 }

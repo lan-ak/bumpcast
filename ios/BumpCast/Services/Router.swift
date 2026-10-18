@@ -12,6 +12,18 @@ final class Router {
     var flightPath: [UUID] = []
     var learnPath: [Explainer] = []
     var showBreathing = false
+    /// A short confirmation shown over the tabs ("YYZ → EWR added. First forecast…").
+    private(set) var toast: String?
+    @ObservationIgnored private var toastTask: Task<Void, Never>?
+
+    func showToast(_ text: String) {
+        toast = text
+        toastTask?.cancel()
+        toastTask = Task {
+            try? await Task.sleep(for: .seconds(4))
+            if !Task.isCancelled { toast = nil }
+        }
+    }
 
     func openFlight(_ id: UUID) {
         tab = .flights

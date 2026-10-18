@@ -62,3 +62,13 @@ def test_describe_unchanged_uses_model_run_time():
         "No change to where the bumps are.",
         "Why: updated with the latest forecast data (8 am).",
     ]
+
+
+def test_quiet_hours_hold_overnight_unless_flying_early():
+    from datetime import UTC, datetime, timedelta
+
+    night = datetime(2026, 10, 19, 6, tzinfo=UTC)  # 2 am in Toronto
+    assert notify.is_quiet(night, "America/Toronto", night + timedelta(hours=20))
+    assert not notify.is_quiet(night, "America/Toronto", night + timedelta(hours=3))  # early flight
+    day = datetime(2026, 10, 19, 16, tzinfo=UTC)  # noon in Toronto
+    assert not notify.is_quiet(day, "America/Toronto", day + timedelta(hours=20))

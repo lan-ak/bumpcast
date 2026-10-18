@@ -5,10 +5,29 @@ struct Flight: Codable, Hashable, Identifiable, Sendable {
     var origin: String  // ICAO
     var destination: String  // ICAO
     var departureAt: Date  // scheduled departure, UTC
+    /// "Tell me when it's ready or changes" for this flight.
+    var notify: Bool = true
 
     enum CodingKeys: String, CodingKey {
-        case id, origin, destination
+        case id, origin, destination, notify
         case departureAt = "departure_at"
+    }
+
+    init(id: UUID, origin: String, destination: String, departureAt: Date, notify: Bool = true) {
+        self.id = id
+        self.origin = origin
+        self.destination = destination
+        self.departureAt = departureAt
+        self.notify = notify
+    }
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try c.decode(UUID.self, forKey: .id)
+        origin = try c.decode(String.self, forKey: .origin)
+        destination = try c.decode(String.self, forKey: .destination)
+        departureAt = try c.decode(Date.self, forKey: .departureAt)
+        notify = try c.decodeIfPresent(Bool.self, forKey: .notify) ?? true
     }
 
     var originAirport: Airport? { AirportStore.shared.airport(origin) }
@@ -45,14 +64,30 @@ struct Flight: Codable, Hashable, Identifiable, Sendable {
     }
 }
 
-/// Fields the app sends when creating or editing a flight.
+/// Fields the app sends when creating or editing a flight. New flights carry a client-made id,
+/// so one saved offline keeps the same id once it syncs.
 struct FlightDraft: Codable, Sendable {
+    var id: UUID?
     var origin: String
     var destination: String
     var departureAt: Date
+    var notify: Bool = true
 
     enum CodingKeys: String, CodingKey {
-        case origin, destination
+        case id, origin, destination, notify
         case departureAt = "departure_at"
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var c = encoder.container(keyedBy: CodingKeys.self)
+        try c.encodeIfPresent(id, forKey: .id)
+        try c.encode(origin, forKey: .origin)
+        try c.encode(destination, forKey: .destination)
+        try c.encode(departureAt, forKey: .departureAt)
+        try c.encode(notify, forKey: .notify)
+    }
+
+    var asFlight: Flight {
+        Flight(id: id ?? UUID(), origin: origin, destination: destination, departureAt: departureAt, notify: notify)
     }
 }

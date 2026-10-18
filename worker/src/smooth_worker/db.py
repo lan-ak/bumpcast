@@ -65,7 +65,7 @@ class Database:
         return self._get(
             "/flights",
             {
-                "select": f"id,user_id,origin,destination,departure_at,forecasts:forecasts!forecasts_flight_id_fkey({FORECAST_FIELDS})",
+                "select": f"id,user_id,origin,destination,departure_at,notify,forecasts:forecasts!forecasts_flight_id_fkey({FORECAST_FIELDS})",
                 "and": f"(departure_at.gte.{(now - timedelta(hours=1)).isoformat()},"
                 f"departure_at.lte.{(now + timedelta(hours=48, minutes=5)).isoformat()})",
                 "forecasts.order": "issued_at.desc",

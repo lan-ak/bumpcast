@@ -10,6 +10,8 @@ struct Snapshot: Codable, Sendable {
     var reports: [UUID: LandingReport] = [:]
     var waitlist: Set<String> = []
     var syncedAt: Date?
+    /// Flights added while offline, saved to the server on the next sync.
+    var pendingAdds: [FlightDraft]? = nil
 }
 
 actor LocalStore {

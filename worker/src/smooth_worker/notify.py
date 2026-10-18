@@ -10,6 +10,7 @@ flights unlocked with a flight pass, and shown locked in the app for everyone el
 import logging
 from dataclasses import dataclass
 from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 
 from . import airports, changes
 from .apns import Apns
@@ -20,6 +21,20 @@ log = logging.getLogger(__name__)
 MILESTONES = [(48, "48h"), (24, "24h"), (6, "6h"), (2, "2h")]
 # Don't notify about flights that have already left.
 DEPARTED_GRACE = timedelta(minutes=15)
+# Quiet overnight (local time): held until morning, unless the flight leaves soon.
+QUIET_START_HOUR, QUIET_END_HOUR = 22, 7
+EARLY_FLIGHT = timedelta(hours=4)
+
+
+def is_quiet(now: datetime, tz: str | None, departure: datetime) -> bool:
+    """Hold notifications overnight in the user's time zone, unless they fly early."""
+    if departure - now <= EARLY_FLIGHT:
+        return False
+    try:
+        local = now.astimezone(ZoneInfo(tz)) if tz else now
+    except (KeyError, ValueError):
+        local = now
+    return local.hour >= QUIET_START_HOUR or local.hour < QUIET_END_HOUR
 
 
 @dataclass
@@ -100,6 +115,8 @@ def run(db, apns: Apns | None, now: datetime) -> int:
         p = plan((departure - now).total_seconds() / 3600, forecast, sent)
         if p is None:
             continue
+        if is_quiet(now, profiles.get(flight["user_id"], {}).get("timezone"), departure):
+            continue  # planned again on the first poll after quiet hours
         try:
             count += _send(db, apns, p, flight, forecast, sent, profiles, passes, devices)
         except Exception:
@@ -132,6 +149,9 @@ def _send(db, apns, p, flight, forecast, sent, profiles, passes, devices) -> int
 
     if not entitled:
         db.update_notification(notification_id, delivered=False, error="locked: needs Pro or a flight pass")
+        return 1
+    if flight.get("notify") is False:
+        db.update_notification(notification_id, delivered=False, error="notifications off for this flight")
         return 1
     targets = devices.get(flight["user_id"], [])
     if apns is None or not targets:

@@ -5,6 +5,7 @@ struct FlightsListView: View {
     @Environment(Router.self) private var router
     @Environment(Paywalls.self) private var paywalls
     @Environment(InFlight.self) private var inFlight
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Namespace private var zoom
     @State private var isAdding = false
     @State private var isShowingSettings = false
@@ -36,6 +37,8 @@ struct FlightsListView: View {
                     LearnCard()
                 }
                 .padding()
+                // A new flight settles in with the house spring.
+                .animation(Theme.motion(reduceMotion), value: store.flights.map(\.id))
             }
             .background { SkyBackground(sky: sky) }
             .navigationTitle("Flights")
@@ -52,7 +55,7 @@ struct FlightsListView: View {
                 }
             }
             .refreshable { await store.reload() }
-            .sheet(isPresented: $isAdding) { FlightEditorView().font(.bcBody) }
+            .sheet(isPresented: $isAdding) { AddFlightView().font(.bcBody) }
             .sheet(isPresented: $isShowingSettings) { SettingsView().font(.bcBody) }
             .sensoryFeedback(trigger: store.flights.count) { old, new in
                 new > old ? .impact(flexibility: .soft, intensity: 0.5) : nil

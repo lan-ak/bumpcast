@@ -102,6 +102,19 @@ A tumbler outline whose water surface ripples more with severity: flat (smooth),
 5. **Live Activity / Lock Screen** — "Smooth for 42 min", next stretch, route strip with plane position and bumpy stretches, Breathe + Full forecast buttons, "Saved before takeoff · confirmed forecast from …".
 6. **Dynamic Island** — compact: glyph + minutes of smooth air left; landscape (`isDynamicIslandLimitedInWidth`): glyph + "42m" only; expanded: route strip + Breathe / "Why the next bumps?" buttons. **Watch Smart Stack / CarPlay**: `.supplementalActivityFamilies([.small])` layout. **StandBy**: `activityBackgroundTint` night sky.
 7. **After landing** — "How did it feel?" Smoother / About right / Bumpier (a `LiveActivityIntent` button too). Store ratings; they're the calibration data the README calls for.
+8. **Add a flight** (replaces the current `FlightEditorView` form; mockups in the "Add a flight" row). A sheet with three short steps, each asking one question, with "1 of 3" in the nav bar and Cancel/Back as plain bar buttons.
+   - **Route — "Where are you flying?"**: From and To fields joined by a dotted route line, with a swap button between them. Recent airports appear as chips; tapping one fills the empty field. Tapping a field pushes a searchable airport list (IATA in Plex Mono, city, then airport name, with the matched text in bold). The note "We have the strongest coverage in the US, and we're expanding rapidly." is always visible. **Next** stays disabled until both airports are set.
+   - **When — "When do you leave?"**: the route as an eyebrow, then a row of day chips (Today … +5 days, plus a calendar button for later dates) and the system time wheel. The wheel is a DatePicker and stays SF Pro. Below it: "Local time in {origin city}, from your booking", and a one-line preview, "Your first forecast arrives {day} around {time}" (departure − 48 h).
+   - **Check — "Check your flight"**: a route card (codes, cities, departure, "About N h N min in the air" from `estimatedAirMinutes`) with a Change link. Then a **What happens next** timeline: Now ("Saved. Too early to tell yet.") → departure − 48 h "Advance forecast" → departure − 18 h "Confirmed forecast" → "You fly" ("saved on your phone for the flight, even offline"). Then the toggle "Tell me when it's ready or changes", with "Only for changes you'd notice. Never overnight." It's on by default, and the system permission prompt appears when the user taps Add flight with the toggle on. The primary button is **Add flight** in accent teal.
+   - **Saved**: the sheet closes, the new card settles into the list with the zoom spring, and one soft haptic plays. A toast reads "{route} added. First forecast {day} around {time}."
+   - **States** (never red, never shaking; the orange outline is moderate `#C9733A`, always with words):
+     - Same airport twice: orange outline and "That's where you're leaving from. Pick where you're flying to."
+     - Outside coverage: shown on step 1 as soon as the second airport is picked, with **Save anyway** / **Change route**.
+     - Departure already passed: up to 1 h late is allowed for delays; beyond that, "Check the date, or pick a later time."
+     - Leaving within 18 h: skip the "What happens next" timeline, and after saving open the forecast directly.
+     - Offline: keep the flight on the phone and save it when the connection returns, without losing what was typed.
+   - **Edit flight** reuses the same three screens, opening on Check, with the title "Edit flight" and the button **Save changes**.
+   - **Copy promises need backing.** "Never overnight" requires quiet hours for notifications, and "even offline" requires the offline forecast download. Don't ship that wording until both work.
 
 ## 4. Motion
 

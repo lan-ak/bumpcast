@@ -45,7 +45,7 @@ enum Services {
 struct SupabaseFlightService: FlightService {
     let client: SupabaseClient
 
-    private static let flightColumns = "id,origin,destination,departure_at"
+    private static let flightColumns = "id,origin,destination,departure_at,notify"
     private static let updateColumns = "id,flight_id,milestone,kind,grade,title,body,changes,pro_only,created_at"
 
     func signIn() async throws -> UUID {
@@ -181,13 +181,14 @@ actor DemoFlightService: FlightService {
     func flights() async throws -> [Flight] { stored.sorted { $0.departureAt < $1.departureAt } }
 
     func add(_ draft: FlightDraft) async throws -> Flight {
-        let flight = Flight(id: UUID(), origin: draft.origin, destination: draft.destination, departureAt: draft.departureAt)
+        let flight = draft.asFlight
         stored.append(flight)
         return flight
     }
 
     func update(_ id: UUID, _ draft: FlightDraft) async throws -> Flight {
-        let flight = Flight(id: id, origin: draft.origin, destination: draft.destination, departureAt: draft.departureAt)
+        var flight = draft.asFlight
+        flight.id = id
         stored.removeAll { $0.id == id }
         stored.append(flight)
         return flight
