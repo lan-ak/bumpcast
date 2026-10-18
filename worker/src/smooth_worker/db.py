@@ -80,7 +80,7 @@ class Database:
         rows = self._get(
             "/notifications",
             {
-                "select": "flight_id,milestone,kind,forecast_id,created_at,forecast:forecasts(source)",
+                "select": "id,flight_id,milestone,kind,forecast_id,title,body,delivered,error,created_at,forecast:forecasts(source)",
                 "flight_id": _in(flight_ids),
                 "order": "created_at.asc",
             },

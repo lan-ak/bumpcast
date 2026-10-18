@@ -1,3 +1,5 @@
+from datetime import UTC, datetime, timedelta
+
 from smooth_worker import changes, notify
 
 READY = {"status": "ready", "source": "gfs", "grade": "smooth", "segments": []}
@@ -39,6 +41,17 @@ def test_noaa_confirmation_between_milestones():
     assert notify.plan(16, confirmed, sent) is None
 
 
+def test_retry_undelivered_until_a_device_registers():
+    now = datetime(2026, 10, 18, 17, 35, tzinfo=UTC)
+    sent = [{"milestone": "24h", "kind": "ready", "delivered": False, "error": "no device", "created_at": "2026-10-18T17:30:46Z"}]
+    assert notify.retry(sent, now) is sent[0]
+    # Not once it's old, delivered, or failed for a reason a retry won't fix.
+    assert notify.retry(sent, now + timedelta(hours=2)) is None
+    assert notify.retry([{**sent[0], "delivered": True, "error": None}], now) is None
+    assert notify.retry([{**sent[0], "error": "locked: needs Pro or a flight pass"}], now) is None
+    assert notify.retry([], now) is None
+
+
 def test_no_notification_for_unready_forecast():
     assert notify.plan(10, {"status": "out_of_coverage"}, []) is None
 
@@ -65,8 +78,6 @@ def test_describe_unchanged_uses_model_run_time():
 
 
 def test_quiet_hours_hold_overnight_unless_flying_early():
-    from datetime import UTC, datetime, timedelta
-
     night = datetime(2026, 10, 19, 6, tzinfo=UTC)  # 2 am in Toronto
     assert notify.is_quiet(night, "America/Toronto", night + timedelta(hours=20))
     assert not notify.is_quiet(night, "America/Toronto", night + timedelta(hours=3))  # early flight

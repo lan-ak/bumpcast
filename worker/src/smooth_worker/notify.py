@@ -24,6 +24,10 @@ DEPARTED_GRACE = timedelta(minutes=15)
 # Quiet overnight (local time): held until morning, unless the flight leaves soon.
 QUIET_START_HOUR, QUIET_END_HOUR = 22, 7
 EARLY_FLIGHT = timedelta(hours=4)
+# A push that failed only because the phone hadn't registered yet (permission is asked right
+# after saving a flight, often after the first forecast lands) is retried for a while.
+RETRYABLE_ERRORS = {"no device", "no apns"}
+RETRY_WINDOW = timedelta(hours=1)
 
 
 def is_quiet(now: datetime, tz: str | None, departure: datetime) -> bool:
@@ -71,6 +75,17 @@ def plan(hours_to_departure: float, forecast: dict, sent: list[dict]) -> Plan | 
     return None
 
 
+def retry(sent: list[dict], now: datetime) -> dict | None:
+    """The latest notification, if it never reached a phone for want of a device or APNs key."""
+    if not sent:
+        return None
+    last = sent[-1]
+    if last.get("delivered") or last.get("error") not in RETRYABLE_ERRORS:
+        return None
+    created = datetime.fromisoformat(last["created_at"].replace("Z", "+00:00"))
+    return last if now - created <= RETRY_WINDOW else None
+
+
 def compose(p: Plan, flight: dict, forecast: dict, previous: dict | None, tz: str | None) -> tuple[str, str, list[str]]:
     origin, destination = airports.lookup(flight["origin"]), airports.lookup(flight["destination"])
     route = f"{origin.iata}→{destination.iata}"
@@ -112,6 +127,12 @@ def run(db, apns: Apns | None, now: datetime) -> int:
         if departure < now - DEPARTED_GRACE:
             continue
         sent = sent_by_flight.get(flight["id"], [])
+        targets = devices.get(flight["user_id"])
+        if apns and targets and flight.get("notify") is not False and (last := retry(sent, now)):
+            try:
+                count += _deliver(db, apns, last["id"], flight, last["kind"], last["milestone"], last["title"], last["body"], targets)
+            except Exception:
+                log.exception("retrying notification for flight %s failed", flight["id"])
         p = plan((departure - now).total_seconds() / 3600, forecast, sent)
         if p is None:
             continue
@@ -157,7 +178,10 @@ def _send(db, apns, p, flight, forecast, sent, profiles, passes, devices) -> int
     if apns is None or not targets:
         db.update_notification(notification_id, delivered=False, error="no apns" if apns is None else "no device")
         return 1
+    return _deliver(db, apns, notification_id, flight, p.kind, p.milestone, title, body, targets)
 
+
+def _deliver(db, apns, notification_id, flight, kind, milestone, title, body, targets) -> int:
     payload = {
         # content-available wakes the app in the background to save the new forecast offline.
         "aps": {
@@ -167,17 +191,17 @@ def _send(db, apns, p, flight, forecast, sent, profiles, passes, devices) -> int
             "content-available": 1,
         },
         "flight_id": flight["id"],
-        "kind": p.kind,
-        "milestone": p.milestone,
+        "kind": kind,
+        "milestone": milestone,
     }
     delivered, errors = False, []
     for device in targets:
-        result = apns.send(device["token"], device["environment"], payload, collapse_id=f"{flight['id']}-{p.milestone}")
+        result = apns.send(device["token"], device["environment"], payload, collapse_id=f"{flight['id']}-{milestone}")
         delivered |= result.ok
         if not result.ok:
             errors.append(result.reason or "unknown")
         if result.token_dead:
             db.delete_device(device["token"])
     db.update_notification(notification_id, delivered=delivered, error=None if delivered else ", ".join(errors))
-    log.info("notified %s %s (%s): %s", flight["id"], p.milestone, "delivered" if delivered else errors, title)
+    log.info("notified %s %s (%s): %s", flight["id"], milestone, "delivered" if delivered else errors, title)
     return 1
