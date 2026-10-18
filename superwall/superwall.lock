@@ -8,25 +8,25 @@
     "onboarding": {
       "ios": {
         "paywallId": "281980",
-        "snapshot": "897577410a1d876156e35920913937b39c2190f3010b4e7f259f5957743ab21d"
+        "snapshot": "ef06b8831612e728d4077cb1ae4373a162a9c8e889431318c65cf917acbe8139"
       }
     },
     "forecast-moment": {
       "ios": {
         "paywallId": "281983",
-        "snapshot": "aa88eddebbe0772e326cd7da575f100d261b92e485689e7b5548f8c3ae57b30b"
+        "snapshot": "57230e09b278c3b6b40625d7bfe11b7d530c523d7144d22fdc00c67942650238"
       }
     },
     "pro-features": {
       "ios": {
         "paywallId": "281984",
-        "snapshot": "64df6079361f18856eaf7f31ed8aba57f57b1c20c510ace6a262ea1e55389398"
+        "snapshot": "c7f2fa3f36aee4727080be288932491fe892695a81b81764cd9f70a524df36a3"
       }
     },
     "pro-features-pass-first": {
       "ios": {
         "paywallId": "281985",
-        "snapshot": "3901c849cf54da11efeb35d9ae8deef91ee6eb430dd9f3558a42595b2b871ce3"
+        "snapshot": "771dccbb9860d0b191e33b3da055abb0f06289889bf5a6984faf0819aaeb4456"
       }
     }
   },

@@ -13,3 +13,4 @@ ios/*.xcodeproj/
 ios/build/
 DerivedData/
 xcuserdata/
+ios/.asc/artifacts/

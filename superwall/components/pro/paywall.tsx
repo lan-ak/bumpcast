@@ -11,6 +11,7 @@ import { usePlacementContext, type ProPlacement } from "./context";
 import "./theme.css";
 
 const TERMS_URL = "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/";
+const PRIVACY_URL = "https://docs.google.com/document/d/1wgxMmBIa1OiTJesX83nBVIJl1c2EAz-TxvpMndDK7T0/preview";
 
 /**
  * Which offer is the button. The other is a quiet link under it. This is the A/B test between
@@ -195,6 +196,7 @@ export function ProPaywall({
         <p className="secondary footnote legal">{restoreFailed ? t("pro.restoreFailed") : legal}</p>
         <div className="legal-links">
           <button type="button" className="link" onClick={() => openUrl(TERMS_URL)}>{t("pro.terms")}</button>
+          <button type="button" className="link" onClick={() => openUrl(PRIVACY_URL)}>{t("pro.privacy")}</button>
         </div>
       </div>
     </main>

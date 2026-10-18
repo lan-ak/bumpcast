@@ -196,7 +196,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
   cursor: pointer;
 }
 .legal { margin-top: 10px; text-align: center; }
-.legal-links { display: flex; justify-content: center; }
+.legal-links { display: flex; justify-content: center; gap: 20px; }
 
 @media (max-height: 700px) {
   .pw-hero { flex-basis: 196px; min-height: 196px; }

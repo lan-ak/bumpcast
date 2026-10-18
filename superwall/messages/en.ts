@@ -5,6 +5,7 @@ export default {
     restore: "Restore",
     restoreFailed: "Nothing to restore, or the App Store couldn't be reached.",
     terms: "Terms",
+    privacy: "Privacy",
 
     // Headlines per placement (params.event_name). `fallback` covers anything else.
     title: {

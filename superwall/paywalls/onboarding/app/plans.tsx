@@ -11,6 +11,7 @@ import {
 import { answers, type Help } from "../components/answers";
 
 const TERMS_URL = "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/";
+const PRIVACY_URL = "https://docs.google.com/document/d/1wgxMmBIa1OiTJesX83nBVIJl1c2EAz-TxvpMndDK7T0/preview";
 
 const icon = (d: string): ReactNode => (
   <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
@@ -132,6 +133,7 @@ export default function Plans() {
         <p className="secondary footnote legal">{restoreFailed ? t("plans.restoreFailed") : legal}</p>
         <div className="legal-links">
           <button type="button" className="link" onClick={() => openUrl(TERMS_URL)}>{t("plans.terms")}</button>
+          <button type="button" className="link" onClick={() => openUrl(PRIVACY_URL)}>{t("plans.privacy")}</button>
         </div>
       </div>
     </main>

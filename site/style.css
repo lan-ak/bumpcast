@@ -1,0 +1,11 @@
+:root { --ink:#15253A; --ink2:#45576C; --accent:#2A7385; --bg:#F4F7FA; }
+@media (prefers-color-scheme: dark) { :root { --ink:#E6EFF6; --ink2:#9FB0C4; --accent:#6FBCCC; --bg:#0B1322; } }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--ink); font:17px/1.6 -apple-system, BlinkMacSystemFont, "Atkinson Hyperlegible", sans-serif; }
+main { max-width:680px; margin:0 auto; padding:48px 16px 80px; }
+h1 { font-size:2.2rem; line-height:1.15; margin:.2em 0 .4em; }
+h2 { font-size:1.2rem; margin-top:2em; }
+a { color:var(--accent); }
+.eyebrow { font:500 .8rem/1 ui-monospace, "IBM Plex Mono", monospace; letter-spacing:.08em; text-transform:uppercase; }
+.eyebrow a { text-decoration:none; }
+.muted { color:var(--ink2); }
