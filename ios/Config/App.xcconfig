@@ -1,0 +1,6 @@
+// Supabase connection. Put real values in Secrets.xcconfig (gitignored).
+// With both empty, the app runs in demo mode with a bundled sample forecast.
+SUPABASE_URL =
+SUPABASE_ANON_KEY =
+
+#include? "Secrets.xcconfig"

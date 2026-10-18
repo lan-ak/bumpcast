@@ -1,0 +1,31 @@
+[project]
+name = "smooth-worker"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Lanre Akinyemi", email = "lanre@akinyemi.ca" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "cfgrib>=0.9.15.1",
+    "eccodes>=2.50.0",
+    "eccodeslib>=2.50.0.33",
+    "httpx>=0.28.1",
+    "numpy>=2.5.4",
+    "scipy>=1.18.1",
+    "timezonefinder>=9.0.0",
+    "xarray>=2026.9.0",
+]
+
+[project.scripts]
+smooth-worker = "smooth_worker:main"
+
+[build-system]
+requires = ["uv_build>=0.13.1,<0.14.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]

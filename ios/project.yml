@@ -1,0 +1,54 @@
+name: Smooth
+options:
+  bundleIdPrefix: ca.akinyemi
+  deploymentTarget:
+    iOS: "26.0"
+  createIntermediateGroups: true
+packages:
+  Supabase:
+    url: https://github.com/supabase/supabase-swift
+    from: 2.55.0
+configFiles:
+  Debug: Config/App.xcconfig
+  Release: Config/App.xcconfig
+targets:
+  Smooth:
+    type: application
+    platform: iOS
+    sources:
+      - Smooth
+    dependencies:
+      - package: Supabase
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: ca.akinyemi.smooth
+        MARKETING_VERSION: 0.1.0
+        CURRENT_PROJECT_VERSION: 1
+        SWIFT_VERSION: 6.0
+        TARGETED_DEVICE_FAMILY: 1
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Smooth
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        INFOPLIST_FILE: Smooth/Info.plist
+  SmoothTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - SmoothTests
+    dependencies:
+      - target: Smooth
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        SWIFT_VERSION: 6.0
+schemes:
+  Smooth:
+    build:
+      targets:
+        Smooth: all
+        SmoothTests: [test]
+    test:
+      targets:
+        - SmoothTests
