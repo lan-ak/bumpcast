@@ -4,11 +4,12 @@ import { useRouter } from "superwall/navigation";
 import { answers, type Help } from "../components/answers";
 import { Option, Page, PrimaryButton } from "../components/ui";
 
-const OPTIONS: [Help, "when" | "howLong" | "normal" | "calmDown"][] = [
+const OPTIONS: [Help, "when" | "howLong" | "normal" | "calmDown" | "delays"][] = [
   ["when", "when"],
   ["how-long", "howLong"],
   ["normal", "normal"],
   ["calm-down", "calmDown"],
+  ["delays", "delays"],
 ];
 
 export default function HelpPage() {
@@ -36,6 +37,7 @@ export default function HelpPage() {
 
   return (
     <Page
+      className="page--help"
       footer={
         <>
           <p className="error" role="alert">{error ? t("help.error") : ""}</p>
