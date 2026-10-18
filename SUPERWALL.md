@@ -66,10 +66,10 @@ Onboarding answers (fear level, how often they fly, and so on) are set as attrib
 ## Left to do in the dashboard
 
 1. ~~Design the onboarding flow~~ Done: `superwall/paywalls/onboarding`, live at 100% on the Onboarding campaign. Edit it there and run `SUPERWALL_CHANNEL=next superwall publish`. While it loads, the app shows `LaunchLoadingView`; if it can't load in 8 s (or the campaign skips), `NativeOnboardingView` asks the same questions natively, without the paywall. Debug builds can force the native flow with `-nativeOnboarding`.
-2. **Design the paywalls:**
-   - a soft paywall for Forecast moments;
-   - a gated paywall for Pro features, offering a flight pass and the subscription;
-   - an A/B test of which of the two leads.
+2. ~~Design the paywalls~~ Done, as code sharing `superwall/components/pro` (one look: the onboarding Plans page, as a modal sheet). The headline follows `params.event_name`; the flight pass is only offered when the placement passes `flight_id`.
+   - **Forecast moments** → `forecast-moment` (paywall 281983) at 100%. Shows the user's route, hours to departure and `grade_title` on the sky.
+   - **Pro features** → A/B test at 50/50: `pro-features` (281984, subscription is the button, pass is a link) vs `pro-features-pass-first` (281985, pass is the button, Pro trial is a link). Without a flight both show the subscription only.
+   - Edit them under `superwall/paywalls/`, then `SUPERWALL_CHANNEL=next superwall publish`.
 3. **Replace the 100% holdout audiences** that Superwall creates with real audiences, for example:
    - `user.notifications_enabled == true`;
    - `params.hours_to_departure < 48`.

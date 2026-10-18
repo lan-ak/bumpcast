@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "superwall-studio",
+      "runtimeExecutable": "/bin/sh",
+      "runtimeArgs": ["-c", "cd superwall && SUPERWALL_CHANNEL=next npx superwall dev --port 6100"],
+      "port": 6100
+    }
+  ]
+}
