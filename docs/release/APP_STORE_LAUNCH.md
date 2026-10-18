@@ -70,7 +70,7 @@ Each frame sells one benefit. Use a real-looking demo flight (e.g. `JFK → LAX 
 | 6 | CALM, ON CUE | Breathe through it, right on time. | Calm breathing paced to the next stretch |
 | 7 | TURBULENCE MAP | Feel what pilots are feeling. | Map with pilot reports on |
 | 8 | AFTER YOU LAND | See how right we were. | "How did it feel?" plus the accuracy stat. No competitor shows this |
-| 9 | WORKS OFFLINE | Ready in airplane mode. | Flights list with saved forecasts |
+| 9 | FIND YOUR FLIGHT | Type a flight number. Done. | Find step with flight-number results |
 | 10 | ALL THIS AND MORE | — | Icon grid: Live Activity, offline, breathing, explainers, map, pilot reports, accuracy, Flight Pass, no ads, no account |
 
 - **Frame 1 is the hero.** Six of the eight competitors put social proof there (awards, press, "300K travelers"). We don't have any yet, so lead with the emotion. Add a laurel ("Rated 4.9 by nervous flyers", "10,000 flights forecast") as soon as the numbers are real.
