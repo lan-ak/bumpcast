@@ -57,8 +57,36 @@ Sources: [AeroAPI pricing and tiers](https://www.flightaware.com/commercial/aero
 - Confirm the attribution requirements in the provider's terms. Our design rule forbids naming sources in the UI, so a provider that requires on-screen credit is a blocker.
 - Add the key as a Fly.io secret on the worker only. The iOS app calls our backend for lookups and never holds the key.
 
+## Update: chosen scope (search for everyone, live status for Pro)
+
+Scope agreed after the first comparison:
+- **Everyone:** search by flight number when adding a flight. One lookup per flight.
+- **Pro or flight pass:** status refreshed inside the worker's forecast pass (`run_once`). That's every 6 h from T‑48h to T‑18h, then hourly until about T+1h, so ~25 calls per paid flight. A departure change re-forecasts in the same step and sends a "Delayed 40 min, forecast updated" push.
+- No in-air tracking, no polling of free flights, no alerts or webhooks.
+
+This narrows it to the two self-serve options:
+
+| | AeroDataBox | FlightAware AeroAPI (Standard) |
+|---|---|---|
+| Search for a date weeks ahead | Same call (`/flights/number/{n}/{date}`), schedules 180–365 days out. 2 units | `/flights/{ident}` only reaches 2 days ahead. Further out needs `/schedules`, at $0.02 per result set (up to 1 year ahead) |
+| Status refresh | Same call, 2 units | `/flights/{ident}`, $0.005 |
+| Live status coverage | Only at airports it tracks live. Elsewhere the response is schedule-only (the `quality` field says which) | Strongest in the US (FAA + airline + ADS-B) |
+| Gate / terminal / delay / cancelled / diverted | Yes | Yes |
+| Consumer app terms | OK on paid plans. No permanent copies (purge status after the flight) | Standard explicitly covers B2C |
+| Minimum spend | $19/mo (direct Starter) | $100/mo |
+
+Monthly cost (assuming half of searches are for flights more than 2 days out):
+
+| Usage | AeroDataBox | AeroAPI |
+|---|---|---|
+| 2k searches + 300 Pro flights | ~19k units, **$19** Starter | ~$63 of usage, **$100** minimum |
+| 10k searches + 2k Pro flights | ~120k units, **$99** Growth | **~$375** |
+| 50k searches + 10k Pro flights | ~600k units, **$499** Scale (or ~$240 RapidAPI Mega) | **~$1,875** |
+
+**Revised recommendation: start on AeroDataBox (direct Starter, $19/mo)**, and confirm US live coverage in its free trial before launch. With hourly refreshes and no in-air tracking, AeroAPI's precision matters less, while AeroDataBox is 4–5× cheaper and handles far-future search in the same call. The risk is a paid flight from an airport it doesn't track live. The UI should then say live status isn't available for that flight rather than showing stale times. The worker keeps the provider behind one small module, so moving to AeroAPI later is a contained change if coverage disappoints.
+
 ## Decision
 
-- [ ] FlightAware AeroAPI Standard (recommended)
-- [ ] AeroDataBox direct Growth
+- [ ] AeroDataBox direct Starter (recommended for the chosen scope)
+- [ ] FlightAware AeroAPI Standard
 - [ ] Other
