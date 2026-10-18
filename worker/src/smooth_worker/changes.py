@@ -92,15 +92,14 @@ def _first_look(new: dict) -> list[str]:
 
 def _why(old: dict, new: dict, tz: str | None) -> str:
     if confidence(new.get("source")) != confidence(old.get("source")) and new.get("source") in ("gtg", "mixed"):
-        return "Why: NOAA's detailed turbulence forecast now covers your flight."
+        return "Why: your forecast is now confirmed with our detailed forecast."
     run = new.get("model_run")
-    model = "NOAA's turbulence forecast" if new.get("source") in ("gtg", "mixed") else "the global weather model"
     if not run:
-        return f"Why: the latest run of {model}."
+        return "Why: updated with the latest forecast data."
     run_at = datetime.fromisoformat(str(run).replace("Z", "+00:00"))
     try:
         local = run_at.astimezone(ZoneInfo(tz)) if tz else run_at
     except (KeyError, ValueError):
         local = run_at
     stamp = local.strftime("%-I %p").lower() + ("" if tz else " UTC")
-    return f"Why: updated with the {stamp} run of {model}."
+    return f"Why: updated with the latest forecast data ({stamp})."

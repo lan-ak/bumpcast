@@ -142,7 +142,7 @@ private struct WaitlistCard: View {
         MessageCard(
             symbol: "globe",
             title: "We don't cover this route yet",
-            message: "BumpCast forecasts are US-only for now, using NOAA's turbulence data. Worldwide coverage is next."
+            message: "BumpCast forecasts cover US flights for now. Worldwide coverage is next."
         ) {
             if store.waitlist.contains(country) {
                 Label("We'll let you know when we cover \(name).", systemImage: "checkmark.circle.fill")
@@ -177,7 +177,7 @@ private struct NotificationsCard: View {
                 Text(forecastReady ? "Get told if your forecast changes" : "Get told when your forecast is ready")
                     .font(.headline)
                 Text(forecastReady
-                    ? "We'll notify you at 24, 6 and 2 hours before departure, and when NOAA confirms it."
+                    ? "We'll notify you at 24, 6 and 2 hours before departure, and when your forecast is confirmed."
                     : "We'll notify you 48 hours before departure, then when anything changes.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)

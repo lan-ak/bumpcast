@@ -12,7 +12,7 @@ enum Placement: String, CaseIterable {
     case firstGradeViewed = "first_grade_viewed"
     /// Opened from the "Your forecast is ready" notification: the main paywall moment.
     case forecastReadyOpened = "forecast_ready_opened"
-    /// Opened from an update or "confirmed by NOAA" notification.
+    /// Opened from an update or "forecast confirmed" notification.
     case updateOpened = "update_opened"
     /// Gated: the full timeline (bump chart, stretches, confidence detail).
     case timelineLocked = "timeline_locked"
@@ -153,7 +153,7 @@ final class Paywalls {
         let store = FlightStore.shared
         let next = store.nextFlight
         let nextForecast = next.flatMap { store.forecasts[$0.id] }
-        let flown = store.flights.filter { $0.estimatedLanding(store.forecasts[$0.id]) <= .now }
+        let flown = store.flights.filter { InFlight.shared.landing(of: $0, forecast: store.forecasts[$0.id]) <= .now }
         let matched = store.reports.values.filter { $0.matched == true }.count
         var attributes: [String: Any?] = [
             "flights_saved": store.flights.count,

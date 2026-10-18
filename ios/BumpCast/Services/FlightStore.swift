@@ -177,7 +177,8 @@ final class FlightStore {
     func flight(_ id: UUID) -> Flight? { flights.first { $0.id == id } }
 
     var upcomingFlights: [Flight] {
-        flights.filter { $0.estimatedLanding(forecasts[$0.id]) > .now }
+        // Uses the tapped landing time when there is one.
+        flights.filter { InFlight.shared.landing(of: $0, forecast: forecasts[$0.id]) > .now }
     }
 
     var nextFlight: Flight? { upcomingFlights.first }

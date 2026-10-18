@@ -102,6 +102,12 @@ private struct GradeCard: View {
             Label(grade.title, systemImage: grade.symbol)
                 .font(.title.bold())
                 .foregroundStyle(grade.color)
+            // Shown to everyone, free included: an advance forecast firms up closer to the flight.
+            TimelineView(.everyMinute) { context in
+                Text(confidence.statusLine(now: context.date))
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(.secondary)
+            }
             Text(grade.summary)
             if let minutes = forecast.durationMin {
                 Text("About \(minutes.durationText) in the air · \(bumpsText)")

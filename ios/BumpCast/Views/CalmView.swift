@@ -193,7 +193,7 @@ struct Explainer: Identifiable, Hashable {
             id: "crew",
             title: "What the crew is doing",
             paragraphs: [
-                "Pilots get turbulence forecasts and live reports from other aircraft before and during the flight, including the same NOAA guidance BumpCast uses inside 18 hours.",
+                "Pilots get turbulence forecasts and live reports from other aircraft before and during the flight.",
                 "They change altitude or route to find smoother air when they can, and turn on the seatbelt sign early. When flight attendants sit down, it's routine caution, not an emergency.",
             ]),
         Explainer(
@@ -215,8 +215,8 @@ struct Explainer: Identifiable, Hashable {
             id: "forecast",
             title: "How BumpCast forecasts",
             paragraphs: [
-                "Inside 18 hours of departure, we use NOAA's Graphical Turbulence Guidance (GTG), the forecast US airline dispatchers use, sampled along your likely route and altitude.",
-                "Before that, we give an early outlook from global weather models. It's labelled as early and can change; it firms up when NOAA's forecast covers your flight.",
+                "Up to two days before your flight, you get an advance forecast. It's labelled as advance because it can still change.",
+                "About 18 hours before departure, it's confirmed with a more detailed forecast along your likely route and altitude, then updated every hour until you fly. We'll notify you when anything changes.",
                 "We assume a direct route and a typical climb, cruise and descent. Your real routing and altitude may differ, and forecasts can miss storm-related bumps, so treat it as a guide, not a guarantee.",
             ]),
     ]

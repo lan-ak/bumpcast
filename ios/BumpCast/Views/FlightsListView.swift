@@ -70,7 +70,7 @@ struct FlightsListView: View {
 
     private var upcoming: [Flight] { store.upcomingFlights }
     private var flown: [Flight] {
-        store.flights.filter { $0.estimatedLanding(store.forecasts[$0.id]) <= .now }.reversed()
+        store.flights.filter { InFlight.shared.landing(of: $0, forecast: store.forecasts[$0.id]) <= .now }.reversed()
     }
 
     private func row(_ flight: Flight) -> some View {
@@ -115,7 +115,7 @@ struct FlightRow: View {
                     .foregroundStyle(.secondary)
             } else if let forecast, forecast.status == .ready, flight.departureAt > .now {
                 let confidence = forecast.confidence(departure: flight.departureAt)
-                Label(confidence.title, systemImage: confidence.symbol)
+                Label(confidence.shortStatus(), systemImage: confidence.symbol)
                     .font(.caption.weight(.medium))
                     .foregroundStyle(confidence.color)
             }

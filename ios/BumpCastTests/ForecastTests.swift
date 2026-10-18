@@ -44,6 +44,17 @@ struct ForecastTests {
         #expect(forecast("mixed", run: run).confidence(departure: departure) == .partly(confirmedUntilMin: 40))
     }
 
+    @Test func statusLinesSayWhenItFirmsUp() {
+        let calendar = Calendar.current
+        let now = calendar.date(bySettingHour: 10, minute: 0, second: 0, of: .now)!
+        let tonight = calendar.date(bySettingHour: 19, minute: 15, second: 0, of: now)!
+        let early = Forecast.Confidence.early(noaaExpected: tonight)
+        #expect(early.shortStatus(now: now) == "Advance · confirms tonight")
+        #expect(early.statusLine(now: now).hasPrefix("Confirmed today around"))
+        #expect(Forecast.Confidence.early(noaaExpected: now.addingTimeInterval(-60)).shortStatus(now: now) == "Advance · confirming now")
+        #expect(Forecast.Confidence.confirmed.statusLine(now: now) == "Updated hourly until you fly")
+    }
+
     @Test func airportSearchPrefersExactCode() {
         #expect(AirportStore.shared.search("lax").first?.icao == "KLAX")
         #expect(AirportStore.shared.airport("JFK")?.tz == "America/New_York")

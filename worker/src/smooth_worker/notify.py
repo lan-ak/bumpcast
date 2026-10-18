@@ -1,4 +1,6 @@
-"""Forecast notifications: "ready" at 48 h, updates at 24 / 6 / 2 h, and "confirmed by NOAA".
+"""Forecast notifications: "ready" at 48 h, updates at 24 / 6 / 2 h, and "forecast confirmed".
+
+User-facing text never names data sources: forecasts are "advance" until confirmed.
 
 Every notification is recorded in Supabase (it doubles as the app's "what changed"
 feed). Only the first ("ready") goes to everyone; updates are pushed to Pro users and
@@ -43,7 +45,7 @@ def plan(hours_to_departure: float, forecast: dict, sent: list[dict]) -> Plan | 
         if not sent:
             return Plan(milestone, "ready", pro_only=False)
         return Plan(milestone, "update", pro_only=True)
-    # NOAA takes over between milestones (about 17 h out); tell people who saw the early outlook.
+    # The forecast is confirmed between milestones (about 17 h out); tell people who saw the advance one.
     if (
         sent
         and "noaa" not in sent_milestones
@@ -64,9 +66,9 @@ def compose(p: Plan, flight: dict, forecast: dict, previous: dict | None, tz: st
     if p.kind == "ready":
         title = f"Your {route} forecast is ready"
         detail = "Tap to see when the bumps are." if forecast.get("segments") else "Tap for the details."
-        body = f"{grade}{' (early outlook)' if early else ''}. {detail}"
+        body = f"{grade}{' (advance forecast)' if early else ''}. {detail}"
     elif p.kind == "confirmed":
-        title = f"{route}: now confirmed by NOAA"
+        title = f"{route}: forecast confirmed"
         body = f"{grade}. " + " ".join(points[:-1][:2])
     else:
         hours = p.milestone.removesuffix("h")

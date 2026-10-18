@@ -59,7 +59,6 @@ struct SettingsView: View {
                     }
                 }
                 Section {
-                    LabeledContent("Data", value: "NOAA GTG + GFS")
                     LabeledContent("Version", value: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")
                 } footer: {
                     Text("Forecasts are guidance, not guarantees. Always follow crew instructions.")

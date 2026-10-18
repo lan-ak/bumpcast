@@ -73,9 +73,9 @@ extension Severity {
 extension Forecast.Confidence {
     var title: String {
         switch self {
-        case .early: "Early outlook"
+        case .early: "Advance forecast"
         case .partly: "Partly confirmed"
-        case .confirmed: "NOAA forecast"
+        case .confirmed: "Confirmed forecast"
         }
     }
 
@@ -94,22 +94,71 @@ extension Forecast.Confidence {
         }
     }
 
+    /// One line under the grade, for everyone: when the forecast firms up (the badge says which kind).
+    func statusLine(now: Date = .now) -> String {
+        switch self {
+        case .early(let expected):
+            guard expected > now else { return "Being confirmed now" }
+            return "Confirmed \(expected.approximateDayAndTime(now: now))"
+        case .partly:
+            return "Fully confirmed within the hour"
+        case .confirmed:
+            return "Updated hourly until you fly"
+        }
+    }
+
+    /// Short version for the flights list.
+    func shortStatus(now: Date = .now) -> String {
+        switch self {
+        case .early(let expected):
+            guard expected > now else { return "Advance · confirming now" }
+            return "Advance · confirms \(expected.relativeDay(now: now))"
+        case .partly:
+            return "Partly confirmed"
+        case .confirmed:
+            return "Confirmed"
+        }
+    }
+
     var explanation: String {
         switch self {
         case .early(let expected):
-            return "Based on global weather models, so it can still change. "
-                + "NOAA's detailed turbulence forecast reaches your flight \(expected.dayAndTime), and we'll update this then."
+            return "An early look at your flight, so it can still change. "
+                + "We'll confirm it \(expected.dayAndTime) with a more detailed forecast, and let you know if anything changes."
         case .partly(let minutes):
-            return "The first \(minutes.durationText) uses NOAA's detailed turbulence forecast. "
-                + "The rest is our early outlook (faded in the chart) until NOAA's forecast reaches it, usually within the hour."
+            return "The first \(minutes.durationText) of your flight is confirmed. "
+                + "The rest is still an advance forecast (faded in the chart) and will be confirmed closer to departure, usually within the hour."
         case .confirmed:
-            return "Based on NOAA's Graphical Turbulence Guidance, the same forecast US airline dispatchers use. "
-                + "It's refreshed every hour until you fly."
+            return "Confirmed with our detailed forecast for your route and altitude. "
+                + "We keep updating it every hour until you fly."
         }
     }
 }
 
 extension Date {
+    /// "today around 7:15 PM", "tomorrow around 6 AM", "Tuesday around 9:30 AM".
+    func approximateDayAndTime(now: Date = .now) -> String {
+        let time = formatted(date: .omitted, time: .shortened)
+        let calendar = Calendar.current
+        if calendar.isDate(self, inSameDayAs: now) { return "today around \(time)" }
+        if let tomorrow = calendar.date(byAdding: .day, value: 1, to: now), calendar.isDate(self, inSameDayAs: tomorrow) {
+            return "tomorrow around \(time)"
+        }
+        return "\(formatted(.dateTime.weekday(.wide))) around \(time)"
+    }
+
+    /// "this afternoon", "tonight", "tomorrow morning", "Tuesday".
+    func relativeDay(now: Date = .now) -> String {
+        let calendar = Calendar.current
+        let hour = calendar.component(.hour, from: self)
+        let part = hour < 12 ? "morning" : hour < 17 ? "afternoon" : "evening"
+        if calendar.isDate(self, inSameDayAs: now) { return part == "evening" ? "tonight" : "this \(part)" }
+        if let tomorrow = calendar.date(byAdding: .day, value: 1, to: now), calendar.isDate(self, inSameDayAs: tomorrow) {
+            return part == "evening" ? "tomorrow night" : "tomorrow \(part)"
+        }
+        return formatted(.dateTime.weekday(.wide))
+    }
+
     /// "today at 7:15 PM", "tomorrow at 6:00 AM", or "on Tuesday at 9:30 AM".
     var dayAndTime: String {
         let time = formatted(date: .omitted, time: .shortened)

@@ -51,7 +51,7 @@ def test_describe_changes():
     assert "The bumps 32 min in are now moderate bumps (were light chop)." in points
     assert "New: light chop 2 h 30 min in, while cruising." in points
     assert "Eased: the light chop 1 h 30 min in is no longer expected." in points
-    assert points[-1] == "Why: NOAA's detailed turbulence forecast now covers your flight."
+    assert points[-1] == "Why: your forecast is now confirmed with our detailed forecast."
 
 
 def test_describe_unchanged_uses_model_run_time():
@@ -60,5 +60,5 @@ def test_describe_unchanged_uses_model_run_time():
     assert points == [
         "Still smooth flight.",
         "No change to where the bumps are.",
-        "Why: updated with the 8 am run of the global weather model.",
+        "Why: updated with the latest forecast data (8 am).",
     ]

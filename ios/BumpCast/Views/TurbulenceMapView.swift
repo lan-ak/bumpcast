@@ -33,7 +33,7 @@ struct TurbulenceMapView: View {
                         description: Text("The map needs a connection. Your saved flight forecasts still work."))
                 } else if !isLoading && grids[level]?.isEmpty == true {
                     ContentUnavailableView("Map data is updating", systemImage: "clock.arrow.circlepath",
-                        description: Text("NOAA's latest turbulence layers will appear here shortly."))
+                        description: Text("The latest turbulence layers will appear here shortly."))
                 }
             }
             .task(id: level) { await loadGrids() }
@@ -85,7 +85,7 @@ struct TurbulenceMapView: View {
                 }
                 Spacer()
                 if let grid = currentGrid {
-                    Text("NOAA \(grid.cycle.formatted(date: .omitted, time: .shortened)) run")
+                    Text("Updated \(grid.cycle.formatted(date: .omitted, time: .shortened))")
                 }
             }
             .font(.caption2)
