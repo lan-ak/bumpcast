@@ -22,7 +22,7 @@ struct FlightDetailView: View {
                 FlightHeader(flight: flight)
                 switch state {
                 case .ready(let forecast):
-                    ForecastView(forecast: forecast)
+                    ForecastView(forecast: forecast, flight: flight)
                 case .unlocksAt(let date):
                     MessageCard(
                         symbol: "clock",

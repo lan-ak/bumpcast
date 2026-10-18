@@ -63,6 +63,12 @@ struct FlightRow: View {
                 StatusPill(state: ForecastState(flight: flight, forecast: forecast))
             }
             Text(flight.departureText).font(.subheadline).foregroundStyle(.secondary)
+            if let forecast, forecast.status == .ready {
+                let confidence = forecast.confidence(departure: flight.departureAt)
+                Label(confidence.title, systemImage: confidence.symbol)
+                    .font(.caption.weight(.medium))
+                    .foregroundStyle(confidence.color)
+            }
         }
         .padding(.vertical, 4)
     }

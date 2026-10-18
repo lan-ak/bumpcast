@@ -3,36 +3,53 @@ import SwiftUI
 
 struct ForecastView: View {
     let forecast: Forecast
+    let flight: Flight
 
     var body: some View {
+        let confidence = forecast.confidence(departure: flight.departureAt)
         VStack(alignment: .leading, spacing: 20) {
             if let grade = forecast.grade {
-                GradeCard(grade: grade, forecast: forecast)
+                GradeCard(grade: grade, forecast: forecast, confidence: confidence)
             }
-            TimelineCard(forecast: forecast)
+            TimelineCard(forecast: forecast, confidence: confidence)
             if !forecast.segments.isEmpty {
                 VStack(alignment: .leading, spacing: 12) {
                     Text("What to expect").font(.title3.bold())
                     ForEach(forecast.segments, id: \.startMin) { SegmentRow(segment: $0) }
                 }
             }
-            SourceNote(forecast: forecast)
+            ConfidenceNote(forecast: forecast, confidence: confidence)
         }
+    }
+}
+
+struct ConfidenceBadge: View {
+    let confidence: Forecast.Confidence
+
+    var body: some View {
+        Label(confidence.title, systemImage: confidence.symbol)
+            .font(.caption.weight(.semibold))
+            .foregroundStyle(confidence.color)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 5)
+            .background(.background.opacity(0.7), in: .capsule)
     }
 }
 
 private struct GradeCard: View {
     let grade: Forecast.Grade
     let forecast: Forecast
+    let confidence: Forecast.Confidence
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
+            ConfidenceBadge(confidence: confidence)
             Label(grade.title, systemImage: grade.symbol)
                 .font(.title.bold())
                 .foregroundStyle(grade.color)
             Text(grade.summary)
             if let minutes = forecast.durationMin {
-                Text("About \(minutes.durationText) in the air · \(bumpyMinutes) min of bumps")
+                Text("About \(minutes.durationText) in the air · \(bumpsText)")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
@@ -42,12 +59,16 @@ private struct GradeCard: View {
         .background(grade.color.opacity(0.12), in: .rect(cornerRadius: 20))
     }
 
-    private var bumpyMinutes: Int { forecast.samples.filter { $0.severity > .smooth }.count }
+    private var bumpsText: String {
+        let minutes = forecast.samples.filter { $0.severity > .smooth }.count
+        return minutes == 0 ? "no bumps expected" : "\(minutes) min of bumps"
+    }
 }
 
-/// Bumpiness minute by minute, coloured by severity.
+/// Bumpiness minute by minute, coloured by severity. Outlook minutes are faded.
 private struct TimelineCard: View {
     let forecast: Forecast
+    let confidence: Forecast.Confidence
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -60,6 +81,7 @@ private struct TimelineCard: View {
                     yEnd: .value("Bumpiness", max(sample.edr, 0.02))
                 )
                 .foregroundStyle(sample.severity.color.gradient)
+                .opacity(isOutlook(sample.min) ? 0.4 : 1)
             }
             .chartYScale(domain: 0...max(0.4, forecast.samples.map(\.edr).max() ?? 0))
             .chartYAxis {
@@ -81,6 +103,14 @@ private struct TimelineCard: View {
             .frame(height: 180)
             .accessibilityLabel("Turbulence timeline")
             Legend()
+        }
+    }
+
+    private func isOutlook(_ minute: Int) -> Bool {
+        switch confidence {
+        case .early: true
+        case .partly(let until): minute >= until
+        case .confirmed: false
         }
     }
 }
@@ -123,25 +153,26 @@ private struct SegmentRow: View {
     }
 }
 
-private struct SourceNote: View {
+/// Explains how settled the forecast is and when it will firm up.
+private struct ConfidenceNote: View {
     let forecast: Forecast
+    let confidence: Forecast.Confidence
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(sourceText)
+        VStack(alignment: .leading, spacing: 8) {
+            Label(confidence.title, systemImage: confidence.symbol)
+                .font(.headline)
+                .foregroundStyle(confidence.color)
+            Text(confidence.explanation)
+                .font(.subheadline)
             if let issued = forecast.issuedAt {
                 Text("Updated \(issued.formatted(.relative(presentation: .named)))")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
             }
         }
-        .font(.footnote)
-        .foregroundStyle(.secondary)
-    }
-
-    private var sourceText: String {
-        switch forecast.source {
-        case "gtg": "Based on NOAA's Graphical Turbulence Guidance, the same forecast US dispatchers use."
-        case "mixed": "Based on NOAA turbulence guidance, plus our longer-range outlook for the later part of the flight."
-        default: "Early outlook from global weather models. It sharpens to NOAA's detailed turbulence forecast 18 hours before departure."
-        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding()
+        .background(.fill.quaternary, in: .rect(cornerRadius: 20))
     }
 }

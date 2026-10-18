@@ -13,7 +13,7 @@ supabase/   Database schema (migrations) and config
 1. **Route:** great-circle path between the two airports, assuming a typical jet climb, cruise and descent and 15 minutes of taxi-out (`worker/src/smooth_worker/route.py`).
 2. **Data source,** chosen for each minute of the flight (`forecast.py`):
    - **0–18 h before departure:** NOAA **GTG v4** eddy dissipation rate (EDR) on the 3 km HRRR grid, from NOMADS `dafs/prod`. The worker reads each file's `.idx` and downloads only the ~21 altitude levels it needs, about 21 MB per forecast hour (`sources/gtg.py`).
-   - **18–48 h before departure:** our own outlook. It computes the **Ellrod TI1** clear-air turbulence index from GFS 0.25° winds (NOMADS grib filter, about 1 MB per hour) and maps it onto the EDR scale (`sources/gfs.py`). That mapping is a first guess; calibrate it with pilot reports and after-landing ratings.
+   - **18–48 h before departure:** our own outlook. It computes the **Ellrod TI1** clear-air turbulence index from GFS 0.25° winds (NOMADS grib filter, about 1 MB per hour) and maps it onto the EDR scale (`sources/gfs.py`). That mapping is a first guess; calibrate it with pilot reports and after-landing ratings. The index is averaged over neighbouring cells and capped at "moderate": a single global model 18+ hours out can't credibly call severe turbulence, so only GTG can.
    - **More than 48 h before departure:** the forecast is `too_early`.
    - **Route leaves the US domain:** the forecast is `out_of_coverage`.
 3. **Output:** EDR is turned into severity (smooth < 0.10 ≤ light < 0.22 ≤ moderate < 0.34 ≤ severe). From that come the bumpy stretches, a grade and a 0–100 score.

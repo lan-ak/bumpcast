@@ -17,7 +17,7 @@ extension Forecast.Grade {
         switch self {
         case .smooth: "Calm air the whole way. A good day to fly."
         case .mostlySmooth: "Calm air almost the whole way, with a moment or two of light chop."
-        case .someBumps: "Mostly calm, with a few stretches of light chop. Normal for most flights."
+        case .someBumps: "Mostly calm, with a few bumpy stretches. Normal for most flights."
         case .bumpy: "Some stretches where the bumps get noticeable. Uncomfortable, but routine for the crew."
         case .rough: "A few stronger patches. Keep your seatbelt on and the crew will handle the rest."
         }
@@ -67,6 +67,56 @@ extension Severity {
         case .moderate: Color(hue: 0.06, saturation: 0.9, brightness: 0.9)
         case .severe: .red
         }
+    }
+}
+
+extension Forecast.Confidence {
+    var title: String {
+        switch self {
+        case .early: "Early outlook"
+        case .partly: "Partly confirmed"
+        case .confirmed: "NOAA forecast"
+        }
+    }
+
+    var symbol: String {
+        switch self {
+        case .early: "binoculars"
+        case .partly: "checkmark.seal"
+        case .confirmed: "checkmark.seal.fill"
+        }
+    }
+
+    var color: Color {
+        switch self {
+        case .early: .secondary
+        case .partly, .confirmed: .blue
+        }
+    }
+
+    var explanation: String {
+        switch self {
+        case .early(let expected):
+            return "Based on global weather models, so it can still change. "
+                + "NOAA's detailed turbulence forecast reaches your flight \(expected.dayAndTime), and we'll update this then."
+        case .partly(let minutes):
+            return "The first \(minutes.durationText) uses NOAA's detailed turbulence forecast. "
+                + "The rest is our early outlook (faded in the chart) until NOAA's forecast reaches it, usually within the hour."
+        case .confirmed:
+            return "Based on NOAA's Graphical Turbulence Guidance, the same forecast US airline dispatchers use. "
+                + "It's refreshed every hour until you fly."
+        }
+    }
+}
+
+extension Date {
+    /// "today at 7:15 PM", "tomorrow at 6:00 AM", or "on Tuesday at 9:30 AM".
+    var dayAndTime: String {
+        let time = formatted(date: .omitted, time: .shortened)
+        let calendar = Calendar.current
+        if calendar.isDateInToday(self) { return "today at \(time)" }
+        if calendar.isDateInTomorrow(self) { return "tomorrow at \(time)" }
+        return "on \(formatted(.dateTime.weekday(.wide))) at \(time)"
     }
 }
 

@@ -67,8 +67,38 @@ struct Forecast: Codable, Hashable, Sendable {
         case cruiseFt = "cruise_ft"
     }
 
-    /// Inside 18 hours the forecast comes from NOAA's GTG; beyond that it's our outlook.
-    var isOutlook: Bool { source == "gfs" }
+    /// How settled the forecast is. NOAA's GTG reaches 18 hours ahead; anything
+    /// beyond that is our early outlook from the global model and can still change.
+    enum Confidence: Equatable {
+        /// All our outlook. NOAA's forecast is expected to start covering the flight around `noaaExpected`.
+        case early(noaaExpected: Date)
+        /// NOAA covers the flight up to `confirmedUntilMin` minutes after takeoff; the rest is outlook.
+        case partly(confirmedUntilMin: Int)
+        /// The whole flight is covered by NOAA's GTG.
+        case confirmed
+    }
+
+    /// NOAA's GTG horizon and how long after each hourly run it's published.
+    static let noaaHorizon: TimeInterval = 18 * 3600
+    static let noaaPublishLag: TimeInterval = 3600
+    /// The worker assumes takeoff 15 minutes after scheduled departure (taxi-out).
+    static let taxiOut: TimeInterval = 15 * 60
+
+    func confidence(departure: Date) -> Confidence {
+        let takeoff = departure.addingTimeInterval(Self.taxiOut)
+        switch source {
+        case "gtg":
+            return .confirmed
+        case "mixed":
+            if let run = modelRun {
+                let covered = run.addingTimeInterval(Self.noaaHorizon).timeIntervalSince(takeoff) / 60
+                return .partly(confirmedUntilMin: max(0, Int(covered)))
+            }
+            return .partly(confirmedUntilMin: 0)
+        default:
+            return .early(noaaExpected: takeoff.addingTimeInterval(-Self.noaaHorizon + Self.noaaPublishLag))
+        }
+    }
 }
 
 enum Severity: String, Codable, Comparable, CaseIterable, Sendable {

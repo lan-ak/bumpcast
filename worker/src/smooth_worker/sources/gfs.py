@@ -34,6 +34,10 @@ FT_PER_M = 1 / 0.3048
 # ~8 moderate, ~12 moderate-severe.
 TI_POINTS = [0.0, 4.0, 8.0, 12.0, 20.0]
 EDR_POINTS = [0.03, 0.12, 0.22, 0.34, 0.50]
+NEIGHBOURHOOD = 1  # +/- cells (0.25 deg, ~25 km) averaged around each point
+# A 18-48 h outlook from one global model can't credibly call severe turbulence;
+# only GTG (inside 18 h) may. Cap just below the severe threshold.
+MAX_OUTLOOK_EDR = 0.30
 
 
 def latest_cycle(now: datetime | None = None) -> datetime | None:
@@ -134,5 +138,10 @@ class GfsSource:
         mids, tis = self._load(fhr)
         j = int(np.abs(self._lats - lat).argmin())
         i = int(np.abs(self._lons - (lon % 360)).argmin())
-        ti = float(np.interp(altitude_ft, mids[:, j, i], tis[:, j, i]))
-        return float(np.interp(ti, TI_POINTS, EDR_POINTS))
+        # Average the index over neighbouring cells: single-point jet-core spikes
+        # (TI 30+) are noise at this lead time, not a forecast of severe bumps.
+        n = NEIGHBOURHOOD
+        window = (slice(None), slice(max(j - n, 0), j + n + 1), slice(max(i - n, 0), i + n + 1))
+        ti_profile = tis[window].mean(axis=(1, 2))
+        ti = float(np.interp(altitude_ft, mids[:, j, i], ti_profile))
+        return min(float(np.interp(ti, TI_POINTS, EDR_POINTS)), MAX_OUTLOOK_EDR)

@@ -19,31 +19,40 @@ final class FlightStore {
             try await service.signIn()
             await reload()
         } catch {
-            self.error = error.localizedDescription
+            report(error)
         }
     }
 
     func reload() async {
-        isLoading = true
-        defer { isLoading = false }
-        do {
-            flights = try await service.flights()
-            await withTaskGroup(of: Void.self) { group in
-                for flight in flights {
-                    group.addTask { await self.refreshForecast(flight.id) }
+        // Run unstructured so pull-to-refresh dismissing (which cancels its task)
+        // doesn't abort the network calls halfway.
+        await Task {
+            isLoading = true
+            defer { isLoading = false }
+            do {
+                flights = try await service.flights()
+                await withTaskGroup(of: Void.self) { group in
+                    for flight in flights {
+                        group.addTask { await self.refreshForecast(flight.id) }
+                    }
                 }
+            } catch {
+                report(error)
             }
-        } catch {
-            self.error = error.localizedDescription
-        }
+        }.value
     }
 
     func refreshForecast(_ id: UUID) async {
         do {
             forecasts[id] = try await service.latestForecast(for: id)
         } catch {
-            self.error = error.localizedDescription
+            report(error)
         }
+    }
+
+    private func report(_ error: Error) {
+        if error is CancellationError || (error as? URLError)?.code == .cancelled { return }
+        self.error = error.localizedDescription
     }
 
     @discardableResult
@@ -57,7 +66,7 @@ final class FlightStore {
             await refreshForecast(flight.id)
             return flight
         } catch {
-            self.error = error.localizedDescription
+            report(error)
             return nil
         }
     }
@@ -68,7 +77,7 @@ final class FlightStore {
             flights.removeAll { $0.id == id }
             forecasts[id] = nil
         } catch {
-            self.error = error.localizedDescription
+            report(error)
         }
     }
 }

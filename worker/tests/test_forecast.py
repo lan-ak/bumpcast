@@ -84,3 +84,20 @@ def test_is_due(departure_in, issued_ago, status, edited, due):
         "forecasts": [{"issued_at": issued.isoformat(), "status": status}] if issued else [],
     }
     assert is_due(flight, NOW) is due
+
+
+def test_gfs_outlook_never_severe(tmp_path):
+    import numpy as np
+
+    from smooth_worker.sources.gfs import GfsSource, MAX_OUTLOOK_EDR
+    from smooth_worker.severity import SEVERE, classify
+
+    source = GfsSource(NOW, tmp_path)
+    source._lats = np.array([43.0, 42.75, 42.5, 42.25, 42.0])
+    source._lons = np.array([286.5, 286.75, 287.0, 287.25, 287.5])
+    mids = np.broadcast_to(np.array([30000.0, 34000.0])[:, None, None], (2, 5, 5)).copy()
+    tis = np.zeros((2, 5, 5))
+    tis[:, :, :] = 40.0  # far beyond Ellrod's severe guidance everywhere
+    source._layers[2] = (mids, tis)
+    edr = source.edr(42.5, -73.0, 32000, NOW + timedelta(hours=2))
+    assert edr == MAX_OUTLOOK_EDR and classify(edr) != SEVERE
