@@ -115,6 +115,31 @@ A tumbler outline whose water surface ripples more with severity: flat (smooth),
      - Offline: keep the flight on the phone and save it when the connection returns, without losing what was typed.
    - **Edit flight** reuses the same three screens, opening on Check, with the title "Edit flight" and the button **Save changes**.
    - **Copy is backed by behaviour.** "Quiet overnight unless you fly early": the worker holds notifications from 22:00 to 07:00 local time, except when the flight leaves within 4 h, so early flyers still get the 2-hour update. "Even offline": forecasts are saved on the phone. If either behaviour changes, change the copy too.
+9. **Turbulence map** (restyles `TurbulenceMapView`; mockups in the "Turbulence map" row). The map is a tab. Default to the user's next flight; if there isn't one, show all of the US.
+   - **Opening view:** "My route" frames the next flight's great-circle line (deep teal, with a white casing) and zooms to its bumpiest stretch, at the flight's cruise height and the forecast time closest to now. Chips switch between **My route** and **All US**, and pick the time: **Now / +3 h / +6 h**, labelled with clock times.
+   - **Altitude ladder:** a vertical glass control on the right edge (FL420 … 10k ft) replaces the menu picker. Each height has a severity dot for the route at that height, and the cruise height has a dashed outline. This teaches that crews change height to find smoother air. VoiceOver reads each one, for example "FL380, smooth on your route".
+   - **Route card (bottom):** "{route} at {height}", the water glass and a plain-words summary for that height ("Mostly smooth · Light chop over the Rockies for about 8 min"). Below it, a legend in words: Light chop / Moderate / Strong, with "Clear = smooth".
+   - **Drawing the turbulence:** smooth cells are transparent; only bumps get colour. Use severity colours at about 45% opacity, blurred or interpolated into soft fields, never hard 0.25° squares. Use a muted base map with no points of interest (as now).
+   - **Pilot reports (Pro):** round markers in severity colours with a white ring (no airplane glyph), from the last 3 h and within 5,000 ft of the selected height. Tapping one opens a sheet: "Pilot report · N min ago", the headline ("Light chop near Denver"), tiles for height, aircraft and distance from the route, then one sentence on why pilots share reports. If it's on the user's route, link it to their forecast: "Your forecast already expects light chop here for about 8 minutes." For non-Pro users, the chip opens a calm teaser ("See what pilots are feeling right now") instead of a lock icon.
+   - **Landscape:** the map fills the screen, with a glass side panel on the left (view, time, a summary of all of the US at that height, legend, updated time) and the altitude ladder on the right. Keep the US clear of both.
+   - **States:** offline ("The map needs a connection. Your saved flight forecasts still work in airplane mode." plus an "Open my forecast" link) and updating (keep the last layer visible, faded, with its time).
+   - **Copy:** never name data sources on screen (no NOAA). Use "Turbulence map" as the title.
+   - **Motion:** the route draws from origin to destination on first open (§4). Changing height or time cross-fades the layers over 0.4 s, and a `.selection` haptic plays on each height step.
+10. **Learn** (`LearnView`, the "Field Guide" library; the explainer layout is the "Why it's bumpy" mockup).
+   - **Library:** the time-of-day sky behind it, "Learn" as the nav title, and two groups with eyebrow labels: **Why it gets bumpy** (causes) and **Good to know** (basics). Each row is a sky card with a small calm diagram, a title (`bcHeadline`) and a one-line subtitle.
+   - **Explainer page:** the diagram in a sky card, the title in `bcDisplay`, then always the same three sections in the same order: **What's happening**, **What the crew is doing**, **What you'll feel**. Then a "Good to know" reassurance card and chips for related turbulence types. On light-chop pages, offer the opt-in haptic "What will light chop feel like?" (only when haptics are on).
+   - **Diagrams:** simple lines in accent teal over muted ground, with the airplane small and level. Never draw lightning, a falling plane or jagged lines.
+   - **Copy:** calm and factual. Use comparisons from everyday life (water over rocks, a fast stream meeting a still pool). No statistics without a source, no false reassurance, no data-source names. Every explainer is bundled so it works offline.
+   - **Entry points:** the Learn tab, the Learn card on Flights, "Why it's bumpy here" on a stretch, and "Why pilots share reports" on the map.
+11. **Settings** (`SettingsView`, a sheet from the Flights toolbar).
+   - Standard grouped `Form` rows in the brand fonts over the time-of-day sky (`scrollContentBackground(.hidden)` + `SkyBackground`). This is a utility screen, so there are no custom cards.
+   - **Sections, in order:**
+     - **BumpCast Pro:** status, manage or cancel (straight to Apple's sheet), and restore.
+     - **Notifications:** on/off, a button to turn them on, and a footer: "Forecast ready 48 hours before departure, then updates at 24, 6 and 2 hours. Quiet overnight unless you fly early."
+     - **Haptics:** a toggle stored in `haptics.enabled`, with the footer "Soft taps for breathing and when a forecast is confirmed. Never used as a warning." **Every** haptic in the app checks this toggle, including `sensoryFeedback` calls.
+     - **How accurate are we?:** the landed-flight stats, or a gentle prompt to rate flights.
+     - **About:** version, Licences (font OFL texts), and the footer "Forecasts are guidance, not guarantees. Always follow crew instructions."
+   - Toggles use the accent tint, and nothing in Settings uses red.
 
 ## 4. Motion
 

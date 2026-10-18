@@ -145,7 +145,7 @@ private struct WaitlistCard: View {
         ) {
             if store.waitlist.contains(country) {
                 Label("We'll let you know when we cover \(name).", systemImage: "checkmark.circle.fill")
-                    .foregroundStyle(.green)
+                    .foregroundStyle(Theme.accent)
             } else {
                 Button {
                     isJoining = true

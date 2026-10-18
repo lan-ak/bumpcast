@@ -42,14 +42,6 @@ extension Forecast.Grade {
         case .rough: Severity.severe.color
         }
     }
-
-    var symbol: String {
-        switch self {
-        case .smooth, .mostlySmooth: "sun.max"
-        case .someBumps: "wind"
-        case .bumpy, .rough: "cloud.bolt"
-        }
-    }
 }
 
 extension Severity {

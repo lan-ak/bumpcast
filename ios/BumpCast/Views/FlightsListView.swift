@@ -6,6 +6,7 @@ struct FlightsListView: View {
     @Environment(Paywalls.self) private var paywalls
     @Environment(InFlight.self) private var inFlight
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @AppStorage("haptics.enabled") private var hapticsEnabled = true
     @Namespace private var zoom
     @State private var isAdding = false
     @State private var isShowingSettings = false
@@ -58,12 +59,13 @@ struct FlightsListView: View {
             .sheet(isPresented: $isAdding) { AddFlightView().font(.bcBody) }
             .sheet(isPresented: $isShowingSettings) { SettingsView().font(.bcBody) }
             .sensoryFeedback(trigger: store.flights.count) { old, new in
-                new > old ? .impact(flexibility: .soft, intensity: 0.5) : nil
+                new > old && hapticsEnabled ? .impact(flexibility: .soft, intensity: 0.5) : nil
             }
-            .alert("Something went wrong", isPresented: .constant(store.error != nil)) {
+            // Calm, actionable wording instead of the raw system error.
+            .alert("That didn't go through", isPresented: .constant(store.error != nil)) {
                 Button("OK") { store.error = nil }
             } message: {
-                Text(store.error ?? "")
+                Text("Check your connection and try again. Your saved forecasts still work offline.")
             }
         }
     }

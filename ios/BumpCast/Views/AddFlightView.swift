@@ -648,6 +648,7 @@ private struct WheelColumn: View {
     @Binding var selection: Int
     let label: (Int) -> String
     let name: String
+    @AppStorage("haptics.enabled") private var hapticsEnabled = true
     @State private var scrolled: Int?
 
     var body: some View {
@@ -674,7 +675,7 @@ private struct WheelColumn: View {
             .init(color: .clear, location: 0), .init(color: .black, location: 0.3),
             .init(color: .black, location: 0.7), .init(color: .clear, location: 1),
         ], startPoint: .top, endPoint: .bottom))
-        .sensoryFeedback(.selection, trigger: scrolled)
+        .sensoryFeedback(.selection, trigger: scrolled) { _, _ in hapticsEnabled }
         .onAppear { scrolled = selection }
         .onChange(of: scrolled) { if let scrolled, scrolled != selection { selection = scrolled } }
         .onChange(of: selection) { if scrolled != selection { scrolled = selection } }

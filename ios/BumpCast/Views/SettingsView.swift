@@ -10,6 +10,7 @@ struct SettingsView: View {
     @State private var isManagingSubscription = false
     @State private var restoreMessage: String?
     @State private var stats: AccuracyStats?
+    @AppStorage("haptics.enabled") private var hapticsEnabled = true
 
     var body: some View {
         NavigationStack {
@@ -46,7 +47,12 @@ struct SettingsView: View {
                         }
                     }
                 } footer: {
-                    Text("Forecast ready 48 hours before departure, then updates at 24, 6 and 2 hours.")
+                    Text("Forecast ready 48 hours before departure, then updates at 24, 6 and 2 hours. Quiet overnight unless you fly early.")
+                }
+                Section {
+                    Toggle("Haptics", isOn: $hapticsEnabled).tint(Theme.accent)
+                } footer: {
+                    Text("Soft taps for breathing and when a forecast is confirmed. Never used as a warning.")
                 }
                 Section("How accurate are we?") {
                     if let stats, let exact = stats.exactPercent, let close = stats.withinOnePercent {
@@ -66,6 +72,9 @@ struct SettingsView: View {
                     Text("Forecasts are guidance, not guarantees. Always follow crew instructions.")
                 }
             }
+            // The same calm sky as the rest of the app, behind the standard grouped rows.
+            .scrollContentBackground(.hidden)
+            .background { SkyBackground(sky: Sky(date: .now)) }
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -109,6 +118,7 @@ private struct LicensesView: View {
             .padding()
             .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .background { SkyBackground(sky: Sky(date: .now)) }
         .navigationTitle("Licences")
         .navigationBarTitleDisplayMode(.inline)
     }

@@ -10,6 +10,7 @@ struct ForecastView: View {
     @Environment(InFlight.self) private var inFlight
     @Environment(Router.self) private var router
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @AppStorage("haptics.enabled") private var hapticsEnabled = true
     /// Set when this forecast moved from advance to confirmed since the user last saw it.
     @State private var justConfirmed = false
     @State private var rowsVisible = false
@@ -53,7 +54,7 @@ struct ForecastView: View {
             .tint(Theme.accent)
             ForecastFooter(forecast: forecast, confidence: confidence)
         }
-        .sensoryFeedback(.impact(flexibility: .soft, intensity: 0.5), trigger: justConfirmed) { _, new in new }
+        .sensoryFeedback(.impact(flexibility: .soft, intensity: 0.5), trigger: justConfirmed) { _, new in new && hapticsEnabled }
         .onAppear {
             paywalls.firstGradeViewed(flight)
             justConfirmed = ConfidenceMemory.didFirmUp(flight: flight.id, now: confidence)
@@ -160,6 +161,7 @@ private struct TimelineCard: View {
     var sweepFromAdvance = false
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @AppStorage("haptics.enabled") private var hapticsEnabled = true
     @State private var reveal: CGFloat = 1
     @State private var selectedMinute: Int?
     @State private var focusedStretch = 0
@@ -180,7 +182,7 @@ private struct TimelineCard: View {
             }
             .frame(height: 190)
             .chartXSelection(value: $selectedMinute)
-            .sensoryFeedback(.selection, trigger: selectedSeverity)
+            .sensoryFeedback(.selection, trigger: selectedSeverity) { _, _ in hapticsEnabled }
             .accessibilityElement()
             .accessibilityLabel("Turbulence timeline")
             .accessibilityValue(accessibilityStretch)
