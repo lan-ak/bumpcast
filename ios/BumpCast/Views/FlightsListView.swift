@@ -52,8 +52,8 @@ struct FlightsListView: View {
                 }
             }
             .refreshable { await store.reload() }
-            .sheet(isPresented: $isAdding) { FlightEditorView() }
-            .sheet(isPresented: $isShowingSettings) { SettingsView() }
+            .sheet(isPresented: $isAdding) { FlightEditorView().font(.bcBody) }
+            .sheet(isPresented: $isShowingSettings) { SettingsView().font(.bcBody) }
             .sensoryFeedback(trigger: store.flights.count) { old, new in
                 new > old ? .impact(flexibility: .soft, intensity: 0.5) : nil
             }
@@ -252,7 +252,7 @@ private struct LearnCard: View {
             router.tab = .learn
         } label: {
             HStack(spacing: 14) {
-                Image(systemName: "book.pages").font(.title2).foregroundStyle(Theme.accent)
+                Image(systemName: "book.pages").font(.bcTitle2).foregroundStyle(Theme.accent)
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Why planes handle turbulence").font(.bcHeadline)
                     Text("Short reads on what's happening and what the crew is doing.")

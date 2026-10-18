@@ -6,7 +6,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         _ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
         Paywalls.shared.configure()
-        BrandFont.applyToNavigationTitles()
+        BrandFont.applyToSystemControls()
         UNUserNotificationCenter.current().delegate = PushNotifications.shared
         AppSync.registerBackgroundRefresh()
         // "How did it feel?" buttons on the Live Activity after landing.

@@ -16,7 +16,7 @@ struct SettingsView: View {
             Form {
                 Section("BumpCast Pro") {
                     if paywalls.isPro {
-                        Label("You have Pro", systemImage: "checkmark.seal.fill").foregroundStyle(.blue)
+                        Label("You have Pro", systemImage: "checkmark.seal.fill").foregroundStyle(Theme.accent)
                         // Easy cancel: straight to Apple's subscription management.
                         Button("Manage or cancel subscription") { isManagingSubscription = true }
                     } else {

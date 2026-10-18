@@ -12,7 +12,7 @@ Visual references (private claude.ai links, owner: Lanre):
 
 | Layer | Source direction | What it means in code |
 |---|---|---|
-| System UI (tab bar, nav bars, sheets, menus) | Native iOS 27 Liquid Glass | Standard SwiftUI components only. No custom tab bar or nav chrome. |
+| System UI (tab bar, nav bars, sheets, menus) | Native iOS 27 Liquid Glass | Standard SwiftUI components only. No custom tab bar or nav chrome. The components stay native, but their text uses the brand fonts (see Type). |
 | Mood (backgrounds, hero, calm tools) | "Cabin Dawn" | Time-of-day sky gradient behind content, large soft type, wave-line timeline on summary cards. |
 | Proof (forecast detail) | "Flight Deck" | Confidence badge and update time on every forecast (no source names). Tabular numbers. Precise bar chart one level down. |
 | Depth (explainers) | "Field Guide" | A "Why it's bumpy here" card per bumpy stretch, plus a Learn library. |
@@ -74,7 +74,14 @@ Implementation rules:
 - **Font files:** bundle the static TTFs (the `static/` folder of each Google Fonts download, not the variable font). List them under `UIAppFonts` in the Info.plist of both the app and the widget extension, because the Live Activity, Dynamic Island and widgets use them too. Use the files' real PostScript names in `Font.custom`.
 - **Licences:** include each font's `OFL.txt` and credit the fonts in Settings › Acknowledgements.
 - **Numbers that tick or line up** (score, countdowns, minutes): add `.monospacedDigit()`. If a face has no tabular figures and the digits jitter, set those numbers in IBM Plex Mono.
-- **System UI stays system:** tab bars, nav bars, alerts, menus and system sheets keep SF Pro, so the Liquid Glass chrome still looks native. The brand faces are for the content layer only.
+- **No system font.** Every piece of text the app draws uses the three brand faces, including:
+  - navigation titles: large titles in Familjen Grotesk Bold, inline titles in Familjen Grotesk SemiBold;
+  - toolbar and bar buttons, and tab bar labels: Atkinson Hyperlegible;
+  - segmented controls, search fields, forms and lists (Settings, Add flight): Atkinson Hyperlegible;
+  - Live Activity, Dynamic Island and widgets: the same tokens.
+
+  The components stay native Liquid Glass; only their text changes. Set the bar fonts once at launch through UIKit appearance, using `UIFontMetrics` so they scale with Dynamic Type. Never set text in `.font(.system(...))`, plain text styles like `.font(.headline)`, or `.monospaced()`; always use a `bc…` token. (SF Symbols may still be sized with a font; that's an icon, not text.)
+- **What iOS doesn't let apps restyle:** system alerts and confirmation dialogs, context menus, the date and time picker, the keyboard, share sheets, and Apple's purchase and subscription-management sheets. Those keep SF Pro. Where it matters, use an in-app sheet or card with brand fonts instead of a system alert.
 - **Tone:** headlines are short, calm sentences.
 
 ### Water-glass glyph (severity indicator)

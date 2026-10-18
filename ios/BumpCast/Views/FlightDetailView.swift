@@ -75,7 +75,7 @@ struct FlightDetailView: View {
                 }
             }
         }
-        .sheet(isPresented: $isEditing) { FlightEditorView(flight: flight) }
+        .sheet(isPresented: $isEditing) { FlightEditorView(flight: flight).font(.bcBody) }
         .refreshable { await store.reload() }
         .task(id: state == .building) {
             // While the worker is building the forecast, check back every 30 seconds.
@@ -94,7 +94,7 @@ private struct FlightHeader: View {
         VStack(alignment: .leading, spacing: 4) {
             HStack(alignment: .firstTextBaseline) {
                 Text(flight.originAirport?.iata ?? flight.origin)
-                Image(systemName: "airplane").font(.title2).foregroundStyle(.secondary)
+                Image(systemName: "airplane").font(.bcTitle2).foregroundStyle(.secondary)
                 Text(flight.destinationAirport?.iata ?? flight.destination)
             }
             .font(.bcDisplay)
@@ -113,7 +113,7 @@ struct MessageCard<Actions: View>: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Image(systemName: symbol).font(.title).foregroundStyle(.tint)
+            Image(systemName: symbol).font(.bcTitle).foregroundStyle(.tint)
             Text(title).font(.bcSection)
             Text(message).foregroundStyle(.secondary)
             actions
@@ -171,7 +171,7 @@ private struct NotificationsCard: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
-            Image(systemName: "bell.badge").font(.title2).foregroundStyle(.tint)
+            Image(systemName: "bell.badge").font(.bcTitle2).foregroundStyle(.tint)
             VStack(alignment: .leading, spacing: 6) {
                 Text(forecastReady ? "Get told if your forecast changes" : "Get told when your forecast is ready")
                     .font(.bcCardTitle)

@@ -132,16 +132,35 @@ enum BrandFont {
 }
 
 extension BrandFont {
-    /// Screen titles in Familjen Grotesk, scaled with Dynamic Type. Only the title text changes;
-    /// the bar itself stays the system's (Liquid Glass) so the chrome still looks native.
+    /// No system font (DESIGN_SPEC §2): brand faces on the native bars and controls, scaled with
+    /// Dynamic Type. Only the text changes; the components stay native Liquid Glass.
     @MainActor
-    static func applyToNavigationTitles() {
-        let appearance = UINavigationBar.appearance()
-        if let large = UIFont(name: displayBold, size: 34) {
-            appearance.largeTitleTextAttributes = [.font: UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: large)]
+    static func applyToSystemControls() {
+        func scaled(_ name: String, _ size: CGFloat, _ style: UIFont.TextStyle) -> UIFont? {
+            UIFont(name: name, size: size).map { UIFontMetrics(forTextStyle: style).scaledFont(for: $0) }
         }
-        if let inline = UIFont(name: displaySemiBold, size: 17) {
-            appearance.titleTextAttributes = [.font: UIFontMetrics(forTextStyle: .headline).scaledFont(for: inline)]
+        let navigation = UINavigationBar.appearance()
+        if let large = scaled(displayBold, 34, .largeTitle) {
+            navigation.largeTitleTextAttributes = [.font: large]
+        }
+        if let inline = scaled(displaySemiBold, 17, .headline) {
+            navigation.titleTextAttributes = [.font: inline]
+        }
+        if let button = scaled(body, 17, .body) {
+            for state: UIControl.State in [.normal, .highlighted, .disabled] {
+                UIBarButtonItem.appearance().setTitleTextAttributes([.font: button], for: state)
+            }
+        }
+        if let tab = scaled(body, 10, .caption2), let tabSelected = scaled(bodyBold, 10, .caption2) {
+            UITabBarItem.appearance().setTitleTextAttributes([.font: tab], for: .normal)
+            UITabBarItem.appearance().setTitleTextAttributes([.font: tabSelected], for: .selected)
+        }
+        if let segment = scaled(body, 13, .footnote), let segmentSelected = scaled(bodyBold, 13, .footnote) {
+            UISegmentedControl.appearance().setTitleTextAttributes([.font: segment], for: .normal)
+            UISegmentedControl.appearance().setTitleTextAttributes([.font: segmentSelected], for: .selected)
+        }
+        if let search = scaled(body, 17, .body) {
+            UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).font = search
         }
     }
 }
