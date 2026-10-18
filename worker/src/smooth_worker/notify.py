@@ -12,7 +12,7 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
-from . import airports, changes
+from . import airports, changes, flightdata, status
 from .apns import Apns
 
 log = logging.getLogger(__name__)
@@ -28,6 +28,11 @@ EARLY_FLIGHT = timedelta(hours=4)
 # after saving a flight, often after the first forecast lands) is retried for a while.
 RETRYABLE_ERRORS = {"no device", "no apns"}
 RETRY_WINDOW = timedelta(hours=1)
+# Schedule pushes that landed in quiet hours go out in the morning, if still recent.
+HELD = "held: quiet hours"
+HELD_WINDOW = timedelta(hours=12)
+# How long a delay push waits for the forecast at the new time before going without it.
+FORECAST_WAIT = timedelta(minutes=15)
 
 
 def is_quiet(now: datetime, tz: str | None, departure: datetime) -> bool:
@@ -121,6 +126,10 @@ def run(db, apns: Apns | None, now: datetime) -> int:
     count = 0
     for flight in flights:
         forecast = (flight.get("forecasts") or [None])[0]
+        try:
+            count += _status_event(db, apns, flight, forecast, profiles, passes, devices, now)
+        except Exception:
+            log.exception("status notification for flight %s failed", flight["id"])
         if not forecast:
             continue
         departure = datetime.fromisoformat(flight["departure_at"].replace("Z", "+00:00"))
@@ -205,3 +214,140 @@ def _deliver(db, apns, notification_id, flight, kind, milestone, title, body, ta
     db.update_notification(notification_id, delivered=delivered, error=None if delivered else ", ".join(errors))
     log.info("notified %s %s (%s): %s", flight["id"], milestone, "delivered" if delivered else errors, title)
     return 1
+
+
+# Live status (Pro or a flight pass) and published schedules (free)
+
+
+def _status_event(db, apns, flight, forecast, profiles, passes, devices, now) -> int:
+    """Push a delay, cancellation or diversion once, combined with the forecast it caused."""
+    current = flight.get("status")
+    profile = profiles.get(flight["user_id"], {})
+    if not current or not (profile.get("is_pro") or flight["id"] in passes):
+        return 0
+    event = status.plan(current)
+    if event is None:
+        return 0
+    departure = status.effective_departure(flight, current)
+    if departure < now - DEPARTED_GRACE and event.kind == "delay":
+        return 0
+    if is_quiet(now, profile.get("timezone"), departure):
+        return 0  # planned again on the first poll after quiet hours
+
+    new = None
+    if event.kind == "delay" and forecast and forecast.get("departure_at"):
+        if datetime.fromisoformat(forecast["departure_at"].replace("Z", "+00:00")) == event.departure:
+            new = forecast
+    old = None
+    if event.kind == "delay" and current.get("notified_departure"):
+        told = datetime.fromisoformat(current["notified_departure"].replace("Z", "+00:00"))
+        scheduled = datetime.fromisoformat(flight["departure_at"].replace("Z", "+00:00"))
+        old = db.forecast_for_departure(flight["id"], told, scheduled=told == scheduled)
+    checked = datetime.fromisoformat(current["checked_at"].replace("Z", "+00:00"))
+    if event.kind == "delay" and new is None and (forecast or {}).get("status") == "ready" and now - checked < FORECAST_WAIT:
+        return 0  # the forecast for the new time is still being computed: say both at once
+    title, body = status.compose(event, flight, current, old, new)
+    told = {"notified_status": current["status"]}
+    if event.departure:
+        told["notified_departure"] = event.departure.isoformat()
+    db.update_flight_status(flight["id"], told)
+    return _record(
+        db,
+        apns,
+        flight,
+        devices.get(flight["user_id"], []),
+        {
+            "milestone": event.milestone,
+            "kind": event.kind,
+            "forecast_id": (new or forecast or {}).get("id"),
+            "grade": (new or forecast or {}).get("grade"),
+            "title": title,
+            "body": body,
+            "changes": [{"text": body}],
+            "pro_only": True,
+        },
+    )
+
+
+def _record(db, apns, flight, targets, fields: dict, hold: bool = False) -> int:
+    """Record a notification in the feed and push it when the user can get it."""
+    notification_id = db.insert_notification({"flight_id": flight["id"], "user_id": flight["user_id"], **fields})
+    if notification_id is None:
+        return 0  # already recorded
+    if flight.get("notify") is False:
+        db.update_notification(notification_id, delivered=False, error="notifications off for this flight")
+    elif hold:
+        db.update_notification(notification_id, delivered=False, error=HELD)
+    elif apns is None or not targets:
+        db.update_notification(notification_id, delivered=False, error="no apns" if apns is None else "no device")
+    else:
+        _deliver(db, apns, notification_id, flight, fields["kind"], fields["milestone"], fields["title"], fields["body"], targets)
+    return 1
+
+
+def check_schedules(db, data: flightdata.FlightData | None, apns: Apns | None, now: datetime) -> int:
+    """Once a day, look up flights saved before their schedule was out; fill them in when it is."""
+    if data is None:
+        return 0
+    flights = [f for f in db.pending_schedules(now) if status.schedule_due(f.get("status"), now)]
+    user_ids = sorted({f["user_id"] for f in flights})
+    profiles = db.profiles(user_ids) if flights else {}
+    devices = db.devices(user_ids) if flights else {}
+    count = 0
+    for flight in flights:
+        try:
+            count += _check_schedule(db, data, apns, flight, profiles, devices, now)
+        except Exception:
+            log.exception("schedule check for flight %s failed", flight["id"])
+    _deliver_held(db, apns, now)
+    return count
+
+
+def _check_schedule(db, data, apns, flight, profiles, devices, now) -> int:
+    origin = airports.lookup(flight["origin"])
+    day = datetime.fromisoformat(flight["departure_at"].replace("Z", "+00:00")).astimezone(ZoneInfo(origin.tz)).date()
+    legs = data.legs(flight["flight_number"], day)
+    leg = flightdata.find_leg(legs, origin.icao, flight["destination"]) or next(
+        (leg for leg in legs if not leg.codeshare), None
+    )
+    result = status.published(flight, leg) if leg else None
+    if result is None:
+        db.upsert_flight_status({"flight_id": flight["id"], "checked_at": now.isoformat()})
+        return 0
+    # Changing the time or route resets forecasts, notifications and this check (see the trigger),
+    # so the note is recorded after the update.
+    db.update_flight(flight["id"], result.update)
+    db.delete_flight_status(flight["id"])
+    profile = profiles.get(flight["user_id"], {})
+    departure = datetime.fromisoformat(result.update["departure_at"])
+    fields = {
+        "milestone": "schedule",
+        "kind": "schedule",
+        "title": result.title,
+        "body": result.body,
+        "changes": [{"text": t} for t in result.note],
+        "pro_only": False,
+    }
+    if not result.push:
+        notification_id = db.insert_notification({"flight_id": flight["id"], "user_id": flight["user_id"], **fields})
+        if notification_id:
+            db.update_notification(notification_id, delivered=False, error="in app only")
+        return 1
+    hold = is_quiet(now, profile.get("timezone"), departure)
+    return _record(db, apns, flight, devices.get(flight["user_id"], []), fields, hold=hold)
+
+
+def _deliver_held(db, apns, now: datetime) -> None:
+    """Send schedule pushes held overnight, once it's morning for the user."""
+    held = db.held_notifications(HELD, now - HELD_WINDOW)
+    if not held or apns is None:
+        return
+    user_ids = sorted({n["user_id"] for n in held})
+    profiles, devices = db.profiles(user_ids), db.devices(user_ids)
+    for n in held:
+        flight = n["flight"]
+        departure = datetime.fromisoformat(flight["departure_at"].replace("Z", "+00:00"))
+        targets = devices.get(n["user_id"], [])
+        if not targets or is_quiet(now, profiles.get(n["user_id"], {}).get("timezone"), departure):
+            continue
+        _deliver(db, apns, n["id"], {**flight, "user_id": n["user_id"]}, n["kind"], n["milestone"], n["title"], n["body"], targets)

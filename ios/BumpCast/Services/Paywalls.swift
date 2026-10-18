@@ -20,6 +20,8 @@ enum Placement: String, CaseIterable {
     case updatesLocked = "updates_locked"
     /// Gated: "We've taken off", the Live Activity and in-flight reminders.
     case liveActivityLocked = "live_activity_locked"
+    /// Gated: live flight status (delays, gate, cancellations) and delay pushes.
+    case liveStatusLocked = "live_status_locked"
     /// Gated: pilot reports on the map.
     case pilotReportsLocked = "pilot_reports_locked"
     /// Gated: saving more than the free number of upcoming flights.

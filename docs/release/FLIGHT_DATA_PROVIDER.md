@@ -91,3 +91,19 @@ Monthly cost (assuming half of searches are for flights more than 2 days out):
 
 Also decided: search (by number and by route list) is free for everyone; live status and delay pushes are Pro or flight pass. We set no search horizon of our own: search reaches as far ahead as airlines publish (confirm how far the provider's listings go on Starter in the trial). A flight number entered for a date that isn't scheduled yet is saved with the user's manual airports and times, and the worker retries the lookup until the schedule appears, then fills it in.
 - [ ] Other
+
+## Setup (built in 1.1)
+
+- **API:** `https://api.aerodatabox.com`, with the key in the `x-api-key` header (the direct plan). Checked with a real key on 2026-10-18.
+- **Where the key goes:** never in the repo or the app.
+  - Supabase secret for the `flight-search` edge function:
+    `supabase secrets set AERODATABOX_API_KEY=…`
+  - Fly secret for the worker:
+    `fly secrets set AERODATABOX_API_KEY=…`
+  - `AERODATABOX_API_URL` and `AERODATABOX_KEY_HEADER` are optional overrides. A RapidAPI URL switches to RapidAPI's headers.
+- **Calls:**
+  - Search by number: `/flights/number/{n}/{date}` (Tier 2).
+  - Route list: `/flights/airports/icao/{origin}/{from}/{to}`, called twice per day (two 12-hour windows).
+  - The worker's status refresh uses the number endpoint.
+- **Coverage seen on 2026-10-18:** at JFK, 120 of 230 departures in a six-hour window had live times. The rest had the schedule only. Those flights show "Live status isn't available for this flight", and their forecast keeps the scheduled time.
+- **Superwall:** the new `live_status_locked` placement needs a campaign before it shows a paywall.

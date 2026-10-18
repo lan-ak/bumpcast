@@ -1,0 +1,44 @@
+[
+  {
+    "greatCircleDistance": {"km": 3983.0},
+    "departure": {
+      "airport": {"icao": "KJFK", "iata": "JFK", "name": "New York John F Kennedy", "timeZone": "America/New_York"},
+      "scheduledTime": {"utc": "2026-10-22 11:15Z", "local": "2026-10-22 07:15-04:00"},
+      "revisedTime": {"utc": "2026-10-22 11:55Z", "local": "2026-10-22 07:55-04:00"},
+      "terminal": "5",
+      "gate": "B22",
+      "quality": ["Basic", "Live"]
+    },
+    "arrival": {
+      "airport": {"icao": "KLAX", "iata": "LAX", "name": "Los Angeles", "timeZone": "America/Los_Angeles"},
+      "scheduledTime": {"utc": "2026-10-22 17:41Z", "local": "2026-10-22 10:41-07:00"},
+      "revisedTime": {"utc": "2026-10-22 18:15Z", "local": "2026-10-22 11:15-07:00"},
+      "terminal": "5",
+      "quality": ["Basic", "Live"]
+    },
+    "lastUpdatedUtc": "2026-10-22 10:12Z",
+    "number": "B6 23",
+    "callSign": "JBU23",
+    "status": "Delayed",
+    "codeshareStatus": "IsOperator",
+    "isCargo": false,
+    "aircraft": {"model": "Airbus A321"},
+    "airline": {"name": "JetBlue", "iata": "B6", "icao": "JBU"}
+  },
+  {
+    "departure": {
+      "airport": {"icao": "KJFK", "iata": "JFK", "name": "New York John F Kennedy"},
+      "scheduledTime": {"utc": "2026-10-22 11:15Z", "local": "2026-10-22 07:15-04:00"},
+      "quality": ["Basic"]
+    },
+    "arrival": {
+      "airport": {"icao": "KLAX", "iata": "LAX", "name": "Los Angeles"},
+      "scheduledTime": {"utc": "2026-10-22 17:41Z", "local": "2026-10-22 10:41-07:00"},
+      "quality": ["Basic"]
+    },
+    "number": "EK 6303",
+    "status": "Delayed",
+    "codeshareStatus": "IsCodeshared",
+    "airline": {"name": "Emirates", "iata": "EK"}
+  }
+]

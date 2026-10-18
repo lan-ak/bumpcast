@@ -7,18 +7,40 @@ struct Flight: Codable, Hashable, Identifiable, Sendable {
     var departureAt: Date  // scheduled departure, UTC
     /// "Tell me when it's ready or changes" for this flight.
     var notify: Bool = true
+    /// From flight search, e.g. "B6 23". Flights added by airport have none.
+    var flightNumber: String?
+    var airlineName: String?
+    /// Scheduled arrival, when the flight came from search.
+    var arrivalAt: Date?
+    /// Saved by number before the airline published this date; the times are the user's for now.
+    var schedulePending: Bool = false
+    /// Live status (Pro or a flight pass), written by the worker.
+    var status: FlightStatus?
 
     enum CodingKeys: String, CodingKey {
-        case id, origin, destination, notify
+        case id, origin, destination, notify, status
         case departureAt = "departure_at"
+        case flightNumber = "flight_number"
+        case airlineName = "airline_name"
+        case arrivalAt = "arrival_at"
+        case schedulePending = "schedule_pending"
     }
 
-    init(id: UUID, origin: String, destination: String, departureAt: Date, notify: Bool = true) {
+    init(
+        id: UUID, origin: String, destination: String, departureAt: Date, notify: Bool = true,
+        flightNumber: String? = nil, airlineName: String? = nil, arrivalAt: Date? = nil,
+        schedulePending: Bool = false, status: FlightStatus? = nil
+    ) {
         self.id = id
         self.origin = origin
         self.destination = destination
         self.departureAt = departureAt
         self.notify = notify
+        self.flightNumber = flightNumber
+        self.airlineName = airlineName
+        self.arrivalAt = arrivalAt
+        self.schedulePending = schedulePending
+        self.status = status
     }
 
     init(from decoder: Decoder) throws {
@@ -28,7 +50,16 @@ struct Flight: Codable, Hashable, Identifiable, Sendable {
         destination = try c.decode(String.self, forKey: .destination)
         departureAt = try c.decode(Date.self, forKey: .departureAt)
         notify = try c.decodeIfPresent(Bool.self, forKey: .notify) ?? true
+        flightNumber = try c.decodeIfPresent(String.self, forKey: .flightNumber)
+        airlineName = try c.decodeIfPresent(String.self, forKey: .airlineName)
+        arrivalAt = try c.decodeIfPresent(Date.self, forKey: .arrivalAt)
+        schedulePending = try c.decodeIfPresent(Bool.self, forKey: .schedulePending) ?? false
+        status = try? c.decodeIfPresent(FlightStatus.self, forKey: .status)
     }
+
+    /// When the flight actually leaves, as far as we know: actual, then expected, then scheduled.
+    /// Only flights with live status have one that differs from the schedule.
+    var expectedDeparture: Date { status?.liveDeparture ?? departureAt }
 
     var originAirport: Airport? { AirportStore.shared.airport(origin) }
     var destinationAirport: Airport? { AirportStore.shared.airport(destination) }
@@ -38,8 +69,9 @@ struct Flight: Codable, Hashable, Identifiable, Sendable {
 
     var forecastUnlocksAt: Date { departureAt.addingTimeInterval(-Self.forecastWindow) }
 
-    /// Matches the worker's assumption: wheels up 15 minutes after scheduled departure.
-    var estimatedTakeoff: Date { departureAt.addingTimeInterval(Forecast.taxiOut) }
+    /// Matches the worker's assumption: wheels up 15 minutes after departure. Follows delays,
+    /// like the forecast does.
+    var estimatedTakeoff: Date { expectedDeparture.addingTimeInterval(Forecast.taxiOut) }
 
     /// Landing from the forecast's flight time, or a rough great-circle estimate before there is one.
     func estimatedLanding(_ forecast: Forecast?) -> Date {
@@ -62,6 +94,58 @@ struct Flight: Codable, Hashable, Identifiable, Sendable {
     var routeText: String {
         "\(originAirport?.iata ?? origin) → \(destinationAirport?.iata ?? destination)"
     }
+
+    /// "B6 23 · JFK → LAX", or just the route for flights added by airport.
+    var titleText: String {
+        flightNumber.map { "\($0) · \(routeText)" } ?? routeText
+    }
+}
+
+/// The latest live status the worker stored for a flight.
+struct FlightStatus: Codable, Hashable, Sendable {
+    enum State: String, Codable, Sendable {
+        case scheduled, delayed, departed, cancelled, diverted
+    }
+
+    var state: State?
+    var live: Bool = false
+    var departureScheduled: Date?
+    var departureExpected: Date?
+    var departureActual: Date?
+    var arrivalScheduled: Date?
+    var arrivalExpected: Date?
+    var arrivalActual: Date?
+    var delayMin: Int?
+    var departureGate: String?
+    var departureTerminal: String?
+    var arrivalTerminal: String?
+    var divertedTo: String?
+    var checkedAt: Date
+    var nextCheckAt: Date?
+    var finished: Bool = false
+
+    enum CodingKeys: String, CodingKey {
+        case live, finished
+        case state = "status"
+        case departureScheduled = "departure_scheduled"
+        case departureExpected = "departure_expected"
+        case departureActual = "departure_actual"
+        case arrivalScheduled = "arrival_scheduled"
+        case arrivalExpected = "arrival_expected"
+        case arrivalActual = "arrival_actual"
+        case delayMin = "delay_min"
+        case departureGate = "departure_gate"
+        case departureTerminal = "departure_terminal"
+        case arrivalTerminal = "arrival_terminal"
+        case divertedTo = "diverted_to"
+        case checkedAt = "checked_at"
+        case nextCheckAt = "next_check_at"
+    }
+
+    /// A status with live times, as opposed to a row that only records schedule checks.
+    var hasStatus: Bool { state != nil }
+
+    var liveDeparture: Date? { hasStatus ? (departureActual ?? departureExpected) : nil }
 }
 
 /// Fields the app sends when creating or editing a flight. New flights carry a client-made id,
@@ -72,10 +156,18 @@ struct FlightDraft: Codable, Sendable {
     var destination: String
     var departureAt: Date
     var notify: Bool = true
+    var flightNumber: String? = nil
+    var airlineName: String? = nil
+    var arrivalAt: Date? = nil
+    var schedulePending: Bool = false
 
     enum CodingKeys: String, CodingKey {
         case id, origin, destination, notify
         case departureAt = "departure_at"
+        case flightNumber = "flight_number"
+        case airlineName = "airline_name"
+        case arrivalAt = "arrival_at"
+        case schedulePending = "schedule_pending"
     }
 
     func encode(to encoder: Encoder) throws {
@@ -85,9 +177,16 @@ struct FlightDraft: Codable, Sendable {
         try c.encode(destination, forKey: .destination)
         try c.encode(departureAt, forKey: .departureAt)
         try c.encode(notify, forKey: .notify)
+        // Explicit nulls, so an edit that drops the flight number clears it.
+        try c.encode(flightNumber, forKey: .flightNumber)
+        try c.encode(airlineName, forKey: .airlineName)
+        try c.encode(arrivalAt, forKey: .arrivalAt)
+        try c.encode(schedulePending, forKey: .schedulePending)
     }
 
     var asFlight: Flight {
-        Flight(id: id ?? UUID(), origin: origin, destination: destination, departureAt: departureAt, notify: notify)
+        Flight(
+            id: id ?? UUID(), origin: origin, destination: destination, departureAt: departureAt, notify: notify,
+            flightNumber: flightNumber, airlineName: airlineName, arrivalAt: arrivalAt, schedulePending: schedulePending)
     }
 }

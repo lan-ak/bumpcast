@@ -6,7 +6,10 @@ from datetime import datetime, timedelta
 
 import httpx
 
-FORECAST_FIELDS = "id,issued_at,status,source,model_run,grade,score,duration_min,segments"
+FORECAST_FIELDS = "id,issued_at,status,source,model_run,grade,score,duration_min,segments,departure_at"
+STATUS_EMBED = "status:flight_status(*)"
+# Delayed flights stay in play after their scheduled time; callers filter by expected departure.
+LOOKBACK = timedelta(hours=12)
 
 
 def _in(values) -> str:
@@ -31,12 +34,13 @@ class Database:
     # Forecasts
 
     def flights_with_latest_forecast(self, now: datetime) -> list[dict]:
-        """Upcoming flights (not yet landed) with their most recent forecast, if any."""
+        """Upcoming flights (not yet landed) with their most recent forecast and status, if any."""
         return self._get(
             "/flights",
             {
-                "select": "id,origin,destination,departure_at,updated_at,forecasts:forecasts!forecasts_flight_id_fkey(issued_at,status,source)",
-                "departure_at": f"gte.{(now - timedelta(hours=1)).isoformat()}",
+                "select": "id,user_id,origin,destination,departure_at,updated_at,flight_number,"
+                f"forecasts:forecasts!forecasts_flight_id_fkey(issued_at,status,source,departure_at),{STATUS_EMBED}",
+                "departure_at": f"gte.{(now - LOOKBACK).isoformat()}",
                 "forecasts.order": "issued_at.desc",
                 "forecasts.limit": "1",
                 "order": "departure_at.asc",
@@ -54,6 +58,22 @@ class Database:
         )
         r.raise_for_status()
 
+    def forecast_for_departure(self, flight_id: str, departure: datetime, scheduled: bool) -> dict | None:
+        """The latest forecast computed for a departure time. Forecasts from before 1.1 have no
+        departure_at and used the schedule, so they count when `departure` is the scheduled time."""
+        match = f"departure_at.eq.{departure.isoformat()}"
+        rows = self._get(
+            "/forecasts",
+            {
+                "select": FORECAST_FIELDS,
+                "flight_id": f"eq.{flight_id}",
+                "or": f"({match},departure_at.is.null)" if scheduled else f"({match})",
+                "order": "issued_at.desc",
+                "limit": "1",
+            },
+        )
+        return rows[0] if rows else None
+
     def forecast(self, forecast_id: str) -> dict | None:
         rows = self._get("/forecasts", {"select": FORECAST_FIELDS, "id": f"eq.{forecast_id}"})
         return rows[0] if rows else None
@@ -65,8 +85,9 @@ class Database:
         return self._get(
             "/flights",
             {
-                "select": f"id,user_id,origin,destination,departure_at,notify,forecasts:forecasts!forecasts_flight_id_fkey({FORECAST_FIELDS})",
-                "and": f"(departure_at.gte.{(now - timedelta(hours=1)).isoformat()},"
+                "select": f"id,user_id,origin,destination,departure_at,notify,flight_number,"
+                f"forecasts:forecasts!forecasts_flight_id_fkey({FORECAST_FIELDS}),{STATUS_EMBED}",
+                "and": f"(departure_at.gte.{(now - LOOKBACK).isoformat()},"
                 f"departure_at.lte.{(now + timedelta(hours=48, minutes=5)).isoformat()})",
                 "forecasts.order": "issued_at.desc",
                 "forecasts.limit": "1",
@@ -135,6 +156,51 @@ class Database:
 
     def delete_device(self, token: str) -> None:
         self.http.delete("/devices", params={"token": f"eq.{token}"}).raise_for_status()
+
+    # Flight status
+
+    def upsert_flight_status(self, row: dict) -> None:
+        r = self.http.post(
+            "/flight_status",
+            params={"on_conflict": "flight_id"},
+            json=row,
+            headers={"Prefer": "return=minimal,resolution=merge-duplicates"},
+        )
+        r.raise_for_status()
+
+    def update_flight_status(self, flight_id: str, fields: dict) -> None:
+        r = self.http.patch(
+            "/flight_status", params={"flight_id": f"eq.{flight_id}"}, json=fields, headers={"Prefer": "return=minimal"}
+        )
+        r.raise_for_status()
+
+    def pending_schedules(self, now: datetime) -> list[dict]:
+        """Flights saved by number before the airline published their schedule."""
+        return self._get(
+            "/flights",
+            {
+                "select": f"id,user_id,origin,destination,departure_at,notify,flight_number,{STATUS_EMBED}",
+                "schedule_pending": "is.true",
+                "departure_at": f"gte.{now.isoformat()}",
+            },
+        )
+
+    def delete_flight_status(self, flight_id: str) -> None:
+        self.http.delete("/flight_status", params={"flight_id": f"eq.{flight_id}"}).raise_for_status()
+
+    def held_notifications(self, error: str, since: datetime) -> list[dict]:
+        return self._get(
+            "/notifications",
+            {
+                "select": "id,user_id,kind,milestone,title,body,flight:flights(id,departure_at,notify)",
+                "error": f"eq.{error}",
+                "created_at": f"gte.{since.isoformat()}",
+            },
+        )
+
+    def update_flight(self, flight_id: str, fields: dict) -> None:
+        r = self.http.patch("/flights", params={"id": f"eq.{flight_id}"}, json=fields, headers={"Prefer": "return=minimal"})
+        r.raise_for_status()
 
     # Map data
 

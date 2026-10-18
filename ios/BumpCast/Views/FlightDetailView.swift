@@ -8,6 +8,7 @@ struct FlightDetailView: View {
     @Environment(PushNotifications.self) private var push
     @Environment(\.dismiss) private var dismiss
     @State private var isEditing = false
+    @State private var isAdding = false
 
     var body: some View {
         if let flight = store.flight(flightID) {
@@ -33,6 +34,7 @@ struct FlightDetailView: View {
         return ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 FlightHeader(flight: flight)
+                ScheduleNote(flight: flight)
                 if store.isOffline, let synced = store.syncedAt {
                     Label("Offline. Saved \(synced.formatted(.relative(presentation: .named))).", systemImage: "wifi.slash")
                         .font(.bcFootnote)
@@ -48,7 +50,27 @@ struct FlightDetailView: View {
                 if !landed, flight.departureAt > .now, !push.isEnabled, state != .outOfCoverage {
                     NotificationsCard(forecastReady: { if case .ready = state { true } else { false } }())
                 }
+                FlightStatusSection(flight: flight, forecast: forecast)
+                if flight.status?.state == .cancelled {
+                    CancelledCard(flight: flight, addFlight: { isAdding = true }) {
+                        Task {
+                            await store.delete(flight.id)
+                            dismiss()
+                        }
+                    }
+                } else if flight.status?.state == .diverted {
+                    DivertedCard(flight: flight)
+                }
                 switch state {
+                case _ where flight.status?.state == .cancelled:
+                    EmptyView()  // the forecast describes a flight that isn't happening
+                case .ready(let forecast) where flight.status?.state == .diverted:
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("This forecast was for the original route to \(flight.destinationAirport?.iata ?? flight.destination).")
+                            .font(.bcFootnote)
+                            .foregroundStyle(.secondary)
+                        ForecastView(forecast: forecast, flight: flight).opacity(0.45)
+                    }
                 case .ready(let forecast):
                     ForecastView(forecast: forecast, flight: flight)
                 case .unlocksAt(let date):
@@ -85,6 +107,7 @@ struct FlightDetailView: View {
             }
         }
         .sheet(isPresented: $isEditing) { AddFlightView(flight: flight).font(.bcBody) }
+        .sheet(isPresented: $isAdding) { AddFlightView().font(.bcBody) }
         .refreshable { await store.reload() }
         .task(id: state == .building) {
             // While the worker is building the forecast, check back every 30 seconds.
@@ -101,6 +124,9 @@ private struct FlightHeader: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
+            if let number = flight.flightNumber {
+                Text(flight.airlineName.map { "\(number) · \($0)" } ?? number).eyebrow().foregroundStyle(.secondary)
+            }
             HStack(alignment: .firstTextBaseline) {
                 Text(flight.originAirport?.iata ?? flight.origin)
                 Image(systemName: "airplane").font(.bcTitle2).foregroundStyle(.secondary)
@@ -110,6 +136,11 @@ private struct FlightHeader: View {
             Text("\(flight.originAirport?.city ?? "") to \(flight.destinationAirport?.city ?? "")")
                 .foregroundStyle(.secondary)
             Text(flight.departureText).font(.bcMeta).foregroundStyle(.secondary)
+            if flight.schedulePending {
+                Label("We'll fill in the details when the airline publishes this flight.", systemImage: "calendar.badge.clock")
+                    .font(.bcFootnote)
+                    .foregroundStyle(.secondary)
+            }
         }
     }
 }

@@ -150,10 +150,11 @@ struct NextFlightCard: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Next flight").eyebrow().foregroundStyle(.secondary)
+                    Text(flight.flightNumber.map { "Next flight · \($0)" } ?? "Next flight").eyebrow().foregroundStyle(.secondary)
                     Text(flight.routeText).font(.bcDisplay).displayTypeLimit()
                     Text(flight.departureText).font(.bcMeta).foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)  // wrap, never cut off the time
+                    LiveStatusRow(flight: flight)
                 }
                 Spacer()
                 WaterGlass(severity: state.severity, size: 44)
@@ -203,17 +204,20 @@ struct FlightRow: View {
                 // Route and status share a line until the text is too big, then stack.
                 ViewThatFits(in: .horizontal) {
                     HStack {
-                        Text(flight.routeText).font(.bcHeadline)
+                        Text(flight.titleText).font(.bcHeadline)
                         Spacer()
                         StatusPill(state: state)
                     }
                     VStack(alignment: .leading, spacing: 2) {
-                        Text(flight.routeText).font(.bcHeadline)
+                        Text(flight.titleText).font(.bcHeadline)
                         StatusPill(state: state)
                     }
                 }
                 Text(flight.departureText).font(.bcMeta).foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)  // wrap, never cut off the time
+                if flight.departureAt > .now.addingTimeInterval(-3 * 3600) {
+                    LiveStatusRow(flight: flight)
+                }
                 if let report {
                     Label(report.summary, systemImage: report.matched == true ? "checkmark.circle" : "hand.raised")
                         .font(.bcCaptionStrong)

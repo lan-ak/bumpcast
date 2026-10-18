@@ -10,6 +10,10 @@ protocol FlightService: Sendable {
     func latestForecast(for flightID: UUID) async throws -> Forecast?
     func updates(for flightID: UUID) async throws -> [FlightUpdate]
 
+    /// Flight search (free): by number on a local date, or the nonstops on a route that day.
+    func searchFlights(number: String, date: String) async throws -> FlightSearchResult
+    func routeFlights(origin: String, destination: String, date: String) async throws -> FlightSearchResult
+
     func registerDevice(token: String, environment: String) async throws
     func saveProfile(_ profile: ProfileRecord) async throws
 
@@ -45,7 +49,8 @@ enum Services {
 struct SupabaseFlightService: FlightService {
     let client: SupabaseClient
 
-    private static let flightColumns = "id,origin,destination,departure_at,notify"
+    private static let flightColumns =
+        "id,origin,destination,departure_at,notify,flight_number,airline_name,arrival_at,schedule_pending,status:flight_status(*)"
     private static let updateColumns = "id,flight_id,milestone,kind,grade,title,body,changes,pro_only,created_at"
 
     func signIn() async throws -> UUID {
@@ -86,6 +91,28 @@ struct SupabaseFlightService: FlightService {
             .eq("flight_id", value: flightID)
             .order("created_at", ascending: false)
             .execute().value
+    }
+
+    func searchFlights(number: String, date: String) async throws -> FlightSearchResult {
+        try await search(["number": number, "date": date])
+    }
+
+    func routeFlights(origin: String, destination: String, date: String) async throws -> FlightSearchResult {
+        try await search(["origin": origin, "destination": destination, "date": date])
+    }
+
+    private func search(_ body: [String: String]) async throws -> FlightSearchResult {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        do {
+            return try await client.functions.invoke(
+                "flight-search", options: FunctionInvokeOptions(body: body), decoder: decoder)
+        } catch is CancellationError {
+            throw CancellationError()
+        } catch {
+            // Offline, rate limited or failing: the sheet offers choosing airports instead.
+            return .unavailable
+        }
     }
 
     func registerDevice(token: String, environment: String) async throws {
@@ -181,9 +208,23 @@ actor DemoFlightService: FlightService {
     func flights() async throws -> [Flight] { stored.sorted { $0.departureAt < $1.departureAt } }
 
     func add(_ draft: FlightDraft) async throws -> Flight {
-        let flight = draft.asFlight
+        var flight = draft.asFlight
+        flight.status = Self.demoStatus(for: flight)
         stored.append(flight)
         return flight
+    }
+
+    /// A 40-minute delay with a gate, for flights added by number within the live-status window.
+    private static func demoStatus(for flight: Flight) -> FlightStatus? {
+        guard flight.flightNumber != nil, !flight.schedulePending,
+            flight.departureAt.timeIntervalSinceNow < Flight.forecastWindow
+        else { return nil }
+        let expected = flight.departureAt.addingTimeInterval(40 * 60)
+        return FlightStatus(
+            state: .delayed, live: true, departureScheduled: flight.departureAt, departureExpected: expected,
+            arrivalScheduled: flight.arrivalAt, arrivalExpected: flight.arrivalAt?.addingTimeInterval(34 * 60),
+            delayMin: 40, departureGate: "B22", departureTerminal: "5", arrivalTerminal: "5",
+            checkedAt: .now.addingTimeInterval(-8 * 60), nextCheckAt: .now.addingTimeInterval(52 * 60))
     }
 
     func update(_ id: UUID, _ draft: FlightDraft) async throws -> Flight {
@@ -210,6 +251,63 @@ actor DemoFlightService: FlightService {
     }
 
     func updates(for flightID: UUID) async throws -> [FlightUpdate] { [] }
+
+    func searchFlights(number: String, date: String) async throws -> FlightSearchResult {
+        try await Task.sleep(for: .milliseconds(600))
+        guard let normalized = FlightNumber.normalize(number), let day = Self.day(date) else {
+            return FlightSearchResult(state: .notFound, flights: [])
+        }
+        if day.timeIntervalSinceNow > 60 * 86400 { return FlightSearchResult(state: .notPublished, flights: []) }
+        let legs = Self.demoRoutes.filter { $0.number == normalized }
+        guard !legs.isEmpty else { return FlightSearchResult(state: .notFound, flights: []) }
+        return FlightSearchResult(state: .found, flights: legs.map { $0.found(on: day) })
+    }
+
+    func routeFlights(origin: String, destination: String, date: String) async throws -> FlightSearchResult {
+        try await Task.sleep(for: .milliseconds(600))
+        guard let day = Self.day(date) else { return .unavailable }
+        if day.timeIntervalSinceNow > 60 * 86400 { return FlightSearchResult(state: .notPublished, flights: []) }
+        let flights = Self.demoRoutes.filter { $0.origin == origin && $0.destination == destination }.map { $0.found(on: day) }
+        return FlightSearchResult(state: flights.isEmpty ? .notFound : .found, flights: flights.sorted { $0.departureAt < $1.departureAt })
+    }
+
+    /// Demo schedule: (number, airline, route, local departure hour/minute, minutes in the air).
+    private struct DemoRoute {
+        let number: String, airline: String, origin: String, destination: String
+        let hour: Int, minute: Int, block: Int
+
+        func found(on day: Date) -> FoundFlight {
+            let tz = AirportStore.shared.airport(origin)?.timeZone ?? .current
+            var calendar = Calendar(identifier: .gregorian)
+            calendar.timeZone = tz
+            let local = calendar.dateComponents([.year, .month, .day], from: day)
+            let departure = calendar.date(from: DateComponents(
+                year: local.year, month: local.month, day: local.day, hour: hour, minute: minute)) ?? day
+            return FoundFlight(
+                flightNumber: number, airlineName: airline, origin: origin, destination: destination,
+                departureAt: departure, arrivalAt: departure.addingTimeInterval(TimeInterval(block * 60)))
+        }
+    }
+
+    private static let demoRoutes: [DemoRoute] = [
+        DemoRoute(number: "B6 23", airline: "JetBlue", origin: "KJFK", destination: "KLAX", hour: 7, minute: 15, block: 386),
+        DemoRoute(number: "AA 1", airline: "American Airlines", origin: "KJFK", destination: "KLAX", hour: 8, minute: 0, block: 380),
+        DemoRoute(number: "DL 423", airline: "Delta", origin: "KJFK", destination: "KLAX", hour: 13, minute: 30, block: 385),
+        DemoRoute(number: "UA 2303", airline: "United", origin: "KJFK", destination: "KLAX", hour: 18, minute: 5, block: 390),
+        DemoRoute(number: "UA 456", airline: "United", origin: "KDEN", destination: "KSFO", hour: 9, minute: 40, block: 150),
+        DemoRoute(number: "B6 1023", airline: "JetBlue", origin: "KBOS", destination: "KJFK", hour: 5, minute: 30, block: 75),
+        DemoRoute(number: "B6 1023", airline: "JetBlue", origin: "KJFK", destination: "KLAX", hour: 7, minute: 15, block: 386),
+    ]
+
+    /// "2026-10-22" as noon UTC, close enough to pick the local day anywhere in the US.
+    private static func day(_ text: String) -> Date? {
+        let parser = DateFormatter()
+        parser.locale = Locale(identifier: "en_US_POSIX")
+        parser.timeZone = TimeZone(identifier: "UTC")
+        parser.dateFormat = "yyyy-MM-dd"
+        return parser.date(from: text)?.addingTimeInterval(12 * 3600)
+    }
+
     func registerDevice(token: String, environment: String) async throws {}
     func saveProfile(_ profile: ProfileRecord) async throws {}
     func passFlightIDs() async throws -> Set<UUID> { passes }

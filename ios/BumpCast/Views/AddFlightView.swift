@@ -1,19 +1,30 @@
 import SwiftUI
 
-/// Add a flight in three short steps (Route, When, Check), or edit one starting on Check.
-/// DESIGN_SPEC §3 item 8. States are never red: problems use the moderate orange plus words.
+/// Add a flight: find it by number (free), or in three short steps (Route, When, Check), where
+/// When lists that day's nonstops on the route. Editing starts on Check.
+/// DESIGN_SPEC §3 item 8 and docs/design/flight-status-1.1-copy.md. States are never red:
+/// problems use the moderate orange plus words. Never say where flight data comes from.
 struct AddFlightView: View {
     var flight: Flight?
 
-    enum Step: Int, CaseIterable { case route, when, check }
+    enum Step: Int, CaseIterable { case find, route, when, check }
+
+    /// The flight just saved, when adding its connection.
+    struct Connection: Equatable {
+        let from: Airport
+        let arrival: Date
+        /// The previous flight left on an earlier local day (an overnight flight).
+        let overnight: Bool
+    }
 
     @Environment(FlightStore.self) private var store
     @Environment(PushNotifications.self) private var push
     @Environment(Router.self) private var router
     @Environment(\.dismiss) private var dismiss
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @AppStorage("haptics.enabled") private var hapticsEnabled = true
 
-    @State private var step: Step = .route
+    @State private var step: Step = .find
     @State private var origin: Airport?
     @State private var destination: Airport?
     @State private var departure = AddFlightView.defaultDeparture
@@ -21,6 +32,18 @@ struct AddFlightView: View {
     @State private var allowOutsideCoverage = false
     @State private var isSaving = false
     @State private var loaded = false
+    // From search
+    @State private var number = ""
+    @State private var picked: FoundFlight?
+    @State private var pendingNumber: String?
+    /// Where the picked flight came from, for Back.
+    @State private var pickedFrom: Step = .when
+    /// On When: the time wheel instead of the list of flights.
+    @State private var manualTime = false
+    // Connecting flights
+    @State private var connection: Connection?
+    @State private var added: [Flight] = []
+    @State private var savedHaptic = 0
 
     private var isEditing: Bool { flight != nil }
     private var sky: Sky { Sky(date: departure, timeZone: origin?.timeZone ?? .current) }
@@ -29,18 +52,27 @@ struct AddFlightView: View {
         NavigationStack {
             ZStack {
                 switch step {
+                case .find:
+                    FindStep(
+                        number: $number, departure: $departure, connection: connection,
+                        timeZone: connection?.from.timeZone ?? origin?.timeZone ?? .current,
+                        pick: use, chooseAirports: { step = .route }, enterManually: enterManually)
+                    .transition(stepTransition)
                 case .route:
                     RouteStep(
                         origin: $origin, destination: $destination,
                         allowOutsideCoverage: $allowOutsideCoverage, recent: recentAirports, sky: sky)
                     .transition(stepTransition)
                 case .when:
-                    WhenStep(origin: origin, destination: destination, departure: $departure)
-                        .transition(stepTransition)
+                    WhenStep(
+                        origin: origin, destination: destination, departure: $departure,
+                        manual: $manualTime, after: connection?.arrival,
+                        pick: use, lookUpNumber: { step = .find })
+                    .transition(stepTransition)
                 case .check:
                     CheckStep(
                         origin: origin, destination: destination, departure: departure, notify: $notify,
-                        isEditing: isEditing
+                        isEditing: isEditing, picked: picked
                     ) { step = .route }
                     .transition(stepTransition)
                 }
@@ -48,19 +80,37 @@ struct AddFlightView: View {
             .animation(Theme.motion(reduceMotion), value: step)
             .background { SkyBackground(sky: sky) }
             .onSky(sky)
-            .safeAreaInset(edge: .bottom) { primaryButton }
-            .navigationTitle(isEditing ? "Edit flight" : "\(step.rawValue + 1) of 3")
+            .safeAreaInset(edge: .top) { context }
+            .safeAreaInset(edge: .bottom) { bottomButtons }
+            .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    if step == .route || (isEditing && step == .check) {
-                        Button("Cancel") { dismiss() }
+                    if !added.isEmpty && step == .find {
+                        Button("Done") { finish() }  // the first flight is already saved
+                    } else if step == firstStep || (isEditing && step == .check) {
+                        Button(added.isEmpty ? "Cancel" : "Done") { added.isEmpty ? dismiss() : finish() }
                     } else {
-                        Button("Back") { step = Step(rawValue: step.rawValue - 1) ?? .route }
+                        Button("Back", action: back)
                     }
                 }
             }
+            .sensoryFeedback(.success, trigger: savedHaptic) { _, _ in hapticsEnabled }
             .onAppear(perform: loadExisting)
+            // A new route lists its flights again (unless the number's schedule isn't out yet).
+            .onChange(of: origin) { if step == .route { manualTime = pendingNumber != nil } }
+            .onChange(of: destination) { if step == .route { manualTime = pendingNumber != nil } }
+        }
+    }
+
+    private var firstStep: Step { isEditing ? .route : .find }
+
+    private var title: String {
+        if isEditing { return "Edit flight" }
+        switch step {
+        case .find: return ""
+        case .route, .when: return "\(step.rawValue) of 3"
+        case .check: return picked == nil ? "3 of 3" : ""
         }
     }
 
@@ -69,7 +119,75 @@ struct AddFlightView: View {
             insertion: .opacity.combined(with: .offset(x: 24)), removal: .opacity.combined(with: .offset(x: -24)))
     }
 
-    // MARK: Primary button
+    private func back() {
+        switch step {
+        case .check where picked != nil:
+            // A searched flight came straight from Find or the route list.
+            step = pickedFrom
+            picked = nil
+        case .route where pendingNumber != nil:
+            step = .find
+        default:
+            step = Step(rawValue: step.rawValue - 1) ?? firstStep
+        }
+    }
+
+    // MARK: Context above the steps
+
+    @ViewBuilder
+    private var context: some View {
+        if let connection, step != .check {
+            Label {
+                Text("Connecting from \(connection.from.iata) · arrives \(connection.arrival.localTime(in: connection.from.timeZone, withDay: connection.overnight))")
+            } icon: {
+                Image(systemName: "arrow.triangle.turn.up.right.diamond").foregroundStyle(Theme.accent)
+            }
+            .font(.bcSubheadlineStrong)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal)
+            .padding(.top, 4)
+        } else if let pendingNumber, step != .find {
+            VStack(alignment: .leading, spacing: 2) {
+                Text("\(pendingNumber) · \(departure.formatted(Self.pendingDay(origin?.timeZone)))").font(.bcMeta)
+                Text("Times fill in when the airline publishes them").font(.bcFootnote).foregroundStyle(.secondary)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .skyCard(cornerRadius: 16, padding: 12)
+            .padding(.horizontal)
+        }
+    }
+
+    private static func pendingDay(_ tz: TimeZone?) -> Date.FormatStyle {
+        var style = Date.FormatStyle().weekday(.abbreviated).day().month(.abbreviated).year()
+        style.timeZone = tz ?? .current
+        return style
+    }
+
+    // MARK: Bottom buttons
+
+    @ViewBuilder
+    private var bottomButtons: some View {
+        switch step {
+        case .find:
+            EmptyView()  // Find has its own buttons
+        case .when where !manualTime:
+            EmptyView()  // pick a flight from the list, or "Enter the time myself"
+        case .check where !isEditing:
+            VStack(spacing: 10) {
+                primaryButton
+                Button {
+                    Task { await save(thenConnect: true) }
+                } label: {
+                    Text("Add a connecting flight").font(.bcHeadline).frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.bordered).tint(Theme.accent).controlSize(.large)
+                .disabled(!canAdvance || isSaving)
+            }
+            .padding()
+        default:
+            primaryButton.padding()
+        }
+    }
 
     private var primaryButton: some View {
         Button(action: advance) {
@@ -79,18 +197,18 @@ struct AddFlightView: View {
         .tint(Theme.accent)
         .controlSize(.large)
         .disabled(!canAdvance || isSaving)
-        .padding()
     }
 
     private var buttonTitle: String {
         switch step {
-        case .route, .when: "Next"
+        case .find, .route, .when: "Next"
         case .check: isEditing ? "Save changes" : "Add flight"
         }
     }
 
     private var canAdvance: Bool {
         switch step {
+        case .find: false
         case .route: RouteStep.isValid(origin, destination, allowOutsideCoverage: allowOutsideCoverage)
         case .when: WhenStep.isValid(departure)
         case .check:
@@ -100,40 +218,125 @@ struct AddFlightView: View {
 
     private func advance() {
         switch step {
+        case .find: break
         case .route: step = .when
         case .when: step = .check
-        case .check: Task { await save() }
+        case .check: Task { await save(thenConnect: false) }
         }
+    }
+
+    // MARK: Search results
+
+    /// A flight picked from search or the route list: fill everything in and go to Check.
+    private func use(_ found: FoundFlight) {
+        guard let from = found.originAirport, let to = found.destinationAirport else { return }
+        pickedFrom = step
+        picked = found
+        pendingNumber = nil
+        origin = from
+        destination = to
+        departure = found.departureAt
+        allowOutsideCoverage = true
+        step = .check
+    }
+
+    /// The schedule for this number isn't out yet: enter airports and time, keep the number.
+    private func enterManually(_ number: String) {
+        pendingNumber = number
+        picked = nil
+        manualTime = true
+        if let connection { origin = connection.from }
+        step = .route
     }
 
     // MARK: Saving
 
-    private func save() async {
+    private func save(thenConnect: Bool) async {
         guard let origin, let destination else { return }
         isSaving = true
         defer { isSaving = false }
-        let draft = FlightDraft(origin: origin.icao, destination: destination.icao, departureAt: departure, notify: notify)
-        guard let saved = await store.save(draft, editing: flight?.id) else { return }
-        dismiss()
-        // The toggle asks for permission at the moment it's useful.
-        if notify, push.status == .notDetermined {
-            await push.requestPermission()
+        var draft = FlightDraft(origin: origin.icao, destination: destination.icao, departureAt: departure, notify: notify)
+        if let picked, picked.origin == origin.icao, picked.destination == destination.icao {
+            draft.flightNumber = picked.flightNumber
+            draft.airlineName = picked.airlineName
+            // The airline's arrival, moved with the departure if the user changed the time.
+            draft.arrivalAt = picked.arrivalAt?.addingTimeInterval(departure.timeIntervalSince(picked.departureAt))
+        } else if let pendingNumber {
+            draft.flightNumber = pendingNumber
+            draft.schedulePending = true
+        } else if let flight, flight.origin == origin.icao, flight.destination == destination.icao {
+            // Editing keeps the number unless the route changed.
+            draft.flightNumber = flight.flightNumber
+            draft.airlineName = flight.airlineName
+            draft.arrivalAt = flight.arrivalAt.map { $0.addingTimeInterval(departure.timeIntervalSince(flight.departureAt)) }
+            draft.schedulePending = flight.schedulePending
         }
-        router.showToast(toastText(for: saved))
+        guard let saved = await store.save(draft, editing: flight?.id) else { return }
+        added.append(saved)
+        if thenConnect {
+            startConnection(after: saved)
+            return
+        }
+        finish()
+    }
+
+    /// Reopen the sheet for the next leg, from where this one lands.
+    private func startConnection(after saved: Flight) {
+        guard let from = saved.destinationAirport else { return finish() }
+        let arrival = saved.arrivalAt ?? saved.estimatedLanding(nil)
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = from.timeZone
+        let departedOn = saved.departureAt.localDay(in: saved.originAirport?.timeZone ?? from.timeZone)
+        connection = Connection(from: from, arrival: arrival, overnight: arrival.localDay(in: from.timeZone) > departedOn)
+        origin = from
+        manualTime = false
+        destination = nil
+        picked = nil
+        pendingNumber = nil
+        number = ""
+        allowOutsideCoverage = false
+        // An hour after landing, on the arrival day.
+        let next = arrival.addingTimeInterval(3600)
+        departure = calendar.date(bySetting: .second, value: 0, of: next) ?? next
+        step = .find
+    }
+
+    private func finish() {
+        guard let last = added.last else { return dismiss() }
+        dismiss()
+        savedHaptic += 1
+        Task {
+            // The toggle asks for permission at the moment it's useful.
+            if notify, push.status == .notDetermined {
+                await push.requestPermission()
+            }
+        }
+        router.showToast(toastText)
         // Leaving soon: go straight to the forecast.
-        if !isEditing, saved.departureAt.timeIntervalSinceNow < 18 * 3600 {
-            router.openFlight(saved.id)
+        if !isEditing, added.count == 1, last.departureAt.timeIntervalSinceNow < 18 * 3600 {
+            router.openFlight(last.id)
         }
     }
 
-    private func toastText(for saved: Flight) -> String {
+    private var toastText: String {
+        if added.count > 1 {
+            var days: [String] = []
+            for day in added.map(Self.unlockDay) where !days.contains(day) { days.append(day) }
+            if days.count == 1 { return "\(added.count) flights added. Forecasts for each arrive \(days[0])." }
+            return "\(added.count) flights added. First forecasts arrive \(days.dropLast().joined(separator: ", ")) and \(days.last ?? "")."
+        }
+        guard let saved = added.first else { return "" }
         if store.isPending(saved.id) {
             return "\(saved.routeText) saved on your phone. We'll sync it when you're back online."
         }
         if isEditing { return "Changes saved." }
         let unlock = saved.forecastUnlocksAt
-        if unlock <= .now { return "\(saved.routeText) added. Your forecast will be ready in a few minutes." }
-        return "\(saved.routeText) added. First forecast \(unlock.approximateDayAndTime())."
+        if unlock <= .now { return "\(saved.titleText) added. Your forecast will be ready in a few minutes." }
+        return "\(saved.titleText) added. First forecast \(unlock.approximateDayAndTime())."
+    }
+
+    private static func unlockDay(_ flight: Flight) -> String {
+        flight.forecastUnlocksAt <= .now ? "today" : flight.forecastUnlocksAt.formatted(.dateTime.weekday(.abbreviated))
     }
 
     // MARK: Setup
@@ -152,6 +355,7 @@ struct AddFlightView: View {
         departure = flight.departureAt
         notify = flight.notify
         allowOutsideCoverage = true
+        manualTime = true
         step = .check
     }
 
@@ -164,6 +368,226 @@ struct AddFlightView: View {
             .filter { seen.insert($0.icao).inserted }
             .prefix(6)
             .map { $0 }
+    }
+}
+
+// MARK: - Find by flight number (free)
+
+private struct FindStep: View {
+    @Binding var number: String
+    @Binding var departure: Date
+    let connection: AddFlightView.Connection?
+    let timeZone: TimeZone
+    let pick: (FoundFlight) -> Void
+    let chooseAirports: () -> Void
+    let enterManually: (String) -> Void
+
+    enum Search: Equatable {
+        case idle, searching
+        case found([FoundFlight])
+        case notFound, notPublished, unavailable
+    }
+
+    @Environment(FlightStore.self) private var store
+    @State private var search: Search = .idle
+    @FocusState private var focused: Bool
+
+    private var normalized: String? { FlightNumber.normalize(number) }
+    private var calendar: Calendar {
+        var c = Calendar(identifier: .gregorian)
+        c.locale = .current
+        c.timeZone = timeZone
+        return c
+    }
+    private var dayText: String { departure.formatted(Date.FormatStyle(timeZone: timeZone).weekday(.abbreviated).day().month(.abbreviated)) }
+    private var shown: String { normalized ?? number.uppercased() }
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 18) {
+                Text(connection == nil ? "Find your flight" : "Find your next flight")
+                    .font(.bcDisplay)
+                    .accessibilityAddTraits(.isHeader)
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("Flight number").eyebrow().foregroundStyle(.secondary)
+                    TextField(connection == nil ? "e.g. B6 23" : "e.g. UA 573", text: $number)
+                        .font(.bcTitle2)
+                        .focused($focused)
+                        .textInputAutocapitalization(.characters)
+                        .autocorrectionDisabled()
+                        .submitLabel(.search)
+                        .onSubmit(find)
+                        .skyCard(cornerRadius: 16, padding: 14)
+                    Text("Airline code and number, from your booking.").font(.bcFootnote).foregroundStyle(.secondary)
+                }
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("Day").eyebrow().foregroundStyle(.secondary)
+                    DayPicker(departure: $departure, calendar: calendar)
+                    if let connection, connection.overnight {
+                        Text("\(departure.formatted(Date.FormatStyle(timeZone: timeZone).weekday(.wide))), because your overnight flight lands then.")
+                            .font(.bcFootnote)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                result
+                if search == .idle || search == .searching {
+                    Button(action: find) {
+                        Text("Find flight").font(.bcHeadline).frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent).tint(Theme.accent)
+                    .controlSize(.large)
+                    .disabled(normalized == nil || search == .searching)
+                    Button("Choose airports instead", action: chooseAirports)
+                        .font(.bcSubheadlineStrong)
+                        .tint(Theme.accent)
+                        .frame(maxWidth: .infinity)
+                }
+            }
+            .padding()
+        }
+        .scrollDismissesKeyboard(.interactively)
+        .onAppear { if number.isEmpty { focused = true } }
+        .onDisappear { focused = false }
+        .onChange(of: number) { if search != .searching { search = .idle } }
+        .onChange(of: departure) { if search != .searching { search = .idle } }
+        .animation(.smooth, value: search)
+    }
+
+    @ViewBuilder
+    private var result: some View {
+        switch search {
+        case .idle:
+            EmptyView()
+        case .searching:
+            Label("Looking for \(shown) on \(dayText)…", systemImage: "magnifyingglass")
+                .font(.bcSubheadline)
+                .foregroundStyle(.secondary)
+                .accessibilityLabel("Searching for flight \(shown)")
+        case .found(let flights) where flights.count == 1:
+            let flight = flights[0]
+            VStack(alignment: .leading, spacing: 12) {
+                Text("Found it").eyebrow().foregroundStyle(Theme.accent)
+                FoundFlightSummary(flight: flight)
+                Text("Is this your flight?").font(.bcHeadline)
+                Button {
+                    pick(flight)
+                } label: {
+                    Text("Yes, use this flight").font(.bcHeadline).frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent).tint(Theme.accent)
+                Button("Not this one") { search = .idle; focused = true }
+                    .font(.bcSubheadlineStrong).tint(Theme.accent).frame(maxWidth: .infinity)
+            }
+            .skyCard()
+        case .found(let flights):
+            VStack(alignment: .leading, spacing: 10) {
+                Text("\(shown) flies \(flights.count) legs that day").font(.bcCardTitle)
+                Text("Pick the one you're on.").font(.bcSubheadline).foregroundStyle(.secondary)
+                VStack(spacing: 0) {
+                    ForEach(Array(flights.enumerated()), id: \.element.id) { index, flight in
+                        if index > 0 { Divider() }
+                        Button { pick(flight) } label: {
+                            HStack {
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("\(flight.originAirport?.iata ?? flight.origin) → \(flight.destinationAirport?.iata ?? flight.destination)")
+                                        .font(.bcHeadline)
+                                    Text(flight.timesText).font(.bcMeta).foregroundStyle(.secondary)
+                                }
+                                Spacer()
+                                Image(systemName: "chevron.right").foregroundStyle(.tertiary)
+                            }
+                            .padding(.vertical, 10)
+                            .contentShape(.rect)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+                Button("Not this one") { search = .idle }
+                    .font(.bcSubheadlineStrong).tint(Theme.accent)
+            }
+            .skyCard()
+        case .notFound:
+            notice(
+                title: "We couldn't find \(shown) on \(dayText)",
+                body: "Check the number and the day, or add it by choosing your airports.",
+                primary: ("Choose airports", chooseAirports), secondary: ("Try again", find))
+        case .notPublished:
+            notice(
+                title: "\(shown)'s schedule for \(departure.formatted(Date.FormatStyle(timeZone: timeZone).weekday(.abbreviated).day().month(.abbreviated).year())) isn't out yet",
+                body: "Airlines publish their schedules in stages, and this one hasn't been released. Add your airports and departure time from your booking. We'll fill in the rest when it's published.",
+                primary: ("Enter airports and time", { enterManually(shown) }),
+                secondary: ("Change number or day", { search = .idle; focused = true }))
+        case .unavailable:
+            notice(
+                title: "Flight search isn't available right now",
+                body: "You can still add your flight by choosing your airports. We'll forecast it the same way.",
+                primary: ("Choose airports", chooseAirports), secondary: ("Try again", find))
+        }
+    }
+
+    private func notice(title: String, body: String, primary: (String, () -> Void), secondary: (String, () -> Void)) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(title).font(.bcCardTitle)
+            Text(body).font(.bcSubheadline).foregroundStyle(.secondary)
+            HStack {
+                Button(primary.0, action: primary.1)
+                    .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent).tint(Theme.accent)
+                Button(secondary.0, action: secondary.1)
+                    .buttonStyle(.bordered).tint(Theme.accent)
+            }
+            .font(.bcSubheadlineStrong)
+        }
+        .skyCard()
+    }
+
+    private func find() {
+        guard let normalized else { return }
+        focused = false
+        search = .searching
+        Task {
+            let result = (try? await store.service.searchFlights(number: normalized, date: departure.searchDay(in: timeZone)))
+                ?? .unavailable
+            // Only flights between airports we know; a connection prefers legs from where it lands.
+            var flights = result.flights.filter { $0.originAirport != nil && $0.destinationAirport != nil }
+            if let from = connection?.from, flights.contains(where: { $0.origin == from.icao }) {
+                flights = flights.filter { $0.origin == from.icao }
+            }
+            switch result.state {
+            case .found where !flights.isEmpty: search = .found(flights)
+            case .found, .notFound, .noSchedule: search = .notFound
+            case .notPublished: search = .notPublished
+            case .unavailable: search = .unavailable
+            }
+        }
+    }
+}
+
+/// "B6 23 · JFK → LAX · Departs 7:15 AM EDT · Arrives 10:41 AM PDT", laid out as a card body.
+private struct FoundFlightSummary: View {
+    let flight: FoundFlight
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(flight.title).font(.bcMeta).foregroundStyle(.secondary)
+            Text("\(flight.originAirport?.iata ?? flight.origin) → \(flight.destinationAirport?.iata ?? flight.destination)")
+                .font(.bcTitle2)
+            if let tz = flight.originAirport?.timeZone {
+                Text("Departs \(flight.departureAt.localTimeWithZone(in: tz))").font(.bcSubheadline)
+            }
+            if let arrival = flight.arrivalAt, let tz = flight.destinationAirport?.timeZone {
+                Text("Arrives \(arrival.localTimeWithZone(in: tz))").font(.bcSubheadline)
+            }
+        }
+        .accessibilityElement(children: .combine)
+    }
+}
+
+extension FoundFlight {
+    /// "7:00 AM → 10:32 AM", each local to its airport.
+    var timesText: String {
+        let dep = departureAt.localTime(in: originAirport?.timeZone ?? .current)
+        guard let arrivalAt else { return dep }
+        return "\(dep) → \(arrivalAt.localTime(in: destinationAirport?.timeZone ?? .current))"
     }
 }
 
@@ -430,13 +854,15 @@ private struct WhenStep: View {
     let origin: Airport?
     let destination: Airport?
     @Binding var departure: Date
-    @State private var isPickingDate = false
+    /// The time wheel instead of the list of that day's flights.
+    @Binding var manual: Bool
+    /// When connecting: list flights after this arrival first.
+    let after: Date?
+    let pick: (FoundFlight) -> Void
+    let lookUpNumber: () -> Void
 
     /// Up to an hour late is allowed, for delays.
     static func isValid(_ departure: Date) -> Bool { departure > .now.addingTimeInterval(-3600) }
-
-    /// Days shown as tiles; later dates come from the calendar tile.
-    private static let tileDays = 6
 
     private var timeZone: TimeZone { origin?.timeZone ?? .current }
     private var calendar: Calendar {
@@ -446,6 +872,238 @@ private struct WhenStep: View {
         return c
     }
 
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 18) {
+                if let origin, let destination {
+                    Text(manual
+                        ? "\(origin.iata) → \(destination.iata)"
+                        : "\(origin.iata) → \(destination.iata) · \(departure.formatted(Date.FormatStyle(timeZone: timeZone).weekday(.abbreviated).day().month(.abbreviated)))")
+                        .eyebrow().foregroundStyle(.secondary)
+                }
+                Text(manual ? "When do you leave?" : "Which flight are you on?").font(.bcDisplay)
+                DayPicker(departure: $departure, calendar: calendar)
+                if manual {
+                    TimeWheel(date: $departure, calendar: calendar)
+                        .skyCard(padding: 8)
+                    Text("Local time in \(origin?.city ?? "your departure city"), from your booking.")
+                        .font(.bcFootnote)
+                        .foregroundStyle(.secondary)
+                    if !Self.isValid(departure) {
+                        Text("Check the date, or pick a later time.")
+                            .font(.bcSubheadline)
+                            .foregroundStyle(Theme.color(.moderate))
+                    } else {
+                        Label(previewText, systemImage: "clock")
+                            .font(.bcSubheadline)
+                            .skyCard(cornerRadius: 16, padding: 12)
+                    }
+                } else if let origin, let destination {
+                    RouteFlightList(
+                        origin: origin, destination: destination, day: departure.searchDay(in: timeZone),
+                        dayText: departure.formatted(Date.FormatStyle(timeZone: timeZone).weekday(.abbreviated).day().month(.abbreviated)),
+                        after: after, pick: pick, enterTime: { manual = true }, lookUpNumber: lookUpNumber)
+                }
+            }
+            .padding()
+        }
+    }
+
+    private var previewText: String {
+        let unlock = departure.addingTimeInterval(-Flight.forecastWindow)
+        if unlock <= .now { return "Your forecast will be ready a few minutes after you add the flight." }
+        return "Your first forecast arrives \(unlock.approximateDayAndTime())."
+    }
+}
+
+/// That day's nonstop flights on the route, grouped by part of the day. Never says where the
+/// list comes from.
+private struct RouteFlightList: View {
+    let origin: Airport
+    let destination: Airport
+    let day: String  // yyyy-MM-dd, local to the origin
+    let dayText: String
+    let after: Date?
+    let pick: (FoundFlight) -> Void
+    let enterTime: () -> Void
+    let lookUpNumber: () -> Void
+
+    @Environment(FlightStore.self) private var store
+    @State private var result: FlightSearchResult?
+    @State private var showEarlier = false
+
+    private enum Part: String, CaseIterable {
+        case morning = "Morning", afternoon = "Afternoon", evening = "Evening"
+    }
+
+    private var flights: [FoundFlight] {
+        (result?.flights ?? []).filter { $0.originAirport != nil && $0.destinationAirport != nil }
+    }
+    /// After a connection's arrival, earlier flights wait behind "Show earlier flights".
+    private var earlier: [FoundFlight] {
+        guard let after else { return [] }
+        return flights.filter { $0.departureAt < after }
+    }
+    private var visible: [FoundFlight] { showEarlier ? flights : flights.filter { !earlier.contains($0) } }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            switch result?.state {
+            case nil:
+                Label("Finding nonstop flights on \(dayText)…", systemImage: "airplane")
+                    .font(.bcSubheadline)
+                    .foregroundStyle(.secondary)
+            case .found? where !flights.isEmpty:
+                list
+            case .found?, .notFound?:
+                notice(
+                    title: "No nonstop flights found that day",
+                    body: "If you're connecting, add your first flight, then tap Add a connecting flight on the last step. Or enter your departure time and we'll forecast it the same way.")
+            case .noSchedule?:
+                notice(title: "We can't list flights from \(origin.city) yet", body: "Enter your departure time and we'll forecast it the same way.")
+            case .notPublished?:
+                notice(
+                    title: "Flight lists for \(dayText) aren't out yet",
+                    body: "They appear closer to the day. For now, enter your departure time, or look up your flight number.",
+                    secondary: ("Look up flight number", lookUpNumber))
+            case .unavailable?:
+                notice(
+                    title: "Can't load flights right now",
+                    body: "Enter your departure time instead. We'll forecast it the same way.",
+                    secondary: ("Try again", { Task { await load() } }))
+            }
+            if result == nil || (result?.state == .found && !flights.isEmpty) {
+                Button("Enter the time myself", action: enterTime)  // the notices carry their own
+                    .font(.bcSubheadlineStrong)
+                    .tint(Theme.accent)
+            }
+        }
+        .task(id: "\(origin.icao)-\(destination.icao)-\(day)") { await load() }
+    }
+
+    private var list: some View {
+        ScrollViewReader { proxy in
+            VStack(alignment: .leading, spacing: 12) {
+                Text("\(flights.count) nonstop flight\(flights.count == 1 ? "" : "s"). Times are local: \(origin.iata) \(zone(origin)), \(destination.iata) \(zone(destination)).")
+                    .font(.bcFootnote)
+                    .foregroundStyle(.secondary)
+                if let after {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Showing flights after your \(after.localTime(in: origin.timeZone)) arrival.").font(.bcFootnote)
+                        if !earlier.isEmpty && !showEarlier {
+                            Button("Show \(earlier.count) earlier flight\(earlier.count == 1 ? "" : "s")") { showEarlier = true }
+                                .font(.bcFootnoteStrong).tint(Theme.accent)
+                        }
+                    }
+                }
+                let groups = Part.allCases.map { part in (part, visible.filter { self.part(of: $0) == part }) }.filter { !$0.1.isEmpty }
+                if visible.count > 6 && groups.count > 1 {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack {
+                            ForEach(groups, id: \.0) { part, rows in
+                                Button("\(part.rawValue) \(rows.count)") { withAnimation(.smooth) { proxy.scrollTo(part, anchor: .top) } }
+                                    .buttonStyle(.bordered).tint(Theme.accent).font(.bcSubheadlineStrong)
+                            }
+                        }
+                    }
+                }
+                ForEach(groups, id: \.0) { part, rows in
+                    VStack(alignment: .leading, spacing: 8) {
+                        if groups.count > 1 { Text(part.rawValue).eyebrow().foregroundStyle(.secondary) }
+                        VStack(spacing: 0) {
+                            ForEach(Array(rows.enumerated()), id: \.element.id) { index, flight in
+                                if index > 0 { Divider().padding(.leading, 16) }
+                                RouteFlightRow(flight: flight) { pick(flight) }
+                            }
+                        }
+                        .skyCard(padding: 0)
+                    }
+                    .id(part)
+                }
+            }
+        }
+    }
+
+    private func notice(title: String, body: String, secondary: (String, () -> Void)? = nil) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(title).font(.bcCardTitle)
+            Text(body).font(.bcSubheadline).foregroundStyle(.secondary)
+            HStack {
+                Button("Enter the time myself", action: enterTime)
+                    .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent).tint(Theme.accent)
+                if let secondary {
+                    Button(secondary.0, action: secondary.1).buttonStyle(.bordered).tint(Theme.accent)
+                }
+            }
+            .font(.bcSubheadlineStrong)
+        }
+        .skyCard()
+    }
+
+    private func part(of flight: FoundFlight) -> Part {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = origin.timeZone
+        let hour = calendar.component(.hour, from: flight.departureAt)
+        return hour < 12 ? .morning : hour < 17 ? .afternoon : .evening
+    }
+
+    private func zone(_ airport: Airport) -> String {
+        airport.timeZone.abbreviation(for: flights.first?.departureAt ?? .now) ?? ""
+    }
+
+    private func load() async {
+        result = nil
+        showEarlier = false
+        result = (try? await store.service.routeFlights(origin: origin.icao, destination: destination.icao, date: day)) ?? .unavailable
+    }
+}
+
+/// "B6 23 · JetBlue" over "7:00 AM → 10:32 AM". At large text sizes the chevron goes.
+private struct RouteFlightRow: View {
+    let flight: FoundFlight
+    let action: () -> Void
+    @Environment(\.dynamicTypeSize) private var typeSize
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 12) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(flight.title).font(.bcHeadline)
+                    Text(flight.timesText).font(.bcMeta).foregroundStyle(.secondary)
+                }
+                Spacer(minLength: 0)
+                if !typeSize.isAccessibilitySize {
+                    Image(systemName: "chevron.right").foregroundStyle(.tertiary)
+                }
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .contentShape(.rect)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(accessibilityText)
+    }
+
+    private var accessibilityText: String {
+        let airline = flight.airlineName ?? flight.flightNumber
+        let number = flight.flightNumber.split(separator: " ").last.map(String.init) ?? ""
+        let departs = flight.departureAt.localTime(in: flight.originAirport?.timeZone ?? .current)
+        let arrives = flight.arrivalAt.map { ", arrives \($0.localTime(in: flight.destinationAirport?.timeZone ?? .current))" } ?? ""
+        return "\(airline) \(number), departs \(departs)\(arrives)"
+    }
+}
+
+/// Day tiles for the next six days, then a calendar tile for later dates.
+private struct DayPicker: View {
+    @Binding var departure: Date
+    let calendar: Calendar
+    @State private var isPickingDate = false
+
+    /// Days shown as tiles; later dates come from the calendar tile.
+    private static let tileDays = 6
+
+    private var timeZone: TimeZone { calendar.timeZone }
+
     private var isLaterDate: Bool {
         let today = calendar.startOfDay(for: .now)
         let days = calendar.dateComponents([.day], from: today, to: calendar.startOfDay(for: departure)).day ?? 0
@@ -453,50 +1111,27 @@ private struct WhenStep: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 18) {
-                if let origin, let destination {
-                    Text("\(origin.iata) → \(destination.iata)").eyebrow().foregroundStyle(.secondary)
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 6) {
+                ForEach(0..<Self.tileDays, id: \.self) { offset in
+                    let day = calendar.date(byAdding: .day, value: offset, to: calendar.startOfDay(for: .now))!
+                    DayTile(
+                        top: offset == 0 ? "Today" : weekday(day),
+                        bottom: Text(dayNumber(day)),
+                        selected: calendar.isDate(day, inSameDayAs: departure)
+                    ) { setDay(day) }
+                    .accessibilityLabel(offset == 0 ? "Today" : day.formatted(accessibleDay))
                 }
-                Text("When do you leave?").font(.bcDisplay)
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 6) {
-                        ForEach(0..<Self.tileDays, id: \.self) { offset in
-                            let day = calendar.date(byAdding: .day, value: offset, to: calendar.startOfDay(for: .now))!
-                            DayTile(
-                                top: offset == 0 ? "Today" : weekday(day),
-                                bottom: Text(dayNumber(day)),
-                                selected: calendar.isDate(day, inSameDayAs: departure)
-                            ) { setDay(day) }
-                            .accessibilityLabel(offset == 0 ? "Today" : day.formatted(accessibleDay))
-                        }
-                        DayTile(
-                            top: isLaterDate ? month(departure) : "More",
-                            bottom: isLaterDate ? Text(dayNumber(departure)) : Text(Image(systemName: "calendar")),
-                            selected: isLaterDate
-                        ) { isPickingDate = true }
-                        .accessibilityLabel(isLaterDate ? departure.formatted(accessibleDay) : "Pick another date")
-                    }
-                    .padding(.vertical, 2)
-                }
-                .scrollClipDisabled()
-                TimeWheel(date: $departure, calendar: calendar)
-                    .skyCard(padding: 8)
-                Text("Local time in \(origin?.city ?? "your departure city"), from your booking.")
-                    .font(.bcFootnote)
-                    .foregroundStyle(.secondary)
-                if !Self.isValid(departure) {
-                    Text("Check the date, or pick a later time.")
-                        .font(.bcSubheadline)
-                        .foregroundStyle(Theme.color(.moderate))
-                } else {
-                    Label(previewText, systemImage: "clock")
-                        .font(.bcSubheadline)
-                        .skyCard(cornerRadius: 16, padding: 12)
-                }
+                DayTile(
+                    top: isLaterDate ? month(departure) : "More",
+                    bottom: isLaterDate ? Text(dayNumber(departure)) : Text(Image(systemName: "calendar")),
+                    selected: isLaterDate
+                ) { isPickingDate = true }
+                .accessibilityLabel(isLaterDate ? departure.formatted(accessibleDay) : "Pick another date")
             }
-            .padding()
+            .padding(.vertical, 2)
         }
+        .scrollClipDisabled()
         .sheet(isPresented: $isPickingDate) {
             NavigationStack {
                 VStack(alignment: .leading, spacing: 18) {
@@ -518,12 +1153,6 @@ private struct WhenStep: View {
             .font(.bcBody)
             .presentationDetents([.fraction(0.72), .large])
         }
-    }
-
-    private var previewText: String {
-        let unlock = departure.addingTimeInterval(-Flight.forecastWindow)
-        if unlock <= .now { return "Your forecast will be ready a few minutes after you add the flight." }
-        return "Your first forecast arrives \(unlock.approximateDayAndTime())."
     }
 
     private var accessibleDay: Date.FormatStyle {
@@ -805,6 +1434,8 @@ private struct CheckStep: View {
     let departure: Date
     @Binding var notify: Bool
     let isEditing: Bool
+    /// The flight from search, when it came from there.
+    let picked: FoundFlight?
     let change: () -> Void
 
     var body: some View {
@@ -852,6 +1483,9 @@ private struct CheckStep: View {
     private func routeCard(_ origin: Airport, _ destination: Airport) -> some View {
         let flight = Flight(id: UUID(), origin: origin.icao, destination: destination.icao, departureAt: departure)
         return VStack(alignment: .leading, spacing: 8) {
+            if let picked {
+                Text(picked.title).eyebrow().foregroundStyle(.secondary)
+            }
             HStack {
                 Text(flight.routeText).font(.bcTitle2)
                 Spacer()
@@ -859,7 +1493,13 @@ private struct CheckStep: View {
             }
             Text("\(origin.city) to \(destination.city)").font(.bcSubheadline)
             Text(flight.departureText).font(.bcMeta).foregroundStyle(.secondary)
-            Text("About \(Int(flight.estimatedAirMinutes).durationText) in the air").font(.bcFootnote).foregroundStyle(.secondary)
+            if let arrival = picked?.arrivalAt {
+                // Moves with the departure if the time was changed here.
+                let moved = arrival.addingTimeInterval(departure.timeIntervalSince(picked?.departureAt ?? departure))
+                Text("Arrives \(moved.localTimeWithZone(in: destination.timeZone))").font(.bcMeta).foregroundStyle(.secondary)
+            } else {
+                Text("About \(Int(flight.estimatedAirMinutes).durationText) in the air").font(.bcFootnote).foregroundStyle(.secondary)
+            }
         }
         .skyCard()
     }

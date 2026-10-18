@@ -11,9 +11,11 @@ import os
 import time
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
-from . import airports, forecast, mapdata, notify
+from . import airports, flightdata, forecast, mapdata, notify, status
 from .apns import Apns
+from .flightdata import FlightData
 from .sources import GfsSource, GtgSource, gfs, gtg
 
 log = logging.getLogger("smooth_worker")
@@ -63,8 +65,10 @@ def cmd_forecast(args: argparse.Namespace) -> None:
         )
 
 
-def is_due(flight: dict, now: datetime) -> bool:
-    departure = _parse_time(flight["departure_at"])
+def is_due(flight: dict, now: datetime, departure: datetime | None = None) -> bool:
+    """Whether to recompute the forecast. `departure` is the expected departure when a delay moved it."""
+    scheduled = _parse_time(flight["departure_at"])
+    departure = departure or scheduled
     latest = (flight.get("forecasts") or [None])[0]
     if latest is None:
         return True
@@ -73,6 +77,9 @@ def is_due(flight: dict, now: datetime) -> bool:
         return True  # flight was edited
     if latest["status"] == "out_of_coverage":
         return False
+    forecast_for = _parse_time(latest["departure_at"]) if latest.get("departure_at") else scheduled
+    if forecast_for != departure and latest["status"] != "too_early":
+        return True  # the departure moved: forecast the new time now
     if departure - now > forecast.FORECAST_WINDOW:
         return False  # still too early; app shows when the forecast unlocks
     if latest["status"] == "too_early":
@@ -81,28 +88,60 @@ def is_due(flight: dict, now: datetime) -> bool:
     return now - issued >= refresh
 
 
-def run_once(db) -> int:
+def entitled_flights(db, flights: list[dict]) -> set[str]:
+    """Flights with live status: the user is Pro, or bought a flight pass for the flight."""
+    numbered = [f for f in flights if f.get("flight_number")]
+    if not numbered:
+        return set()
+    profiles = db.profiles(sorted({f["user_id"] for f in numbered}))
+    passes = db.flights_with_passes([f["id"] for f in numbered])
+    return {f["id"] for f in numbered if profiles.get(f["user_id"], {}).get("is_pro") or f["id"] in passes}
+
+
+def refresh_status(db, data: FlightData, flight: dict, previous: dict | None, now: datetime) -> dict | None:
+    """Fetch and store the flight's latest status. Returns the stored row."""
+    origin = airports.lookup(flight["origin"])
+    day = _parse_time(flight["departure_at"]).astimezone(ZoneInfo(origin.tz)).date()
+    leg = flightdata.find_leg(data.legs(flight["flight_number"], day), origin.icao, flight["destination"])
+    if leg is None:
+        # Not found today: note the check so the next try waits for the usual interval.
+        row = {**(previous or {}), "flight_id": flight["id"], "checked_at": now.isoformat()}
+    else:
+        row = status.build(leg, flight, previous, now)
+    db.upsert_flight_status(row)
+    log.info("flight %s %s: %s", flight["id"], flight["flight_number"], row.get("status") or "not found")
+    return row
+
+
+def run_once(db, data: FlightData | None = None) -> int:
     now = datetime.now(UTC)
-    due = [f for f in db.flights_with_latest_forecast(now) if is_due(f, now)]
-    if not due:
-        return 0
-    sources = None
-    for flight in due:
+    flights = db.flights_with_latest_forecast(now)
+    entitled = entitled_flights(db, flights) if data else set()
+    count, sources = 0, None
+    for flight in flights:
         try:
+            # Status only counts for flights that have live status.
+            current = flight.get("status") if flight["id"] in entitled else None
+            if flight["id"] in entitled and status.is_due(current, status.effective_departure(flight, current), now):
+                current = refresh_status(db, data, flight, current, now)
+                count += 1
+            departure = status.effective_departure(flight, current)
+            if departure < now - timedelta(hours=1) or not is_due(flight, now, departure):
+                continue
             origin = airports.lookup(flight["origin"])
             destination = airports.lookup(flight["destination"])
-            departure = _parse_time(flight["departure_at"])
             if departure - now > forecast.FORECAST_WINDOW:
                 result = forecast.Forecast(status="too_early")
             else:
                 sources = sources or load_sources(now)
                 result = forecast.compute(origin, destination, departure, now, sources)
-            db.insert_forecast(flight["id"], result.to_row())
+            db.insert_forecast(flight["id"], {**result.to_row(), "departure_at": departure.isoformat()})
             db.prune_forecasts(flight["id"], now - HISTORY)
+            count += 1
             log.info("flight %s %s->%s: %s %s", flight["id"], origin.iata, destination.iata, result.status, result.grade or "")
         except Exception:
             log.exception("flight %s failed", flight["id"])
-    return len(due)
+    return count
 
 
 def prune_cache(max_age: timedelta = timedelta(days=1)) -> None:
@@ -112,12 +151,14 @@ def prune_cache(max_age: timedelta = timedelta(days=1)) -> None:
             path.unlink(missing_ok=True)
 
 
-def poll(db, apns: Apns | None) -> None:
-    """One pass: forecasts first (notifications describe them), then notifications, then map data.
-    Each step is isolated so a failure in one doesn't block the others."""
+def poll(db, apns: Apns | None, data: FlightData | None = None) -> None:
+    """One pass: status and forecasts first (notifications describe them), then notifications,
+    then published schedules, then map data. Each step is isolated so a failure in one doesn't
+    block the others."""
     steps = [
-        ("forecasts", lambda: f"processed {run_once(db)} flight(s)"),
+        ("forecasts", lambda: f"processed {run_once(db, data)} status/forecast update(s)"),
         ("notifications", lambda: f"{notify.run(db, apns, datetime.now(UTC))} notification(s)"),
+        ("schedules", lambda: f"{notify.check_schedules(db, data, apns, datetime.now(UTC))} schedule(s) published"),
         ("pireps", lambda: f"{mapdata.refresh_pireps(db, datetime.now(UTC))} pilot report(s)"),
         ("map", lambda: f"{refresh_map(db)} map layer(s)"),
     ]
@@ -141,8 +182,11 @@ def cmd_run(args: argparse.Namespace) -> None:
     apns = Apns.from_env()
     if apns is None:
         log.warning("APNs not configured (APNS_KEY_ID / APNS_TEAM_ID / APNS_KEY): notifications are recorded, not pushed")
+    data = FlightData.from_env()
+    if data is None:
+        log.warning("Flight data not configured (AERODATABOX_API_KEY): no live status or schedule checks")
     while True:
-        poll(db, apns)
+        poll(db, apns, data)
         if args.once:
             return
         time.sleep(POLL_SECONDS)

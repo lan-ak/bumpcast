@@ -58,9 +58,12 @@ struct Forecast: Codable, Hashable, Sendable {
     let segments: [Segment]
     let samples: [Sample]
     let route: [[Double]]
+    /// The departure this forecast was computed for: the expected time when a delay moved it.
+    var departureAt: Date? = nil
 
     enum CodingKeys: String, CodingKey {
         case status, source, grade, score, segments, samples, route
+        case departureAt = "departure_at"
         case issuedAt = "issued_at"
         case modelRun = "model_run"
         case durationMin = "duration_min"

@@ -1,0 +1,695 @@
+<title>BumpCast Flight Status 1.1</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Familjen+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a review board. Each section names a screen, states the rule, then shows phone mockups in a wrapping row. Phones carry their own fixed light/dark/contrast palettes; the board follows the viewer's theme. */
+:root {
+  --bg: #e9eff3;
+  --panel: #ffffff;
+  --fg: #15253a;
+  --fg2: #4b5d72;
+  --rule: #cdd9e2;
+  --accent: #2a7385;
+  --display: "Familjen Grotesk", "Avenir Next", system-ui, sans-serif;
+  --body: "Atkinson Hyperlegible", "Helvetica Neue", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #0e1724; --panel: #152233; --fg: #e3ecf4; --fg2: #a3b4c6; --rule: #2a3c51; --accent: #6fbccc; color-scheme: dark } }
+:root[data-theme="dark"] { --bg: #0e1724; --panel: #152233; --fg: #e3ecf4; --fg2: #a3b4c6; --rule: #2a3c51; --accent: #6fbccc; color-scheme: dark }
+
+body { background: var(--bg); color: var(--fg); font: 16px/1.55 var(--body); }
+.wrap { max-width: 1320px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 44px 72px; display: grid; gap: 56px; }
+h1, h2, h3 { font-family: var(--display); margin: 0; line-height: 1.15; text-wrap: balance; }
+h1 { font-size: clamp(2rem, 4.5vw, 3rem); letter-spacing: -0.02em; }
+h2 { font-size: 1.7rem; }
+p { margin: 0; }
+.eb { font: 500 0.75rem/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+.prose { max-width: 70ch; color: var(--fg2); }
+section { display: grid; gap: 20px; }
+.head { display: grid; gap: 8px; }
+.rules { display: flex; flex-wrap: wrap; gap: 8px; }
+.rules span { font-size: 0.85rem; border: 1px solid var(--rule); background: var(--panel); border-radius: 999px; padding: 6px 12px; }
+.row { display: flex; flex-wrap: wrap; gap: 28px; align-items: flex-start; }
+figure { margin: 0; display: grid; gap: 10px; width: 300px; max-width: 100%; }
+figcaption { font-size: 0.86rem; color: var(--fg2); }
+figcaption b { color: var(--fg); font-family: var(--display); font-size: 0.95rem; display: block; }
+code { font-family: var(--mono); font-size: 0.85em; background: var(--panel); border: 1px solid var(--rule); border-radius: 5px; padding: 0 4px; }
+
+/* ---------- phone ---------- */
+.ph { width: 300px; max-width: 100%; border-radius: 42px; background: #0a1018; padding: 9px; box-sizing: border-box; box-shadow: 0 20px 40px -26px rgba(10,25,45,.55); }
+.sc {
+  --ink: #15253a; --ink2: #45576c; --card: rgba(255,255,255,.68); --edge: rgba(255,255,255,.92); --accent: #2a7385; --onacc: #ffffff;
+  --sky: linear-gradient(180deg, #f6d9c4 0%, #e3e6ee 28%, #dbe7f1 100%); --field: #ffffff; --line: #d6e0e8; --tagbg: rgba(42,115,133,.1);
+  border-radius: 33px; padding: 46px 16px 22px; min-height: 560px; box-sizing: border-box;
+  background: var(--sky); color: var(--ink); font: 14px/1.4 var(--body);
+  display: flex; flex-direction: column; gap: 12px; overflow: hidden;
+}
+.dk .sc { --ink: #f2f5f8; --ink2: #b7c3d0; --card: rgba(255,255,255,.08); --edge: rgba(255,255,255,.15); --accent: #6fbccc; --onacc: #0f1c2c; --sky: linear-gradient(180deg, #1b2a45 0%, #121d31 50%, #0b1322 100%); --field: rgba(255,255,255,.09); --line: rgba(255,255,255,.14); --tagbg: rgba(111,188,204,.14); }
+.hc .sc { --ink2: #26364a; --card: #ffffff; --edge: #15253a; --line: #8597a8; }
+.hc .card, .hc .fld { border-width: 1.5px; }
+.ax .sc { font-size: 19px; }
+.ax .h1 { font-size: 30px; }
+.sheet .sc { background: linear-gradient(180deg, #fbefe6 0%, #f4f7fa 26%); border-radius: 33px; }
+.dk.sheet .sc { background: #142031; }
+
+.nav { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; min-height: 32px; }
+.nav .l { justify-self: start; color: var(--accent); font-size: 15px; }
+.nav .t { font: 600 15px var(--display); }
+.nav .r { justify-self: end; font: 400 11px var(--mono); color: var(--ink2); }
+.h1 { font: 700 26px/1.05 var(--display); letter-spacing: -0.02em; margin: 0; }
+.h2 { font: 600 18px/1.15 var(--display); margin: 0; }
+.e { font: 500 10.5px/1.2 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink2); }
+.m { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.s2 { color: var(--ink2); }
+.fld { background: var(--field); border: 1px solid var(--line); border-radius: 16px; padding: 10px 14px; display: grid; gap: 2px; }
+.fld.on { border: 2px solid var(--accent); padding: 9px 13px; }
+.fld .v { font: 500 20px var(--mono); }
+.fld .ph-t { color: var(--ink2); }
+.chips { display: flex; gap: 6px; }
+.chip { flex: none; width: 44px; height: 58px; border-radius: 14px; border: 1px solid var(--line); background: var(--field); display: grid; place-content: center; text-align: center; }
+.chip small { font: 500 9.5px var(--mono); text-transform: uppercase; letter-spacing: .06em; color: var(--ink2); }
+.chip b { font: 600 19px var(--display); }
+.chip.on { background: var(--ink); color: var(--sky-ink, #fff); border: 0; }
+.dk .chip.on { color: #0f1c2c; }
+.chip.on small { color: inherit; opacity: .8; }
+.btn { min-height: 46px; border-radius: 16px; background: var(--accent); color: var(--onacc); display: grid; place-items: center; font: 600 16px var(--display); }
+.btn.ink { background: var(--ink); color: var(--field); }
+.dk .btn.ink { color: #0f1c2c; }
+.btn2 { min-height: 42px; border-radius: 14px; border: 1px solid var(--line); background: transparent; color: var(--ink); display: grid; place-items: center; font: 700 14px var(--body); }
+.lnk { color: var(--accent); font-weight: 700; }
+.card { background: var(--card); border: 1px solid var(--edge); border-radius: 18px; padding: 12px 14px; display: grid; gap: 6px; }
+.grow { flex: 1; }
+.hr { height: 1px; background: var(--line); }
+.inline { display: flex; gap: 8px; align-items: center; }
+.spin { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--line); border-top-color: var(--accent); flex: none; animation: spin 1.2s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spin { animation: none; } }
+.leg { display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.leg:last-child { border-bottom: 0; }
+.jump { display: flex; gap: 6px; flex-wrap: wrap; }
+.jump span { font: 700 12px var(--body); border-radius: 999px; padding: 6px 11px; border: 1px solid var(--line); background: var(--field); }
+.jump span.on { background: var(--ink); color: var(--field); border-color: var(--ink); }
+.dk .jump span.on { color: #0f1c2c; }
+.grp { font: 500 10px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink2); padding: 8px 0 2px; }
+.fl { display: grid; grid-template-columns: 1fr auto; gap: 1px 8px; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--line); }
+.fl:last-child { border-bottom: 0; }
+.fl .n { font-weight: 700; }
+.fl .t { font: 500 12.5px var(--mono); color: var(--ink2); font-variant-numeric: tabular-nums; }
+.ax .fl { grid-template-columns: 1fr; }
+.ax .fl .chev { display: none; }
+.skel { height: 12px; border-radius: 6px; background: var(--line); }
+.tag { font: 700 10.5px var(--body); color: var(--accent); background: var(--tagbg); border-radius: 999px; padding: 2px 8px; }
+.st { display: flex; gap: 6px; align-items: center; font-size: 13px; font-weight: 700; flex-wrap: wrap; }
+.st .sep { color: var(--ink2); font-weight: 400; }
+.ico { width: 14px; height: 14px; flex: none; }
+.tbl { display: grid; grid-template-columns: auto repeat(3, minmax(0, 1fr)); gap: 6px 8px; font-size: 12.5px; align-items: baseline; }
+.tbl .hd { font: 500 9.5px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink2); }
+.tbl .old { color: var(--ink2); }
+.tbl .now { font-weight: 700; }
+.ax .tbl { grid-template-columns: 1fr; gap: 2px; }
+.ax .tbl .hd { display: none; }
+.glass { width: 26px; height: 32px; flex: none; }
+.notif { background: rgba(240,244,248,.82); color: #15253a; border-radius: 22px; padding: 11px 13px; display: grid; grid-template-columns: 30px 1fr; gap: 2px 10px; font-size: 13px; line-height: 1.3; }
+.notif .ic { grid-row: span 3; width: 30px; height: 30px; border-radius: 8px; overflow: hidden; }
+.notif .ap { display: flex; justify-content: space-between; font-size: 11.5px; color: #4b5d72; }
+.notif b { font-size: 13.5px; }
+.lock { background: linear-gradient(180deg, #2b3f63 0%, #3c5a7c 45%, #c9a99a 100%); color: #fff; }
+.lock .clock { font: 600 58px/1 var(--display); text-align: center; letter-spacing: -0.03em; }
+.lock .date { text-align: center; font-weight: 700; opacity: .9; }
+.pw { background: linear-gradient(180deg, #f6d9c4 0%, #dfe6ef 45%, #a9c6e2 100%); }
+
+/* copy table */
+.tablebox { overflow-x: auto; background: var(--panel); border: 1px solid var(--rule); border-radius: 14px; }
+table { width: 100%; border-collapse: collapse; min-width: 640px; font-size: 0.92rem; }
+th, td { text-align: left; vertical-align: top; padding: 11px 14px; border-bottom: 1px solid var(--rule); }
+th { font: 500 0.72rem/1.2 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--fg2); }
+tr:last-child td { border-bottom: 0; }
+td:first-child { font-weight: 700; width: 24%; }
+footer { color: var(--fg2); font-size: 0.88rem; border-top: 1px solid var(--rule); padding-top: 18px; }
+</style>
+
+<div class="wrap">
+
+<header class="head">
+  <span class="eb">BumpCast 1.1 · for review · designs only</span>
+  <h1>Flight-number search and live status</h1>
+  <p class="prose">Search by flight number is free. Live status is Pro, or comes with a flight pass for that flight. It refreshes with each forecast update: every 6 h from 48 h to 18 h out, then hourly until about an hour after departure. When the departure time moves, the forecast is recomputed in the same step. Full copy is in <code>docs/design/flight-status-1.1-copy.md</code>.</p>
+  <div class="rules"><span>Never name a data source</span><span>Status never uses turbulence colours</span><span>Airport-local times</span><span>Always show "Updated …"</span><span>No in-air position, no "Landed"</span><span>No red, no warnings</span></div>
+</header>
+
+<!-- ================= 1. ADD FLIGHT ================= -->
+<section>
+  <div class="head"><span class="eb">1 · Add a flight · free</span><h2>Find your flight by number</h2>
+  <p class="prose">This becomes the first screen of the add-flight sheet. "Choose airports instead" leads to the existing route step, which still works for everything. A match skips straight to <b>Check your flight</b>.</p></div>
+  <div class="row">
+
+    <figure><div class="ph sheet"><div class="sc">
+      <div class="nav"><span class="l">Cancel</span><span class="t">Add a flight</span><span class="r">1 of 2</span></div>
+      <p class="h1">Find your flight</p>
+      <div class="fld on"><span class="e">Flight number</span><span class="v">B6 23</span></div>
+      <span class="s2" style="font-size:12.5px">Airline code and number, from your booking.</span>
+      <span class="e">Day</span>
+      <div class="chips"><span class="chip"><small>Tue</small><b>20</b></span><span class="chip"><small>Wed</small><b>21</b></span><span class="chip on"><small>Thu</small><b>22</b></span><span class="chip"><small>Fri</small><b>23</b></span><span class="chip"><small>Sat</small><b>24</b></span></div>
+      <span class="grow"></span>
+      <span class="btn">Find flight</span>
+      <span class="lnk" style="text-align:center">Choose airports instead</span>
+    </div></div><figcaption><b>Enter number and day</b>Same day tiles as today's When step, with the number above.</figcaption></figure>
+
+    <figure><div class="ph sheet"><div class="sc">
+      <div class="nav"><span class="l">Cancel</span><span class="t">Add a flight</span><span class="r">1 of 2</span></div>
+      <p class="h1">Find your flight</p>
+      <div class="fld"><span class="e">Flight number</span><span class="v">B6 23</span></div>
+      <div class="card"><div class="inline"><span class="spin"></span><span>Looking for B6 23 on Thu 22 Oct…</span></div></div>
+      <span class="grow"></span>
+      <span class="btn" style="opacity:.45">Find flight</span>
+      <span class="lnk" style="text-align:center">Choose airports instead</span>
+    </div></div><figcaption><b>Searching</b>Inline, no full-screen spinner. Reduce Motion shows a still ring.</figcaption></figure>
+
+    <figure><div class="ph sheet"><div class="sc">
+      <div class="nav"><span class="l">Back</span><span class="t">Add a flight</span><span class="r">1 of 2</span></div>
+      <span class="e" style="color:var(--accent)">Found it</span>
+      <p class="h1">Is this your flight?</p>
+      <div class="card" style="gap:10px">
+        <span class="e">B6 23 · JetBlue</span>
+        <div style="display:flex;justify-content:space-between;align-items:baseline"><b class="m" style="font-size:24px;font-weight:500">JFK</b><span class="s2">→</span><b class="m" style="font-size:24px;font-weight:500">LAX</b></div>
+        <div class="hr"></div>
+        <div style="display:flex;justify-content:space-between;gap:8px"><span><span class="s2" style="font-size:12px">Departs</span><br><b>7:15 AM EDT</b></span><span style="text-align:right"><span class="s2" style="font-size:12px">Arrives</span><br><b>10:41 AM PDT</b></span></div>
+        <span class="s2" style="font-size:12.5px">Thu 22 Oct · about 6 h 26 min</span>
+      </div>
+      <span class="grow"></span>
+      <span class="btn">Yes, use this flight</span>
+      <span class="btn2">Not this one</span>
+    </div></div><figcaption><b>One match</b>Fills From, To and both times. Confirming goes to Check your flight.</figcaption></figure>
+
+    <figure><div class="ph sheet"><div class="sc">
+      <div class="nav"><span class="l">Back</span><span class="t">Add a flight</span><span class="r">1 of 2</span></div>
+      <p class="h1">B6 23 flies 2 legs that day</p>
+      <span class="s2">Pick the one you're on.</span>
+      <div class="card" style="gap:0;padding:2px 14px">
+        <div class="leg"><b class="m" style="font-weight:500">BOS → JFK</b><span class="s2">›</span><span class="s2 m" style="font-size:12.5px">5:30 AM → 6:45 AM</span></div>
+        <div class="leg"><b class="m" style="font-weight:500">JFK → LAX</b><span class="s2">›</span><span class="s2 m" style="font-size:12.5px">7:15 AM → 10:41 AM</span></div>
+      </div>
+      <span class="grow"></span>
+      <span class="lnk" style="text-align:center">Choose airports instead</span>
+    </div></div><figcaption><b>Several legs</b>Each row is a button. Times are local to each airport.</figcaption></figure>
+
+    <figure><div class="ph sheet"><div class="sc">
+      <div class="nav"><span class="l">Cancel</span><span class="t">Add a flight</span><span class="r">1 of 2</span></div>
+      <p class="h1">Find your flight</p>
+      <div class="fld"><span class="e">Flight number</span><span class="v">B6 2300</span></div>
+      <div class="card">
+        <b class="h2">We couldn't find B6 2300 on Thu 22 Oct</b>
+        <span class="s2">Check the number and the day, or add it by choosing your airports.</span>
+      </div>
+      <span class="grow"></span>
+      <span class="btn">Choose airports</span>
+      <span class="btn2">Try again</span>
+    </div></div><figcaption><b>No match</b>A calm card, not an error. The airport route is the main way forward.</figcaption></figure>
+
+    <figure><div class="ph sheet"><div class="sc">
+      <div class="nav"><span class="l">Cancel</span><span class="t">Add a flight</span><span class="r">1 of 2</span></div>
+      <p class="h1">Find your flight</p>
+      <div class="card">
+        <div class="inline"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.5 6.2a9.5 9.5 0 0 1 13 0M4 8.8a6 6 0 0 1 8 0M6.5 11.3a2.4 2.4 0 0 1 3 0" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"></path><path d="M2 2l12 12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"></path></svg><b class="h2">Flight search isn't available right now</b></div>
+        <span class="s2">You can still add your flight by choosing your airports. We'll forecast it the same way.</span>
+      </div>
+      <span class="grow"></span>
+      <span class="btn">Choose airports</span>
+      <span class="btn2">Try again</span>
+    </div></div><figcaption><b>Offline or lookup error</b>Same layout as no match. Nothing typed is lost.</figcaption></figure>
+
+    <figure><div class="ph sheet dk"><div class="sc">
+      <div class="nav"><span class="l">Back</span><span class="t">Add a flight</span><span class="r">1 of 2</span></div>
+      <span class="e" style="color:var(--accent)">Found it</span>
+      <p class="h1">Is this your flight?</p>
+      <div class="card" style="gap:10px">
+        <span class="e">B6 23 · JetBlue</span>
+        <div style="display:flex;justify-content:space-between;align-items:baseline"><b class="m" style="font-size:24px;font-weight:500">JFK</b><span class="s2">→</span><b class="m" style="font-size:24px;font-weight:500">LAX</b></div>
+        <div class="hr"></div>
+        <div style="display:flex;justify-content:space-between;gap:8px"><span><span class="s2" style="font-size:12px">Departs</span><br><b>7:15 AM EDT</b></span><span style="text-align:right"><span class="s2" style="font-size:12px">Arrives</span><br><b>10:41 AM PDT</b></span></div>
+      </div>
+      <span class="grow"></span>
+      <span class="btn">Yes, use this flight</span>
+      <span class="btn2">Not this one</span>
+    </div></div><figcaption><b>One match, dark</b>The button label uses dark ink on the light teal (onAccent), never white.</figcaption></figure>
+  </div>
+</section>
+
+<!-- ================= 1a. SCHEDULE NOT OUT YET ================= -->
+<section>
+  <div class="head"><span class="eb">1a · Add a flight by number · schedule not out yet</span><h2>A flight booked before its schedule is published</h2>
+  <p class="prose">There's no search horizon of our own; search goes as far ahead as airlines have published schedules, usually 9–11 months. A number further out than that isn't a dead end. We explain calmly, the user enters airports and time from their booking, and the number stays with the flight. When the airline publishes the schedule, the app fills in the times. If they differ, the forecast uses the airline's times. The route-list "aren't out yet" state in 1b stays for route searches.</p></div>
+  <div class="row">
+
+    <figure><div class="ph sheet"><div class="sc">
+      <div class="nav"><span class="l">Cancel</span><span class="t">Add a flight</span><span class="r">1 of 2</span></div>
+      <p class="h1">Find your flight</p>
+      <div class="fld"><span class="e">Flight number</span><span class="v">UA 456</span></div>
+      <div class="card" style="gap:8px">
+        <div class="inline"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true" style="width:18px;height:18px"><rect x="2" y="3" width="12" height="11" rx="2" fill="none" stroke="var(--accent)" stroke-width="1.4"></rect><path d="M2 6.5h12M5.5 1.8v2.6M10.5 1.8v2.6" stroke="var(--accent)" stroke-width="1.4" stroke-linecap="round"></path></svg><b class="h2">UA 456's schedule for Thu 9 Sep 2027 isn't out yet</b></div>
+        <span class="s2">Airlines publish their schedules in stages, and this one hasn't been released. Add your airports and departure time from your booking. We'll fill in the rest when it's published.</span>
+      </div>
+      <span class="grow"></span>
+      <span class="btn">Enter airports and time</span>
+      <span class="btn2">Change number or day</span>
+    </div></div><figcaption><b>Schedule not out yet</b>Not an error: same calm card as no match, with a different reason and next step.</figcaption></figure>
+
+    <figure><div class="ph sheet dk"><div class="sc">
+      <div class="nav"><span class="l">Back</span><span class="t">Add a flight</span><span class="r">1 of 3</span></div>
+      <div class="card" style="grid-template-columns:22px 1fr;align-items:center;padding:9px 12px"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true" style="width:18px;height:18px"><rect x="2" y="3" width="12" height="11" rx="2" fill="none" stroke="var(--accent)" stroke-width="1.4"></rect><path d="M2 6.5h12M5.5 1.8v2.6M10.5 1.8v2.6" stroke="var(--accent)" stroke-width="1.4" stroke-linecap="round"></path></svg><span style="font-size:13px"><b>UA 456 · Thu 9 Sep 2027</b><br><span class="s2">Times fill in when the airline publishes them</span></span></div>
+      <p class="h1">Where are you flying?</p>
+      <div class="fld"><span class="e">From</span><span><b class="m" style="font-size:18px;font-weight:500">EWR</b> Newark</span></div>
+      <div class="fld on"><span class="e">To</span><span><b class="m" style="font-size:18px;font-weight:500">SFO</b> San Francisco</span></div>
+      <span class="grow"></span>
+      <span class="btn">Next</span>
+    </div></div><figcaption><b>Manual entry keeps the number (dark)</b>The usual Route → When → Check steps, with the number pinned at the top.</figcaption></figure>
+
+    <figure><div class="ph"><div class="sc">
+      <p class="h1" style="font-size:28px">Flights</p>
+      <span class="e">Coming up</span>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between"><b>UA 456 · EWR → SFO</b><span class="s2" style="font-size:12px;font-weight:700">Too early</span></div>
+        <span class="m s2" style="font-size:12px">Thu, Sep 9, 2027 · 8:00 AM EDT</span>
+        <div class="st" style="font-weight:400;color:var(--ink2)"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true" style="width:18px;height:18px"><rect x="2" y="3" width="12" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.4"></rect><path d="M2 6.5h12M5.5 1.8v2.6M10.5 1.8v2.6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"></path></svg><span>We'll fill in the details when the airline publishes this flight.</span></div>
+      </div>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between"><b>B6 23 · JFK → LAX</b><span class="s2" style="font-size:12px;font-weight:700">Mostly smooth</span></div>
+        <span class="m s2" style="font-size:12px">Thu, Oct 22 · 7:15 AM EDT</span>
+      </div>
+    </div></div><figcaption><b>Waiting on the schedule</b>The time shown is what the user entered. The line says plainly that the details will follow.</figcaption></figure>
+
+    <figure><div class="ph ax hc"><div class="sc">
+      <span class="e">UA 456 · United</span>
+      <b style="font:700 30px/1.05 var(--display)">EWR → SFO</b>
+      <div class="card" style="gap:8px">
+        <b style="font:600 20px var(--display)">Schedule published</b>
+        <span>UA 456 leaves at <b>8:05 AM</b>, not 8:00 AM. Your forecast will use 8:05 AM.</span>
+        <span class="s2" style="font-size:15px">Arrives 11:31 AM PDT</span>
+      </div>
+    </div></div><figcaption><b>Filled in: times differ (large text, Increase Contrast)</b>A one-time note on the card and detail view, dismissed on view. If the times match, it says "Schedule published. It matches what you entered."</figcaption></figure>
+
+    <figure><div class="ph"><div class="sc lock">
+      <span class="date">Monday 14 June</span>
+      <span class="clock">9:12</span>
+      <span class="grow"></span>
+      <div class="notif"><span class="ic"><svg viewBox="0 0 200 200" width="30" height="30" aria-hidden="true"><rect width="200" height="200" fill="#e9dccf"></rect><rect y="118" width="200" height="82" fill="#8fb2d4"></rect><circle cx="128" cy="118" r="30" fill="#fff3e8"></circle><path d="M26 118 C42 118 48 98 62 98 S82 118 98 118 L212 118" fill="none" stroke="#1f5f6e" stroke-width="14" stroke-linecap="round"></path></svg></span><span class="ap"><span>BUMPCAST</span><span>now</span></span><b>UA 456 times confirmed</b><span>Your flight on Sep 9 leaves at 9:40 AM, not 8:00 AM. We'll forecast for the new time.</span></div>
+    </div></div><figcaption><b>Push only when it matters</b>Sent only if departure differs by 15 min or more, or an airport differs. A matching schedule stays silent. Quiet hours apply.</figcaption></figure>
+  </div>
+</section>
+
+<!-- ================= 1b. FLIGHTS ON THIS ROUTE ================= -->
+<section>
+  <div class="head"><span class="eb">1b · Add a flight by airports · free</span><h2>Flights on this route</h2>
+  <p class="prose">This sits behind "Choose airports instead". Once From, To and the day are set, the When step lists that day's nonstop flights, operating carrier only and sorted by departure. Tapping a row goes to <b>Check your flight</b>, the same as a number match, so the flight has a number and gets live status on Pro. Busy routes are grouped into morning, afternoon and evening, with chips to jump between them. Every state keeps <b>Enter the time myself</b>, which opens today's time wheel.</p></div>
+  <div class="row">
+
+    <figure><div class="ph sheet"><div class="sc">
+      <div class="nav"><span class="l">Back</span><span class="t">Add a flight</span><span class="r">2 of 3</span></div>
+      <span class="e">JFK → LAX</span>
+      <p class="h1">Which flight are you on?</p>
+      <div class="chips"><span class="chip"><small>Tue</small><b>20</b></span><span class="chip"><small>Wed</small><b>21</b></span><span class="chip on"><small>Thu</small><b>22</b></span><span class="chip"><small>Fri</small><b>23</b></span><span class="chip"><small>Sat</small><b>24</b></span></div>
+      <div class="card" style="gap:10px">
+        <div class="inline"><span class="spin"></span><span>Finding nonstop flights on Thu 22 Oct…</span></div>
+        <span class="skel" style="width:70%"></span><span class="skel" style="width:55%"></span><span class="skel" style="width:64%"></span>
+      </div>
+      <span class="grow"></span>
+      <span class="lnk" style="text-align:center">Enter the time myself</span>
+    </div></div><figcaption><b>Loading</b>The day tiles stay usable while it loads.</figcaption></figure>
+
+    <figure><div class="ph sheet"><div class="sc">
+      <div class="nav"><span class="l">Back</span><span class="t">Add a flight</span><span class="r">2 of 3</span></div>
+      <span class="e">JFK → LAX · Thu 22 Oct</span>
+      <p class="h1">Which flight are you on?</p>
+      <div class="jump"><span>Morning 9</span><span class="on">Afternoon 8</span><span>Evening 6</span></div>
+      <span class="s2" style="font-size:12px">23 nonstop flights. Times are local: JFK EDT, LAX PDT.</span>
+      <div class="card" style="gap:0;padding:0 14px">
+        <span class="grp">Afternoon</span>
+        <div class="fl"><span class="n">B6 23 · JetBlue</span><span class="s2 chev">›</span><span class="t">12:00 PM → 3:32 PM</span></div>
+        <div class="fl"><span class="n">AA 1 · American</span><span class="s2 chev">›</span><span class="t">12:30 PM → 3:59 PM</span></div>
+        <div class="fl"><span class="n">DL 423 · Delta</span><span class="s2 chev">›</span><span class="t">1:15 PM → 4:41 PM</span></div>
+        <div class="fl"><span class="n">UA 1916 · United</span><span class="s2 chev">›</span><span class="t">2:05 PM → 5:30 PM</span></div>
+        <div class="fl"><span class="n">B6 1923 · JetBlue</span><span class="s2 chev">›</span><span class="t">3:40 PM → 7:08 PM</span></div>
+      </div>
+      <span class="lnk" style="text-align:center">Enter the time myself</span>
+    </div></div><figcaption><b>The list</b>Chips show counts and scroll the list to that group. Codeshares are hidden.</figcaption></figure>
+
+    <figure><div class="ph sheet"><div class="sc">
+      <div class="nav"><span class="l">Back</span><span class="t">Add a flight</span><span class="r">2 of 3</span></div>
+      <span class="e">BOS → ASE · Thu 22 Oct</span>
+      <p class="h1">Which flight are you on?</p>
+      <div class="card">
+        <b class="h2">No nonstop flights found that day</b>
+        <span class="s2">If you're connecting, add your first flight, then tap <b>Add a connecting flight</b> on the last step. Or enter your departure time and we'll forecast it the same way.</span>
+      </div>
+      <span class="grow"></span>
+      <span class="btn">Enter the time myself</span>
+      <span class="btn2">Pick another day</span>
+    </div></div><figcaption><b>No flights found</b>Points connecting travellers to the right next step.</figcaption></figure>
+
+    <figure><div class="ph sheet"><div class="sc">
+      <div class="nav"><span class="l">Back</span><span class="t">Add a flight</span><span class="r">2 of 3</span></div>
+      <span class="e">EGE → DEN · Thu 22 Oct</span>
+      <p class="h1">Which flight are you on?</p>
+      <div class="card">
+        <b class="h2">We can't list flights from Eagle County yet</b>
+        <span class="s2">Enter your departure time and we'll forecast it the same way.</span>
+      </div>
+      <span class="grow"></span>
+      <span class="btn">Enter the time myself</span>
+    </div></div><figcaption><b>No schedule for this airport</b>Says what's missing without saying where listings come from.</figcaption></figure>
+
+    <figure><div class="ph sheet"><div class="sc">
+      <div class="nav"><span class="l">Back</span><span class="t">Add a flight</span><span class="r">2 of 3</span></div>
+      <span class="e">JFK → LAX · Thu 3 Dec</span>
+      <p class="h1">Which flight are you on?</p>
+      <div class="card">
+        <b class="h2">Flight lists for Thu 3 Dec aren't out yet</b>
+        <span class="s2">They appear closer to the day. For now, enter your departure time, or look up your flight number.</span>
+      </div>
+      <span class="grow"></span>
+      <span class="btn">Enter the time myself</span>
+      <span class="btn2">Look up flight number</span>
+    </div></div><figcaption><b>Beyond published schedules</b>For route searches past what airlines have published (usually 9–11 months). Number searches use the 1a flow instead.</figcaption></figure>
+
+    <figure><div class="ph sheet"><div class="sc">
+      <div class="nav"><span class="l">Back</span><span class="t">Add a flight</span><span class="r">2 of 3</span></div>
+      <span class="e">JFK → LAX · Thu 22 Oct</span>
+      <p class="h1">Which flight are you on?</p>
+      <div class="card">
+        <div class="inline"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.5 6.2a9.5 9.5 0 0 1 13 0M4 8.8a6 6 0 0 1 8 0M6.5 11.3a2.4 2.4 0 0 1 3 0" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"></path><path d="M2 2l12 12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"></path></svg><b class="h2">Can't load flights right now</b></div>
+        <span class="s2">Enter your departure time instead. We'll forecast it the same way.</span>
+      </div>
+      <span class="grow"></span>
+      <span class="btn">Enter the time myself</span>
+      <span class="btn2">Try again</span>
+    </div></div><figcaption><b>Offline or error</b>Same calm card. The airports and day you picked are kept.</figcaption></figure>
+
+    <figure><div class="ph sheet dk"><div class="sc">
+      <div class="nav"><span class="l">Back</span><span class="t">Add a flight</span><span class="r">2 of 3</span></div>
+      <span class="e">JFK → LAX · Thu 22 Oct</span>
+      <p class="h1">Which flight are you on?</p>
+      <div class="jump"><span class="on">Morning 9</span><span>Afternoon 8</span><span>Evening 6</span></div>
+      <div class="card" style="gap:0;padding:0 14px">
+        <span class="grp">Morning</span>
+        <div class="fl"><span class="n">AA 177 · American</span><span class="s2 chev">›</span><span class="t">6:00 AM → 9:21 AM</span></div>
+        <div class="fl"><span class="n">B6 415 · JetBlue</span><span class="s2 chev">›</span><span class="t">7:00 AM → 10:32 AM</span></div>
+        <div class="fl"><span class="n">DL 1 · Delta</span><span class="s2 chev">›</span><span class="t">8:00 AM → 11:24 AM</span></div>
+      </div>
+      <span class="lnk" style="text-align:center">Enter the time myself</span>
+    </div></div><figcaption><b>The list, dark</b>The selected chip uses ink on light, matching the day tiles.</figcaption></figure>
+
+    <figure><div class="ph sheet ax hc"><div class="sc">
+      <span class="e">JFK → LAX</span>
+      <p class="h1">Which flight are you on?</p>
+      <div class="jump"><span class="on">Morning 9</span><span>Afternoon 8</span></div>
+      <div class="card" style="gap:0;padding:0 14px">
+        <div class="fl"><span class="n">B6 415 · JetBlue</span><span class="t" style="font-size:16px">7:00 AM → 10:32 AM</span></div>
+        <div class="fl"><span class="n">DL 1 · Delta</span><span class="t" style="font-size:16px">8:00 AM → 11:24 AM</span></div>
+      </div>
+      <span class="lnk">Enter the time myself</span>
+    </div></div><figcaption><b>Large text with Increase Contrast</b>Rows stack the times under the flight and drop the chevron; the whole row is still tappable.</figcaption></figure>
+  </div>
+</section>
+
+<!-- ================= 1c. CONNECTING FLIGHT ================= -->
+<section>
+  <div class="head"><span class="eb">1c · Add a connecting flight · free</span><h2>The next flight of the same trip</h2>
+  <p class="prose">On <b>Check your flight</b>, a secondary action sits next to the primary save. It saves this flight, then reopens the sheet for the next leg: the search starts from the arrival airport, the day defaults to the arrival date (which matters for overnight arrivals), and times default to after the arrival. A context line keeps it clear this is the same trip. Each flight still saves and forecasts on its own. Trip grouping, linked cards and connection-risk alerts are planned for 1.2.</p></div>
+  <div class="row">
+
+    <figure><div class="ph sheet"><div class="sc">
+      <div class="nav"><span class="l">Back</span><span class="t">Add a flight</span><span class="r">2 of 2</span></div>
+      <p class="h1">Check your flight</p>
+      <div class="card" style="gap:8px">
+        <span class="e">UA 1916 · United</span>
+        <div style="display:flex;justify-content:space-between;align-items:baseline"><b class="m" style="font-size:24px;font-weight:500">EWR</b><span class="s2">→</span><b class="m" style="font-size:24px;font-weight:500">DEN</b></div>
+        <div class="hr"></div>
+        <div style="display:flex;justify-content:space-between;gap:8px"><span><span class="s2" style="font-size:12px">Departs</span><br><b>7:05 AM EDT</b></span><span style="text-align:right"><span class="s2" style="font-size:12px">Arrives</span><br><b>9:12 AM MDT</b></span></div>
+      </div>
+      <span class="s2" style="font-size:12.5px">Your first forecast arrives Tue around 7:05 AM.</span>
+      <span class="grow"></span>
+      <span class="btn">Add flight</span>
+      <span class="btn2">Add a connecting flight</span>
+    </div></div><figcaption><b>Check your flight, with the new action</b>The secondary button saves this flight first, then opens the next search. It's the same whether the flight came from a number, the route list or manual entry.</figcaption></figure>
+
+    <figure><div class="ph sheet"><div class="sc">
+      <div class="nav"><span class="l">Done</span><span class="t">Add a flight</span><span class="r">1 of 2</span></div>
+      <div class="card" style="grid-template-columns:22px 1fr;align-items:center;padding:9px 12px"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true" style="width:18px;height:18px"><path d="M2 12h5a3 3 0 0 0 3-3V4M7 7l3-3 3 3" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg><span style="font-size:13px"><b>Connecting from DEN · arrives 9:12 AM</b></span></div>
+      <p class="h1">Find your next flight</p>
+      <div class="fld on"><span class="e">Flight number</span><span class="v ph-t" style="color:var(--ink2)">e.g. UA 573</span></div>
+      <span class="e">Day</span>
+      <div class="chips"><span class="chip"><small>Wed</small><b>21</b></span><span class="chip on"><small>Thu</small><b>22</b></span><span class="chip"><small>Fri</small><b>23</b></span><span class="chip"><small>Sat</small><b>24</b></span><span class="chip"><small>Sun</small><b>25</b></span></div>
+      <span class="grow"></span>
+      <span class="btn" style="opacity:.45">Find flight</span>
+      <span class="lnk" style="text-align:center">Choose airports instead</span>
+    </div></div><figcaption><b>Reopened for the next leg</b>The first flight is already saved, so the top-left button is "Done" rather than Cancel. The day defaults to the arrival date.</figcaption></figure>
+
+    <figure><div class="ph sheet dk"><div class="sc">
+      <div class="nav"><span class="l">Back</span><span class="t">Add a flight</span><span class="r">2 of 3</span></div>
+      <div class="card" style="grid-template-columns:22px 1fr;align-items:center;padding:9px 12px"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true" style="width:18px;height:18px"><path d="M2 12h5a3 3 0 0 0 3-3V4M7 7l3-3 3 3" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg><span style="font-size:13px"><b>Connecting from DEN · arrives 9:12 AM</b></span></div>
+      <span class="e">DEN → SFO · Thu 22 Oct</span>
+      <p class="h1">Which flight are you on?</p>
+      <span class="s2" style="font-size:12px">Showing flights after your 9:12 AM arrival.</span>
+      <div class="card" style="gap:0;padding:0 14px">
+        <div class="fl"><span class="n">UA 573 · United</span><span class="s2 chev">›</span><span class="t">10:30 AM → 12:14 PM</span></div>
+        <div class="fl"><span class="n">WN 2210 · Southwest</span><span class="s2 chev">›</span><span class="t">11:05 AM → 12:50 PM</span></div>
+        <div class="fl"><span class="n">F9 501 · Frontier</span><span class="s2 chev">›</span><span class="t">1:20 PM → 3:02 PM</span></div>
+      </div>
+      <span class="lnk" style="text-align:center">Show 6 earlier flights</span>
+      <span class="lnk" style="text-align:center">Enter the time myself</span>
+    </div></div><figcaption><b>Choose airports, From filled in (dark)</b>From is DEN and the list starts after the arrival. Earlier flights are one tap away, never hidden for good.</figcaption></figure>
+
+    <figure><div class="ph sheet ax hc"><div class="sc">
+      <div class="card" style="grid-template-columns:22px 1fr;align-items:center;padding:9px 12px"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true" style="width:18px;height:18px"><path d="M2 12h5a3 3 0 0 0 3-3V4M7 7l3-3 3 3" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg><span style="font-size:13px"><b>Connecting from JFK · arrives Fri 6:40 AM</b></span></div>
+      <p class="h1">Find your next flight</p>
+      <span class="e">Day</span>
+      <div class="chips"><span class="chip"><small>Thu</small><b>22</b></span><span class="chip on"><small>Fri</small><b>23</b></span><span class="chip"><small>Sat</small><b>24</b></span></div>
+      <span class="s2" style="font-size:15px">Friday, because your overnight flight lands then.</span>
+      <span class="lnk">Choose airports instead</span>
+    </div></div><figcaption><b>Overnight arrival, large text with Increase Contrast</b>A red-eye from LAX lands Friday, so the next search defaults to Friday and says why.</figcaption></figure>
+
+    <figure><div class="ph"><div class="sc">
+      <p class="h1" style="font-size:28px">Flights</p>
+      <div style="align-self:center;background:rgba(21,37,58,.92);color:#fff;border-radius:999px;padding:9px 14px;font-size:13px"><b>2 flights added.</b> Forecasts for each arrive Tue.</div>
+      <div class="card"><div style="display:flex;justify-content:space-between"><b>UA 1916 · EWR → DEN</b><span class="s2" style="font-size:12px;font-weight:700">Too early</span></div><span class="m s2" style="font-size:12px">Thu, Oct 22 · 7:05 AM EDT</span></div>
+      <div class="card"><div style="display:flex;justify-content:space-between"><b>UA 573 · DEN → SFO</b><span class="s2" style="font-size:12px;font-weight:700">Too early</span></div><span class="m s2" style="font-size:12px">Thu, Oct 22 · 10:30 AM MDT</span></div>
+    </div></div><figcaption><b>Back on Flights</b>Two separate cards, no grouping (that comes in 1.2). One soft haptic, and a toast that counts both flights.</figcaption></figure>
+  </div>
+</section>
+
+<!-- ================= 2. FLIGHT CARD ================= -->
+<section>
+  <div class="head"><span class="eb">2 · Flights list</span><h2>Flight number and a compact status row</h2>
+  <p class="prose">The number comes before the route. With Pro or a flight pass, a status row sits under the date. Free users see a locked row that opens the <code>live_status_locked</code> placement. Status uses ink and teal only, so it never looks like a turbulence level.</p></div>
+  <div class="row">
+
+    <figure><div class="ph"><div class="sc">
+      <p class="h1" style="font-size:28px">Flights</p>
+      <div class="card" style="gap:8px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start"><div style="display:grid;gap:2px"><span class="e">Next flight · B6 23</span><b style="font:700 26px var(--display)">JFK → LAX</b><span class="m s2" style="font-size:12px">Thu, Oct 22 · 7:15 AM EDT</span></div>
+          <svg class="glass" viewBox="0 0 28 34" aria-hidden="true"><path d="M5 3h18l-2.4 27H7.4z" fill="none" stroke="#c99a2e" stroke-width="1.6" stroke-linejoin="round"></path><path d="M6.2 14c2.4 0 2.8-1.8 4.3-1.8s2 1.8 3.6 1.8h7.7l-1.4 15.4H7.6z" fill="#c99a2e" opacity=".55"></path></svg></div>
+        <div class="st"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="var(--accent)"></circle><path d="M4.8 8.2l2.1 2.1 4.3-4.6" stroke="var(--onacc)" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>On time <span class="sep">·</span> Gate B22 <span class="sep">·</span> Terminal 5</div>
+        <b style="font:600 18px var(--display)">A few bumps, mostly calm.</b>
+        <span class="s2" style="font-size:12px">Confirmed forecast · updated 3:12 PM</span>
+      </div>
+      <span class="e" style="padding-top:4px">Coming up</span>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between"><b>AA 1180 · ORD → DEN</b><span class="s2" style="font-size:12px;font-weight:700">Mostly smooth</span></div>
+        <span class="m s2" style="font-size:12px">Fri, Oct 23 · 4:47 PM CDT</span>
+        <div class="st"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.3" fill="none" stroke="currentColor" stroke-width="1.5"></circle><path d="M8 4.6V8l2.3 1.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"></path></svg>Delayed 40 min <span class="sep">·</span> now 5:27 PM</div>
+      </div>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between"><b>SFO → BOS</b><span class="s2" style="font-size:12px;font-weight:700">Too early</span></div>
+        <span class="m s2" style="font-size:12px">Sun, Oct 25 · 6:05 PM PDT</span>
+        <span class="s2" style="font-size:12px">Added by airports, so no flight number</span>
+      </div>
+    </div></div><figcaption><b>Pro: on time and delayed</b>One line. Gate and terminal appear once they're set.</figcaption></figure>
+
+    <figure><div class="ph"><div class="sc">
+      <p class="h1" style="font-size:28px">Flights</p>
+      <div class="card" style="gap:8px">
+        <span class="e">Next flight · B6 23</span><b style="font:700 26px var(--display)">JFK → LAX</b><span class="m s2" style="font-size:12px">Thu, Oct 22 · 7:15 AM EDT</span>
+        <div class="hr"></div>
+        <div style="display:flex;gap:10px;align-items:center">
+          <svg class="ico" viewBox="0 0 16 16" aria-hidden="true" style="width:18px;height:18px"><circle cx="8" cy="8" r="6.3" fill="none" stroke="var(--accent)" stroke-width="1.5"></circle><path d="M8 4.6V8l2.3 1.5" stroke="var(--accent)" stroke-width="1.5" fill="none" stroke-linecap="round"></path></svg>
+          <div class="grow" style="display:grid"><b>Live status</b><span class="s2" style="font-size:12.5px">Delays and gate changes</span></div>
+          <span class="tag">Pro</span><span class="s2">›</span>
+        </div>
+        <b style="font:600 18px var(--display)">A few bumps, mostly calm.</b>
+      </div>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between"><b>AA 1180 · ORD → DEN</b><span class="s2" style="font-size:12px;font-weight:700">Mostly smooth</span></div>
+        <span class="m s2" style="font-size:12px">Fri, Oct 23 · 4:47 PM CDT</span>
+      </div>
+    </div></div><figcaption><b>Free: locked row</b>A real row, no blurred fake status. Tapping it opens the live-status paywall.</figcaption></figure>
+
+    <figure><div class="ph dk"><div class="sc">
+      <p class="h1" style="font-size:28px">Flights</p>
+      <div class="card">
+        <span class="e">Next flight · B6 23</span><b style="font:700 26px var(--display)">JFK → LAX</b><span class="m s2" style="font-size:12px">Thu, Oct 22 · 7:15 AM EDT</span>
+        <div class="st"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.3" fill="none" stroke="currentColor" stroke-width="1.5"></circle><path d="M3.6 12.4l8.8-8.8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path></svg>Cancelled</div>
+        <span class="s2" style="font-size:12.5px">Add your new flight for a fresh forecast.</span>
+      </div>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between"><b>AA 1180 · ORD → DEN</b></div>
+        <span class="m s2" style="font-size:12px">Fri, Oct 23 · 4:47 PM CDT</span>
+        <div class="st"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 13V9a4 4 0 0 1 4-4h7M10 2l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>Diverted to COS</div>
+      </div>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between"><b>DL 402 · ATL → SEA</b></div>
+        <span class="m s2" style="font-size:12px">Mon, Oct 26 · 9:10 AM EDT</span>
+        <span class="s2" style="font-size:12.5px">Live status starts Sat</span>
+      </div>
+    </div></div><figcaption><b>Dark: cancelled, diverted, not yet tracked</b>Icons and words carry the state. No colour coding.</figcaption></figure>
+  </div>
+</section>
+
+<!-- ================= 3. DETAIL ================= -->
+<section>
+  <div class="head"><span class="eb">3 · Flight detail</span><h2>Status section, with a forecast that moves with you</h2>
+  <p class="prose">This section sits above the forecast. Times are in a scheduled, expected and actual grid, and the freshness line is always visible. When the departure time moves, a note explains that the forecast moved too.</p></div>
+  <div class="row">
+
+    <figure><div class="ph"><div class="sc">
+      <div class="nav"><span class="l">‹</span><span class="t">Forecast</span><span class="r"></span></div>
+      <span class="e">B6 23 · JetBlue</span>
+      <b style="font:700 28px var(--display)">JFK → LAX</b>
+      <div class="card" style="gap:10px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline"><span class="e">Flight status</span><span class="s2" style="font-size:11.5px">Updated 3:12 PM</span></div>
+        <b style="font:700 22px var(--display)">Delayed 40 min</b>
+        <div class="tbl">
+          <span></span><span class="hd">Scheduled</span><span class="hd">Expected</span><span class="hd">Actual</span>
+          <b>Departs</b><span class="m old">7:15 AM</span><span class="m now">7:55 AM</span><span class="m old">–</span>
+          <b>Arrives</b><span class="m old">10:41 AM</span><span class="m now">11:19 AM</span><span class="m old">–</span>
+        </div>
+        <div class="hr"></div>
+        <span><b>Gate B22</b> · Terminal 5</span>
+        <span class="s2" style="font-size:11.5px">Next update around 4:10 PM</span>
+      </div>
+      <div class="card" style="grid-template-columns:20px 1fr;align-items:start">
+        <svg class="ico" viewBox="0 0 16 16" aria-hidden="true" style="width:18px;height:18px;margin-top:2px"><path d="M13.5 8A5.5 5.5 0 1 1 11.9 4.1M13.5 2.5v3h-3" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <span>Forecast updated for the new <b>7:55 AM</b> departure. The bumps moved with it.</span>
+      </div>
+      <span class="e" style="padding-top:2px">Confirmed forecast</span>
+      <b style="font:700 22px var(--display)">A few bumps, mostly calm.</b>
+    </div></div><figcaption><b>Pro: delayed, forecast shifted</b>Changed times are bold; the originals stay visible in grey.</figcaption></figure>
+
+    <figure><div class="ph"><div class="sc">
+      <div class="nav"><span class="l">‹</span><span class="t">Forecast</span><span class="r"></span></div>
+      <span class="e">B6 23 · JetBlue</span>
+      <b style="font:700 28px var(--display)">JFK → LAX</b>
+      <div class="card" style="gap:10px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline"><span class="e">Flight status</span><span class="s2" style="font-size:11.5px">Updated 6:02 AM</span></div>
+        <div class="inline"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true" style="width:20px;height:20px"><circle cx="8" cy="8" r="6.3" fill="none" stroke="currentColor" stroke-width="1.5"></circle><path d="M3.6 12.4l8.8-8.8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path></svg><b style="font:700 22px var(--display)">This flight is cancelled</b></div>
+        <span class="s2">Your airline will be in touch about other options. When you have a new flight, add it and we'll forecast it.</span>
+        <span class="btn">Add a new flight</span>
+        <span class="btn2">Remove this flight</span>
+      </div>
+    </div></div><figcaption><b>Cancelled</b>The forecast is hidden. One clear next step.</figcaption></figure>
+
+    <figure><div class="ph dk"><div class="sc">
+      <div class="nav"><span class="l">‹</span><span class="t">Forecast</span><span class="r"></span></div>
+      <span class="e">AA 1180 · American</span>
+      <b style="font:700 28px var(--display)">ORD → DEN</b>
+      <div class="card" style="gap:10px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline"><span class="e">Flight status</span><span class="s2" style="font-size:11.5px">Updated 6:20 PM</span></div>
+        <div class="inline"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true" style="width:20px;height:20px"><path d="M2 13V9a4 4 0 0 1 4-4h7M10 2l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg><b style="font:700 22px var(--display)">Diverted to Colorado Springs (COS)</b></div>
+        <span class="s2">Diversions are planned for and routine for the crew. Your airline will share what happens next.</span>
+      </div>
+      <div class="card" style="opacity:.55">
+        <span class="e">Forecast</span>
+        <b style="font:600 18px var(--display)">Mostly smooth.</b>
+        <span class="s2" style="font-size:12px">This forecast was for the original route to DEN.</span>
+      </div>
+    </div></div><figcaption><b>Diverted, dark</b>No position tracking, so we only state the new airport.</figcaption></figure>
+
+    <figure><div class="ph ax"><div class="sc">
+      <span class="e">B6 23</span>
+      <div class="card" style="gap:10px">
+        <span class="e">Flight status</span>
+        <b style="font:700 26px/1.1 var(--display)">Delayed 40 min</b>
+        <div class="tbl">
+          <b>Departs</b><span class="m"><span class="old">Scheduled 7:15 AM</span></span><span class="m now">Expected 7:55 AM</span>
+          <b style="padding-top:6px">Arrives</b><span class="m"><span class="old">Scheduled 10:41 AM</span></span><span class="m now">Expected 11:19 AM</span>
+        </div>
+        <span><b>Gate B22</b><br>Terminal 5</span>
+        <span class="s2" style="font-size:15px">Updated 3:12 PM</span>
+      </div>
+    </div></div><figcaption><b>Large text (AX sizes)</b>The grid becomes labelled lines, so no column gets squeezed.</figcaption></figure>
+
+    <figure><div class="ph hc"><div class="sc">
+      <span class="e">B6 23 · JetBlue</span>
+      <div class="card" style="gap:10px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline"><span class="e">Flight status</span><span class="s2" style="font-size:11.5px">Updated 3:12 PM</span></div>
+        <b style="font:700 22px var(--display)">Delayed 40 min</b>
+        <div class="tbl">
+          <span></span><span class="hd">Scheduled</span><span class="hd">Expected</span><span class="hd">Actual</span>
+          <b>Departs</b><span class="m old">7:15 AM</span><span class="m now">7:55 AM</span><span class="m old">–</span>
+          <b>Arrives</b><span class="m old">10:41 AM</span><span class="m now">11:19 AM</span><span class="m old">–</span>
+        </div>
+        <span><b>Gate B22</b> · Terminal 5</span>
+      </div>
+      <div class="card"><span>Forecast updated for the new <b>7:55 AM</b> departure.</span></div>
+    </div></div><figcaption><b>Increase Contrast</b>Cards go solid with a dark outline, and grey text darkens to pass AA.</figcaption></figure>
+  </div>
+</section>
+
+<!-- ================= 4. PUSH ================= -->
+<section>
+  <div class="head"><span class="eb">4 · Notifications</span><h2>One message per real change</h2>
+  <p class="prose">These follow the same quiet hours as forecast updates: nothing from 22:00 to 07:00 local time unless the flight leaves within 4 h. A delay and the forecast change it causes always arrive together. Departure moves under 15 min stay in the app. Gate changes never push, because gates refresh at most hourly and a late push would mislead; the gate shows on the card instead.</p></div>
+  <div class="row">
+    <figure><div class="ph"><div class="sc lock">
+      <span class="date">Thursday 22 October</span>
+      <span class="clock">5:48</span>
+      <span class="grow"></span>
+      <div class="notif"><span class="ic"><svg viewBox="0 0 200 200" width="30" height="30" aria-hidden="true"><rect width="200" height="200" fill="#e9dccf"></rect><rect y="118" width="200" height="82" fill="#8fb2d4"></rect><circle cx="128" cy="118" r="30" fill="#fff3e8"></circle><path d="M26 118 C42 118 48 98 62 98 S82 118 98 118 L212 118" fill="none" stroke="#1f5f6e" stroke-width="14" stroke-linecap="round"></path></svg></span><span class="ap"><span>BUMPCAST</span><span>now</span></span><b>Delayed 40 min, forecast updated</b><span>B6 23 now leaves at 7:55 AM. Still mostly smooth, with light chop over the Rockies.</span></div>
+      <div class="notif"><span class="ic"><svg viewBox="0 0 200 200" width="30" height="30" aria-hidden="true"><rect width="200" height="200" fill="#e9dccf"></rect><rect y="118" width="200" height="82" fill="#8fb2d4"></rect><circle cx="128" cy="118" r="30" fill="#fff3e8"></circle><path d="M26 118 C42 118 48 98 62 98 S82 118 98 118 L212 118" fill="none" stroke="#1f5f6e" stroke-width="14" stroke-linecap="round"></path></svg></span><span class="ap"><span>BUMPCAST</span><span>Yesterday</span></span><b>Delayed 25 min</b><span>AA 1180 now leaves at 5:12 PM. We checked: your forecast hasn't changed.</span></div>
+    </div></div><figcaption><b>Delay with and without a forecast change</b>Both cross the 15-minute threshold. Gate changes never push.</figcaption></figure>
+
+    <figure><div class="ph"><div class="sc lock">
+      <span class="date">Thursday 22 October</span>
+      <span class="clock">7:00</span>
+      <span class="grow"></span>
+      <div class="notif"><span class="ic"><svg viewBox="0 0 200 200" width="30" height="30" aria-hidden="true"><rect width="200" height="200" fill="#e9dccf"></rect><rect y="118" width="200" height="82" fill="#8fb2d4"></rect><circle cx="128" cy="118" r="30" fill="#fff3e8"></circle><path d="M26 118 C42 118 48 98 62 98 S82 118 98 118 L212 118" fill="none" stroke="#1f5f6e" stroke-width="14" stroke-linecap="round"></path></svg></span><span class="ap"><span>BUMPCAST</span><span>7:00</span></span><b>B6 23 is cancelled</b><span>Your airline will be in touch about other options. Add your new flight for a fresh forecast.</span></div>
+      <div class="notif"><span class="ic"><svg viewBox="0 0 200 200" width="30" height="30" aria-hidden="true"><rect width="200" height="200" fill="#e9dccf"></rect><rect y="118" width="200" height="82" fill="#8fb2d4"></rect><circle cx="128" cy="118" r="30" fill="#fff3e8"></circle><path d="M26 118 C42 118 48 98 62 98 S82 118 98 118 L212 118" fill="none" stroke="#1f5f6e" stroke-width="14" stroke-linecap="round"></path></svg></span><span class="ap"><span>BUMPCAST</span><span>Yesterday</span></span><b>AA 1180 is diverting to Colorado Springs</b><span>Diversions are routine for the crew. Your airline will share what happens next.</span></div>
+    </div></div><figcaption><b>Cancelled, held overnight; diverted</b>The cancellation came in at 01:40 and was held until 07:00.</figcaption></figure>
+  </div>
+</section>
+
+<!-- ================= 5. PAYWALL ================= -->
+<section>
+  <div class="head"><span class="eb">5 · Paywall moment · live_status_locked</span><h2>Why live status is worth it</h2>
+  <p class="prose">This is the copy for the Superwall paywall behind the locked row. Layout and prices live in Superwall. The flight pass line gives one-trip flyers a lighter option.</p></div>
+  <div class="row">
+    <figure><div class="ph"><div class="sc pw">
+      <span class="grow"></span>
+      <span class="e">BumpCast Pro</span>
+      <p class="h1">Know about delays before the airport does the announcing</p>
+      <span>Delays, gate changes and cancellations, and a fresh turbulence forecast whenever your departure time moves.</span>
+      <div class="card" style="gap:8px;font-size:13px">
+        <span>✓&nbsp; Live status for every flight</span>
+        <span>✓&nbsp; Forecast recalculated when you're delayed</span>
+        <span>✓&nbsp; Full bump timeline and updates</span>
+      </div>
+      <span class="btn">See Pro plans</span>
+      <span class="lnk" style="text-align:center">Just this trip? Get a flight pass</span>
+    </div></div><figcaption><b>Paywall copy</b>The check marks are list markers, not emoji. Prices stay in Superwall.</figcaption></figure>
+  </div>
+</section>
+
+<!-- ================= COPY TABLE ================= -->
+<section>
+  <div class="head"><span class="eb">Copy at a glance</span><h2>Push titles and bodies</h2></div>
+  <div class="tablebox"><table>
+    <tr><th>Event</th><th>Title</th><th>Body</th></tr>
+    <tr><td>Delayed ≥ 15 min, forecast changed</td><td>Delayed 40 min, forecast updated</td><td>B6 23 now leaves at 7:55 AM. Still mostly smooth, with light chop over the Rockies.</td></tr>
+    <tr><td>Delayed ≥ 15 min, forecast unchanged</td><td>Delayed 40 min</td><td>B6 23 now leaves at 7:55 AM. We checked: your forecast hasn't changed.</td></tr>
+    <tr><td>Leaving earlier, ≥ 15 min</td><td>Leaving earlier than expected</td><td>B6 23 now leaves at 7:30 AM. Forecast updated.</td></tr>
+    <tr><td>Cancelled</td><td>B6 23 is cancelled</td><td>Your airline will be in touch about other options. Add your new flight for a fresh forecast.</td></tr>
+    <tr><td>Diverted</td><td>B6 23 is diverting to Denver</td><td>Diversions are routine for the crew. Your airline will share what happens next.</td></tr>
+  </table></div>
+</section>
+
+<footer>The flights, airlines, times and gates are examples. Decided by Lanre: the airline name shows next to the number ("B6 23 · JetBlue"), gate changes never push, and delays push at 15 minutes or more. Search, by number and by route, is free; live status and delay pushes are Pro or flight pass. There's no search horizon of our own: search reaches as far as airlines have published, usually 9–11 months.</footer>
+</div>
