@@ -15,7 +15,6 @@ enum AppSync {
         }
         let userID = await store.start()
         if let userID { Paywalls.shared.identify(userID) }
-        Paywalls.shared.showOnboardingIfNeeded()
         await PushNotifications.shared.refreshStatus()
         await saveProfile()
         store.onSync?()

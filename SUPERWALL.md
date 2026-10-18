@@ -22,7 +22,7 @@ For local testing, `ios/BumpCast/Products.storekit` mirrors these and is attache
 
 | Placement | Campaign | When it fires | Gated? |
 |---|---|---|---|
-| `onboarding` | Onboarding | First launch, once. **Build the onboarding flow here.** | No |
+| `onboarding` | Onboarding | First launch, once. The flow and its Pro paywall are code in `superwall/paywalls/onboarding` (paywall 281980). | No |
 | `first_grade_viewed` | Forecast moments | First time a free user sees a forecast grade (soft paywall) | No |
 | `forecast_ready_opened` | Forecast moments | Free user opens the app from the "Your forecast is ready" push (**the main paywall moment**) | No |
 | `update_opened` | Forecast moments | Free user opens the app from an update or "confirmed by NOAA" push | No |
@@ -65,7 +65,7 @@ Onboarding answers (fear level, how often they fly, and so on) are set as attrib
 
 ## Left to do in the dashboard
 
-1. **Design the onboarding flow** and attach it to the Onboarding campaign.
+1. ~~Design the onboarding flow~~ Done: `superwall/paywalls/onboarding`, live at 100% on the Onboarding campaign. Edit it there and run `SUPERWALL_CHANNEL=next superwall publish`. While it loads, the app shows `LaunchLoadingView`; if it can't load in 8 s (or the campaign skips), `NativeOnboardingView` asks the same questions natively, without the paywall. Debug builds can force the native flow with `-nativeOnboarding`.
 2. **Design the paywalls:**
    - a soft paywall for Forecast moments;
    - a gated paywall for Pro features, offering a flight pass and the subscription;

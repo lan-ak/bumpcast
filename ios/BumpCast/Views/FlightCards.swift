@@ -39,7 +39,7 @@ struct InFlightCard: View {
                 Label("We've taken off", systemImage: "airplane")
                     .frame(maxWidth: .infinity)
             }
-            .buttonStyle(.borderedProminent)
+            .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent)
         }
         .skyCard()
     }

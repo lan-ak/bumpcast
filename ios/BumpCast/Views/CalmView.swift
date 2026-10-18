@@ -6,38 +6,92 @@ struct CalmView: View {
     @Environment(FlightStore.self) private var store
     @Environment(InFlight.self) private var inFlight
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.dynamicTypeSize) private var typeSize
+    @State private var breathing = false
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 20) {
-                // Its own header: the system title can't follow the night sky's light ink.
-                Text("Calm")
-                    .font(.bcDisplay)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .accessibilityAddTraits(.isHeader)
-                Spacer()
-                Image(systemName: "wind")
-                    .font(.system(size: 64, weight: .light))
-                    .foregroundStyle(Theme.accent)
-                    .symbolEffect(.breathe.pulse, options: .repeat(.continuous), isActive: !reduceMotion)
-                    .accessibilityHidden(true)
-                Text("Breathe through the bumps").font(.bcDisplay).multilineTextAlignment(.center)
-                Text(subtitle).multilineTextAlignment(.center).foregroundStyle(.secondary)
-                Button {
-                    router.showBreathing = true
-                } label: {
-                    Label("Start breathing", systemImage: "wind").frame(maxWidth: .infinity)
+            GeometryReader { geo in
+                // Scrolls at large text sizes; otherwise fills the screen, with the orb sized to
+                // the screen so tall phones don't end up with empty bands above and below.
+                ScrollView {
+                    VStack(spacing: 20) {
+                        // Its own header: the system title can't follow the night sky's light ink.
+                        Text("Calm")
+                            .font(.bcDisplay)
+                            .displayTypeLimit()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .accessibilityAddTraits(.isHeader)
+                        Spacer(minLength: 8)
+                        // Smaller at accessibility text sizes, so the button stays near the top.
+                        orb(diameter: min(geo.size.width * 0.5, geo.size.height * 0.24)
+                            * (typeSize.isAccessibilitySize ? 0.5 : 1))
+                        Text("Breathe through the bumps")
+                            .font(.bcDisplay)
+                            .displayTypeLimit()
+                            .multilineTextAlignment(.center)
+                        Text(subtitle).multilineTextAlignment(.center).foregroundStyle(.secondary)
+                        Button {
+                            router.showBreathing = true
+                        } label: {
+                            Label("Start breathing", systemImage: "wind").frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent)
+                        .tint(Theme.accent)
+                        .controlSize(.large)
+                        Spacer(minLength: 16)
+                        readingCards
+                    }
+                    .padding(24)
+                    .frame(minHeight: geo.size.height)
                 }
-                .buttonStyle(.borderedProminent)
-                .tint(Theme.accent)
-                .controlSize(.large)
-                Spacer()
+                .scrollBounceBehavior(.basedOnSize)
             }
-            .padding(24)
             .background { SkyBackground(sky: .night) }
             .onSky(.night)
             .toolbar(.hidden, for: .navigationBar)
             .toolbarColorScheme(.dark, for: .navigationBar)
+        }
+    }
+
+    /// The same orb as the breathing screen, breathing slowly here too (a glow with Reduce Motion).
+    private func orb(diameter: CGFloat) -> some View {
+        Circle()
+            .fill(RadialGradient(
+                colors: [Color(hex: 0xF4FBFD), Color(hex: 0xA8DBE3), Color(hex: 0x4F9BAB)],
+                center: UnitPoint(x: 0.38, y: 0.32), startRadius: 0, endRadius: diameter * 0.6))
+            .frame(width: diameter, height: diameter)
+            .shadow(color: Color(hex: 0x8FD7E0).opacity(0.35), radius: diameter * 0.2)
+            .scaleEffect(reduceMotion ? 1 : (breathing ? 1 : 0.88))
+            .opacity(reduceMotion ? (breathing ? 1 : 0.7) : 1)
+            .animation(.easeInOut(duration: 5).repeatForever(autoreverses: true), value: breathing)
+            .onAppear { breathing = true }
+            .accessibilityHidden(true)
+    }
+
+    /// Two short reads that help mid-flight, so the lower half of the screen has a purpose.
+    private var readingCards: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Good to read now").eyebrow().foregroundStyle(.secondary)
+            ForEach(["built", "seatbelt"], id: \.self) { id in
+                if let explainer = Explainer.byID(id) {
+                    Button {
+                        router.learnPath = [explainer]
+                        router.tab = .learn
+                    } label: {
+                        HStack {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(explainer.title).font(.bcHeadline)
+                                Text(explainer.subtitle).font(.bcSubheadline).foregroundStyle(.secondary)
+                            }
+                            Spacer(minLength: 0)
+                            Image(systemName: "chevron.right").foregroundStyle(.tertiary)
+                        }
+                        .skyCard(cornerRadius: 18, padding: 14)
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
         }
     }
 

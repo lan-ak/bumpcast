@@ -7,6 +7,9 @@ enum Theme {
     static let ink = Color(light: 0x15253A, dark: 0xF2F5F8)
     static let secondaryInk = Color(light: 0x45576C, dark: 0xB7C3D0)
     static let accent = Color(light: 0x2A7385, dark: 0x6FBCCC)
+    /// Label colour on accent-filled buttons. White on the light-mode accent; deep ink on the
+    /// lighter dark-mode accent, where white would be about 2:1 contrast.
+    static let onAccent = Color(light: 0xFFFFFF, dark: 0x0F1C2C)
 
     static func color(_ severity: Severity?) -> Color {
         switch severity {
@@ -204,5 +207,29 @@ extension View {
     /// Small uppercase data label in Plex Mono.
     func eyebrow() -> some View {
         font(.bcEyebrow).textCase(.uppercase).tracking(1.4)
+    }
+}
+
+/// Side by side at normal text sizes; stacked at accessibility sizes, so text keeps a
+/// full-width column instead of squeezing beside an icon.
+struct AdaptiveStack<Content: View>: View {
+    var alignment: VerticalAlignment = .center
+    var spacing: CGFloat = 14
+    @ViewBuilder var content: Content
+    @Environment(\.dynamicTypeSize) private var typeSize
+
+    var body: some View {
+        let layout = typeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: spacing))
+            : AnyLayout(HStackLayout(alignment: alignment, spacing: spacing))
+        layout { content }
+    }
+}
+
+extension View {
+    /// Display headlines stop growing at the first accessibility size, so a two-word grade
+    /// never fills the screen. Body text keeps scaling all the way.
+    func displayTypeLimit() -> some View {
+        dynamicTypeSize(...DynamicTypeSize.accessibility1)
     }
 }

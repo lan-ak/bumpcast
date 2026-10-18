@@ -156,7 +156,7 @@ private struct WaitlistCard: View {
                 } label: {
                     Label("Notify me when you cover \(name)", systemImage: "bell")
                 }
-                .buttonStyle(.borderedProminent)
+                .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent)
                 .disabled(isJoining)
             }
         }

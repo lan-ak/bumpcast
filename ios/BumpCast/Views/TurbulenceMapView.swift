@@ -183,7 +183,7 @@ struct TurbulenceMapView: View {
                             .monospacedDigit()
                     }
                     .frame(width: 72, height: isLandscape ? 34 : 40)
-                    .foregroundStyle(height == level ? Color.white : Color.primary)
+                    .foregroundStyle(height == level ? Theme.onAccent : Color.primary)
                     .background {
                         if height == level {
                             Capsule().fill(Theme.accent)
@@ -304,7 +304,7 @@ struct TurbulenceMapView: View {
                     if let flight {
                         Button("Open my forecast") { router.openFlight(flight.id) }
                             .font(.bcSubheadlineStrong)
-                            .buttonStyle(.borderedProminent)
+                            .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent)
                             .tint(Theme.accent)
                     }
                 } else if isLoading {
@@ -450,7 +450,7 @@ private struct Chip: View {
             .font(.bcSubheadlineStrong)
             .padding(.horizontal, 14)
             .frame(minHeight: 36)
-            .foregroundStyle(selected ? Color.white : Color.primary)
+            .foregroundStyle(selected ? Theme.onAccent : Color.primary)
             .background { if selected { Capsule().fill(Theme.accent) } }
             .glassEffect(selected ? .identity : .regular, in: .capsule)
             .contentShape(.capsule)
@@ -504,7 +504,7 @@ private struct PilotReportSheet: View {
                         Text(note).font(.bcSubheadline)
                         Button("Open my forecast") { openForecast(route.flightID) }
                             .font(.bcSubheadlineStrong)
-                            .buttonStyle(.borderedProminent)
+                            .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent)
                             .tint(Theme.accent)
                     }
                     .skyCard()
@@ -572,7 +572,7 @@ private struct PilotReportsTeaser: View {
             Button(action: seeOptions) {
                 Text("See Pro options").font(.bcHeadline).frame(maxWidth: .infinity)
             }
-            .buttonStyle(.borderedProminent)
+            .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent)
             .tint(Theme.accent)
             .controlSize(.large)
             Button("Not now") { dismiss() }

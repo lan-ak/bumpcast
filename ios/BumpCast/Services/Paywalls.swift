@@ -117,15 +117,10 @@ final class Paywalls {
         Superwall.shared.register(placement: placement.rawValue, params: params(for: flight))
     }
 
-    /// Onboarding counts as done once Superwall has decided: it showed the flow, or the campaign
-    /// says not to (holdout, no audience). Errors (say, offline at first launch) retry next launch.
-    func showOnboardingIfNeeded() {
-        let key = "onboarding.done"
-        guard isConfigured, !defaults.bool(forKey: key) else { return }
-        let handler = PaywallPresentationHandler()
-        handler.onPresent { [defaults] _ in defaults.set(true, forKey: key) }
-        handler.onSkip { [defaults] _ in defaults.set(true, forKey: key) }
-        Superwall.shared.register(placement: Placement.onboarding.rawValue, handler: handler)
+    /// Onboarding answers and other one-off attributes (the native onboarding fallback uses this).
+    func setUserAttributes(_ attributes: [String: Any]) {
+        guard isConfigured else { return }
+        Superwall.shared.setUserAttributes(attributes)
     }
 
     func firstGradeViewed(_ flight: Flight) {

@@ -87,10 +87,11 @@ private struct GradeCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             ConfidenceBadge(confidence: confidence)
-            HStack(alignment: .center, spacing: 14) {
+            AdaptiveStack {
                 WaterGlass(severity: forecast.worstSeverity, size: 44)
                 Text(grade.headline)
                     .font(.bcDisplay)
+                    .displayTypeLimit()
                     .fixedSize(horizontal: false, vertical: true)
             }
             Text(grade.summary)
@@ -128,24 +129,34 @@ struct ConfidenceBadge: View {
 /// Time in the air, minutes of light chop, minutes of moderate or stronger.
 private struct StatTiles: View {
     let forecast: Forecast
+    @Environment(\.dynamicTypeSize) private var typeSize
 
     var body: some View {
         let light = forecast.samples.filter { $0.severity == .light }.count
         let moderate = forecast.samples.filter { $0.severity >= .moderate }.count
-        HStack(spacing: 10) {
+        // Three across, all the same height; one per row at accessibility sizes.
+        let layout = typeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(spacing: 10))
+            : AnyLayout(HStackLayout(alignment: .top, spacing: 10))
+        layout {
             tile("In the air", (forecast.durationMin ?? 0).durationText)
             tile("Light chop", "\(light) min")
             tile("Moderate", "\(moderate) min")
         }
+        .fixedSize(horizontal: false, vertical: true)
     }
 
     private func tile(_ title: String, _ value: String) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(value)
                 .font(.bcFigure)
+                // "4 h 54 min" stays on one line in a third of a small phone.
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
                 .contentTransition(.numericText())
             Text(title).font(.bcCaption).foregroundStyle(.secondary)
         }
+        .frame(maxHeight: .infinity, alignment: .topLeading)
         .skyCard(cornerRadius: 16, padding: 12)
         .accessibilityElement(children: .combine)
     }
@@ -340,7 +351,7 @@ private struct LockedTimelineCard: View {
                 Label(forecast.segments.isEmpty ? "See the full timeline" : "See when the bumps are", systemImage: "lock.open")
                     .frame(maxWidth: .infinity)
             }
-            .buttonStyle(.borderedProminent)
+            .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent)
             .tint(Theme.accent)
             Text("Includes the full timeline, update alerts and in-flight countdowns.")
                 .font(.bcFootnote)

@@ -47,7 +47,11 @@ struct BumpCastApp: App {
                 .environment(Paywalls.shared)
                 .environment(PushNotifications.shared)
                 .environment(InFlight.shared)
-                .task { await AppSync.start() }
+                .task {
+                    // First launch: present the onboarding flow while the rest of the app syncs.
+                    Onboarding.shared.start()
+                    await AppSync.start()
+                }
                 .onOpenURL { Router.shared.handle(url: $0) }
                 .onChange(of: scenePhase) { _, phase in
                     switch phase {
@@ -91,6 +95,28 @@ struct RootView: View {
         .tint(Theme.accent)
         .overlay(alignment: .top) { ToastView(text: router.toast) }
         .fullScreenCover(isPresented: $router.showBreathing) { BreathingView().font(.bcBody) }
+        .overlay { OnboardingCover() }
+    }
+}
+
+/// First launch: the logo while Superwall loads the onboarding flow, or the native flow if it
+/// can't. Superwall presents its flow over this, and the cover lifts once it's on screen.
+private struct OnboardingCover: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    private var onboarding: Onboarding { .shared }
+
+    var body: some View {
+        ZStack {
+            switch onboarding.phase {
+            case .loading:
+                LaunchLoadingView().transition(.opacity)
+            case .native:
+                NativeOnboardingView().transition(.opacity)
+            case .superwall, .done:
+                EmptyView()
+            }
+        }
+        .animation(reduceMotion ? Theme.fade : .easeInOut(duration: 0.5), value: onboarding.phase)
     }
 }
 

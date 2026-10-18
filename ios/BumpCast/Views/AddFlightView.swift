@@ -75,7 +75,7 @@ struct AddFlightView: View {
         Button(action: advance) {
             Text(buttonTitle).font(.bcHeadline).frame(maxWidth: .infinity)
         }
-        .buttonStyle(.borderedProminent)
+        .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent)
         .tint(Theme.accent)
         .controlSize(.large)
         .disabled(!canAdvance || isSaving)
@@ -243,7 +243,7 @@ private struct RouteStep: View {
                             .foregroundStyle(.secondary)
                         HStack {
                             Button("Save anyway") { allowOutsideCoverage = true }
-                                .buttonStyle(.borderedProminent).tint(Theme.accent)
+                                .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent).tint(Theme.accent)
                             Button("Change route") { destination = nil }
                                 .buttonStyle(.bordered).tint(Theme.accent)
                         }
@@ -568,7 +568,7 @@ private struct DayTile: View {
                 bottom.font(.bcTitle2)
             }
             .frame(width: 50, height: 66)
-            .foregroundStyle(selected ? Color.white : Color.primary)
+            .foregroundStyle(selected ? Theme.onAccent : Color.primary)
             .background {
                 if selected {
                     shape.fill(Theme.accent)
@@ -764,7 +764,7 @@ private struct MonthCalendar: View {
             Text("\(calendar.component(.day, from: day))")
                 .font(selected || isToday ? .bcHeadline : .bcBody)
                 .monospacedDigit()
-                .foregroundStyle(selected ? Color.white : isToday ? Theme.accent : Color.primary)
+                .foregroundStyle(selected ? Theme.onAccent : isToday ? Theme.accent : Color.primary)
                 .frame(width: 40, height: 40)
                 .background { if selected { Circle().fill(Theme.accent) } }
                 .frame(maxWidth: .infinity)

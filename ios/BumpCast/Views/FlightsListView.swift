@@ -124,7 +124,7 @@ struct FlightsListView: View {
                 .multilineTextAlignment(.center)
                 .foregroundStyle(.secondary)
             Button("Add a flight", action: addFlight)
-                .buttonStyle(.borderedProminent)
+                .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent)
         }
         .frame(maxWidth: .infinity)
         .skyCard()
@@ -151,8 +151,9 @@ struct NextFlightCard: View {
             HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Next flight").eyebrow().foregroundStyle(.secondary)
-                    Text(flight.routeText).font(.bcDisplay)
+                    Text(flight.routeText).font(.bcDisplay).displayTypeLimit()
                     Text(flight.departureText).font(.bcMeta).foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)  // wrap, never cut off the time
                 }
                 Spacer()
                 WaterGlass(severity: state.severity, size: 44)
@@ -196,15 +197,23 @@ struct FlightRow: View {
 
     var body: some View {
         let state = ForecastState(flight: flight, forecast: forecast)
-        HStack(spacing: 14) {
+        AdaptiveStack {
             WaterGlass(severity: state.severity, size: 30)
             VStack(alignment: .leading, spacing: 4) {
-                HStack {
-                    Text(flight.routeText).font(.bcHeadline)
-                    Spacer()
-                    StatusPill(state: state)
+                // Route and status share a line until the text is too big, then stack.
+                ViewThatFits(in: .horizontal) {
+                    HStack {
+                        Text(flight.routeText).font(.bcHeadline)
+                        Spacer()
+                        StatusPill(state: state)
+                    }
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(flight.routeText).font(.bcHeadline)
+                        StatusPill(state: state)
+                    }
                 }
                 Text(flight.departureText).font(.bcMeta).foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)  // wrap, never cut off the time
                 if let report {
                     Label(report.summary, systemImage: report.matched == true ? "checkmark.circle" : "hand.raised")
                         .font(.bcCaptionStrong)
@@ -257,14 +266,16 @@ private struct LearnCard: View {
             router.tab = .learn
         } label: {
             HStack(spacing: 14) {
-                Image(systemName: "book.pages").font(.bcTitle2).foregroundStyle(Theme.accent)
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Why planes handle turbulence").font(.bcHeadline)
-                    Text("Short reads on what's happening and what the crew is doing.")
-                        .font(.bcSubheadline)
-                        .foregroundStyle(.secondary)
+                AdaptiveStack {
+                    Image(systemName: "book.pages").font(.bcTitle2).foregroundStyle(Theme.accent)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Why planes handle turbulence").font(.bcHeadline)
+                        Text("Short reads on what's happening and what the crew is doing.")
+                            .font(.bcSubheadline)
+                            .foregroundStyle(.secondary)
+                    }
                 }
-                Spacer()
+                Spacer(minLength: 0)
                 Image(systemName: "chevron.right").foregroundStyle(.tertiary)
             }
             .skyCard(cornerRadius: 18, padding: 14)
@@ -289,9 +300,15 @@ extension Flight {
     /// Departure in the origin airport's local time, e.g. "Sun, Oct 18 · 3:00 PM EDT".
     var departureText: String {
         let tz = originAirport?.timeZone ?? .current
-        var style = Date.FormatStyle(date: .abbreviated, time: .shortened, timeZone: tz)
-        style = style.weekday(.abbreviated)
+        // Short enough for one line of Plex Mono on a small phone: no year unless it differs.
+        var calendar = Calendar.current
+        calendar.timeZone = tz
+        var day = Date.FormatStyle(timeZone: tz).weekday(.abbreviated).month(.abbreviated).day()
+        if calendar.component(.year, from: departureAt) != calendar.component(.year, from: .now) {
+            day = day.year()
+        }
+        let time = Date.FormatStyle(timeZone: tz).hour().minute()
         let zone = tz.abbreviation(for: departureAt) ?? ""
-        return "\(departureAt.formatted(style)) \(zone)"
+        return "\(departureAt.formatted(day)) · \(departureAt.formatted(time)) \(zone)"
     }
 }

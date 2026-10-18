@@ -26,13 +26,16 @@ struct LearnView: View {
             ForEach(items) { explainer in
                 NavigationLink(value: explainer) {
                     HStack(spacing: 14) {
-                        ExplainerDiagram(kind: explainer.diagram)
-                            .frame(width: 56, height: 40)
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text(explainer.title).font(.bcHeadline)
-                            Text(explainer.subtitle).font(.bcSubheadline).foregroundStyle(.secondary)
+                        // The diagram moves above the text at accessibility sizes.
+                        AdaptiveStack {
+                            ExplainerDiagram(kind: explainer.diagram)
+                                .frame(width: 56, height: 40)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(explainer.title).font(.bcHeadline)
+                                Text(explainer.subtitle).font(.bcSubheadline).foregroundStyle(.secondary)
+                            }
                         }
-                        Spacer()
+                        Spacer(minLength: 0)
                         Image(systemName: "chevron.right").foregroundStyle(.tertiary)
                     }
                     .skyCard(cornerRadius: 18, padding: 14)
@@ -53,7 +56,7 @@ struct ExplainerView: View {
                     .frame(height: 140)
                     .skyCard()
                     .accessibilityHidden(true)
-                Text(explainer.title).font(.bcDisplay)
+                Text(explainer.title).font(.bcDisplay).displayTypeLimit()
                 section("What's happening", explainer.happening)
                 section("What the crew is doing", explainer.crew)
                 section("What you'll feel", explainer.feel)
