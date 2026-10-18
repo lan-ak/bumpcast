@@ -25,6 +25,9 @@ FT_PER_M = 1 / 0.3048
 # Coarser below 10,000 ft (few minutes spent there), every 2,000 ft above.
 WANTED_FT = [1000, 4000, 7000, 10000] + list(range(12000, 46000, 2000))
 NEIGHBOURHOOD = 1  # +/- cells (3 km each) when taking the local max
+# Each forecast hour is ~21 levels x 1.9M points. Route points come in time order, so
+# keeping two hours in memory is enough and keeps the worker well under 1 GB.
+MAX_FIELDS_IN_MEMORY = 2
 
 
 def _file(cycle: datetime, fhr: int) -> str:
@@ -69,6 +72,8 @@ class GtgSource:
         self._fields: dict[int, GtgField] = {}
         self._tree: cKDTree | None = None
         self._shape: tuple[int, int] | None = None
+        self._lats: np.ndarray | None = None
+        self._lons: np.ndarray | None = None
 
     def covers(self, valid: datetime) -> bool:
         fhr = round((valid - self.cycle).total_seconds() / 3600)
@@ -105,21 +110,23 @@ class GtgSource:
     def _load(self, fhr: int) -> GtgField:
         if fhr in self._fields:
             return self._fields[fhr]
+        while len(self._fields) >= MAX_FIELDS_IN_MEMORY:
+            self._fields.pop(next(iter(self._fields)))
         levels, grids = [], []
         with self._download(fhr).open("rb") as f:
             while (gid := eccodes.codes_grib_new_from_file(f)) is not None:
                 try:
                     ny, nx = eccodes.codes_get(gid, "Ny"), eccodes.codes_get(gid, "Nx")
-                    if self._tree is None:
+                    if self._lats is None:
                         lats = eccodes.codes_get_array(gid, "latitudes")
                         lons = eccodes.codes_get_array(gid, "longitudes")
-                        self._tree = cKDTree(lonlat_to_xyz(lats, lons))
                         self._shape = (ny, nx)
+                        self._lats, self._lons = lats, np.where(lons > 180, lons - 360, lons)
                     values = eccodes.codes_get_values(gid).reshape(ny, nx)
                     missing = eccodes.codes_get(gid, "missingValue")
                     values = np.where(values == missing, 0.0, values)
                     levels.append(eccodes.codes_get(gid, "level") * FT_PER_M)
-                    grids.append(values.astype(np.float32))
+                    grids.append(values.astype(np.float16))  # EDR 0-1; 3 significant digits is plenty
                 finally:
                     eccodes.codes_release(gid)
         order = np.argsort(levels)
@@ -127,17 +134,32 @@ class GtgSource:
         self._fields[fhr] = field
         return field
 
-    def in_domain(self, lat: float, lon: float) -> bool:
+    def field(self, fhr: int) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+        """Raw grid for the map: flat lats, flat lons (-180..180), levels_ft, edr[level, ny, nx]."""
+        f = self._load(fhr)
+        return self._lats, self._lons, f.levels_ft, f.edr
+
+    def release(self, fhr: int) -> None:
+        self._fields.pop(fhr, None)
+
+    def _nearest(self, lat: float, lon: float) -> tuple[float, int]:
+        """Distance (radians) and flat index of the closest grid point. The tree is built on first use."""
         if self._tree is None:
-            self._load(0)
-        dist, _ = self._tree.query(lonlat_to_xyz(np.array([lat]), np.array([lon])))
-        return bool(dist[0] < 5.0 / 6371.0)  # within 5 km of a grid point
+            if self._lats is None:
+                self._load(0)
+            self._tree = cKDTree(lonlat_to_xyz(self._lats, self._lons))
+        dist, flat = self._tree.query(lonlat_to_xyz(np.array([lat]), np.array([lon])))
+        return float(dist[0]), int(flat[0])
+
+    def in_domain(self, lat: float, lon: float) -> bool:
+        dist, _ = self._nearest(lat, lon)
+        return dist < 5.0 / 6371.0  # within 5 km of a grid point
 
     def edr(self, lat: float, lon: float, altitude_ft: float, valid: datetime) -> float:
         fhr = round((valid - self.cycle).total_seconds() / 3600)
         field = self._load(fhr)
-        _, flat = self._tree.query(lonlat_to_xyz(np.array([lat]), np.array([lon])))
-        j, i = np.unravel_index(flat[0], self._shape)
+        _, flat = self._nearest(lat, lon)
+        j, i = np.unravel_index(flat, self._shape)
         n = NEIGHBOURHOOD
         window = field.edr[:, max(j - n, 0) : j + n + 1, max(i - n, 0) : i + n + 1].max(axis=(1, 2))
-        return float(np.interp(altitude_ft, field.levels_ft, window))
+        return float(np.interp(altitude_ft, field.levels_ft, window.astype(np.float32)))

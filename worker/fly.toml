@@ -1,0 +1,19 @@
+# fly.toml app configuration file generated for smooth-worker on 2026-10-18T10:39:09-04:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'smooth-worker'
+primary_region = 'iad'
+
+[build]
+  dockerfile = 'Dockerfile'
+
+[[mounts]]
+  source = 'smooth_cache'
+  destination = '/data'
+  initial_size = '3gb'
+
+[[vm]]
+  size = 'shared-cpu-1x'
+  memory = '2gb'

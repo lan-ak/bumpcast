@@ -1,7 +1,7 @@
 import Foundation
 import Testing
 
-@testable import Smooth
+@testable import BumpCast
 
 struct ForecastTests {
     @Test func decodesWorkerOutput() throws {

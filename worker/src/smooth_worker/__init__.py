@@ -1,7 +1,7 @@
 """Smooth turbulence forecast worker.
 
   smooth-worker forecast JFK LAX 2026-10-19T14:00Z   # one-off forecast, prints a summary
-  smooth-worker run                                  # poll Supabase and keep forecasts fresh
+  smooth-worker run                                  # keep forecasts, notifications and map data fresh
 """
 
 import argparse
@@ -12,7 +12,8 @@ import time
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
-from . import airports, forecast
+from . import airports, forecast, mapdata, notify
+from .apns import Apns
 from .sources import GfsSource, GtgSource, gfs, gtg
 
 log = logging.getLogger("smooth_worker")
@@ -111,17 +112,37 @@ def prune_cache(max_age: timedelta = timedelta(days=1)) -> None:
             path.unlink(missing_ok=True)
 
 
+def poll(db, apns: Apns | None) -> None:
+    """One pass: forecasts first (notifications describe them), then notifications, then map data.
+    Each step is isolated so a failure in one doesn't block the others."""
+    steps = [
+        ("forecasts", lambda: f"processed {run_once(db)} flight(s)"),
+        ("notifications", lambda: f"{notify.run(db, apns, datetime.now(UTC))} notification(s)"),
+        ("pireps", lambda: f"{mapdata.refresh_pireps(db, datetime.now(UTC))} pilot report(s)"),
+        ("map", lambda: f"{refresh_map(db)} map layer(s)"),
+    ]
+    for name, step in steps:
+        try:
+            log.info("%s: %s", name, step())
+        except Exception:
+            log.exception("%s failed", name)
+    prune_cache()
+
+
+def refresh_map(db) -> int:
+    cycle = gtg.latest_cycle()
+    return mapdata.refresh_grids(db, GtgSource(cycle, CACHE_DIR)) if cycle else 0
+
+
 def cmd_run(args: argparse.Namespace) -> None:
     from .db import Database
 
     db = Database()
+    apns = Apns.from_env()
+    if apns is None:
+        log.warning("APNs not configured (APNS_KEY_ID / APNS_TEAM_ID / APNS_KEY): notifications are recorded, not pushed")
     while True:
-        try:
-            count = run_once(db)
-            log.info("processed %d flight(s)", count)
-            prune_cache()
-        except Exception:
-            log.exception("poll failed")
+        poll(db, apns)
         if args.once:
             return
         time.sleep(POLL_SECONDS)

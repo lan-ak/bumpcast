@@ -5,6 +5,7 @@ struct FlightEditorView: View {
     var flight: Flight?
 
     @Environment(FlightStore.self) private var store
+    @Environment(PushNotifications.self) private var push
     @Environment(\.dismiss) private var dismiss
     @State private var origin: Airport?
     @State private var destination: Airport?
@@ -28,6 +29,13 @@ struct FlightEditorView: View {
                 }
                 if origin != nil, origin == destination {
                     Text("Pick two different airports.").foregroundStyle(.red)
+                } else if let origin, let destination, !Coverage.covers(from: origin, to: destination) {
+                    Label(
+                        "This route is outside our US coverage for now. You can still save it, and we'll tell you when we cover it.",
+                        systemImage: "globe"
+                    )
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
                 }
             }
             .navigationTitle(flight == nil ? "Add flight" : "Edit flight")
@@ -64,6 +72,10 @@ struct FlightEditorView: View {
         let draft = FlightDraft(origin: origin.icao, destination: destination.icao, departureAt: departure)
         if await store.save(draft, editing: flight?.id) != nil {
             dismiss()
+            // The moment the user has a reason to want alerts: ask once.
+            if push.status == .notDetermined {
+                await push.requestPermission()
+            }
         }
     }
 }

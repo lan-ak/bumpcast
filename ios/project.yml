@@ -1,4 +1,4 @@
-name: Smooth
+name: BumpCast
 options:
   bundleIdPrefix: ca.akinyemi
   deploymentTarget:
@@ -8,47 +8,77 @@ packages:
   Supabase:
     url: https://github.com/supabase/supabase-swift
     from: 2.55.0
+  SuperwallKit:
+    url: https://github.com/superwall/Superwall-iOS
+    from: 4.18.0
 configFiles:
   Debug: Config/App.xcconfig
   Release: Config/App.xcconfig
 targets:
-  Smooth:
+  BumpCast:
     type: application
     platform: iOS
     sources:
-      - Smooth
+      - BumpCast
+      - Shared
     dependencies:
       - package: Supabase
+      - package: SuperwallKit
+      - target: BumpCastWidgets
+        embed: true
+    entitlements:
+      path: BumpCast/BumpCast.entitlements
+      properties:
+        aps-environment: development
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: ca.akinyemi.smooth
+        PRODUCT_BUNDLE_IDENTIFIER: ca.akinyemi.bumpcast
         MARKETING_VERSION: 0.1.0
         CURRENT_PROJECT_VERSION: 1
         SWIFT_VERSION: 6.0
         TARGETED_DEVICE_FAMILY: 1
         GENERATE_INFOPLIST_FILE: YES
-        INFOPLIST_KEY_CFBundleDisplayName: Smooth
+        INFOPLIST_KEY_CFBundleDisplayName: BumpCast
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
-        INFOPLIST_FILE: Smooth/Info.plist
-  SmoothTests:
+        INFOPLIST_FILE: BumpCast/Info.plist
+  BumpCastWidgets:
+    type: app-extension
+    platform: iOS
+    sources:
+      - BumpCastWidgets
+      - Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: ca.akinyemi.bumpcast.widgets
+        MARKETING_VERSION: 0.1.0
+        CURRENT_PROJECT_VERSION: 1
+        SWIFT_VERSION: 6.0
+        TARGETED_DEVICE_FAMILY: 1
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: BumpCast
+        INFOPLIST_FILE: BumpCastWidgets/Info.plist
+        SKIP_INSTALL: YES
+  BumpCastTests:
     type: bundle.unit-test
     platform: iOS
     sources:
-      - SmoothTests
+      - BumpCastTests
     dependencies:
-      - target: Smooth
+      - target: BumpCast
     settings:
       base:
         GENERATE_INFOPLIST_FILE: YES
         SWIFT_VERSION: 6.0
 schemes:
-  Smooth:
+  BumpCast:
     build:
       targets:
-        Smooth: all
-        SmoothTests: [test]
+        BumpCast: all
+        BumpCastTests: [test]
+    run:
+      storeKitConfiguration: BumpCast/Products.storekit
     test:
       targets:
-        - SmoothTests
+        - BumpCastTests

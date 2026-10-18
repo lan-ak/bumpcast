@@ -1,0 +1,107 @@
+{
+  "identifier" : "6E3B1F2A",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "3.99",
+      "familyShareable" : false,
+      "internalID" : "684306",
+      "localizations" : [
+        {
+          "description" : "Full forecast, updates and in-flight tools for one flight.",
+          "displayName" : "Flight Pass",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "bumpcast_flight_pass",
+      "referenceName" : "Flight Pass",
+      "type" : "Consumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "58179",
+    "_failTransactionsEnabled" : false,
+    "_locale" : "en_US",
+    "_storefront" : "USA",
+    "_storeKitErrors" : [
+
+    ]
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "21E0A3C4",
+      "localizations" : [
+
+      ],
+      "name" : "BumpCast Pro",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "6.99",
+          "familyShareable" : false,
+          "groupNumber" : 2,
+          "internalID" : "684307",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Full forecasts, updates and in-flight tools for every flight.",
+              "displayName" : "BumpCast Pro Monthly",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "bumpcast_pro_monthly",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "BumpCast Pro Monthly",
+          "subscriptionGroupID" : "21E0A3C4",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "39.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "684308",
+          "introductoryOffer" : {
+            "internalID" : "9A1C7E55",
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P1W"
+          },
+          "localizations" : [
+            {
+              "description" : "Full forecasts, updates and in-flight tools for every flight.",
+              "displayName" : "BumpCast Pro Annual",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "bumpcast_pro_annual",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "BumpCast Pro Annual",
+          "subscriptionGroupID" : "21E0A3C4",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 4,
+    "minor" : 0
+  }
+}

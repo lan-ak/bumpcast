@@ -2,25 +2,37 @@ import SwiftUI
 
 struct FlightsListView: View {
     @Environment(FlightStore.self) private var store
+    @Environment(Router.self) private var router
+    @Environment(Paywalls.self) private var paywalls
     @State private var isAdding = false
+    @State private var isShowingSettings = false
 
     var body: some View {
         @Bindable var store = store
-        NavigationStack {
+        @Bindable var router = router
+        NavigationStack(path: $router.flightPath) {
             List {
                 if Services.isDemo {
                     Label("Demo mode: sample forecast, nothing is saved", systemImage: "info.circle")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                 }
-                ForEach(store.flights) { flight in
-                    NavigationLink(value: flight) {
-                        FlightRow(flight: flight, forecast: store.forecasts[flight.id])
+                if store.isOffline, let synced = store.syncedAt {
+                    Label("Offline. Showing forecasts saved \(synced.formatted(.relative(presentation: .named))).", systemImage: "wifi.slash")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }
+                if !upcoming.isEmpty {
+                    Section("Upcoming") {
+                        ForEach(upcoming) { row($0) }
+                            .onDelete { delete(upcoming, $0) }
                     }
                 }
-                .onDelete { offsets in
-                    let ids = offsets.map { store.flights[$0].id }
-                    Task { for id in ids { await store.delete(id) } }
+                if !flown.isEmpty {
+                    Section("Flown") {
+                        ForEach(flown) { row($0) }
+                            .onDelete { delete(flown, $0) }
+                    }
                 }
             }
             .overlay {
@@ -30,18 +42,24 @@ struct FlightsListView: View {
                     } description: {
                         Text("Save a flight and we'll have its turbulence forecast ready 48 hours before you fly.")
                     } actions: {
-                        Button("Add a flight") { isAdding = true }
+                        Button("Add a flight", action: addFlight)
                             .buttonStyle(.borderedProminent)
                     }
                 }
             }
             .navigationTitle("Flights")
-            .navigationDestination(for: Flight.self) { FlightDetailView(flightID: $0.id) }
+            .navigationDestination(for: UUID.self) { FlightDetailView(flightID: $0) }
             .toolbar {
-                Button("Add flight", systemImage: "plus") { isAdding = true }
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Settings", systemImage: "gearshape") { isShowingSettings = true }
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Add flight", systemImage: "plus", action: addFlight)
+                }
             }
             .refreshable { await store.reload() }
             .sheet(isPresented: $isAdding) { FlightEditorView() }
+            .sheet(isPresented: $isShowingSettings) { SettingsView() }
             .alert("Something went wrong", isPresented: .constant(store.error != nil)) {
                 Button("OK") { store.error = nil }
             } message: {
@@ -49,21 +67,53 @@ struct FlightsListView: View {
             }
         }
     }
+
+    private var upcoming: [Flight] { store.upcomingFlights }
+    private var flown: [Flight] {
+        store.flights.filter { $0.estimatedLanding(store.forecasts[$0.id]) <= .now }.reversed()
+    }
+
+    private func row(_ flight: Flight) -> some View {
+        NavigationLink(value: flight.id) {
+            FlightRow(flight: flight, forecast: store.forecasts[flight.id], report: store.reports[flight.id])
+        }
+    }
+
+    private func delete(_ flights: [Flight], _ offsets: IndexSet) {
+        let ids = offsets.map { flights[$0].id }
+        Task { for id in ids { await store.delete(id) } }
+    }
+
+    /// Free users can keep a couple of upcoming flights; more goes through the paywall.
+    private func addFlight() {
+        if paywalls.canAddFlight {
+            isAdding = true
+        } else {
+            paywalls.unlock(.flightLimitReached) { isAdding = true }
+        }
+    }
 }
 
 struct FlightRow: View {
     let flight: Flight
     let forecast: Forecast?
+    var report: LandingReport? = nil
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
-                Text(routeText).font(.headline)
+                Text(flight.routeText).font(.headline)
                 Spacer()
                 StatusPill(state: ForecastState(flight: flight, forecast: forecast))
             }
             Text(flight.departureText).font(.subheadline).foregroundStyle(.secondary)
-            if let forecast, forecast.status == .ready {
+            if let report {
+                Label(
+                    report.matched == true ? "Forecast matched" : "You felt \(report.felt.title.lowercased())",
+                    systemImage: report.matched == true ? "checkmark.circle" : "hand.raised")
+                    .font(.caption.weight(.medium))
+                    .foregroundStyle(.secondary)
+            } else if let forecast, forecast.status == .ready, flight.departureAt > .now {
                 let confidence = forecast.confidence(departure: flight.departureAt)
                 Label(confidence.title, systemImage: confidence.symbol)
                     .font(.caption.weight(.medium))
@@ -71,10 +121,6 @@ struct FlightRow: View {
             }
         }
         .padding(.vertical, 4)
-    }
-
-    private var routeText: String {
-        "\(flight.originAirport?.iata ?? flight.origin) → \(flight.destinationAirport?.iata ?? flight.destination)"
     }
 }
 
@@ -99,8 +145,6 @@ struct StatusPill: View {
                 Label("Preparing", systemImage: "hourglass").foregroundStyle(.secondary)
             case .outOfCoverage:
                 Label("Not covered yet", systemImage: "globe").foregroundStyle(.secondary)
-            case .departed:
-                Label("Flown", systemImage: "checkmark").foregroundStyle(.secondary)
             }
         }
         .font(.caption.weight(.semibold))

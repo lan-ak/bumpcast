@@ -2,5 +2,6 @@
 // With both empty, the app runs in demo mode with a bundled sample forecast.
 SUPABASE_URL =
 SUPABASE_ANON_KEY =
+SUPERWALL_API_KEY =
 
 #include? "Secrets.xcconfig"

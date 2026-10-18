@@ -5,20 +5,75 @@ struct ForecastView: View {
     let forecast: Forecast
     let flight: Flight
 
+    @Environment(Paywalls.self) private var paywalls
+    @Environment(InFlight.self) private var inFlight
+
     var body: some View {
         let confidence = forecast.confidence(departure: flight.departureAt)
         VStack(alignment: .leading, spacing: 20) {
             if let grade = forecast.grade {
                 GradeCard(grade: grade, forecast: forecast, confidence: confidence)
             }
-            TimelineCard(forecast: forecast, confidence: confidence)
-            if !forecast.segments.isEmpty {
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("What to expect").font(.title3.bold())
-                    ForEach(forecast.segments, id: \.startMin) { SegmentRow(segment: $0) }
+            if paywalls.hasFullAccess(to: flight) {
+                TimelineCard(
+                    forecast: forecast, confidence: confidence,
+                    nowMinute: inFlight.elapsedMinutes(flight, forecast: forecast))
+                if !forecast.segments.isEmpty {
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("What to expect").font(.title3.bold())
+                        ForEach(forecast.segments, id: \.startMin) { SegmentRow(segment: $0) }
+                    }
+                }
+                ConfidenceNote(forecast: forecast, confidence: confidence)
+            } else {
+                LockedTimelineCard(forecast: forecast) {
+                    paywalls.unlock(.timelineLocked, flight: flight) {}
                 }
             }
-            ConfidenceNote(forecast: forecast, confidence: confidence)
+        }
+        .onAppear { paywalls.firstGradeViewed(flight) }
+    }
+}
+
+/// Free users see the grade; the timeline is Pro. Show its shape without the detail.
+private struct LockedTimelineCard: View {
+    let forecast: Forecast
+    let unlock: () -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Bumps along the way").font(.title3.bold())
+            Chart(forecast.samples, id: \.min) { sample in
+                RectangleMark(
+                    xStart: .value("Minute", sample.min), xEnd: .value("Minute", sample.min + 1),
+                    yStart: .value("Bumpiness", 0), yEnd: .value("Bumpiness", max(sample.edr, 0.02)))
+                    .foregroundStyle(.secondary)
+            }
+            .chartXAxis(.hidden)
+            .chartYAxis(.hidden)
+            .frame(height: 120)
+            .blur(radius: 8)
+            .accessibilityHidden(true)
+            Text(teaser).font(.subheadline)
+            Button(action: unlock) {
+                Label(forecast.segments.isEmpty ? "See the full timeline" : "See when the bumps are", systemImage: "lock.open")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.borderedProminent)
+            Text("Includes the full timeline, update alerts and in-flight countdowns.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding()
+        .background(.fill.quaternary, in: .rect(cornerRadius: 20))
+    }
+
+    private var teaser: String {
+        switch forecast.segments.count {
+        case 0: "No bumpy stretches expected. See the minute-by-minute timeline."
+        case 1: "1 bumpy stretch on this flight. See exactly when, and how it'll feel."
+        default: "\(forecast.segments.count) bumpy stretches on this flight. See exactly when, and how they'll feel."
         }
     }
 }
@@ -69,6 +124,8 @@ private struct GradeCard: View {
 private struct TimelineCard: View {
     let forecast: Forecast
     let confidence: Forecast.Confidence
+    /// Minutes since takeoff while flying: drawn as a "you are here" line.
+    var nowMinute: Int? = nil
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -82,6 +139,14 @@ private struct TimelineCard: View {
                 )
                 .foregroundStyle(sample.severity.color.gradient)
                 .opacity(isOutlook(sample.min) ? 0.4 : 1)
+                if let nowMinute, sample.min == nowMinute {
+                    RuleMark(x: .value("Now", nowMinute))
+                        .foregroundStyle(.primary)
+                        .lineStyle(StrokeStyle(lineWidth: 2))
+                        .annotation(position: .top, alignment: .leading) {
+                            Text("You are here").font(.caption2.bold())
+                        }
+                }
             }
             .chartYScale(domain: 0...max(0.4, forecast.samples.map(\.edr).max() ?? 0))
             .chartYAxis {
