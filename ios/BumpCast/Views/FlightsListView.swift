@@ -42,6 +42,7 @@ struct FlightsListView: View {
                 .animation(Theme.motion(reduceMotion), value: store.flights.map(\.id))
             }
             .background { SkyBackground(sky: sky) }
+            .onSky(sky)  // light text on a night sky
             .navigationTitle("Flights")
             .navigationDestination(for: UUID.self) { id in
                 FlightDetailView(flightID: id)

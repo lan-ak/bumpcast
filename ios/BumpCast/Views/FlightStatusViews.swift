@@ -67,7 +67,8 @@ struct LiveStatusRow: View {
             if Date.now < flight.liveStatusStartsAt {
                 return "Live status starts \(flight.liveStatusStartsAt.formatted(.dateTime.weekday(.abbreviated)))"
             }
-            return "Live status isn't available for this flight"
+            // No row yet: the worker checks within a few minutes. A row without a status was checked.
+            return flight.status == nil ? "Checking live status…" : "Live status isn't available for this flight"
         }
         let tz = flight.originTimeZone
         switch status.state {
@@ -159,7 +160,9 @@ struct FlightStatusSection: View {
         } else if flight.expectedDeparture > .now.addingTimeInterval(-3600) {
             VStack(alignment: .leading, spacing: 6) {
                 Text("Flight status").font(.bcSection)
-                Text("Live status isn't available for this flight. Your forecast still uses the scheduled time.")
+                Text(flight.status == nil
+                    ? "Checking live status. It usually takes a few minutes after you add a flight."
+                    : "Live status isn't available for this flight. Your forecast still uses the scheduled time.")
                     .font(.bcSubheadline)
                     .foregroundStyle(.secondary)
             }

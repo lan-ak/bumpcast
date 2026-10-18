@@ -77,7 +77,8 @@ extension View {
         modifier(SkyCard(cornerRadius: cornerRadius, padding: padding))
     }
 
-    /// Sets light text when the sky is dark.
+    /// Sets light text when the sky is dark (or the phone is in dark mode, which always shows
+    /// the night sky). Put it outside `SkyBackground` so the two agree.
     func onSky(_ sky: Sky) -> some View {
         modifier(OnSky(sky: sky))
     }
@@ -100,8 +101,10 @@ private struct SkyCard: ViewModifier {
 
 private struct OnSky: ViewModifier {
     let sky: Sky
+    @Environment(\.colorScheme) private var systemScheme
+
     func body(content: Content) -> some View {
-        content.environment(\.colorScheme, sky.isDark ? .dark : .light)
+        content.environment(\.colorScheme, sky.isDark || systemScheme == .dark ? .dark : .light)
     }
 }
 

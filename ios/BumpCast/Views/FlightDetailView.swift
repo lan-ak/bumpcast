@@ -93,6 +93,7 @@ struct FlightDetailView: View {
             .padding()
         }
         .background { SkyBackground(sky: Sky(date: flight.departureAt, timeZone: flight.originAirport?.timeZone ?? .current)) }
+        .onSky(Sky(date: flight.departureAt, timeZone: flight.originAirport?.timeZone ?? .current))
         .navigationTitle("Forecast")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
