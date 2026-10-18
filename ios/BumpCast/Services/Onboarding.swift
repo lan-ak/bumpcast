@@ -1,6 +1,7 @@
 import Foundation
 import Observation
 import SuperwallKit
+import UIKit
 
 /// First-launch onboarding. The flow lives in Superwall (the `onboarding` placement); while it
 /// loads the app shows `LaunchLoadingView`, and if it can't load, `NativeOnboardingView` asks the
@@ -26,15 +27,21 @@ final class Onboarding {
     private static let doneKey = "onboarding.done"
     /// How long the loading screen waits for the Superwall flow before switching to the native one.
     private static let timeout: Duration = .seconds(8)
+    /// Long enough for the logo to draw itself before the flow slides in.
+    private static let minimumLogoTime: Duration = .seconds(1.8)
+    /// The paywall's name on the dashboard (`superwall/paywalls/onboarding/config.ts`).
+    private static let paywallName = "Onboarding"
 
     @ObservationIgnored private let defaults = UserDefaults.standard
     @ObservationIgnored private var started = false
+    @ObservationIgnored private var webviewReady = false
+    @ObservationIgnored private var webviewFailed = false
 
     private init() {
         phase = UserDefaults.standard.bool(forKey: Self.doneKey) ? .done : .loading
     }
 
-    /// Called once at launch. Registers the placement and starts the fallback timer.
+    /// Called once at launch. Waits for the flow to preload, then presents it (or falls back).
     func start() {
         guard phase == .loading, !started else { return }
         started = true
@@ -45,6 +52,50 @@ final class Onboarding {
             return
         }
 
+        // The flow is full-bleed web content. Superwall infers the safe area from the device
+        // model, which simulators (and future models) don't report, so hand it the real insets.
+        if let window = UIApplication.shared.connectedScenes
+            .compactMap({ ($0 as? UIWindowScene)?.keyWindow }).first
+        {
+            let insets = window.safeAreaInsets
+            paywalls.setUserAttributes([
+                "safe_area_top": Int(insets.top.rounded()), "safe_area_bottom": Int(insets.bottom.rounded()),
+            ])
+        }
+
+        Task { [weak self] in
+            // Present only once the flow's page has preloaded, so Superwall never shows its
+            // shimmer; and not before the logo animation has played.
+            let launched = ContinuousClock.now
+            let deadline = launched + Self.timeout
+            while ContinuousClock.now < deadline {
+                guard let self, self.phase == .loading else { return }
+                if self.webviewFailed || Superwall.shared.configurationStatus == .failed { break }
+                if self.webviewReady, ContinuousClock.now - launched >= Self.minimumLogoTime {
+                    self.present()
+                    return
+                }
+                try? await Task.sleep(for: .milliseconds(100))
+            }
+            self?.fallBack()
+        }
+    }
+
+    /// The onboarding page preloads in the background as soon as Superwall configures (its
+    /// campaign is prioritized). `Paywalls` forwards the webview events here.
+    func paywallWebviewEvent(_ event: SuperwallEvent) {
+        switch event {
+        case .paywallWebviewLoadComplete(let info) where info.name == Self.paywallName:
+            webviewReady = true
+        case .paywallWebviewLoadFail(let info) where info.name == Self.paywallName,
+            .paywallWebviewLoadTimeout(let info) where info.name == Self.paywallName:
+            webviewFailed = true
+        default:
+            break
+        }
+    }
+
+    private func present() {
         let handler = PaywallPresentationHandler()
         handler.onPresent { [weak self] _ in
             Task { @MainActor in self?.phase = .superwall }
@@ -68,13 +119,10 @@ final class Onboarding {
         }
         Superwall.shared.register(placement: Placement.onboarding.rawValue, handler: handler)
 
+        // The page is already loaded, so presenting is near-instant; if it somehow isn't, don't
+        // leave the logo up forever.
         Task { [weak self] in
-            let deadline = ContinuousClock.now + Self.timeout
-            while ContinuousClock.now < deadline {
-                if Superwall.shared.configurationStatus == .failed { break }
-                try? await Task.sleep(for: .milliseconds(200))
-                if self?.phase != .loading { return }
-            }
+            try? await Task.sleep(for: .seconds(4))
             self?.fallBack()
         }
     }

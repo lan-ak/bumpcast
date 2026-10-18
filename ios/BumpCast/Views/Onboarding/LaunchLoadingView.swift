@@ -11,20 +11,25 @@ struct LaunchLoadingView: View {
 
     var body: some View {
         ZStack {
+            // Starts as the launch screen (LaunchBackground + LaunchIcon, both centred on the full
+            // screen), so the hand-off from the system splash is invisible; then the sky fades in.
+            Color("LaunchBackground")
             LinearGradient(colors: palette.sky, startPoint: .top, endPoint: .bottom)
-                .ignoresSafeArea()
-            VStack(spacing: 24) {
-                CalmLineIcon(palette: palette, lineProgress: drawn ? 1 : 0, sunRise: drawn ? 1 : 0)
-                    .frame(width: 132, height: 132)
-                    .clipShape(.rect(cornerRadius: 30, style: .continuous))
-                    .scaleEffect(breathing ? 1.03 : 1)
-                    .shadow(color: .black.opacity(0.08), radius: 16, y: 8)
-                Text("BumpCast")
-                    .font(.bcTitle)
-                    .foregroundStyle(palette.ink)
-                    .opacity(drawn ? 1 : 0)
-            }
+                .opacity(drawn ? 1 : 0)
+            CalmLineIcon(palette: palette, lineProgress: drawn ? 1 : 0, sunRise: drawn ? 1 : 0)
+                .frame(width: 132, height: 132)
+                .clipShape(.rect(cornerRadius: 30, style: .continuous))
+                .scaleEffect(breathing ? 1.03 : 1)
+                .overlay(alignment: .bottom) {
+                    Text("BumpCast")
+                        .font(.bcTitle)
+                        .foregroundStyle(palette.ink)
+                        .fixedSize()
+                        .offset(y: 58)
+                        .opacity(drawn ? 1 : 0)
+                }
         }
+        .ignoresSafeArea()
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("BumpCast is loading")
         .onAppear {
