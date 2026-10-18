@@ -5,13 +5,23 @@ struct CalmView: View {
     @Environment(Router.self) private var router
     @Environment(FlightStore.self) private var store
     @Environment(InFlight.self) private var inFlight
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         NavigationStack {
             VStack(spacing: 20) {
+                // Its own header: the system title can't follow the night sky's light ink.
+                Text("Calm")
+                    .font(.bcDisplay)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
                 Spacer()
-                WaterGlass(severity: .smooth, size: 64)
-                Text("Breathe through the bumps").font(.largeTitle.bold()).multilineTextAlignment(.center)
+                Image(systemName: "wind")
+                    .font(.system(size: 64, weight: .light))
+                    .foregroundStyle(Theme.accent)
+                    .symbolEffect(.breathe.pulse, options: .repeat(.continuous), isActive: !reduceMotion)
+                    .accessibilityHidden(true)
+                Text("Breathe through the bumps").font(.bcDisplay).multilineTextAlignment(.center)
                 Text(subtitle).multilineTextAlignment(.center).foregroundStyle(.secondary)
                 Button {
                     router.showBreathing = true
@@ -26,7 +36,8 @@ struct CalmView: View {
             .padding(24)
             .background { SkyBackground(sky: .night) }
             .onSky(.night)
-            .navigationTitle("Calm")
+            .toolbar(.hidden, for: .navigationBar)
+            .toolbarColorScheme(.dark, for: .navigationBar)
         }
     }
 
@@ -96,7 +107,7 @@ struct BreathingView: View {
                 }
                 if let next = NextStretch.current(store: store, inFlight: inFlight, now: context.date) {
                     Text(next.headsUp(now: context.date))
-                        .font(.headline)
+                        .font(.bcHeadline)
                         .multilineTextAlignment(.center)
                         .foregroundStyle(.secondary)
                 }
@@ -108,15 +119,15 @@ struct BreathingView: View {
                         .scaleEffect(reduceMotion ? 1 : orbScale(inhaling: inhaling, progress: progress))
                         .opacity(reduceMotion ? 0.45 + 0.55 * glow(inhaling: inhaling, progress: progress) : 1)
                     VStack(spacing: 8) {
-                        Text(inhaling ? "Breathe in" : "Breathe out").font(.title.bold())
-                        Text("\(Int(remaining.rounded(.up)))").font(.largeTitle.monospacedDigit())
+                        Text(inhaling ? "Breathe in" : "Breathe out").font(.bcTitle)
+                        Text("\(Int(remaining.rounded(.up)))").font(.bcBigFigure)
                             .contentTransition(.numericText(countsDown: true))
                     }
                 }
                 .accessibilityElement(children: .combine)
                 Spacer()
                 Text("Unclench your hands and let your shoulders drop. The seatbelt is doing the work.")
-                    .font(.subheadline)
+                    .font(.bcSubheadline)
                     .multilineTextAlignment(.center)
                     .foregroundStyle(.secondary)
             }

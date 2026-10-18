@@ -6,6 +6,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         _ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
         Paywalls.shared.configure()
+        BrandFont.applyToNavigationTitles()
         UNUserNotificationCenter.current().delegate = PushNotifications.shared
         AppSync.registerBackgroundRefresh()
         // "How did it feel?" buttons on the Live Activity after landing.
@@ -75,19 +76,19 @@ struct RootView: View {
         @Bindable var router = router
         TabView(selection: $router.tab) {
             Tab("Flights", systemImage: "airplane", value: Router.Tab.flights) {
-                FlightsListView()
+                FlightsListView().font(.bcBody)
             }
             Tab("Map", systemImage: "map", value: Router.Tab.map) {
-                TurbulenceMapView()
+                TurbulenceMapView().font(.bcBody)
             }
             Tab("Learn", systemImage: "book.pages", value: Router.Tab.learn) {
-                LearnView()
+                LearnView().font(.bcBody)
             }
             Tab("Calm", systemImage: "wind", value: Router.Tab.calm, role: calmRole) {
-                CalmView()
+                CalmView().font(.bcBody)
             }
         }
         .tint(Theme.accent)
-        .fullScreenCover(isPresented: $router.showBreathing) { BreathingView() }
+        .fullScreenCover(isPresented: $router.showBreathing) { BreathingView().font(.bcBody) }
     }
 }

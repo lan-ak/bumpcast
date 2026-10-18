@@ -26,7 +26,7 @@ struct FlightDetailView: View {
                 FlightHeader(flight: flight)
                 if store.isOffline, let synced = store.syncedAt {
                     Label("Offline. Saved \(synced.formatted(.relative(presentation: .named))).", systemImage: "wifi.slash")
-                        .font(.footnote)
+                        .font(.bcFootnote)
                         .foregroundStyle(.secondary)
                 }
                 if case .ready(let forecast) = state {
@@ -97,10 +97,10 @@ private struct FlightHeader: View {
                 Image(systemName: "airplane").font(.title2).foregroundStyle(.secondary)
                 Text(flight.destinationAirport?.iata ?? flight.destination)
             }
-            .font(.largeTitle.bold())
+            .font(.bcDisplay)
             Text("\(flight.originAirport?.city ?? "") to \(flight.destinationAirport?.city ?? "")")
                 .foregroundStyle(.secondary)
-            Text(flight.departureText).font(.footnote.monospaced()).foregroundStyle(.secondary)
+            Text(flight.departureText).font(.bcMeta).foregroundStyle(.secondary)
         }
     }
 }
@@ -114,7 +114,7 @@ struct MessageCard<Actions: View>: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             Image(systemName: symbol).font(.title).foregroundStyle(.tint)
-            Text(title).font(.title3.bold())
+            Text(title).font(.bcSection)
             Text(message).foregroundStyle(.secondary)
             actions
         }
@@ -174,11 +174,11 @@ private struct NotificationsCard: View {
             Image(systemName: "bell.badge").font(.title2).foregroundStyle(.tint)
             VStack(alignment: .leading, spacing: 6) {
                 Text(forecastReady ? "Get told if your forecast changes" : "Get told when your forecast is ready")
-                    .font(.headline)
+                    .font(.bcCardTitle)
                 Text(forecastReady
                     ? "We'll notify you at 24, 6 and 2 hours before departure, and when your forecast is confirmed."
                     : "We'll notify you 48 hours before departure, then when anything changes.")
-                    .font(.subheadline)
+                    .font(.bcSubheadline)
                     .foregroundStyle(.secondary)
                 Button(push.status == .denied ? "Turn on in Settings" : "Turn on notifications") {
                     if push.status == .denied {

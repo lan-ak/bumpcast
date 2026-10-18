@@ -60,6 +60,8 @@ struct SettingsView: View {
                 }
                 Section {
                     LabeledContent("Version", value: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")
+                    // One row covers the fonts' SIL Open Font License notices.
+                    NavigationLink("Licences") { LicensesView() }
                 } footer: {
                     Text("Forecasts are guidance, not guarantees. Always follow crew instructions.")
                 }
@@ -75,5 +77,46 @@ struct SettingsView: View {
             }
             .task { stats = try? await store.service.accuracyStats() }
         }
+    }
+}
+
+/// Fonts bundled under the SIL Open Font License; the licence text ships with the app.
+struct FontCredit: Identifiable {
+    let name: String
+    let author: String
+    let licenseFile: String
+    var id: String { licenseFile }
+
+    static let all = [
+        FontCredit(name: "Familjen Grotesk", author: "Familjen STHLM", licenseFile: "OFL-FamiljenGrotesk"),
+        FontCredit(name: "Atkinson Hyperlegible", author: "Braille Institute", licenseFile: "OFL-AtkinsonHyperlegible"),
+        FontCredit(name: "IBM Plex Mono", author: "IBM", licenseFile: "OFL-IBMPlexMono"),
+    ]
+}
+
+/// Every bundled font's licence on one page.
+private struct LicensesView: View {
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 24) {
+                ForEach(FontCredit.all) { credit in
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("\(credit.name) · \(credit.author)").font(.bcCardTitle)
+                        Text(Self.text(credit)).font(.bcFootnote)
+                    }
+                }
+            }
+            .padding()
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .navigationTitle("Licences")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+
+    private static func text(_ credit: FontCredit) -> String {
+        guard let url = Bundle.main.url(forResource: credit.licenseFile, withExtension: "txt"),
+            let text = try? String(contentsOf: url, encoding: .utf8)
+        else { return "SIL Open Font License, Version 1.1" }
+        return text
     }
 }

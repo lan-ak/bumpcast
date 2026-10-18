@@ -22,15 +22,15 @@ struct LearnView: View {
 
     private func group(_ title: String, _ items: [Explainer]) -> some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text(title).font(.headline).foregroundStyle(.secondary)
+            Text(title).eyebrow().foregroundStyle(.secondary)
             ForEach(items) { explainer in
                 NavigationLink(value: explainer) {
                     HStack(spacing: 14) {
                         ExplainerDiagram(kind: explainer.diagram)
                             .frame(width: 56, height: 40)
                         VStack(alignment: .leading, spacing: 2) {
-                            Text(explainer.title).font(.headline)
-                            Text(explainer.subtitle).font(.subheadline).foregroundStyle(.secondary)
+                            Text(explainer.title).font(.bcHeadline)
+                            Text(explainer.subtitle).font(.bcSubheadline).foregroundStyle(.secondary)
                         }
                         Spacer()
                         Image(systemName: "chevron.right").foregroundStyle(.tertiary)
@@ -53,7 +53,7 @@ struct ExplainerView: View {
                     .frame(height: 140)
                     .skyCard()
                     .accessibilityHidden(true)
-                Text(explainer.title).font(.largeTitle.bold())
+                Text(explainer.title).font(.bcDisplay)
                 section("What's happening", explainer.happening)
                 section("What the crew is doing", explainer.crew)
                 section("What you'll feel", explainer.feel)
@@ -61,12 +61,12 @@ struct ExplainerView: View {
                     LightChopPreview()
                 }
                 VStack(alignment: .leading, spacing: 6) {
-                    Label("Good to know", systemImage: "hand.thumbsup").font(.headline).foregroundStyle(Theme.accent)
+                    Label("Good to know", systemImage: "hand.thumbsup").font(.bcCardTitle).foregroundStyle(Theme.accent)
                     Text(explainer.goodToKnow)
                 }
                 .skyCard()
                 if !explainer.related.isEmpty {
-                    Text("More turbulence types").font(.headline)
+                    Text("More turbulence types").font(.bcCardTitle)
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
                             ForEach(explainer.related) { other in
@@ -86,7 +86,7 @@ struct ExplainerView: View {
 
     private func section(_ title: String, _ text: String) -> some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text(title).font(.headline)
+            Text(title).font(.bcCardTitle)
             Text(text)
         }
     }
@@ -160,7 +160,7 @@ struct ExplainerDiagram: View {
                 context.draw(plane, at: CGPoint(x: w * 0.5, y: h * 0.4))
             }
         } symbols: {
-            Image(systemName: "airplane").font(.system(size: 14, weight: .semibold)).foregroundStyle(Theme.ink).tag(0)
+            Image(systemName: "airplane").font(.bcCaptionStrong).foregroundStyle(Theme.ink).tag(0)
         }
     }
 }

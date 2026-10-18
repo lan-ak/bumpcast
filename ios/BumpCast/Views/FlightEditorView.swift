@@ -34,7 +34,7 @@ struct FlightEditorView: View {
                         "This route is outside our US coverage for now. You can still save it, and we'll tell you when we cover it.",
                         systemImage: "globe"
                     )
-                    .font(.footnote)
+                    .font(.bcFootnote)
                     .foregroundStyle(.secondary)
                 }
             }
@@ -112,10 +112,10 @@ private struct AirportSearchView: View {
                 dismiss()
             } label: {
                 HStack {
-                    Text(airport.iata).font(.headline.monospaced()).frame(width: 48, alignment: .leading)
+                    Text(airport.iata).font(.bcMeta).frame(width: 48, alignment: .leading)
                     VStack(alignment: .leading) {
                         Text(airport.city)
-                        Text(airport.name).font(.caption).foregroundStyle(.secondary)
+                        Text(airport.name).font(.bcCaption).foregroundStyle(.secondary)
                     }
                 }
             }

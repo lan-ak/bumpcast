@@ -26,16 +26,16 @@ struct FlightLiveActivity: Widget {
             let current = a.current(at: .now, s)
             return DynamicIsland {
                 DynamicIslandExpandedRegion(.leading) {
-                    Label(a.route, systemImage: "airplane").font(.caption.bold())
+                    Label(a.route, systemImage: "airplane").font(.bcCaptionStrong)
                 }
                 DynamicIslandExpandedRegion(.trailing) {
                     Text(timerInterval: countdown(to: a.landing(s)), countsDown: true)
-                        .font(.caption.monospacedDigit())
+                        .font(.bcCaption.monospacedDigit())
                         .multilineTextAlignment(.trailing)
                 }
                 DynamicIslandExpandedRegion(.bottom) {
                     VStack(alignment: .leading, spacing: 8) {
-                        LeadText(attributes: a, state: s).font(.subheadline.bold())
+                        LeadText(attributes: a, state: s).font(.bcSubheadlineStrong)
                         RouteStrip(attributes: a, state: s)
                         HStack {
                             Link(destination: URL(string: "bumpcast://breathe")!) {
@@ -48,7 +48,7 @@ struct FlightLiveActivity: Widget {
                                 }
                             }
                         }
-                        .font(.caption.bold())
+                        .font(.bcCaptionStrong)
                     }
                 }
             } compactLeading: {
@@ -87,6 +87,7 @@ private struct ActivityRoot: View {
             }
         }
         .foregroundStyle(.white)
+        .font(.bcBody)
         .environment(\.colorScheme, .dark)
     }
 }
@@ -98,16 +99,16 @@ private struct LockScreenView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Label(attributes.route, systemImage: "airplane").font(.footnote.monospaced().bold())
+                Label(attributes.route, systemImage: "airplane").font(.bcMeta)
                 Spacer()
                 Text("Lands in \(Text(timerInterval: countdown(to: attributes.landing(state)), countsDown: true))")
-                    .font(.caption.monospacedDigit())
+                    .font(.bcCaption.monospacedDigit())
             }
             HStack(alignment: .center, spacing: 10) {
                 WaterGlass(severity: currentSeverity, size: 28)
                 VStack(alignment: .leading, spacing: 2) {
-                    LeadText(attributes: attributes, state: state).font(.title3.bold())
-                    NextText(attributes: attributes, state: state).font(.caption).foregroundStyle(.white.opacity(0.75))
+                    LeadText(attributes: attributes, state: state).font(.bcSection)
+                    NextText(attributes: attributes, state: state).font(.bcCaption).foregroundStyle(.white.opacity(0.75))
                 }
             }
             RouteStrip(attributes: attributes, state: state)
@@ -120,8 +121,8 @@ private struct LockScreenView: View {
                     Label("Full forecast", systemImage: "chart.bar")
                 }
             }
-            .font(.caption.bold())
-            Text(footer).font(.caption2).foregroundStyle(.white.opacity(0.6))
+            .font(.bcCaptionStrong)
+            Text(footer).font(.bcCaption2).foregroundStyle(.white.opacity(0.6))
         }
         .padding()
     }
@@ -180,7 +181,7 @@ private struct RouteStrip: View {
 
     var body: some View {
         HStack(spacing: 6) {
-            Image(systemName: "airplane.departure").font(.caption2)
+            Image(systemName: "airplane.departure").font(.bcCaption2)
             ZStack(alignment: .leading) {
                 ProgressView(timerInterval: state.takeoff...attributes.landing(state), countsDown: false) {
                     EmptyView()
@@ -200,7 +201,7 @@ private struct RouteStrip: View {
                 .allowsHitTesting(false)
             }
             .frame(height: 12)
-            Image(systemName: "airplane.arrival").font(.caption2)
+            Image(systemName: "airplane.arrival").font(.bcCaption2)
         }
         .accessibilityHidden(true)
     }
@@ -216,8 +217,8 @@ private struct SmallView: View {
             let current = attributes.current(at: .now, state)
             WaterGlass(severity: current.map { $0.1 ? $0.0.level : .smooth } ?? .smooth, size: 22)
             VStack(alignment: .leading, spacing: 0) {
-                Text(attributes.route).font(.caption2.bold())
-                LeadText(attributes: attributes, state: state).font(.caption)
+                Text(attributes.route).font(.bcCaption2Strong)
+                LeadText(attributes: attributes, state: state).font(.bcCaption)
             }
         }
         .padding(8)
@@ -276,8 +277,8 @@ private struct LandedView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Label("Landed · \(attributes.route)", systemImage: "airplane.arrival").font(.footnote.bold())
-            Text("How did it feel?").font(.title3.bold())
+            Label("Landed · \(attributes.route)", systemImage: "airplane.arrival").font(.bcFootnoteStrong)
+            Text("How did it feel?").font(.bcSection)
             HStack {
                 ForEach(FeltRating.allCases, id: \.self) { rating in
                     Button(intent: RateFlightIntent(flightID: attributes.flightID, rating: rating)) {

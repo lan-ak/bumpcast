@@ -118,3 +118,72 @@ extension Color {
             })
     }
 }
+
+/// BumpCast type scale (DESIGN_SPEC §2 "Type"): Familjen Grotesk for display, Atkinson
+/// Hyperlegible for body, IBM Plex Mono for data. All scale with Dynamic Type through
+/// `relativeTo:`. System chrome (tab bars, nav bars, alerts, menus) stays on SF Pro.
+enum BrandFont {
+    static let displaySemiBold = "FamiljenGrotesk-SemiBold"
+    static let displayBold = "FamiljenGrotesk-Bold"
+    static let body = "AtkinsonHyperlegible-Regular"
+    static let bodyBold = "AtkinsonHyperlegible-Bold"
+    static let mono = "IBMPlexMono-Regular"
+    static let monoMedium = "IBMPlexMono-Medium"
+}
+
+extension BrandFont {
+    /// Screen titles in Familjen Grotesk, scaled with Dynamic Type. Only the title text changes;
+    /// the bar itself stays the system's (Liquid Glass) so the chrome still looks native.
+    @MainActor
+    static func applyToNavigationTitles() {
+        let appearance = UINavigationBar.appearance()
+        if let large = UIFont(name: displayBold, size: 34) {
+            appearance.largeTitleTextAttributes = [.font: UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: large)]
+        }
+        if let inline = UIFont(name: displaySemiBold, size: 17) {
+            appearance.titleTextAttributes = [.font: UIFontMetrics(forTextStyle: .headline).scaledFont(for: inline)]
+        }
+    }
+}
+
+extension Font {
+    /// Grade headlines and hero routes.
+    static let bcDisplay = Font.custom(BrandFont.displayBold, size: 34, relativeTo: .largeTitle)
+    /// Big status lines ("Breathe in").
+    static let bcTitle = Font.custom(BrandFont.displayBold, size: 28, relativeTo: .title)
+    /// Card titles ("Too early to tell").
+    static let bcTitle2 = Font.custom(BrandFont.displaySemiBold, size: 22, relativeTo: .title2)
+    /// Section titles ("What to expect").
+    static let bcSection = Font.custom(BrandFont.displaySemiBold, size: 20, relativeTo: .title3)
+    /// Headings inside cards ("In flight", "Good to know").
+    static let bcCardTitle = Font.custom(BrandFont.displaySemiBold, size: 18, relativeTo: .headline)
+    /// Row titles and routes.
+    static let bcHeadline = Font.custom(BrandFont.bodyBold, size: 17, relativeTo: .headline)
+    /// Body copy on cards.
+    static let bcBody = Font.custom(BrandFont.body, size: 17, relativeTo: .body)
+    /// Secondary lines and explanations.
+    static let bcSubheadline = Font.custom(BrandFont.body, size: 15, relativeTo: .subheadline)
+    static let bcSubheadlineStrong = Font.custom(BrandFont.bodyBold, size: 15, relativeTo: .subheadline)
+    /// Routes, departure times and update times ("Mon, Oct 19 at 11:22 AM EDT", "Updated 6:41 AM").
+    static let bcMeta = Font.custom(BrandFont.mono, size: 13, relativeTo: .footnote)
+    static let bcFootnote = Font.custom(BrandFont.body, size: 13, relativeTo: .footnote)
+    static let bcFootnoteStrong = Font.custom(BrandFont.bodyBold, size: 13, relativeTo: .footnote)
+    /// Small uppercase labels ("NEXT FLIGHT"); pair with `.textCase(.uppercase)` and `.tracking(1.4)`.
+    static let bcEyebrow = Font.custom(BrandFont.monoMedium, size: 12, relativeTo: .caption)
+    /// Labels, badges and legends.
+    static let bcCaption = Font.custom(BrandFont.body, size: 12, relativeTo: .caption)
+    static let bcCaptionStrong = Font.custom(BrandFont.bodyBold, size: 12, relativeTo: .caption)
+    static let bcCaption2 = Font.custom(BrandFont.body, size: 11, relativeTo: .caption2)
+    static let bcCaption2Strong = Font.custom(BrandFont.bodyBold, size: 11, relativeTo: .caption2)
+    /// Figures in stat tiles (the display face has tabular digits).
+    static let bcFigure = Font.custom(BrandFont.displaySemiBold, size: 20, relativeTo: .title3)
+    /// Countdowns that tick every second.
+    static let bcBigFigure = Font.custom(BrandFont.displayBold, size: 34, relativeTo: .largeTitle)
+}
+
+extension View {
+    /// Small uppercase data label in Plex Mono.
+    func eyebrow() -> some View {
+        font(.bcEyebrow).textCase(.uppercase).tracking(1.4)
+    }
+}

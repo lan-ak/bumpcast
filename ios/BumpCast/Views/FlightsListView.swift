@@ -80,19 +80,19 @@ struct FlightsListView: View {
     private var notices: some View {
         if Services.isDemo {
             Label("Demo mode: sample forecast, nothing is saved", systemImage: "info.circle")
-                .font(.footnote)
+                .font(.bcFootnote)
                 .foregroundStyle(.secondary)
         }
         if store.isOffline, let synced = store.syncedAt {
             Label("Offline. Showing forecasts saved \(synced.formatted(.relative(presentation: .named))).", systemImage: "wifi.slash")
-                .font(.footnote)
+                .font(.bcFootnote)
                 .foregroundStyle(.secondary)
         }
     }
 
     private func section(_ title: String, flights: [Flight]) -> some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text(title).font(.headline).foregroundStyle(.secondary)
+            Text(title).eyebrow().foregroundStyle(.secondary)
             ForEach(flights) { flight in
                 NavigationLink(value: flight.id) {
                     FlightRow(flight: flight, forecast: store.forecasts[flight.id], report: store.reports[flight.id])
@@ -114,7 +114,7 @@ struct FlightsListView: View {
     private var emptyState: some View {
         VStack(spacing: 12) {
             WaterGlass(severity: nil, size: 48)
-            Text("No flights yet").font(.title2.bold())
+            Text("No flights yet").font(.bcTitle2)
             Text("Save a flight and we'll have its turbulence forecast ready 48 hours before you fly.")
                 .multilineTextAlignment(.center)
                 .foregroundStyle(.secondary)
@@ -145,9 +145,9 @@ struct NextFlightCard: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Next flight").font(.subheadline.weight(.semibold)).foregroundStyle(.secondary)
-                    Text(flight.routeText).font(.largeTitle.bold())
-                    Text(flight.departureText).font(.footnote.monospaced()).foregroundStyle(.secondary)
+                    Text("Next flight").eyebrow().foregroundStyle(.secondary)
+                    Text(flight.routeText).font(.bcDisplay)
+                    Text(flight.departureText).font(.bcMeta).foregroundStyle(.secondary)
                 }
                 Spacer()
                 WaterGlass(severity: state.severity, size: 44)
@@ -155,7 +155,7 @@ struct NextFlightCard: View {
             switch state {
             case .ready(let forecast):
                 if let grade = forecast.grade {
-                    Text(grade.headline).font(.title2.bold())
+                    Text(grade.headline).font(.bcTitle2)
                 }
                 WaveTimeline(forecast: forecast)
                 let confidence = forecast.confidence(departure: flight.departureAt)
@@ -166,16 +166,16 @@ struct NextFlightCard: View {
                         Text("· updated \(issued.formatted(.relative(presentation: .named)))")
                     }
                 }
-                .font(.footnote.weight(.medium))
+                .font(.bcFootnoteStrong)
                 .foregroundStyle(confidence.color)
             case .unlocksAt(let date):
-                Text("Too early to tell").font(.title2.bold())
+                Text("Too early to tell").font(.bcTitle2)
                 Text("Your first forecast arrives \(date.approximateDayAndTime()).").foregroundStyle(.secondary)
             case .building:
-                Text("Building your forecast").font(.title2.bold())
+                Text("Building your forecast").font(.bcTitle2)
                 Text("Checking the latest turbulence data along your route.").foregroundStyle(.secondary)
             case .outOfCoverage:
-                Text("Not covered yet").font(.title2.bold())
+                Text("Not covered yet").font(.bcTitle2)
                 Text("Forecasts cover US flights for now.").foregroundStyle(.secondary)
             }
         }
@@ -195,23 +195,23 @@ struct FlightRow: View {
             WaterGlass(severity: state.severity, size: 30)
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
-                    Text(flight.routeText).font(.headline)
+                    Text(flight.routeText).font(.bcHeadline)
                     Spacer()
                     StatusPill(state: state)
                 }
-                Text(flight.departureText).font(.footnote.monospaced()).foregroundStyle(.secondary)
+                Text(flight.departureText).font(.bcMeta).foregroundStyle(.secondary)
                 if let report {
                     Label(report.summary, systemImage: report.matched == true ? "checkmark.circle" : "hand.raised")
-                        .font(.caption.weight(.medium))
+                        .font(.bcCaptionStrong)
                         .foregroundStyle(.secondary)
                 } else if case .ready(let forecast) = state, flight.departureAt > .now {
                     let confidence = forecast.confidence(departure: flight.departureAt)
                     Label(confidence.shortStatus(), systemImage: confidence.symbol)
-                        .font(.caption.weight(.medium))
+                        .font(.bcCaptionStrong)
                         .foregroundStyle(confidence.color)
                 } else if case .unlocksAt(let date) = state {
                     Text("Too early · first forecast \(date.relativeDay())")
-                        .font(.caption.weight(.medium))
+                        .font(.bcCaptionStrong)
                         .foregroundStyle(.secondary)
                 }
             }
@@ -239,7 +239,7 @@ struct StatusPill: View {
                 Text("Not covered yet").foregroundStyle(.secondary)
             }
         }
-        .font(.caption.weight(.semibold))
+        .font(.bcCaptionStrong)
     }
 }
 
@@ -254,9 +254,9 @@ private struct LearnCard: View {
             HStack(spacing: 14) {
                 Image(systemName: "book.pages").font(.title2).foregroundStyle(Theme.accent)
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Why planes handle turbulence").font(.headline)
+                    Text("Why planes handle turbulence").font(.bcHeadline)
                     Text("Short reads on what's happening and what the crew is doing.")
-                        .font(.subheadline)
+                        .font(.bcSubheadline)
                         .foregroundStyle(.secondary)
                 }
                 Spacer()

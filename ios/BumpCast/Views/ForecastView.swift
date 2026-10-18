@@ -29,7 +29,7 @@ struct ForecastView: View {
                     sweepFromAdvance: justConfirmed)
                 if !forecast.segments.isEmpty {
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("What to expect").font(.title3.bold())
+                        Text("What to expect").font(.bcSection)
                         ForEach(Array(forecast.segments.enumerated()), id: \.element.startMin) { index, segment in
                             SegmentRow(segment: segment, isMain: segment.startMin == mainStretch?.startMin)
                                 .opacity(rowsVisible ? 1 : 0)
@@ -89,14 +89,14 @@ private struct GradeCard: View {
             HStack(alignment: .center, spacing: 14) {
                 WaterGlass(severity: forecast.worstSeverity, size: 44)
                 Text(grade.headline)
-                    .font(.largeTitle.bold())
+                    .font(.bcDisplay)
                     .fixedSize(horizontal: false, vertical: true)
             }
             Text(grade.summary)
             // Shown to everyone, free included: an advance forecast firms up closer to the flight.
             TimelineView(.everyMinute) { context in
                 Text(confidence.statusLine(now: context.date))
-                    .font(.subheadline.weight(.medium))
+                    .font(.bcSubheadlineStrong)
                     .foregroundStyle(.secondary)
             }
         }
@@ -115,7 +115,7 @@ struct ConfidenceBadge: View {
             Image(systemName: confidence.symbol)
                 .contentTransition(.symbolEffect(.replace))
         }
-        .font(.caption.weight(.semibold))
+        .font(.bcCaptionStrong)
         .foregroundStyle(confidence.color)
         .padding(.horizontal, 10)
         .padding(.vertical, 5)
@@ -141,9 +141,9 @@ private struct StatTiles: View {
     private func tile(_ title: String, _ value: String) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(value)
-                .font(.title3.bold().monospacedDigit())
+                .font(.bcFigure)
                 .contentTransition(.numericText())
-            Text(title).font(.caption).foregroundStyle(.secondary)
+            Text(title).font(.bcCaption).foregroundStyle(.secondary)
         }
         .skyCard(cornerRadius: 16, padding: 12)
         .accessibilityElement(children: .combine)
@@ -166,7 +166,7 @@ private struct TimelineCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Bumps along the way").font(.title3.bold())
+            Text("Bumps along the way").font(.bcSection)
             ZStack {
                 // Underneath: the advance forecast (sweep) or nothing yet (first draw).
                 chart(dimmed: true)
@@ -216,7 +216,7 @@ private struct TimelineCard: View {
                     .foregroundStyle(Theme.ink)
                     .lineStyle(StrokeStyle(lineWidth: 2))
                     .annotation(position: .top, alignment: .leading) {
-                        Text("You are here").font(.caption2.bold())
+                        Text("You are here").font(.bcCaption2Strong)
                     }
             }
             if !dimmed, let selectedMinute, let sample = sample(at: selectedMinute) {
@@ -224,7 +224,7 @@ private struct TimelineCard: View {
                     .foregroundStyle(Theme.secondaryInk)
                     .annotation(position: .top, overflowResolution: .init(x: .fit, y: .disabled)) {
                         Text("\(selectedMinute == 0 ? "Takeoff" : "\(selectedMinute.durationText) in") · \(sample.severity.title)")
-                            .font(.caption.bold().monospacedDigit())
+                            .font(.bcCaptionStrong.monospacedDigit())
                             .padding(6)
                             .background(.regularMaterial, in: .capsule)
                     }
@@ -317,7 +317,7 @@ private struct Legend: View {
                 }
             }
         }
-        .font(.caption)
+        .font(.bcCaption)
         .foregroundStyle(.secondary)
     }
 }
@@ -329,11 +329,11 @@ private struct LockedTimelineCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Bumps along the way").font(.title3.bold())
+            Text("Bumps along the way").font(.bcSection)
             WaveTimeline(forecast: forecast, height: 90)
                 .blur(radius: 8)
                 .accessibilityHidden(true)
-            Text(teaser).font(.subheadline)
+            Text(teaser).font(.bcSubheadline)
             Button(action: unlock) {
                 Label(forecast.segments.isEmpty ? "See the full timeline" : "See when the bumps are", systemImage: "lock.open")
                     .frame(maxWidth: .infinity)
@@ -341,7 +341,7 @@ private struct LockedTimelineCard: View {
             .buttonStyle(.borderedProminent)
             .tint(Theme.accent)
             Text("Includes the full timeline, update alerts and in-flight countdowns.")
-                .font(.footnote)
+                .font(.bcFootnote)
                 .foregroundStyle(.secondary)
         }
         .skyCard()
@@ -364,16 +364,16 @@ private struct SegmentRow: View {
         HStack(alignment: .top, spacing: 12) {
             WaterGlass(severity: segment.severity, size: 26)
             VStack(alignment: .leading, spacing: 4) {
-                Text(timing).font(.headline.monospacedDigit())
+                Text(timing).font(.bcHeadline.monospacedDigit())
                 Text("\(segment.severity.title) for about \(segment.minutes) min while \(FlightPhase.title(segment.phase))")
-                    .font(.subheadline)
-                Text(segment.severity.feelsLike).font(.subheadline).foregroundStyle(.secondary)
+                    .font(.bcSubheadline)
+                Text(segment.severity.feelsLike).font(.bcSubheadline).foregroundStyle(.secondary)
                 if isMain {
                     NavigationLink {
                         ExplainerView(explainer: Explainer.forStretch(segment))
                     } label: {
                         Label("Why it's bumpy here", systemImage: "book.pages")
-                            .font(.subheadline.weight(.semibold))
+                            .font(.bcSubheadlineStrong)
                     }
                     .tint(Theme.accent)
                     .padding(.top, 2)
@@ -397,16 +397,16 @@ private struct ForecastFooter: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             Label(confidence.title, systemImage: confidence.symbol)
-                .font(.headline)
+                .font(.bcCardTitle)
                 .foregroundStyle(confidence.color)
-            Text(confidence.explanation).font(.subheadline)
+            Text(confidence.explanation).font(.bcSubheadline)
             Group {
                 if let issued = forecast.issuedAt {
                     Text("Updated \(issued.formatted(date: .omitted, time: .shortened))")
                         + Text(nextUpdate(after: issued).map { " · next update around \($0)" } ?? "")
                 }
             }
-            .font(.footnote.monospacedDigit())
+            .font(.bcMeta)
             .foregroundStyle(.secondary)
         }
         .skyCard()

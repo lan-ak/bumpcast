@@ -46,15 +46,45 @@ Rules: never use `.red`, warning triangles or exclamation symbols for turbulence
 
 ### Type
 
-- Use SF Pro via Dynamic Type text styles (no custom fonts needed in the app; the mockups use Familjen Grotesk / Atkinson Hyperlegible / IBM Plex Mono as stand-ins).
-- Headline grade: `.largeTitle.bold()`; uses short calm sentences ("A few bumps, mostly calm.").
-- Route and times (`JFK → LAX · B6 23`, "Updated 6:41 AM"): `.footnote.monospaced()`.
-- All numbers that change or line up: `.monospacedDigit()`.
-- Must work at accessibility Dynamic Type sizes.
+The app uses the same three typefaces as the mockups. All three are free under the SIL Open Font License, from Google Fonts.
 
-### Water-glass glyph (signature icon)
+| Role | Typeface | Used for |
+|---|---|---|
+| Display | **Familjen Grotesk** (SemiBold 600, Bold 700) | Grades and headlines ("A few bumps, mostly calm."), screen titles, section headings, the score, "Breathe in" |
+| Body | **Atkinson Hyperlegible** (Regular 400, Bold 700, plus italics) | Body text, row titles, buttons, explanations. It was designed by the Braille Institute for legibility |
+| Data | **IBM Plex Mono** (Regular 400, Medium 500) | Route codes (`JFK → LAX · B6 23`), times ("Updated 6:41 AM"), small uppercase labels, timeline axis labels |
+
+Map the existing `Font` tokens in `ios/Shared/Theme.swift` to these faces:
+
+| Token | Face and weight | Size (pt) | `relativeTo:` |
+|---|---|---|---|
+| `bcDisplay` | Familjen Grotesk Bold | 34 | `.largeTitle` |
+| `bcTitle` | Familjen Grotesk Bold | 28 | `.title` |
+| `bcTitle2` | Familjen Grotesk SemiBold | 22 | `.title2` |
+| `bcSection` | Familjen Grotesk SemiBold | 20 | `.title3` |
+| `bcHeadline` | Atkinson Hyperlegible Bold | 17 | `.headline` |
+| `bcBody` | Atkinson Hyperlegible Regular | 17 | `.body` |
+| `bcSubheadline` | Atkinson Hyperlegible Regular | 15 | `.subheadline` |
+| `bcSubheadlineStrong` | Atkinson Hyperlegible Bold | 15 | `.subheadline` |
+| `bcMeta` | IBM Plex Mono Regular | 13 | `.footnote` |
+| `bcEyebrow` (new) | IBM Plex Mono Medium, uppercase, tracking ≈ 1.4 | 12 | `.caption` |
+
+Implementation rules:
+- **Dynamic Type:** always use `Font.custom(_:size:relativeTo:)` so text scales, and check every screen at the largest accessibility sizes.
+- **Font files:** bundle the static TTFs (the `static/` folder of each Google Fonts download, not the variable font). List them under `UIAppFonts` in the Info.plist of both the app and the widget extension, because the Live Activity, Dynamic Island and widgets use them too. Use the files' real PostScript names in `Font.custom`.
+- **Licences:** include each font's `OFL.txt` and credit the fonts in Settings › Acknowledgements.
+- **Numbers that tick or line up** (score, countdowns, minutes): add `.monospacedDigit()`. If a face has no tabular figures and the digits jitter, set those numbers in IBM Plex Mono.
+- **System UI stays system:** tab bars, nav bars, alerts, menus and system sheets keep SF Pro, so the Liquid Glass chrome still looks native. The brand faces are for the content layer only.
+- **Tone:** headlines are short, calm sentences.
+
+### Water-glass glyph (severity indicator)
 
 A tumbler outline whose water surface ripples more with severity: flat (smooth), small ripple (light), bigger ripple (moderate), choppy (strong); dashed empty outline = "too early to tell". Build it as a SwiftUI `Shape` taking a `Severity?`. Use it in: flight rows, "What to expect" rows, timeline legend, widgets, Live Activity, Dynamic Island compact/minimal, Watch.
+
+**The glass and the app icon have separate jobs.** The Calm line icon (§8) is the brand: it promises calm and never changes. The glass is a gauge: it shows how bumpy a stretch will be and matches the "your drink…" copy. Water connects them: the icon shows still water at the horizon, the glass shows the water in front of you. Rules:
+- **Severity only.** The glass never appears as a brand mark: not in the app icon, the launch screen, App Store artwork, marketing or the share sheet preview.
+- **Same line language as the logo.** Draw the water surface with the icon's stroke style: round caps and joins, and smooth curves (no sharp peaks), with the ripple made of the same gentle bump shape as the logo. The "smooth" glass's flat water line should look like a small cousin of the icon's horizon.
+- **Separate colours.** The brand line is always deep teal (`#1F5F6E` / dark `#8FD7E0`). The glass water uses the severity colours. Don't colour the icon's line by severity or the glass water in brand teal, so the logo never reads as a forecast state.
 
 ## 3. Screens (see the mockup canvas)
 

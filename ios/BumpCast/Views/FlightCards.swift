@@ -20,16 +20,16 @@ struct InFlightCard: View {
         {
             Label("Saved on this phone for offline use · updated \(synced.formatted(.relative(presentation: .named)))",
                 systemImage: "arrow.down.circle")
-                .font(.footnote)
+                .font(.bcFootnote)
                 .foregroundStyle(.secondary)
         }
     }
 
     private var boarding: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Label("Boarding soon?", systemImage: "airplane.departure").font(.headline)
+            Label("Boarding soon?", systemImage: "airplane.departure").font(.bcCardTitle)
             Text("Tap when you take off. We'll count down to each bumpy stretch on your Lock Screen and remind you before it starts. Works without wifi.")
-                .font(.subheadline)
+                .font(.bcSubheadline)
                 .foregroundStyle(.secondary)
             Button {
                 paywalls.unlock(.liveActivityLocked, flight: flight) {
@@ -47,8 +47,8 @@ struct InFlightCard: View {
     private var flying: some View {
         TimelineView(.periodic(from: .now, by: 30)) { context in
             VStack(alignment: .leading, spacing: 10) {
-                Label("In flight", systemImage: "airplane").font(.headline)
-                Text(status(at: context.date)).font(.title3.bold())
+                Label("In flight", systemImage: "airplane").font(.bcCardTitle)
+                Text(status(at: context.date)).font(.bcSection)
                 ProgressView(
                     timerInterval: inFlight.effectiveTakeoff(of: flight)...inFlight.landing(of: flight, forecast: forecast),
                     countsDown: false
@@ -56,8 +56,9 @@ struct InFlightCard: View {
                     EmptyView()
                 } currentValueLabel: {
                     Text("Landing about \(inFlight.landing(of: flight, forecast: forecast).formatted(date: .omitted, time: .shortened))")
+                        .font(.bcMeta)
                 }
-                Text("The countdown is on your Lock Screen too.").font(.footnote).foregroundStyle(.secondary)
+                Text("The countdown is on your Lock Screen too.").font(.bcFootnote).foregroundStyle(.secondary)
                 Button("We've landed") { inFlight.land(flight) }
                     .buttonStyle(.bordered)
             }
@@ -95,10 +96,10 @@ struct LandingCheckCard: View {
                 result(report)
                     .transition(.opacity)
             } else {
-                Text("How did it feel?").font(.title3.bold())
+                Text("How did it feel?").font(.bcSection)
                 if let forecast = store.forecasts[flight.id], let grade = forecast.grade {
                     Text("We forecast: \(grade.headline.lowercased())")
-                        .font(.subheadline)
+                        .font(.bcSubheadline)
                         .foregroundStyle(.secondary)
                 }
                 HStack(spacing: 10) {
@@ -114,7 +115,7 @@ struct LandingCheckCard: View {
                     }
                 }
                 Text("Your answer helps make every forecast more accurate.")
-                    .font(.footnote)
+                    .font(.bcFootnote)
                     .foregroundStyle(.secondary)
             }
         }
@@ -126,12 +127,12 @@ struct LandingCheckCard: View {
     private func result(_ report: LandingReport) -> some View {
         Label(report.matched == true ? "Glad it matched" : "Thanks for telling us",
             systemImage: report.matched == true ? "checkmark.seal.fill" : "hand.thumbsup")
-            .font(.title3.bold())
+            .font(.bcSection)
             .foregroundStyle(report.matched == true ? Theme.accent : Theme.ink)
         Text(report.matched == true
             ? "The forecast felt about right. We'll keep checking every flight."
             : "We use every answer to tune the forecast for flights like yours.")
-            .font(.subheadline)
+            .font(.bcSubheadline)
             .foregroundStyle(.secondary)
     }
 
@@ -164,7 +165,7 @@ struct UpdatesSection: View {
         let updates = store.updates[flight.id] ?? []
         if !updates.isEmpty {
             VStack(alignment: .leading, spacing: 12) {
-                Text("Updates").font(.title3.bold())
+                Text("Updates").font(.bcSection)
                 ForEach(updates) { update in
                     row(update, fullAccess: paywalls.hasFullAccess(to: flight))
                 }
@@ -177,20 +178,20 @@ struct UpdatesSection: View {
     private func row(_ update: FlightUpdate, fullAccess: Bool) -> some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
-                Text(update.title).font(.headline)
+                Text(update.title).font(.bcCardTitle)
                 Spacer()
                 Text(update.createdAt, format: .relative(presentation: .named))
-                    .font(.caption)
+                    .font(.bcCaption)
                     .foregroundStyle(.secondary)
             }
             if fullAccess {
                 ForEach(update.changes, id: \.text) { change in
                     Label(change.text, systemImage: "circle.fill")
                         .labelStyle(BulletLabelStyle())
-                        .font(.subheadline)
+                        .font(.bcSubheadline)
                 }
             } else if !update.proOnly {
-                Text(update.body).font(.subheadline)
+                Text(update.body).font(.bcSubheadline)
             } else {
                 Button {
                     paywalls.unlock(.updatesLocked, flight: flight) {}
@@ -207,7 +208,7 @@ struct UpdatesSection: View {
 private struct BulletLabelStyle: LabelStyle {
     func makeBody(configuration: Configuration) -> some View {
         HStack(alignment: .firstTextBaseline, spacing: 8) {
-            configuration.icon.font(.system(size: 5)).foregroundStyle(.secondary)
+            configuration.icon.font(.bcCaption2).imageScale(.small).foregroundStyle(.secondary)
             configuration.title
         }
     }

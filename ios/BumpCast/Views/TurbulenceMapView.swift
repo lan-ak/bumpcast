@@ -56,7 +56,7 @@ struct TurbulenceMapView: View {
     private var controls: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
-                Text("Altitude").font(.caption.bold())
+                Text("Altitude").font(.bcCaptionStrong)
                 Picker("Altitude", selection: $level) {
                     ForEach(Self.levels, id: \.self) { Text(Self.label($0)).tag($0) }
                 }
@@ -66,7 +66,7 @@ struct TurbulenceMapView: View {
                     Label("Pilot reports", systemImage: paywalls.isPro || !paywalls.isConfigured ? "person.wave.2" : "lock")
                 }
                 .toggleStyle(.button)
-                .font(.caption.bold())
+                .font(.bcCaptionStrong)
             }
             if times.count > 1 {
                 Picker("Time", selection: $timeIndex) {
@@ -88,7 +88,7 @@ struct TurbulenceMapView: View {
                     Text("Updated \(grid.cycle.formatted(date: .omitted, time: .shortened))")
                 }
             }
-            .font(.caption2)
+            .font(.bcCaption2)
             .foregroundStyle(.secondary)
         }
         .padding(12)
