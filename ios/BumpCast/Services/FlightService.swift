@@ -17,7 +17,7 @@ protocol FlightService: Sendable {
     func recordPass(_ pass: FlightPassRecord) async throws
 
     func landingReports() async throws -> [LandingReport]
-    func submitLandingReport(flightID: UUID, felt: Severity, comment: String?) async throws -> LandingReport
+    func submitLandingReport(flightID: UUID, rating: FeltRating) async throws -> LandingReport
     func accuracyStats() async throws -> AccuracyStats?
 
     func waitlistCountries() async throws -> Set<String>
@@ -106,19 +106,20 @@ struct SupabaseFlightService: FlightService {
         try await client.from("flight_passes").upsert(pass, onConflict: "transaction_id", ignoreDuplicates: true).execute()
     }
 
+    private static let reportColumns = "flight_id,felt,felt_relative,forecast_worst,matched"
+
     func landingReports() async throws -> [LandingReport] {
-        try await client.from("landing_reports").select("flight_id,felt,forecast_worst,matched").execute().value
+        try await client.from("landing_reports").select(Self.reportColumns).execute().value
     }
 
-    func submitLandingReport(flightID: UUID, felt: Severity, comment: String?) async throws -> LandingReport {
+    func submitLandingReport(flightID: UUID, rating: FeltRating) async throws -> LandingReport {
         struct Insert: Encodable {
             let flight_id: UUID
-            let felt: Severity
-            let comment: String?
+            let felt_relative: FeltRating
         }
         return try await client.from("landing_reports")
-            .insert(Insert(flight_id: flightID, felt: felt, comment: comment))
-            .select("flight_id,felt,forecast_worst,matched").single().execute().value
+            .insert(Insert(flight_id: flightID, felt_relative: rating))
+            .select(Self.reportColumns).single().execute().value
     }
 
     func accuracyStats() async throws -> AccuracyStats? {
@@ -214,9 +215,10 @@ actor DemoFlightService: FlightService {
     func recordPass(_ pass: FlightPassRecord) async throws { passes.insert(pass.flightId) }
     func landingReports() async throws -> [LandingReport] { Array(reports.values) }
 
-    func submitLandingReport(flightID: UUID, felt: Severity, comment: String?) async throws -> LandingReport {
+    func submitLandingReport(flightID: UUID, rating: FeltRating) async throws -> LandingReport {
         let worst = Self.sampleForecast.segments.map(\.severity).max() ?? .smooth
-        let report = LandingReport(flightId: flightID, felt: felt, forecastWorst: worst, matched: worst == felt)
+        let report = LandingReport(
+            flightId: flightID, felt: nil, feltRelative: rating, forecastWorst: worst, matched: rating == .aboutRight)
         reports[flightID] = report
         return report
     }

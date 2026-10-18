@@ -8,6 +8,11 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         Paywalls.shared.configure()
         UNUserNotificationCenter.current().delegate = PushNotifications.shared
         AppSync.registerBackgroundRefresh()
+        // "How did it feel?" buttons on the Live Activity after landing.
+        FlightRatingHandler.submit = { flightID, rating in
+            _ = await FlightStore.shared.submitLandingReport(flightID: flightID, rating: rating)
+            InFlight.shared.endActivity(flightID)
+        }
         return true
     }
 
@@ -61,6 +66,11 @@ struct BumpCastApp: App {
 struct RootView: View {
     @Environment(Router.self) private var router
 
+    /// Calm is the prominent tab on iOS 27; a regular tab on iOS 26.
+    private var calmRole: TabRole? {
+        if #available(iOS 27, *) { .prominent } else { nil }
+    }
+
     var body: some View {
         @Bindable var router = router
         TabView(selection: $router.tab) {
@@ -70,9 +80,14 @@ struct RootView: View {
             Tab("Map", systemImage: "map", value: Router.Tab.map) {
                 TurbulenceMapView()
             }
-            Tab("Calm", systemImage: "leaf", value: Router.Tab.calm) {
+            Tab("Learn", systemImage: "book.pages", value: Router.Tab.learn) {
+                LearnView()
+            }
+            Tab("Calm", systemImage: "wind", value: Router.Tab.calm, role: calmRole) {
                 CalmView()
             }
         }
+        .tint(Theme.accent)
+        .fullScreenCover(isPresented: $router.showBreathing) { BreathingView() }
     }
 }

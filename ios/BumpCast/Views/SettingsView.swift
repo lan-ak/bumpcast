@@ -51,7 +51,7 @@ struct SettingsView: View {
                 Section("How accurate are we?") {
                     if let stats, let exact = stats.exactPercent, let close = stats.withinOnePercent {
                         LabeledContent("Flights checked", value: "\(stats.reports)")
-                        LabeledContent("Matched what people felt", value: "\(exact)%")
+                        LabeledContent("Felt about right", value: "\(exact)%")
                         LabeledContent("Within one level", value: "\(close)%")
                     } else {
                         Text("Not enough landed flights yet. Rate your flights after landing to help.")

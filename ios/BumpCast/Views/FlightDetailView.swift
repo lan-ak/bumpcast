@@ -61,6 +61,7 @@ struct FlightDetailView: View {
             }
             .padding()
         }
+        .background { SkyBackground(sky: Sky(date: flight.departureAt, timeZone: flight.originAirport?.timeZone ?? .current)) }
         .navigationTitle("Forecast")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -75,7 +76,7 @@ struct FlightDetailView: View {
             }
         }
         .sheet(isPresented: $isEditing) { FlightEditorView(flight: flight) }
-        .refreshable { await store.refreshForecast(flight.id) }
+        .refreshable { await store.reload() }
         .task(id: state == .building) {
             // While the worker is building the forecast, check back every 30 seconds.
             while ForecastState(flight: flight, forecast: store.forecasts[flight.id]) == .building, !Task.isCancelled {
@@ -99,7 +100,7 @@ private struct FlightHeader: View {
             .font(.largeTitle.bold())
             Text("\(flight.originAirport?.city ?? "") to \(flight.destinationAirport?.city ?? "")")
                 .foregroundStyle(.secondary)
-            Text(flight.departureText).font(.subheadline).foregroundStyle(.secondary)
+            Text(flight.departureText).font(.footnote.monospaced()).foregroundStyle(.secondary)
         }
     }
 }
@@ -117,9 +118,7 @@ struct MessageCard<Actions: View>: View {
             Text(message).foregroundStyle(.secondary)
             actions
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding()
-        .background(.fill.quaternary, in: .rect(cornerRadius: 20))
+        .skyCard()
     }
 }
 
@@ -191,8 +190,6 @@ private struct NotificationsCard: View {
                 .buttonStyle(.bordered)
             }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding()
-        .background(.fill.quaternary, in: .rect(cornerRadius: 20))
+        .skyCard()
     }
 }

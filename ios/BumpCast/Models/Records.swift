@@ -26,14 +26,24 @@ struct FlightUpdate: Codable, Hashable, Identifiable, Sendable {
 /// After-landing "How bumpy was it?" The forecast side is filled in by the database.
 struct LandingReport: Codable, Hashable, Sendable {
     let flightId: UUID
-    let felt: Severity
+    /// Older absolute rating; new reports use `feltRelative`.
+    let felt: Severity?
+    let feltRelative: FeltRating?
     let forecastWorst: Severity?
     let matched: Bool?
 
     enum CodingKeys: String, CodingKey {
         case felt, matched
         case flightId = "flight_id"
+        case feltRelative = "felt_relative"
         case forecastWorst = "forecast_worst"
+    }
+
+    var summary: String {
+        if matched == true { return "Forecast felt about right" }
+        if let feltRelative { return "Felt \(feltRelative.title.lowercased()) than forecast" }
+        if let felt { return "You felt \(felt.title.lowercased())" }
+        return "Rated"
     }
 }
 

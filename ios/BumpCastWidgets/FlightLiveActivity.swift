@@ -1,4 +1,5 @@
 import ActivityKit
+import AppIntents
 import SwiftUI
 import WidgetKit
 
@@ -9,56 +10,57 @@ struct BumpCastWidgets: WidgetBundle {
     }
 }
 
-/// Lock Screen and Dynamic Island countdown to the next bumpy stretch. Timers and the
-/// progress bar run on the device with no updates, so it keeps working in flight mode.
+/// Lock Screen, StandBy, Dynamic Island, Watch Smart Stack and CarPlay. Everything is worked out
+/// at render time; the app sets staleDate to the next stretch boundary so the system re-renders
+/// there even with no connection.
 struct FlightLiveActivity: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: FlightActivityAttributes.self) { context in
-            LockScreenView(attributes: context.attributes, state: context.state)
-                .padding()
-                .activityBackgroundTint(Color.black.opacity(0.6))
+            ActivityRoot(attributes: context.attributes, state: context.state)
+                .activityBackgroundTint(Sky.night.colors[1].opacity(0.85))  // night sky, also in StandBy
                 .activitySystemActionForegroundColor(.white)
                 .widgetURL(URL(string: "bumpcast://flight/\(context.attributes.flightID.uuidString)"))
         } dynamicIsland: { context in
-            let attributes = context.attributes
-            let state = context.state
-            let current = attributes.current(at: .now, state)
+            let a = context.attributes
+            let s = context.state
+            let current = a.current(at: .now, s)
             return DynamicIsland {
                 DynamicIslandExpandedRegion(.leading) {
-                    Label(attributes.route, systemImage: "airplane").font(.caption.bold())
+                    Label(a.route, systemImage: "airplane").font(.caption.bold())
                 }
                 DynamicIslandExpandedRegion(.trailing) {
-                    Text(timerInterval: countdown(to: attributes.landing(state)), countsDown: true)
+                    Text(timerInterval: countdown(to: a.landing(s)), countsDown: true)
                         .font(.caption.monospacedDigit())
                         .multilineTextAlignment(.trailing)
                 }
                 DynamicIslandExpandedRegion(.bottom) {
-                    VStack(alignment: .leading, spacing: 6) {
-                        NextStretchText(attributes: attributes, state: state).font(.subheadline.bold())
-                        FlightProgress(attributes: attributes, state: state)
+                    VStack(alignment: .leading, spacing: 8) {
+                        LeadText(attributes: a, state: s).font(.subheadline.bold())
+                        RouteStrip(attributes: a, state: s)
+                        HStack {
+                            Link(destination: URL(string: "bumpcast://breathe")!) {
+                                Label("Breathe", systemImage: "wind")
+                            }
+                            Spacer()
+                            if let next = current?.0 {
+                                Link(destination: URL(string: "bumpcast://learn/\(next.explainerID)")!) {
+                                    Label("Why the next bumps?", systemImage: "book.pages")
+                                }
+                            }
+                        }
+                        .font(.caption.bold())
                     }
                 }
             } compactLeading: {
-                Image(systemName: current == nil ? "sun.max" : "wind")
-                    .foregroundStyle(color(current?.0.severity))
+                WaterGlass(severity: current.map { $0.1 ? $0.0.level : .smooth } ?? .smooth, size: 18)
             } compactTrailing: {
-                if let (stretch, inProgress) = current {
-                    Text(
-                        timerInterval: countdown(to: inProgress ? attributes.end(of: stretch, state) : attributes.start(of: stretch, state)),
-                        countsDown: true
-                    )
-                    .monospacedDigit()
-                    .frame(maxWidth: 48)
-                    .foregroundStyle(color(stretch.severity))
-                } else {
-                    Image(systemName: "checkmark")
-                }
+                CompactTimer(attributes: a, state: s)
             } minimal: {
-                Image(systemName: current == nil ? "sun.max" : "wind")
-                    .foregroundStyle(color(current?.0.severity))
+                WaterGlass(severity: current.map { $0.1 ? $0.0.level : .smooth } ?? .smooth, size: 16)
             }
-            .widgetURL(URL(string: "bumpcast://flight/\(attributes.flightID.uuidString)"))
+            .widgetURL(URL(string: "bumpcast://flight/\(a.flightID.uuidString)"))
         }
+        .supplementalActivityFamilies([.small])
     }
 }
 
@@ -68,12 +70,24 @@ private func countdown(to end: Date) -> ClosedRange<Date> {
     return min(now, end)...end
 }
 
-private func color(_ severity: String?) -> Color {
-    switch severity {
-    case "severe": .red
-    case "moderate": .orange
-    case "light": .yellow
-    default: .teal
+/// Lock Screen (medium) or Watch/CarPlay (small); after landing, the "How did it feel?" buttons.
+private struct ActivityRoot: View {
+    let attributes: FlightActivityAttributes
+    let state: FlightActivityAttributes.ContentState
+    @Environment(\.activityFamily) private var family
+
+    var body: some View {
+        Group {
+            if Date.now >= attributes.landing(state) {
+                LandedView(attributes: attributes)
+            } else if family == .small {
+                SmallView(attributes: attributes, state: state)
+            } else {
+                LockScreenView(attributes: attributes, state: state)
+            }
+        }
+        .foregroundStyle(.white)
+        .environment(\.colorScheme, .dark)
     }
 }
 
@@ -84,68 +98,196 @@ private struct LockScreenView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Label(attributes.route, systemImage: "airplane").font(.headline)
+                Label(attributes.route, systemImage: "airplane").font(.footnote.monospaced().bold())
                 Spacer()
-                Text("Lands in ").font(.caption) + Text(timerInterval: countdown(to: attributes.landing(state)), countsDown: true)
+                Text("Lands in \(Text(timerInterval: countdown(to: attributes.landing(state)), countsDown: true))")
                     .font(.caption.monospacedDigit())
             }
-            NextStretchText(attributes: attributes, state: state).font(.title3.bold())
-            FlightProgress(attributes: attributes, state: state)
-            Link(destination: URL(string: "bumpcast://breathe")!) {
-                Label("Breathe with me", systemImage: "leaf").font(.caption.bold())
-            }
-        }
-        .foregroundStyle(.white)
-    }
-}
-
-private struct NextStretchText: View {
-    let attributes: FlightActivityAttributes
-    let state: FlightActivityAttributes.ContentState
-
-    var body: some View {
-        // Worked out at render time. The app sets staleDate to the next stretch boundary,
-        // so the system re-renders this view there even with no connection.
-        if let (stretch, inProgress) = attributes.current(at: .now, state) {
-            if inProgress {
-                Text("\(stretch.title) now · ends in ")
-                    + Text(timerInterval: countdown(to: attributes.end(of: stretch, state)), countsDown: true).monospacedDigit()
-            } else {
-                Text("\(stretch.title) in ")
-                    + Text(timerInterval: countdown(to: attributes.start(of: stretch, state)), countsDown: true).monospacedDigit()
-            }
-        } else {
-            Text("Smooth air for the rest of the flight")
-        }
-    }
-}
-
-/// Flight progress with the bumpy stretches marked, so position vs. bumps stays visible offline.
-private struct FlightProgress: View {
-    let attributes: FlightActivityAttributes
-    let state: FlightActivityAttributes.ContentState
-
-    var body: some View {
-        ZStack(alignment: .leading) {
-            ProgressView(timerInterval: state.takeoff...attributes.landing(state), countsDown: false) {
-                EmptyView()
-            } currentValueLabel: {
-                EmptyView()
-            }
-            .tint(.white)
-            GeometryReader { geo in
-                ForEach(attributes.stretches, id: \.startMin) { stretch in
-                    let total = Double(max(attributes.durationMin, 1))
-                    RoundedRectangle(cornerRadius: 2)
-                        .fill(color(stretch.severity))
-                        .frame(
-                            width: max(3, geo.size.width * Double(stretch.endMin - stretch.startMin + 1) / total),
-                            height: 6)
-                        .offset(x: geo.size.width * Double(stretch.startMin) / total, y: geo.size.height / 2 - 3)
+            HStack(alignment: .center, spacing: 10) {
+                WaterGlass(severity: currentSeverity, size: 28)
+                VStack(alignment: .leading, spacing: 2) {
+                    LeadText(attributes: attributes, state: state).font(.title3.bold())
+                    NextText(attributes: attributes, state: state).font(.caption).foregroundStyle(.white.opacity(0.75))
                 }
             }
-            .allowsHitTesting(false)
+            RouteStrip(attributes: attributes, state: state)
+            HStack {
+                Link(destination: URL(string: "bumpcast://breathe")!) {
+                    Label("Breathe", systemImage: "wind")
+                }
+                Spacer()
+                Link(destination: URL(string: "bumpcast://flight/\(attributes.flightID.uuidString)")!) {
+                    Label("Full forecast", systemImage: "chart.bar")
+                }
+            }
+            .font(.caption.bold())
+            Text(footer).font(.caption2).foregroundStyle(.white.opacity(0.6))
         }
-        .frame(height: 12)
+        .padding()
+    }
+
+    private var currentSeverity: Severity {
+        guard let (stretch, inProgress) = attributes.current(at: .now, state), inProgress else { return .smooth }
+        return stretch.level
+    }
+
+    private var footer: String {
+        guard let issued = attributes.issuedAt else { return "Saved before takeoff" }
+        return "Saved before takeoff · \(attributes.confidenceTitle) from \(issued.formatted(date: .omitted, time: .shortened))"
+    }
+}
+
+/// "Smooth for 42:10" / "Light chop now · 5:40 left" / "Smooth to landing".
+private struct LeadText: View {
+    let attributes: FlightActivityAttributes
+    let state: FlightActivityAttributes.ContentState
+
+    var body: some View {
+        if let (stretch, inProgress) = attributes.current(at: .now, state) {
+            if inProgress {
+                Text("\(stretch.title) now · \(Text(timerInterval: countdown(to: attributes.end(of: stretch, state)), countsDown: true).monospacedDigit()) left")
+            } else {
+                Text("Smooth for \(Text(timerInterval: countdown(to: attributes.start(of: stretch, state)), countsDown: true).monospacedDigit())")
+            }
+        } else {
+            Text("Smooth to landing")
+        }
+    }
+}
+
+/// What comes after the current state.
+private struct NextText: View {
+    let attributes: FlightActivityAttributes
+    let state: FlightActivityAttributes.ContentState
+
+    var body: some View {
+        if let (stretch, inProgress) = attributes.current(at: .now, state) {
+            if inProgress {
+                Text("Then smoother air")
+            } else {
+                Text("Then \(stretch.title.lowercased()) for about \(stretch.minutes) min")
+            }
+        } else {
+            Text("No more bumps expected")
+        }
+    }
+}
+
+/// Flight progress with the bumpy stretches marked: position vs bumps stays visible offline.
+private struct RouteStrip: View {
+    let attributes: FlightActivityAttributes
+    let state: FlightActivityAttributes.ContentState
+
+    var body: some View {
+        HStack(spacing: 6) {
+            Image(systemName: "airplane.departure").font(.caption2)
+            ZStack(alignment: .leading) {
+                ProgressView(timerInterval: state.takeoff...attributes.landing(state), countsDown: false) {
+                    EmptyView()
+                } currentValueLabel: {
+                    EmptyView()
+                }
+                .tint(.white)
+                GeometryReader { geo in
+                    let total = Double(max(attributes.durationMin, 1))
+                    ForEach(attributes.stretches, id: \.startMin) { stretch in
+                        RoundedRectangle(cornerRadius: 2)
+                            .fill(Theme.color(stretch.level))
+                            .frame(width: max(3, geo.size.width * Double(stretch.minutes) / total), height: 6)
+                            .offset(x: geo.size.width * Double(stretch.startMin) / total, y: geo.size.height / 2 - 3)
+                    }
+                }
+                .allowsHitTesting(false)
+            }
+            .frame(height: 12)
+            Image(systemName: "airplane.arrival").font(.caption2)
+        }
+        .accessibilityHidden(true)
+    }
+}
+
+/// Watch Smart Stack and CarPlay: glyph plus the one number that matters.
+private struct SmallView: View {
+    let attributes: FlightActivityAttributes
+    let state: FlightActivityAttributes.ContentState
+
+    var body: some View {
+        HStack(spacing: 8) {
+            let current = attributes.current(at: .now, state)
+            WaterGlass(severity: current.map { $0.1 ? $0.0.level : .smooth } ?? .smooth, size: 22)
+            VStack(alignment: .leading, spacing: 0) {
+                Text(attributes.route).font(.caption2.bold())
+                LeadText(attributes: attributes, state: state).font(.caption)
+            }
+        }
+        .padding(8)
+    }
+}
+
+/// Dynamic Island compact trailing: minutes of smooth air left, shorter in the iOS 27
+/// landscape Dynamic Island.
+private struct CompactTimer: View {
+    let attributes: FlightActivityAttributes
+    let state: FlightActivityAttributes.ContentState
+
+    var body: some View {
+        if #available(iOS 27, *) {
+            LandscapeAwareTimer(attributes: attributes, state: state)
+        } else {
+            CompactTimerBody(attributes: attributes, state: state, limited: false)
+        }
+    }
+}
+
+@available(iOS 27, *)
+private struct LandscapeAwareTimer: View {
+    let attributes: FlightActivityAttributes
+    let state: FlightActivityAttributes.ContentState
+    @Environment(\.isDynamicIslandLimitedInWidth) private var limited
+
+    var body: some View {
+        CompactTimerBody(attributes: attributes, state: state, limited: limited)
+    }
+}
+
+private struct CompactTimerBody: View {
+    let attributes: FlightActivityAttributes
+    let state: FlightActivityAttributes.ContentState
+    let limited: Bool
+
+    var body: some View {
+        if let (stretch, inProgress) = attributes.current(at: .now, state) {
+            Text(
+                timerInterval: countdown(to: inProgress ? attributes.end(of: stretch, state) : attributes.start(of: stretch, state)),
+                countsDown: true, showsHours: !limited
+            )
+            .monospacedDigit()
+            .frame(maxWidth: limited ? 36 : 52)
+            .foregroundStyle(inProgress ? Theme.color(stretch.level) : Theme.color(.smooth))
+        } else {
+            Image(systemName: "checkmark")
+        }
+    }
+}
+
+/// After landing: rate the flight without opening the app.
+private struct LandedView: View {
+    let attributes: FlightActivityAttributes
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Label("Landed · \(attributes.route)", systemImage: "airplane.arrival").font(.footnote.bold())
+            Text("How did it feel?").font(.title3.bold())
+            HStack {
+                ForEach(FeltRating.allCases, id: \.self) { rating in
+                    Button(intent: RateFlightIntent(flightID: attributes.flightID, rating: rating)) {
+                        Text(rating.title).frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.bordered)
+                    .tint(.white)
+                }
+            }
+        }
+        .padding()
     }
 }

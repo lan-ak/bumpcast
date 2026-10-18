@@ -4,6 +4,8 @@ struct FlightsListView: View {
     @Environment(FlightStore.self) private var store
     @Environment(Router.self) private var router
     @Environment(Paywalls.self) private var paywalls
+    @Environment(InFlight.self) private var inFlight
+    @Namespace private var zoom
     @State private var isAdding = false
     @State private var isShowingSettings = false
 
@@ -11,44 +13,36 @@ struct FlightsListView: View {
         @Bindable var store = store
         @Bindable var router = router
         NavigationStack(path: $router.flightPath) {
-            List {
-                if Services.isDemo {
-                    Label("Demo mode: sample forecast, nothing is saved", systemImage: "info.circle")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                }
-                if store.isOffline, let synced = store.syncedAt {
-                    Label("Offline. Showing forecasts saved \(synced.formatted(.relative(presentation: .named))).", systemImage: "wifi.slash")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                }
-                if !upcoming.isEmpty {
-                    Section("Upcoming") {
-                        ForEach(upcoming) { row($0) }
-                            .onDelete { delete(upcoming, $0) }
+            ScrollView {
+                VStack(alignment: .leading, spacing: 18) {
+                    notices
+                    if let next = upcoming.first {
+                        NavigationLink(value: next.id) {
+                            NextFlightCard(flight: next, forecast: store.forecasts[next.id])
+                        }
+                        .buttonStyle(.plain)
+                        .matchedTransitionSource(id: next.id, in: zoom)
+                        .contextMenu { deleteButton(next) }
                     }
-                }
-                if !flown.isEmpty {
-                    Section("Flown") {
-                        ForEach(flown) { row($0) }
-                            .onDelete { delete(flown, $0) }
+                    if upcoming.count > 1 {
+                        section("Coming up", flights: Array(upcoming.dropFirst()))
                     }
+                    if !flown.isEmpty {
+                        section("Flown", flights: flown)
+                    }
+                    if store.flights.isEmpty && !store.isLoading {
+                        emptyState
+                    }
+                    LearnCard()
                 }
+                .padding()
             }
-            .overlay {
-                if store.flights.isEmpty && !store.isLoading {
-                    ContentUnavailableView {
-                        Label("No flights yet", systemImage: "airplane")
-                    } description: {
-                        Text("Save a flight and we'll have its turbulence forecast ready 48 hours before you fly.")
-                    } actions: {
-                        Button("Add a flight", action: addFlight)
-                            .buttonStyle(.borderedProminent)
-                    }
-                }
-            }
+            .background { SkyBackground(sky: sky) }
             .navigationTitle("Flights")
-            .navigationDestination(for: UUID.self) { FlightDetailView(flightID: $0) }
+            .navigationDestination(for: UUID.self) { id in
+                FlightDetailView(flightID: id)
+                    .navigationTransition(.zoom(sourceID: id, in: zoom))
+            }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button("Settings", systemImage: "gearshape") { isShowingSettings = true }
@@ -60,6 +54,9 @@ struct FlightsListView: View {
             .refreshable { await store.reload() }
             .sheet(isPresented: $isAdding) { FlightEditorView() }
             .sheet(isPresented: $isShowingSettings) { SettingsView() }
+            .sensoryFeedback(trigger: store.flights.count) { old, new in
+                new > old ? .impact(flexibility: .soft, intensity: 0.5) : nil
+            }
             .alert("Something went wrong", isPresented: .constant(store.error != nil)) {
                 Button("OK") { store.error = nil }
             } message: {
@@ -70,18 +67,62 @@ struct FlightsListView: View {
 
     private var upcoming: [Flight] { store.upcomingFlights }
     private var flown: [Flight] {
-        store.flights.filter { InFlight.shared.landing(of: $0, forecast: store.forecasts[$0.id]) <= .now }.reversed()
+        store.flights.filter { inFlight.landing(of: $0, forecast: store.forecasts[$0.id]) <= .now }.reversed()
     }
 
-    private func row(_ flight: Flight) -> some View {
-        NavigationLink(value: flight.id) {
-            FlightRow(flight: flight, forecast: store.forecasts[flight.id], report: store.reports[flight.id])
+    /// The sky follows the next flight's local departure time, or now.
+    private var sky: Sky {
+        guard let next = upcoming.first else { return Sky(date: .now) }
+        return Sky(date: next.departureAt, timeZone: next.originAirport?.timeZone ?? .current)
+    }
+
+    @ViewBuilder
+    private var notices: some View {
+        if Services.isDemo {
+            Label("Demo mode: sample forecast, nothing is saved", systemImage: "info.circle")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+        }
+        if store.isOffline, let synced = store.syncedAt {
+            Label("Offline. Showing forecasts saved \(synced.formatted(.relative(presentation: .named))).", systemImage: "wifi.slash")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
         }
     }
 
-    private func delete(_ flights: [Flight], _ offsets: IndexSet) {
-        let ids = offsets.map { flights[$0].id }
-        Task { for id in ids { await store.delete(id) } }
+    private func section(_ title: String, flights: [Flight]) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(title).font(.headline).foregroundStyle(.secondary)
+            ForEach(flights) { flight in
+                NavigationLink(value: flight.id) {
+                    FlightRow(flight: flight, forecast: store.forecasts[flight.id], report: store.reports[flight.id])
+                        .skyCard(cornerRadius: 18, padding: 14)
+                }
+                .buttonStyle(.plain)
+                .matchedTransitionSource(id: flight.id, in: zoom)
+                .contextMenu { deleteButton(flight) }
+            }
+        }
+    }
+
+    private func deleteButton(_ flight: Flight) -> some View {
+        Button("Delete flight", systemImage: "trash", role: .destructive) {
+            Task { await store.delete(flight.id) }
+        }
+    }
+
+    private var emptyState: some View {
+        VStack(spacing: 12) {
+            WaterGlass(severity: nil, size: 48)
+            Text("No flights yet").font(.title2.bold())
+            Text("Save a flight and we'll have its turbulence forecast ready 48 hours before you fly.")
+                .multilineTextAlignment(.center)
+                .foregroundStyle(.secondary)
+            Button("Add a flight", action: addFlight)
+                .buttonStyle(.borderedProminent)
+        }
+        .frame(maxWidth: .infinity)
+        .skyCard()
     }
 
     /// Free users can keep a couple of upcoming flights; more goes through the paywall.
@@ -94,33 +135,89 @@ struct FlightsListView: View {
     }
 }
 
+/// The next flight, large: route, time, water glass, grade, wave timeline and confidence.
+struct NextFlightCard: View {
+    let flight: Flight
+    let forecast: Forecast?
+
+    var body: some View {
+        let state = ForecastState(flight: flight, forecast: forecast)
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(alignment: .top) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Next flight").font(.subheadline.weight(.semibold)).foregroundStyle(.secondary)
+                    Text(flight.routeText).font(.largeTitle.bold())
+                    Text(flight.departureText).font(.footnote.monospaced()).foregroundStyle(.secondary)
+                }
+                Spacer()
+                WaterGlass(severity: state.severity, size: 44)
+            }
+            switch state {
+            case .ready(let forecast):
+                if let grade = forecast.grade {
+                    Text(grade.headline).font(.title2.bold())
+                }
+                WaveTimeline(forecast: forecast)
+                let confidence = forecast.confidence(departure: flight.departureAt)
+                HStack(spacing: 6) {
+                    Image(systemName: confidence.symbol)
+                    Text(confidence.title)
+                    if let issued = forecast.issuedAt {
+                        Text("· updated \(issued.formatted(.relative(presentation: .named)))")
+                    }
+                }
+                .font(.footnote.weight(.medium))
+                .foregroundStyle(confidence.color)
+            case .unlocksAt(let date):
+                Text("Too early to tell").font(.title2.bold())
+                Text("Your first forecast arrives \(date.approximateDayAndTime()).").foregroundStyle(.secondary)
+            case .building:
+                Text("Building your forecast").font(.title2.bold())
+                Text("Checking the latest turbulence data along your route.").foregroundStyle(.secondary)
+            case .outOfCoverage:
+                Text("Not covered yet").font(.title2.bold())
+                Text("Forecasts cover US flights for now.").foregroundStyle(.secondary)
+            }
+        }
+        .skyCard()
+        .accessibilityElement(children: .combine)
+    }
+}
+
 struct FlightRow: View {
     let flight: Flight
     let forecast: Forecast?
     var report: LandingReport? = nil
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            HStack {
-                Text(flight.routeText).font(.headline)
-                Spacer()
-                StatusPill(state: ForecastState(flight: flight, forecast: forecast))
-            }
-            Text(flight.departureText).font(.subheadline).foregroundStyle(.secondary)
-            if let report {
-                Label(
-                    report.matched == true ? "Forecast matched" : "You felt \(report.felt.title.lowercased())",
-                    systemImage: report.matched == true ? "checkmark.circle" : "hand.raised")
-                    .font(.caption.weight(.medium))
-                    .foregroundStyle(.secondary)
-            } else if let forecast, forecast.status == .ready, flight.departureAt > .now {
-                let confidence = forecast.confidence(departure: flight.departureAt)
-                Label(confidence.shortStatus(), systemImage: confidence.symbol)
-                    .font(.caption.weight(.medium))
-                    .foregroundStyle(confidence.color)
+        let state = ForecastState(flight: flight, forecast: forecast)
+        HStack(spacing: 14) {
+            WaterGlass(severity: state.severity, size: 30)
+            VStack(alignment: .leading, spacing: 4) {
+                HStack {
+                    Text(flight.routeText).font(.headline)
+                    Spacer()
+                    StatusPill(state: state)
+                }
+                Text(flight.departureText).font(.footnote.monospaced()).foregroundStyle(.secondary)
+                if let report {
+                    Label(report.summary, systemImage: report.matched == true ? "checkmark.circle" : "hand.raised")
+                        .font(.caption.weight(.medium))
+                        .foregroundStyle(.secondary)
+                } else if case .ready(let forecast) = state, flight.departureAt > .now {
+                    let confidence = forecast.confidence(departure: flight.departureAt)
+                    Label(confidence.shortStatus(), systemImage: confidence.symbol)
+                        .font(.caption.weight(.medium))
+                        .foregroundStyle(confidence.color)
+                } else if case .unlocksAt(let date) = state {
+                    Text("Too early · first forecast \(date.relativeDay())")
+                        .font(.caption.weight(.medium))
+                        .foregroundStyle(.secondary)
+                }
             }
         }
-        .padding(.vertical, 4)
+        .contentShape(.rect)
+        .accessibilityElement(children: .combine)
     }
 }
 
@@ -132,24 +229,55 @@ struct StatusPill: View {
             switch state {
             case .ready(let forecast):
                 if let grade = forecast.grade {
-                    Label(grade.title, systemImage: grade.symbol).foregroundStyle(grade.color)
+                    Text(grade.title).foregroundStyle(grade.color)
                 }
-            case .unlocksAt(let date):
-                Label {
-                    Text("Forecast \(date, format: .relative(presentation: .named))")
-                } icon: {
-                    Image(systemName: "clock")
-                }
-                .foregroundStyle(.secondary)
+            case .unlocksAt:
+                Text("Too early").foregroundStyle(.secondary)
             case .building:
-                Label("Preparing", systemImage: "hourglass").foregroundStyle(.secondary)
+                Text("Preparing").foregroundStyle(.secondary)
             case .outOfCoverage:
-                Label("Not covered yet", systemImage: "globe").foregroundStyle(.secondary)
+                Text("Not covered yet").foregroundStyle(.secondary)
             }
         }
         .font(.caption.weight(.semibold))
-        .labelStyle(.titleAndIcon)
     }
+}
+
+/// A doorway into the Learn library from the Flights screen.
+private struct LearnCard: View {
+    @Environment(Router.self) private var router
+
+    var body: some View {
+        Button {
+            router.tab = .learn
+        } label: {
+            HStack(spacing: 14) {
+                Image(systemName: "book.pages").font(.title2).foregroundStyle(Theme.accent)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Why planes handle turbulence").font(.headline)
+                    Text("Short reads on what's happening and what the crew is doing.")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                Spacer()
+                Image(systemName: "chevron.right").foregroundStyle(.tertiary)
+            }
+            .skyCard(cornerRadius: 18, padding: 14)
+        }
+        .buttonStyle(.plain)
+    }
+}
+
+extension ForecastState {
+    /// What the water glass shows: the forecast's worst stretch, or nil (dashed) when unknown.
+    var severity: Severity? {
+        if case .ready(let forecast) = self { return forecast.worstSeverity }
+        return nil
+    }
+}
+
+extension Forecast {
+    var worstSeverity: Severity { segments.map(\.severity).max() ?? .smooth }
 }
 
 extension Flight {

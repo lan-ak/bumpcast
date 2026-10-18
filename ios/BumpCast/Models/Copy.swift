@@ -13,6 +13,17 @@ extension Forecast.Grade {
         }
     }
 
+    /// Short calm sentence for headlines ("A few bumps, mostly calm.").
+    var headline: String {
+        switch self {
+        case .smooth: "Smooth all the way."
+        case .mostlySmooth: "Mostly smooth."
+        case .someBumps: "A few bumps, mostly calm."
+        case .bumpy: "Bumpy in places."
+        case .rough: "Some rough patches."
+        }
+    }
+
     var summary: String {
         switch self {
         case .smooth: "Calm air the whole way. A good day to fly."
@@ -62,10 +73,7 @@ extension Severity {
 
     var color: Color {
         switch self {
-        case .smooth: .teal
-        case .light: Color(hue: 0.12, saturation: 0.95, brightness: 0.8)  // amber, readable on light backgrounds
-        case .moderate: Color(hue: 0.06, saturation: 0.9, brightness: 0.9)
-        case .severe: .red
+        case .smooth, .light, .moderate, .severe: Theme.color(self)
         }
     }
 }
@@ -89,8 +97,8 @@ extension Forecast.Confidence {
 
     var color: Color {
         switch self {
-        case .early: .secondary
-        case .partly, .confirmed: .blue
+        case .early: Theme.secondaryInk
+        case .partly, .confirmed: Theme.accent
         }
     }
 

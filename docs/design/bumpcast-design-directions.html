@@ -1,0 +1,352 @@
+<title>BumpCast Design Directions</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Familjen+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column with wide bands for the three phone mockups; sky ground, ink text, one teal accent. */
+:root {
+  --sky: #eaf1f6;
+  --surface: #ffffff;
+  --surface-2: #dde7ee;
+  --ink: #15253a;
+  --ink-2: #4b5d72;
+  --line: #c6d3dd;
+  --accent: #2a7385;
+  --smooth: #3a9a8f;
+  --light: #c99a2e;
+  --moderate: #c9733a;
+  --strong: #8e4a6b;
+  --dawn-a: #f6d9c4; --dawn-b: #c9dcef; --dawn-c: #8fb3d6;
+  --deck-bg: #0f1c2c; --deck-fg: #dfe9f2; --deck-dim: #7f93a8;
+  --guide-bg: #f3f5ef; --guide-ink: #253328;
+  --display: "Familjen Grotesk", "Avenir Next", system-ui, sans-serif;
+  --body: "Atkinson Hyperlegible", "Helvetica Neue", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --sky: #0d1622; --surface: #142131; --surface-2: #1b2b3e; --ink: #e3ecf4; --ink-2: #9fb1c3;
+  --line: #2a3d52; --accent: #6fbccc; --smooth: #5cc0b3; --light: #e0b54e; --moderate: #e38f55; --strong: #c57ea0;
+  --guide-bg: #1b241d; --guide-ink: #dfe8dc; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --sky: #0d1622; --surface: #142131; --surface-2: #1b2b3e; --ink: #e3ecf4; --ink-2: #9fb1c3;
+  --line: #2a3d52; --accent: #6fbccc; --smooth: #5cc0b3; --light: #e0b54e; --moderate: #e38f55; --strong: #c57ea0;
+  --guide-bg: #1b241d; --guide-ink: #dfe8dc; color-scheme: dark }
+
+body { background: var(--sky); color: var(--ink); font: 17px/1.6 var(--body); }
+.wrap { max-width: 1080px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 48px 80px; display: grid; gap: 64px; }
+.prose { max-width: 66ch; }
+h1, h2, h3 { font-family: var(--display); line-height: 1.15; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(2.2rem, 5vw, 3.4rem); letter-spacing: -0.02em; }
+h2 { font-size: 1.9rem; letter-spacing: -0.01em; }
+h3 { font-size: 1.2rem; }
+p { margin: 0; }
+.eyebrow { font: 500 0.78rem/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+.lede { font-size: 1.2rem; color: var(--ink-2); }
+section { display: grid; gap: 24px; }
+.stack { display: grid; gap: 12px; }
+code, .mono { font-family: var(--mono); font-size: 0.86em; }
+code { background: var(--surface-2); padding: 0.1em 0.35em; border-radius: 4px; }
+a { color: var(--accent); }
+
+/* header */
+header { display: grid; gap: 18px; }
+.pillars { display: flex; flex-wrap: wrap; gap: 10px; }
+.pill { font: 600 0.9rem/1 var(--display); padding: 9px 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); }
+.scale { display: grid; grid-template-columns: repeat(4, 1fr); border-radius: 10px; overflow: hidden; border: 1px solid var(--line); background: var(--surface); }
+.scale div { padding: 12px 14px; display: grid; gap: 4px; border-top: 5px solid; }
+.scale b { font-family: var(--display); }
+.scale span { font-size: 0.84rem; color: var(--ink-2); line-height: 1.35; }
+.scale .mono { color: var(--ink-2); font-size: 0.75rem; }
+@media (max-width: 640px) { .scale { grid-template-columns: 1fr 1fr; } }
+
+/* directions */
+.directions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+@media (max-width: 900px) { .directions { grid-template-columns: 1fr; } }
+.dir { display: grid; gap: 14px; align-content: start; min-width: 0; }
+.dir ul { margin: 0; padding-left: 1.1em; color: var(--ink-2); font-size: 0.95rem; display: grid; gap: 4px; }
+.phone { width: 100%; max-width: 300px; aspect-ratio: 9 / 18.5; border-radius: 34px; padding: 10px; background: #0b1119; box-shadow: 0 18px 40px -20px rgba(10, 25, 45, 0.55); justify-self: center; }
+.screen { height: 100%; border-radius: 26px; overflow: hidden; padding: 34px 16px 16px; display: flex; flex-direction: column; gap: 12px; font-size: 12px; line-height: 1.4; position: relative; }
+.island { position: absolute; top: 9px; left: 50%; transform: translateX(-50%); width: 78px; height: 20px; background: #000; border-radius: 12px; }
+
+/* A: Dawn */
+.dawn { background: linear-gradient(170deg, var(--dawn-a) 0%, var(--dawn-b) 48%, var(--dawn-c) 100%); color: #1d2c40; }
+.dawn .route { font: 600 11px/1 var(--mono); letter-spacing: 0.08em; opacity: 0.7; }
+.dawn .big { font: 600 26px/1.1 var(--display); }
+.dawn .glass { background: rgba(255,255,255,0.45); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.6); border-radius: 18px; padding: 12px; display: grid; gap: 8px; }
+.wave { height: 46px; }
+.dawn .breathe { margin-top: auto; display: grid; place-items: center; gap: 6px; }
+.orb { width: 64px; height: 64px; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #fff, rgba(255,255,255,0.2)); box-shadow: 0 0 0 10px rgba(255,255,255,0.18); animation: breathe 8s ease-in-out infinite; }
+@keyframes breathe { 0%, 100% { transform: scale(0.82); } 45% { transform: scale(1.08); } }
+
+/* B: Flight deck */
+.deck { background: var(--deck-bg); color: var(--deck-fg); font-family: var(--mono); }
+.deck .row { display: flex; justify-content: space-between; gap: 8px; font-size: 10.5px; color: var(--deck-dim); }
+.deck .grade { font: 600 22px/1.1 var(--display); color: #8ee0d3; }
+.deck .bars { display: flex; align-items: flex-end; gap: 1.5px; height: 64px; border-bottom: 1px solid #2b3d52; }
+.deck .bars i { flex: 1; display: block; border-radius: 1px 1px 0 0; }
+.deck .src { border: 1px solid #2b3d52; border-radius: 10px; padding: 10px; display: grid; gap: 6px; font-size: 10.5px; }
+.deck .tick { color: #8ee0d3; }
+.deck table { width: 100%; border-collapse: collapse; font-size: 10.5px; }
+.deck td { padding: 4px 0; border-bottom: 1px solid #22344a; }
+.deck td:last-child { text-align: right; }
+
+/* C: Field guide */
+.guide { background: var(--guide-bg); color: var(--guide-ink); }
+.guide .tag { font: 500 10px/1 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.7; }
+.guide .big { font: 600 20px/1.15 var(--display); }
+.guide .card { background: var(--surface); border-radius: 14px; padding: 12px; display: grid; gap: 6px; border: 1px solid var(--line); color: var(--ink); }
+.guide svg { width: 100%; height: auto; }
+.guide .chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.guide .chip { font-size: 10px; border: 1px solid currentColor; border-radius: 999px; padding: 3px 8px; opacity: 0.75; }
+
+/* recommendation */
+.rec { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 28px; display: grid; gap: 16px; }
+.rec-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+@media (max-width: 760px) { .rec-grid { grid-template-columns: 1fr; } }
+.rec-grid div { display: grid; gap: 6px; align-content: start; min-width: 0; }
+.rec-grid b { font-family: var(--display); font-size: 1.05rem; }
+.rec-grid p { color: var(--ink-2); font-size: 0.95rem; }
+
+/* tables */
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+table.spec { width: 100%; border-collapse: collapse; min-width: 680px; font-size: 0.93rem; }
+.spec th, .spec td { text-align: left; vertical-align: top; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+.spec tr:last-child td { border-bottom: 0; }
+.spec th { font: 500 0.74rem/1.2 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-2); background: var(--surface-2); }
+.spec td:first-child { font-weight: 700; width: 22%; }
+.spec td.api { font-family: var(--mono); font-size: 0.8rem; color: var(--ink-2); width: 30%; }
+
+/* feature grid */
+.features { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 760px) { .features { grid-template-columns: 1fr; } }
+.feature { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.feature .src { font: 400 0.75rem/1.3 var(--mono); color: var(--ink-2); }
+.feature p { color: var(--ink-2); font-size: 0.95rem; }
+.feature .why { color: var(--ink); }
+
+/* rules */
+.rules { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 32px; margin: 0; padding: 0; list-style: none; }
+@media (max-width: 760px) { .rules { grid-template-columns: 1fr; } }
+.rules li { padding-left: 18px; position: relative; }
+.rules li::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+.dont li::before { background: var(--strong); border-radius: 1px; }
+
+.demo { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.demo button { font: 600 0.95rem/1 var(--display); padding: 12px 16px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
+.demo button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.demo-strip { flex: 1 1 280px; height: 48px; display: flex; align-items: flex-end; gap: 2px; min-width: 0; }
+.demo-strip i { flex: 1; display: block; border-radius: 2px 2px 0 0; transition: opacity 0.6s ease, height 0.7s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.demo-strip.early i { opacity: 0.38; }
+.note { font-size: 0.85rem; color: var(--ink-2); }
+
+@media (prefers-reduced-motion: reduce) { .orb { animation: none; } .demo-strip i { transition: opacity 0.4s ease; } }
+footer { color: var(--ink-2); font-size: 0.9rem; border-top: 1px solid var(--line); padding-top: 20px; }
+</style>
+
+<div class="wrap">
+
+<header>
+  <span class="eyebrow">BumpCast · design exploration · Oct 2026</span>
+  <h1>Calm air, shown honestly</h1>
+  <p class="lede prose">Three visual directions for BumpCast, plus a motion, haptics and iOS 27 plan to build on once the forecast, Live Activity, map and calm tools are working. The audience is nervous and curious flyers. Each screen should lower someone's heart rate, be honest about how sure the forecast is, and teach one thing.</p>
+  <div class="pillars"><span class="pill">Calming</span><span class="pill">Trustworthy</span><span class="pill">Educational</span></div>
+</header>
+
+<section>
+  <div class="stack prose">
+    <span class="eyebrow">Foundation for every direction</span>
+    <h2>A severity scale that never shouts</h2>
+    <p>The current palette ends in system red, which reads as danger. Proposed: a cool-to-warm ramp ending in a muted plum, always paired with the "your drink" description and a glyph, so color is never the only signal. The thresholds come straight from the worker's EDR cut-offs.</p>
+  </div>
+  <div class="scale" role="list">
+    <div role="listitem" style="border-color: var(--smooth)"><b>Smooth</b><span>Your drink stays still.</span><span class="mono">EDR &lt; 0.10</span></div>
+    <div role="listitem" style="border-color: var(--light)"><b>Light chop</b><span>Your drink ripples.</span><span class="mono">0.10–0.22</span></div>
+    <div role="listitem" style="border-color: var(--moderate)"><b>Moderate</b><span>Drinks can spill. Stay seated.</span><span class="mono">0.22–0.34</span></div>
+    <div role="listitem" style="border-color: var(--strong)"><b>Strong</b><span>Rare. Belt keeps you safe.</span><span class="mono">≥ 0.34</span></div>
+  </div>
+  <p class="note prose">Idea: a small "water glass" glyph whose surface ripples more at each level becomes the app's signature icon set, used in the timeline, widgets and Dynamic Island. It ties the copy you already wrote to a visual.</p>
+</section>
+
+<section>
+  <div class="stack prose">
+    <span class="eyebrow">Three directions</span>
+    <h2>Same forecast, three moods</h2>
+    <p>Each mockup shows the same JFK → LAX "A few bumps" forecast.</p>
+  </div>
+  <div class="directions">
+
+    <article class="dir">
+      <div class="phone" aria-hidden="true"><div class="screen dawn"><span class="island"></span>
+        <span class="route">JFK → LAX · TUE 7:15 AM</span>
+        <span class="big">A few bumps,<br>mostly calm.</span>
+        <div class="glass">
+          <svg class="wave" viewBox="0 0 200 46" preserveAspectRatio="none"><path d="M0 34 C20 34 25 30 40 31 S60 22 72 24 S90 33 110 33 S140 30 150 28 S175 34 200 34 L200 46 L0 46 Z" fill="rgba(42,115,133,0.35)"/><path d="M0 34 C20 34 25 30 40 31 S60 22 72 24 S90 33 110 33 S140 30 150 28 S175 34 200 34" fill="none" stroke="#2a7385" stroke-width="1.5"/></svg>
+          <span>About 8 min of light chop over the Rockies, 3 h 40 min into the flight.</span>
+        </div>
+        <div class="breathe"><span class="orb"></span><span>Breathe with the bumps</span></div>
+      </div></div>
+      <span class="eyebrow">A · Cabin Dawn</span>
+      <h3>Calm first</h3>
+      <p>A sky gradient that matches your departure time (dawn, midday, dusk, night), drawn with a slowly drifting <code>MeshGradient</code>. Large soft type, bumpiness shown as a gentle wave line rather than bars.</p>
+      <ul><li>Strongest for anxious flyers</li><li>Risk: can feel vague or "wellness app"; detail has to live one tap down</li></ul>
+    </article>
+
+    <article class="dir">
+      <div class="phone" aria-hidden="true"><div class="screen deck"><span class="island"></span>
+        <div class="row"><span>JFK–LAX</span><span>DEP 11:15Z</span><span>5 h 52 m</span></div>
+        <span class="grade">A FEW BUMPS · 82</span>
+        <div class="bars" id="deckBars"></div>
+        <div class="row"><span>TKOF</span><span>2 h</span><span>4 h</span><span>LDG</span></div>
+        <table><tr><td>+0:12 climb</td><td>LIGHT · 4 min</td></tr><tr><td>+3:40 cruise</td><td>LIGHT · 8 min</td></tr><tr><td>+5:31 descent</td><td>LIGHT · 3 min</td></tr></table>
+        <div class="src"><span class="tick">✓ CONFIRMED FORECAST</span><span>Updated 14 min ago · next 08:00Z</span><span>Refreshed hourly until you fly</span></div>
+      </div></div>
+      <span class="eyebrow">B · Flight Deck</span>
+      <h3>Trust first</h3>
+      <p>Instrument-panel precision: tabular figures, a minute-by-minute bar timeline, the confidence label and update time always visible. Feels like the instruments pilots use.</p>
+      <ul><li>Strongest for curious flyers and avgeeks</li><li>Risk: dense and cold; jargon like "EDR" and "Z" times can raise anxiety</li></ul>
+    </article>
+
+    <article class="dir">
+      <div class="phone" aria-hidden="true"><div class="screen guide"><span class="island"></span>
+        <span class="tag">Your bumps, explained</span>
+        <span class="big">Why it's bumpy over the Rockies</span>
+        <div class="card">
+          <svg viewBox="0 0 220 80"><path d="M0 70 L40 40 L60 52 L85 22 L110 50 L130 38 L160 70 Z" fill="#9fb8a4"/><path d="M0 18 Q30 18 55 26 T110 14 T165 26 T220 18" fill="none" stroke="#2a7385" stroke-width="2" stroke-dasharray="4 3"/><path d="M175 14 l16 0" stroke="#253328" stroke-width="2"/><path d="M188 10 l5 4 l-5 4" fill="none" stroke="#253328" stroke-width="2"/></svg>
+          <span>Wind flowing over mountains ripples like water over rocks. Pilots call it mountain wave. It's expected and planned for.</span>
+        </div>
+        <div class="card"><b>Your wings are built for this</b><span>Airliners are certified for loads well beyond anything turbulence produces in normal flight.</span></div>
+        <div class="chips"><span class="chip">Jet stream</span><span class="chip">Mountain wave</span><span class="chip">Storm cells</span></div>
+      </div></div>
+      <span class="eyebrow">C · Field Guide</span>
+      <h3>Learning first</h3>
+      <p>Illustrated explainers attached to each bumpy stretch: what causes it, what the crew is doing, what you'll feel. Feels like a well-made nature guide.</p>
+      <ul><li>Best long-term engagement and App Store story</li><li>Risk: needs a cause for each segment, which the worker doesn't output yet</li></ul>
+    </article>
+  </div>
+</section>
+
+<section class="rec">
+  <span class="eyebrow">Recommendation</span>
+  <h2>Blend them in layers</h2>
+  <p class="prose">Apple's iOS 27 brand guidance (WWDC26 session 251) says to keep the Liquid Glass UI layer native and put brand expression in the content layer. That suggests one direction per layer:</p>
+  <div class="rec-grid">
+    <div><b>Mood from Cabin Dawn</b><p>Time-of-day sky backgrounds, generous type, the wave timeline on the summary card, breathing tools.</p></div>
+    <div><b>Proof from Flight Deck</b><p>Confidence badge and update time on every forecast, with no data-source names. Tabular numbers. The precise bar chart one tap down for people who want it.</p></div>
+    <div><b>Depth from Field Guide</b><p>One "why" card per bumpy stretch, plus a learn library. Start with generic explainers; add per-segment causes once the worker can classify them.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="stack prose">
+    <span class="eyebrow">Motion</span>
+    <h2>Transitions that slow things down</h2>
+    <p>Rule of thumb: no bounce, no shake, nothing faster than 0.35 s. Use critically damped springs (<code>.smooth</code>, around 0.5–0.7 s). With Reduce Motion on, every transition becomes a cross-fade.</p>
+  </div>
+  <div class="tablewrap"><table class="spec">
+    <tr><th>Moment</th><th>What happens</th><th>SwiftUI</th></tr>
+    <tr><td>Open a flight</td><td>The flight card expands into the forecast screen, so the route never leaves view.</td><td class="api">.navigationTransition(.zoom(sourceID:in:)) + matchedTransitionSource</td></tr>
+    <tr><td>Forecast reveal</td><td>The timeline draws left to right from takeoff to landing, like the flight itself. The grade fades in after it.</td><td class="api">Chart with animated mask / trim, .smooth(duration: 0.9)</td></tr>
+    <tr><td>Advance → Confirmed forecast</td><td>Faded advance-forecast bars firm up to full opacity, the badge symbol morphs, the score ticks to its new value. This shows the forecast getting more certain.</td><td class="api">contentTransition(.numericText()), symbolEffect(.replace), opacity animation</td></tr>
+    <tr><td>Forecast changes</td><td>Changed stretches glow softly once, then settle, so people see what changed without hunting.</td><td class="api">PhaseAnimator, one cycle</td></tr>
+    <tr><td>Map route</td><td>The great-circle line draws from origin to destination, with bumpy stretches tinted as it passes.</td><td class="api">MapPolyline + trim, or Canvas overlay</td></tr>
+    <tr><td>Calm tools</td><td>Breathing orb expands on inhale (4 s) and contracts on exhale (6 s). The sky drifts very slowly behind it.</td><td class="api">TimelineView(.animation) + MeshGradient; layerEffect shader for drift (session 322)</td></tr>
+  </table></div>
+  <div class="demo">
+    <button type="button" id="confirmBtn">Play "Forecast confirmed"</button>
+    <div class="demo-strip early" id="demoStrip" aria-label="Example timeline, faded while it is an advance forecast"></div>
+  </div>
+  <p class="note">The demo plays the "advance forecast firms up" moment: bars go from faded to solid and settle into the updated values.</p>
+</section>
+
+<section>
+  <div class="stack prose">
+    <span class="eyebrow">Haptics</span>
+    <h2>Touch that steadies, never alarms</h2>
+    <p>Haptics should feel like a hand on the shoulder. Keep them soft, sparse and optional, and never use the warning or error patterns for turbulence.</p>
+  </div>
+  <div class="tablewrap"><table class="spec">
+    <tr><th>Moment</th><th>Feel</th><th>API</th></tr>
+    <tr><td>Breathing guide</td><td>A slow swelling buzz on inhale that fades on exhale. Works with eyes closed during takeoff. This is the most valuable haptic in the app.</td><td class="api">Core Haptics CHHapticPattern, continuous event with intensity/sharpness curves</td></tr>
+    <tr><td>Scrubbing the timeline</td><td>A light tick each time you cross into a different severity. Gives VoiceOver users a sense of the shape too.</td><td class="api">.sensoryFeedback(.selection, trigger: severity)</td></tr>
+    <tr><td>"What will light chop feel like?"</td><td>Opt-in preview: a gentle, irregular rumble at low intensity so the real thing feels familiar. Never offered for Moderate or Strong.</td><td class="api">CHHapticPattern, transient events, intensity ≤ 0.4</td></tr>
+    <tr><td>Forecast confirmed / flight added</td><td>One soft tap.</td><td class="api">.sensoryFeedback(.impact(flexibility: .soft, intensity: 0.5))</td></tr>
+    <tr><td>Forecast got bumpier</td><td>No haptic. Bad news should arrive quietly, with words.</td><td class="api">none</td></tr>
+  </table></div>
+</section>
+
+<section>
+  <div class="stack prose">
+    <span class="eyebrow">iOS 27 · from WWDC26</span>
+    <h2>Platform features worth building on</h2>
+  </div>
+  <div class="features">
+    <div class="feature"><h3>Dynamic Island in landscape</h3><p class="src">Live Activities essentials · session 223</p><p class="why">In iOS 27 the compact and minimal Dynamic Island views also show in landscape, which is how people watch films on a plane. Show "Smooth for 40 min" next to the movie.</p><p>Check <code>isDynamicIslandLimitedInWidth</code> and switch to a narrower glass glyph plus countdown.</p></div>
+    <div class="feature"><h3>Apple Watch Smart Stack and CarPlay</h3><p class="src">Session 223 · small activity family</p><p class="why">A glance at the wrist mid-flight beats unlocking a phone. CarPlay can show the forecast on the drive to the airport.</p><p>Add <code>.supplementalActivityFamilies([.small])</code> with its own layout.</p></div>
+    <div class="feature"><h3>Buttons on the Live Activity</h3><p class="src">Session 223 · LiveActivityIntent</p><p class="why">"Breathe" starts the calm tool from the Lock Screen. After landing, "How did it feel?" collects the rating your README already needs to calibrate the advance forecast.</p></div>
+    <div class="feature"><h3>Refreshed Liquid Glass</h3><p class="src">What's new in SwiftUI · session 269</p><p class="why">Rebuilding against the iOS 27 SDK picks up the new glass, which also follows the system tint slider. Keep tab bars and toolbars standard.</p><p>Use <code>toolbarMinimizeBehavior(.onScrollDown)</code> on the long forecast screen and <code>Tab(role: .prominent)</code> for the Calm tab.</p></div>
+    <div class="feature"><h3>On-device explainer that works offline</h3><p class="src">Foundation Models · sessions 241, 242</p><p class="why">The rebuilt on-device model runs in airplane mode. Answer "Is this bump normal?" using only the stored forecast and your explainer library, passed in through tool calling.</p><p>Guardrail: the model explains; it never predicts or changes a forecast.</p></div>
+    <div class="feature"><h3>Siri and Spotlight</h3><p class="src">App Schemas · sessions 240, 343</p><p class="why">"How bumpy is my flight to LA?" Make each flight an IndexedEntity, and annotate the forecast screen so Siri can talk about what's on it.</p></div>
+    <div class="feature"><h3>StandBy at the gate</h3><p class="src">Session 223</p><p class="why">Charging at the gate in StandBy, the Live Activity scales up. Use <code>activityBackgroundTint</code> for an edge-to-edge night-sky tint.</p></div>
+    <div class="feature"><h3>Accessible timeline</h3><p class="src">Custom controls · session 220</p><p class="why">Make the timeline an adjustable control: VoiceOver swipes move through the stretches and read "3 h 40 min in, light chop for 8 minutes". Add a Swift Charts audio graph as well.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="stack prose">
+    <span class="eyebrow">Ground rules</span>
+    <h2>Keeping it calm and credible</h2>
+  </div>
+  <div class="features">
+    <div class="stack"><h3>Do</h3><ul class="rules">
+      <li>Show the confidence label and update time on every forecast</li>
+      <li>Say what you don't know: advance forecast, out of coverage</li>
+      <li>Lead with duration and timing ("8 min, 3 h in")</li>
+      <li>Pair every color with a word and a glyph</li>
+      <li>Support Dynamic Type up to accessibility sizes</li>
+      <li>Explain what the crew is doing during each stretch</li>
+    </ul></div>
+    <div class="stack"><h3>Don't</h3><ul class="rules dont">
+      <li>Use red, warning icons or alarm haptics</li>
+      <li>Name data sources anywhere in the app or notifications</li>
+      <li>Show raw EDR on the main screen</li>
+      <li>Animate with bounce, shake or flashing</li>
+      <li>Push notifications at night for small changes</li>
+      <li>Imply certainty the data doesn't support</li>
+      <li>Hide the "why"; that's what turns fear into curiosity</li>
+    </ul></div>
+  </div>
+</section>
+
+<footer>iOS 27 details are from WWDC26 session summaries (wwdc.ai): 223 Live Activities essentials, 241/242 Foundation Models, 251 Communicate your brand identity on iOS, 269 What's new in SwiftUI, 220 Accessibility for custom controls, 240/343 App Intents, 322 SwiftUI graphics effects.</footer>
+</div>
+
+<script>
+(function () {
+  var sev = function (v) { return v < 0.10 ? "var(--smooth)" : v < 0.22 ? "var(--light)" : v < 0.34 ? "var(--moderate)" : "var(--strong)"; };
+  var deckSev = function (v) { return v < 0.10 ? "#5cc0b3" : v < 0.22 ? "#e0b54e" : "#e38f55"; };
+  var profile = [];
+  for (var i = 0; i < 60; i++) {
+    var v = 0.04 + 0.02 * Math.sin(i / 3);
+    if (i > 1 && i < 4) v = 0.14;
+    if (i > 36 && i < 41) v = 0.17 + (i === 38 ? 0.03 : 0);
+    if (i > 55 && i < 58) v = 0.12;
+    profile.push(Math.max(0.02, v));
+  }
+  var deck = document.getElementById("deckBars");
+  profile.forEach(function (v) { var b = document.createElement("i"); b.style.height = (v / 0.3 * 100) + "%"; b.style.background = deckSev(v); deck.appendChild(b); });
+
+  var strip = document.getElementById("demoStrip");
+  var early = profile.map(function (v, i) { return i > 34 && i < 43 ? v * 0.75 + 0.02 : v; });
+  var bars = profile.map(function (v, i) { var b = document.createElement("i"); b.style.height = (early[i] / 0.3 * 100) + "%"; b.style.background = sev(early[i]); strip.appendChild(b); return b; });
+  var confirmed = false;
+  var btn = document.getElementById("confirmBtn");
+  btn.addEventListener("click", function () {
+    confirmed = !confirmed;
+    strip.classList.toggle("early", !confirmed);
+    var src = confirmed ? profile : early;
+    bars.forEach(function (b, i) { b.style.height = (src[i] / 0.3 * 100) + "%"; b.style.background = sev(src[i]); });
+    btn.textContent = confirmed ? "Reset to advance forecast" : "Play “Forecast confirmed”";
+    strip.setAttribute("aria-label", confirmed ? "Example timeline, confirmed forecast" : "Example timeline, faded while it is an advance forecast");
+  });
+})();
+</script>

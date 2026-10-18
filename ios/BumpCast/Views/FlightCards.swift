@@ -41,8 +41,7 @@ struct InFlightCard: View {
             }
             .buttonStyle(.borderedProminent)
         }
-        .padding()
-        .background(.fill.quaternary, in: .rect(cornerRadius: 20))
+        .skyCard()
     }
 
     private var flying: some View {
@@ -62,8 +61,7 @@ struct InFlightCard: View {
                 Button("We've landed") { inFlight.land(flight) }
                     .buttonStyle(.bordered)
             }
-            .padding()
-            .background(.fill.quaternary, in: .rect(cornerRadius: 20))
+            .skyCard()
         }
     }
 
@@ -81,62 +79,68 @@ struct InFlightCard: View {
     }
 }
 
-/// After landing: "How bumpy was it?" Feeds public accuracy stats and calibration.
+/// After landing: "How did it feel?" compared with the forecast. The answers are the
+/// calibration data for the forecast, and feed the public accuracy stats.
 struct LandingCheckCard: View {
     let flight: Flight
 
     @Environment(FlightStore.self) private var store
     @Environment(\.requestReview) private var requestReview
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var isSending = false
-
-    private let choices: [Severity] = [.smooth, .light, .moderate, .severe]
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             if let report = store.reports[flight.id] {
                 result(report)
+                    .transition(.opacity)
             } else {
-                Text("How bumpy was it?").font(.title3.bold())
-                Text("Two taps help us check our forecasts and make them better for everyone.")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
-                    ForEach(choices, id: \.self) { severity in
+                Text("How did it feel?").font(.title3.bold())
+                if let forecast = store.forecasts[flight.id], let grade = forecast.grade {
+                    Text("We forecast: \(grade.headline.lowercased())")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                HStack(spacing: 10) {
+                    ForEach(FeltRating.allCases, id: \.self) { rating in
                         Button {
-                            submit(severity)
+                            submit(rating)
                         } label: {
-                            Text(severity.title).frame(maxWidth: .infinity)
+                            Text(rating.title).frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.bordered)
-                        .tint(severity.color)
+                        .tint(Theme.accent)
                         .disabled(isSending)
                     }
                 }
+                Text("Your answer helps make every forecast more accurate.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
             }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding()
-        .background(.fill.quaternary, in: .rect(cornerRadius: 20))
+        .skyCard()
+        .animation(Theme.motion(reduceMotion), value: store.reports[flight.id])
     }
 
     @ViewBuilder
     private func result(_ report: LandingReport) -> some View {
-        Label(report.matched == true ? "Our forecast matched" : "Thanks for telling us",
+        Label(report.matched == true ? "Glad it matched" : "Thanks for telling us",
             systemImage: report.matched == true ? "checkmark.seal.fill" : "hand.thumbsup")
             .font(.title3.bold())
-            .foregroundStyle(report.matched == true ? .green : .primary)
-        if let forecast = report.forecastWorst {
-            Text("You felt \(report.felt.title.lowercased()). We forecast \(forecast.title.lowercased()) at worst.")
-                .font(.subheadline)
-        }
+            .foregroundStyle(report.matched == true ? Theme.accent : Theme.ink)
+        Text(report.matched == true
+            ? "The forecast felt about right. We'll keep checking every flight."
+            : "We use every answer to tune the forecast for flights like yours.")
+            .font(.subheadline)
+            .foregroundStyle(.secondary)
     }
 
-    private func submit(_ felt: Severity) {
+    private func submit(_ rating: FeltRating) {
         isSending = true
         Task {
-            let report = await store.submitLandingReport(flightID: flight.id, felt: felt, comment: nil)
+            let report = await store.submitLandingReport(flightID: flight.id, rating: rating)
             isSending = false
-            // Only ask for a rating after a flight where the forecast was right, once per version.
+            // Only ask for an App Store rating after a flight where the forecast was right, once per version.
             if report?.matched == true {
                 let key = "review.requested.\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] ?? "")"
                 if !UserDefaults.standard.bool(forKey: key) {
@@ -196,9 +200,7 @@ struct UpdatesSection: View {
                 .buttonStyle(.bordered)
             }
         }
-        .padding()
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.fill.quaternary, in: .rect(cornerRadius: 16))
+        .skyCard(cornerRadius: 16, padding: 14)
     }
 }
 

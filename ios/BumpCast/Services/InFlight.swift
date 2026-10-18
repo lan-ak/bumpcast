@@ -17,6 +17,8 @@ final class InFlight {
     /// Remind a little before each stretch so there's time to settle in.
     static let leadTime: TimeInterval = 2 * 60
     static let landingCheckDelay: TimeInterval = 15 * 60
+    /// How long the Live Activity stays after landing to collect the rating.
+    static let ratingWindow: TimeInterval = 30 * 60
 
     init() {
         takeoffs = Self.load("takeoffs", from: defaults)
@@ -76,6 +78,15 @@ final class InFlight {
         Paywalls.shared.updateAttributes()
     }
 
+    /// Ends the flight's Live Activity, e.g. once it has been rated.
+    func endActivity(_ flightID: UUID) {
+        Task {
+            for activity in Activity<FlightActivityAttributes>.activities where activity.attributes.flightID == flightID {
+                await activity.end(nil, dismissalPolicy: .immediate)
+            }
+        }
+    }
+
     /// Clears taps, the Live Activity and reminders, e.g. when a flight's date or route is edited.
     func forget(_ flightID: UUID) {
         takeoffs[flightID] = nil
@@ -96,8 +107,9 @@ final class InFlight {
             for activity in Activity<FlightActivityAttributes>.activities {
                 var state = activity.content.state
                 let landing = activity.attributes.landing(state)
-                if landing < .now {
-                    await activity.end(nil, dismissalPolicy: .default)
+                // Kept for a while after landing so "How did it feel?" can be answered from it.
+                if landing.addingTimeInterval(Self.ratingWindow) < .now {
+                    await activity.end(nil, dismissalPolicy: .immediate)
                     continue
                 }
                 state.updatedAt = .now
@@ -116,8 +128,10 @@ final class InFlight {
             route: flight.routeText,
             durationMin: duration,
             stretches: forecast.segments.map {
-                .init(startMin: $0.startMin, endMin: $0.endMin, severity: $0.severity.rawValue)
-            })
+                .init(startMin: $0.startMin, endMin: $0.endMin, severity: $0.severity.rawValue, phase: $0.phase)
+            },
+            confidenceTitle: forecast.confidence(departure: flight.departureAt).title,
+            issuedAt: forecast.issuedAt)
         let state = FlightActivityAttributes.ContentState(takeoff: takeoff, updatedAt: .now)
         Task {
             for activity in Activity<FlightActivityAttributes>.activities where activity.attributes.flightID == flight.id {

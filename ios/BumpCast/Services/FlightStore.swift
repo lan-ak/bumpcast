@@ -148,9 +148,10 @@ final class FlightStore {
         onSync?()
     }
 
-    func submitLandingReport(flightID: UUID, felt: Severity, comment: String?) async -> LandingReport? {
+    func submitLandingReport(flightID: UUID, rating: FeltRating) async -> LandingReport? {
+        if let existing = reports[flightID] { return existing }
         do {
-            let result = try await service.submitLandingReport(flightID: flightID, felt: felt, comment: comment)
+            let result = try await service.submitLandingReport(flightID: flightID, rating: rating)
             reports[flightID] = result
             await persist()
             onSync?()

@@ -1,96 +1,101 @@
 import SwiftUI
 
+/// The Calm tab: breathing, timed to the flight when one is in progress.
 struct CalmView: View {
     @Environment(Router.self) private var router
     @Environment(FlightStore.self) private var store
     @Environment(InFlight.self) private var inFlight
 
     var body: some View {
-        @Bindable var router = router
         NavigationStack {
-            List {
-                Section {
-                    Button {
-                        router.showBreathing = true
-                    } label: {
-                        HStack(spacing: 14) {
-                            Image(systemName: "wind").font(.title2).foregroundStyle(.teal)
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("Breathe through the bumps").font(.headline)
-                                Text(breathingSubtitle).font(.subheadline).foregroundStyle(.secondary)
-                            }
-                        }
-                        .padding(.vertical, 6)
-                    }
-                    .tint(.primary)
+            VStack(spacing: 20) {
+                Spacer()
+                WaterGlass(severity: .smooth, size: 64)
+                Text("Breathe through the bumps").font(.largeTitle.bold()).multilineTextAlignment(.center)
+                Text(subtitle).multilineTextAlignment(.center).foregroundStyle(.secondary)
+                Button {
+                    router.showBreathing = true
+                } label: {
+                    Label("Start breathing", systemImage: "wind").frame(maxWidth: .infinity)
                 }
-                Section("Why turbulence is safe") {
-                    ForEach(Explainer.all) { explainer in
-                        NavigationLink(explainer.title) { ExplainerView(explainer: explainer) }
-                    }
-                }
+                .buttonStyle(.borderedProminent)
+                .tint(Theme.accent)
+                .controlSize(.large)
+                Spacer()
             }
+            .padding(24)
+            .background { SkyBackground(sky: .night) }
+            .onSky(.night)
             .navigationTitle("Calm")
-            .fullScreenCover(isPresented: $router.showBreathing) {
-                BreathingView(nextStretch: nextStretch)
-            }
         }
     }
 
-    private var activeFlight: (Flight, Forecast)? {
+    private var subtitle: String {
+        if let next = NextStretch.current(store: store, inFlight: inFlight) {
+            return next.headsUp(now: .now)
+        }
+        return "Breathe in for 4, out for 6. A longer out-breath steadies your body when the plane moves."
+    }
+}
+
+/// The next bumpy stretch of the flight in progress, for heads-ups.
+struct NextStretch {
+    let severity: Severity
+    let start: Date
+    let end: Date
+
+    @MainActor
+    static func current(store: FlightStore, inFlight: InFlight, now: Date = .now) -> NextStretch? {
         for flight in store.flights {
-            if let forecast = store.forecasts[flight.id], inFlight.isFlying(flight, forecast: forecast) {
-                return (flight, forecast)
-            }
+            guard let forecast = store.forecasts[flight.id], inFlight.isFlying(flight, forecast: forecast, now: now) else { continue }
+            let takeoff = inFlight.effectiveTakeoff(of: flight)
+            let minute = Int(now.timeIntervalSince(takeoff) / 60)
+            guard let segment = forecast.segments.first(where: { $0.endMin >= minute }) else { return nil }
+            return NextStretch(
+                severity: segment.severity,
+                start: takeoff.addingTimeInterval(TimeInterval(segment.startMin * 60)),
+                end: takeoff.addingTimeInterval(TimeInterval((segment.endMin + 1) * 60)))
         }
         return nil
     }
 
-    /// When the next bumpy stretch starts (or the current one ends), while flying.
-    private var nextStretch: BreathingView.Stretch? {
-        guard let (flight, forecast) = activeFlight else { return nil }
-        let takeoff = inFlight.effectiveTakeoff(of: flight)
-        let minute = Int(Date.now.timeIntervalSince(takeoff) / 60)
-        guard let segment = forecast.segments.first(where: { $0.endMin >= minute }) else { return nil }
-        return .init(
-            severity: segment.severity,
-            start: takeoff.addingTimeInterval(TimeInterval(segment.startMin * 60)),
-            end: takeoff.addingTimeInterval(TimeInterval((segment.endMin + 1) * 60)))
-    }
-
-    private var breathingSubtitle: String {
-        if let next = nextStretch {
-            return next.start <= .now ? "\(next.severity.title) now. Breathe along until it passes." :
-                "\(next.severity.title) in \(Int(next.start.timeIntervalSinceNow / 60) + 1) min. Start a little before."
-        }
-        return "A slow 4-4-6 breath. Steadies your body when the plane moves."
+    func headsUp(now: Date) -> String {
+        if now >= end { return "That stretch has passed. Smooth air now." }
+        if now >= start { return "\(severity.title) now, about \(Int(end.timeIntervalSince(now) / 60) + 1) min to go." }
+        return "\(severity.title) in about \(Int(start.timeIntervalSince(now) / 60) + 1) min."
     }
 }
 
-/// Paced breathing: in for 4, hold for 4, out for 6. A longer out-breath calms the body.
+/// Breathe: night sky, an orb that swells on a 4 s inhale and settles on a 6 s exhale, with an
+/// optional Core Haptics pattern that follows the breath. Reduce Motion: the orb glows instead.
 struct BreathingView: View {
-    struct Stretch {
-        let severity: Severity
-        let start: Date
-        let end: Date
-    }
-
-    let nextStretch: Stretch?
-
     @Environment(\.dismiss) private var dismiss
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(FlightStore.self) private var store
+    @Environment(InFlight.self) private var inFlight
+    @AppStorage("haptics.enabled") private var hapticsEnabled = true
     @State private var startedAt = Date.now
 
-    private let phases: [(name: String, seconds: Double, scale: Double)] = [
-        ("Breathe in", 4, 1.0), ("Hold", 4, 1.0), ("Breathe out", 6, 0.45),
-    ]
+    static let inhale: TimeInterval = 4
+    static let exhale: TimeInterval = 6
+    private var cycle: TimeInterval { Self.inhale + Self.exhale }
 
     var body: some View {
-        TimelineView(.animation(minimumInterval: 0.1)) { context in
-            let (phase, remaining) = phase(at: context.date)
-            VStack(spacing: 32) {
-                if let nextStretch {
-                    Text(stretchText(nextStretch, now: context.date))
+        TimelineView(.animation(minimumInterval: 1 / 30)) { context in
+            let (inhaling, progress, remaining) = phase(at: context.date)
+            VStack(spacing: 28) {
+                HStack {
+                    Toggle(isOn: $hapticsEnabled) {
+                        Label("Haptics", systemImage: "hand.tap")
+                    }
+                    .toggleStyle(.button)
+                    .disabled(!Haptics.isSupported)
+                    Spacer()
+                    Button("Done") { dismiss() }
+                        .buttonStyle(.bordered)
+                }
+                if let next = NextStretch.current(store: store, inFlight: inFlight, now: context.date) {
+                    Text(next.headsUp(now: context.date))
                         .font(.headline)
                         .multilineTextAlignment(.center)
                         .foregroundStyle(.secondary)
@@ -98,12 +103,14 @@ struct BreathingView: View {
                 Spacer()
                 ZStack {
                     Circle()
-                        .fill(.teal.opacity(0.25))
+                        .fill(RadialGradient(colors: [Theme.accent.opacity(0.7), Theme.accent.opacity(0.1)], center: .center, startRadius: 10, endRadius: 170))
                         .frame(width: 280, height: 280)
-                        .scaleEffect(reduceMotion ? 1 : circleScale(at: context.date))
+                        .scaleEffect(reduceMotion ? 1 : orbScale(inhaling: inhaling, progress: progress))
+                        .opacity(reduceMotion ? 0.45 + 0.55 * glow(inhaling: inhaling, progress: progress) : 1)
                     VStack(spacing: 8) {
-                        Text(phase.name).font(.title.bold())
+                        Text(inhaling ? "Breathe in" : "Breathe out").font(.title.bold())
                         Text("\(Int(remaining.rounded(.up)))").font(.largeTitle.monospacedDigit())
+                            .contentTransition(.numericText(countsDown: true))
                     }
                 }
                 .accessibilityElement(children: .combine)
@@ -112,112 +119,35 @@ struct BreathingView: View {
                     .font(.subheadline)
                     .multilineTextAlignment(.center)
                     .foregroundStyle(.secondary)
-                Button("Done") { dismiss() }
-                    .buttonStyle(.borderedProminent)
             }
-            .padding(32)
+            .padding(28)
         }
-        .onAppear { startedAt = .now }
+        .background { SkyBackground(sky: .night) }
+        .onSky(.night)
+        .onAppear {
+            startedAt = .now
+            if hapticsEnabled { Haptics.shared.startBreathing(inhale: Self.inhale, exhale: Self.exhale) }
+        }
+        .onChange(of: hapticsEnabled) { _, on in
+            on ? Haptics.shared.startBreathing(inhale: Self.inhale, exhale: Self.exhale) : Haptics.shared.stop()
+        }
+        .onDisappear { Haptics.shared.stop() }
     }
 
-    private var cycle: Double { phases.map(\.seconds).reduce(0, +) }
-
-    private func phase(at date: Date) -> (phase: (name: String, seconds: Double, scale: Double), remaining: Double) {
-        var t = date.timeIntervalSince(startedAt).truncatingRemainder(dividingBy: cycle)
-        for phase in phases {
-            if t < phase.seconds { return (phase, phase.seconds - t) }
-            t -= phase.seconds
-        }
-        return (phases[0], phases[0].seconds)
+    private func phase(at date: Date) -> (inhaling: Bool, progress: Double, remaining: Double) {
+        let t = date.timeIntervalSince(startedAt).truncatingRemainder(dividingBy: cycle)
+        if t < Self.inhale { return (true, t / Self.inhale, Self.inhale - t) }
+        let out = t - Self.inhale
+        return (false, out / Self.exhale, Self.exhale - out)
     }
 
-    /// Grows while breathing in, holds, shrinks while breathing out.
-    private func circleScale(at date: Date) -> Double {
-        let (phase, remaining) = phase(at: date)
-        let progress = 1 - remaining / phase.seconds
-        switch phase.name {
-        case "Breathe in": return 0.45 + 0.55 * progress
-        case "Hold": return 1
-        default: return 1 - 0.55 * progress
-        }
+    /// 0.8 → 1.08 on the inhale, back on the exhale, eased.
+    private func orbScale(inhaling: Bool, progress: Double) -> Double {
+        0.8 + 0.28 * glow(inhaling: inhaling, progress: progress)
     }
 
-    private func stretchText(_ stretch: Stretch, now: Date) -> String {
-        if now >= stretch.end { return "That stretch has passed. Smooth air now." }
-        if now >= stretch.start {
-            return "\(stretch.severity.title) now, about \(Int(stretch.end.timeIntervalSince(now) / 60) + 1) min to go."
-        }
-        return "\(stretch.severity.title) in about \(Int(stretch.start.timeIntervalSince(now) / 60) + 1) min."
+    private func glow(inhaling: Bool, progress: Double) -> Double {
+        let eased = 0.5 - 0.5 * cos(progress * .pi)
+        return inhaling ? eased : 1 - eased
     }
-}
-
-struct ExplainerView: View {
-    let explainer: Explainer
-
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
-                Text(explainer.title).font(.largeTitle.bold())
-                ForEach(explainer.paragraphs, id: \.self) { Text($0) }
-            }
-            .padding()
-            .frame(maxWidth: .infinity, alignment: .leading)
-        }
-        .navigationBarTitleDisplayMode(.inline)
-    }
-}
-
-/// Short, factual explainers. Calm and accurate, no false reassurance.
-struct Explainer: Identifiable, Hashable {
-    let id: String
-    let title: String
-    let paragraphs: [String]
-
-    static let all: [Explainer] = [
-        Explainer(
-            id: "what",
-            title: "What turbulence actually is",
-            paragraphs: [
-                "Turbulence is uneven air: the plane passes through pockets moving at slightly different speeds or directions, like a boat crossing small waves.",
-                "Most of it comes from wind shear near the jet stream (clear-air turbulence), air flowing over mountains, or rising air in and around clouds and storms.",
-                "It feels dramatic because your body is sensitive to small changes. A bump that feels like a drop is usually a change in height of a few metres.",
-            ]),
-        Explainer(
-            id: "built",
-            title: "Planes are built for it",
-            paragraphs: [
-                "Airliners are designed and tested to handle forces well beyond anything turbulence produces in normal flight. Wings are made to flex; that's why you may see them move.",
-                "Turbulence is a comfort issue, not a structural one. Pilots slow down to a 'turbulence penetration speed' that gives the aircraft extra margin.",
-            ]),
-        Explainer(
-            id: "crew",
-            title: "What the crew is doing",
-            paragraphs: [
-                "Pilots get turbulence forecasts and live reports from other aircraft before and during the flight.",
-                "They change altitude or route to find smoother air when they can, and turn on the seatbelt sign early. When flight attendants sit down, it's routine caution, not an emergency.",
-            ]),
-        Explainer(
-            id: "seatbelt",
-            title: "Why the seatbelt matters",
-            paragraphs: [
-                "Almost all turbulence injuries happen to people who aren't buckled in, usually crew or passengers standing or walking.",
-                "Keeping your belt loosely fastened whenever you're seated is the single most effective thing you can do. With it on, even strong bumps are just uncomfortable.",
-            ]),
-        Explainer(
-            id: "levels",
-            title: "Light, moderate, strong: what they feel like",
-            paragraphs: [
-                "Light chop: rhythmic small bumps. Your drink ripples. Very common on most flights.",
-                "Moderate: noticeable jolts. Walking is tricky and drinks can spill. Uncomfortable, still routine for the crew.",
-                "Strong (severe): hard jolts that can push you against your belt. Rare; pilots work hard to avoid it, and your seatbelt keeps you safe.",
-            ]),
-        Explainer(
-            id: "forecast",
-            title: "How BumpCast forecasts",
-            paragraphs: [
-                "Up to two days before your flight, you get an advance forecast. It's labelled as advance because it can still change.",
-                "About 18 hours before departure, it's confirmed with a more detailed forecast along your likely route and altitude, then updated every hour until you fly. We'll notify you when anything changes.",
-                "We assume a direct route and a typical climb, cruise and descent. Your real routing and altitude may differ, and forecasts can miss storm-related bumps, so treat it as a guide, not a guarantee.",
-            ]),
-    ]
 }
