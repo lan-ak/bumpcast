@@ -87,6 +87,5 @@ Monthly cost (assuming half of searches are for flights more than 2 days out):
 
 ## Decision
 
-- [ ] AeroDataBox direct Starter (recommended for the chosen scope)
-- [ ] FlightAware AeroAPI Standard
+**Chosen (2026-10-18): AeroDataBox, direct Starter ($19/mo).** Build waits for design approval. Check US live coverage during the trial before launch.
 - [ ] Other
