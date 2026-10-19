@@ -1,4 +1,4 @@
 from .gfs import GfsSource
-from .gtg import GtgSource
+from .gtg import GtgEnsemble, GtgSource
 
-__all__ = ["GfsSource", "GtgSource"]
+__all__ = ["GfsSource", "GtgEnsemble", "GtgSource"]

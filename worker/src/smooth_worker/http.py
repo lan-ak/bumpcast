@@ -1,3 +1,4 @@
+import time
 from functools import cache
 
 import httpx
@@ -12,3 +13,17 @@ def client() -> httpx.Client:
         follow_redirects=True,
         headers={"User-Agent": "smooth-turbulence-worker/0.1"},
     )
+
+
+def get_with_retry(url: str, attempts: int = 3, **kwargs) -> httpx.Response:
+    """GET that retries dropped connections and server errors (NOMADS does both under load)."""
+    for attempt in range(attempts):
+        try:
+            r = client().get(url, **kwargs)
+            if r.status_code < 500 or attempt == attempts - 1:
+                return r
+        except httpx.TransportError:
+            if attempt == attempts - 1:
+                raise
+        time.sleep(2 * (attempt + 1))
+    raise AssertionError("unreachable")

@@ -7,6 +7,8 @@ from datetime import datetime, timedelta
 import httpx
 
 FORECAST_FIELDS = "id,issued_at,status,source,model_run,grade,score,duration_min,segments,departure_at"
+if os.environ.get("SMOOTH_GLOBAL") == "1":  # needs the worldwide-coverage migration
+    FORECAST_FIELDS += ",noaa_possible,warnings"
 STATUS_EMBED = "status:flight_status(*)"
 # Delayed flights stay in play after their scheduled time; callers filter by expected departure.
 LOOKBACK = timedelta(hours=12)

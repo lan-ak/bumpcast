@@ -356,7 +356,7 @@ def test_run_once_refreshes_status_and_forecasts_the_new_departure(monkeypatch):
     computed = []
     monkeypatch.setattr(smooth_worker, "load_sources", lambda now: [])
     monkeypatch.setattr(
-        smooth_worker.forecast, "compute", lambda o, d, dep, now, sources: computed.append(dep) or smooth_worker.forecast.Forecast("ready")
+        smooth_worker.forecast, "compute", lambda o, d, dep, now, sources, *rest: computed.append(dep) or smooth_worker.forecast.Forecast("ready")
     )
     db, data = FakeDB([flight]), FakeData([flightdata.parse_leg(f) for f in fixture])
 

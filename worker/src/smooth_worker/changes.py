@@ -32,7 +32,10 @@ def when_text(start_min: int) -> str:
     return "right after takeoff" if start_min <= 2 else f"{minutes_text(start_min)} in"
 
 
-def confidence(source: str | None) -> str:
+def confidence(source: str | None, noaa_possible: bool | None = None) -> str:
+    """'early' also covers routes NOAA's detailed forecast will never fully cover: they stay an outlook."""
+    if noaa_possible is False:
+        return "early"
     return "confirmed" if source == "gtg" else "partly confirmed" if source == "mixed" else "early"
 
 
@@ -91,7 +94,8 @@ def _first_look(new: dict) -> list[str]:
 
 
 def _why(old: dict, new: dict, tz: str | None) -> str:
-    if confidence(new.get("source")) != confidence(old.get("source")) and new.get("source") in ("gtg", "mixed"):
+    new_confidence = confidence(new.get("source"), new.get("noaa_possible"))
+    if new_confidence != confidence(old.get("source"), old.get("noaa_possible")) and new_confidence != "early":
         return "Why: your forecast is now confirmed with our detailed forecast."
     run = new.get("model_run")
     if not run:

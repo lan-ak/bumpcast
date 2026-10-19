@@ -13,10 +13,10 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-from . import airports, flightdata, forecast, mapdata, notify, status
+from . import airports, flightdata, forecast, hazards, mapdata, notify, status
 from .apns import Apns
 from .flightdata import FlightData
-from .sources import GfsSource, GtgSource, gfs, gtg
+from .sources import GfsSource, GtgEnsemble, GtgSource, gfs, gtg
 
 log = logging.getLogger("smooth_worker")
 
@@ -27,9 +27,14 @@ GFS_REFRESH = timedelta(hours=6)  # GFS cycles every 6 hours
 HISTORY = timedelta(days=3)
 
 
-def load_sources(now: datetime) -> list:
+def load_sources(now: datetime, global_coverage: bool | None = None) -> list:
+    global_coverage = forecast.GLOBAL_COVERAGE if global_coverage is None else global_coverage
     sources = []
-    if cycle := gtg.latest_cycle(now):
+    if global_coverage:
+        # Blend the newest GTG run with the one before; the older run's files are usually cached already.
+        if cycles := gtg.latest_cycles(now, 2):
+            sources.append(GtgEnsemble([GtgSource(c, CACHE_DIR) for c in cycles]))
+    elif cycle := gtg.latest_cycle(now):
         sources.append(GtgSource(cycle, CACHE_DIR))
     if cycle := gfs.latest_cycle(now):
         sources.append(GfsSource(cycle, CACHE_DIR))
@@ -47,7 +52,10 @@ def cmd_forecast(args: argparse.Namespace) -> None:
     now = datetime.now(UTC)
     origin, destination = airports.lookup(args.origin), airports.lookup(args.destination)
     departure = _parse_time(args.departure)
-    result = forecast.compute(origin, destination, departure, now, load_sources(now))
+    wide = args.global_coverage or forecast.GLOBAL_COVERAGE
+    result = forecast.compute(
+        origin, destination, departure, now, load_sources(now, wide), hazards.load() if wide else None, wide
+    )
     if args.json:
         print(json.dumps(result.to_row(), indent=2))
         return
@@ -63,6 +71,11 @@ def cmd_forecast(args: argparse.Namespace) -> None:
             f"  {seg['start_min']:>4}-{seg['end_min']:<4} min  {seg['severity']:<8} "
             f"peak EDR {seg['peak_edr']:.2f}  {seg['phase']} {seg['altitude_ft']} ft"
         )
+    if result.extended:
+        stretches = ", ".join(f"{s['source']} {s['start_min']}-{s['end_min']}" for s in result.sources)
+        print(f"sources: {stretches}  noaa_possible={result.noaa_possible}")
+        for w in result.warnings:
+            print(f"  warning {w['start_min']:>4}-{w['end_min']:<4} min  {w['severity']:<8} {w['label']}")
 
 
 def is_due(flight: dict, now: datetime, departure: datetime | None = None) -> bool:
@@ -75,8 +88,8 @@ def is_due(flight: dict, now: datetime, departure: datetime | None = None) -> bo
     issued = _parse_time(latest["issued_at"])
     if _parse_time(flight["updated_at"]) > issued:
         return True  # flight was edited
-    if latest["status"] == "out_of_coverage":
-        return False
+    if latest["status"] == "out_of_coverage" and not forecast.GLOBAL_COVERAGE:
+        return False  # with worldwide coverage, earlier "outside coverage" flights get forecast now
     forecast_for = _parse_time(latest["departure_at"]) if latest.get("departure_at") else scheduled
     if forecast_for != departure and latest["status"] != "too_early":
         return True  # the departure moved: forecast the new time now
@@ -117,7 +130,7 @@ def run_once(db, data: FlightData | None = None) -> int:
     now = datetime.now(UTC)
     flights = db.flights_with_latest_forecast(now)
     entitled = entitled_flights(db, flights) if data else set()
-    count, sources = 0, None
+    count, sources, current_hazards = 0, None, None
     for flight in flights:
         try:
             # Status only counts for flights that have live status.
@@ -134,7 +147,9 @@ def run_once(db, data: FlightData | None = None) -> int:
                 result = forecast.Forecast(status="too_early")
             else:
                 sources = sources or load_sources(now)
-                result = forecast.compute(origin, destination, departure, now, sources)
+                if forecast.GLOBAL_COVERAGE and current_hazards is None:
+                    current_hazards = hazards.load()
+                result = forecast.compute(origin, destination, departure, now, sources, current_hazards)
             db.insert_forecast(flight["id"], {**result.to_row(), "departure_at": departure.isoformat()})
             db.prune_forecasts(flight["id"], now - HISTORY)
             count += 1
@@ -203,6 +218,9 @@ def main() -> None:
     p.add_argument("destination")
     p.add_argument("departure", help="Scheduled departure, ISO 8601 UTC, e.g. 2026-10-19T14:00Z")
     p.add_argument("--json", action="store_true")
+    p.add_argument(
+        "--global", dest="global_coverage", action="store_true", help="Worldwide coverage, as with SMOOTH_GLOBAL=1"
+    )
     p.set_defaults(func=cmd_forecast)
 
     p = sub.add_parser("run", help="Keep forecasts in Supabase fresh")

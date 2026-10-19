@@ -74,6 +74,7 @@ def plan(hours_to_departure: float, forecast: dict, sent: list[dict]) -> Plan | 
         sent
         and "noaa" not in sent_milestones
         and forecast.get("source") in ("gtg", "mixed")
+        and forecast.get("noaa_possible") is not False
         and all(n.get("source") not in ("gtg", "mixed") for n in sent)
     ):
         return Plan("noaa", "confirmed", pro_only=True)
@@ -96,7 +97,7 @@ def compose(p: Plan, flight: dict, forecast: dict, previous: dict | None, tz: st
     route = f"{origin.iata}→{destination.iata}"
     grade = changes.grade_title(forecast.get("grade"))
     points = changes.describe(previous if p.kind != "ready" else None, forecast, tz)
-    early = changes.confidence(forecast.get("source")) == "early"
+    early = changes.confidence(forecast.get("source"), forecast.get("noaa_possible")) == "early"
 
     if p.kind == "ready":
         title = f"Your {route} forecast is ready"

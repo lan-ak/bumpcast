@@ -15,6 +15,7 @@ import numpy as np
 from scipy.spatial import cKDTree
 
 from ..http import client
+from ..severity import SEVERE_EDR
 from .grid import lonlat_to_xyz
 
 log = logging.getLogger(__name__)
@@ -36,7 +37,14 @@ def _file(cycle: datetime, fhr: int) -> str:
 
 def latest_cycle(now: datetime | None = None) -> datetime | None:
     """Newest cycle whose f018 file is published."""
+    cycles = latest_cycles(now, 1)
+    return cycles[0] if cycles else None
+
+
+def latest_cycles(now: datetime | None = None, count: int = 2) -> list[datetime]:
+    """The newest `count` cycles whose f018 file is published, newest first."""
     now = now or datetime.now(UTC)
+    found: list[datetime] = []
     for days_back in (0, 1):
         day = (now - timedelta(days=days_back)).date()
         listing = client().get(f"{BASE}/dafs.{day:%Y%m%d}/")
@@ -49,9 +57,10 @@ def latest_cycle(now: datetime | None = None) -> datetime | None:
                 if name.startswith("dafs.t") and name.endswith(f".gtg.3km.conus.f{MAX_FHR:03d}.grib2")
             }
         )
-        if cycles:
-            return datetime(day.year, day.month, day.day, cycles[-1], tzinfo=UTC)
-    return None
+        found += [datetime(day.year, day.month, day.day, h, tzinfo=UTC) for h in reversed(cycles)]
+        if len(found) >= count:
+            break
+    return found[:count]
 
 
 @dataclass
@@ -75,9 +84,14 @@ class GtgSource:
         self._lats: np.ndarray | None = None
         self._lons: np.ndarray | None = None
 
+    horizon_h = MAX_FHR
+
     def covers(self, valid: datetime) -> bool:
         fhr = round((valid - self.cycle).total_seconds() / 3600)
         return 0 <= fhr <= MAX_FHR
+
+    def covers_point(self, lat: float, lon: float) -> bool:
+        return self.in_domain(lat, lon)
 
     def _download(self, fhr: int) -> Path:
         path = self.cache_dir / f"{self.cycle:%Y%m%d%H}_f{fhr:03d}.grib2"
@@ -163,3 +177,41 @@ class GtgSource:
         n = NEIGHBOURHOOD
         window = field.edr[:, max(j - n, 0) : j + n + 1, max(i - n, 0) : i + n + 1].max(axis=(1, 2))
         return float(np.interp(altitude_ft, field.levels_ft, window.astype(np.float32)))
+
+
+class GtgEnsemble:
+    """The newest GTG run blended with the one before (a "lagged ensemble").
+
+    Consecutive hourly runs disagree a little; blending them keeps a forecast from
+    jumping around between updates. The newest run still decides when it calls
+    severe, so averaging never hides it.
+    """
+
+    name = "gtg"
+    horizon_h = MAX_FHR
+    WEIGHTS = (0.65, 0.35)
+
+    def __init__(self, members: list[GtgSource]):
+        self.members = members
+        self.newest = members[0]
+        self.cycle = self.newest.cycle
+
+    def covers(self, valid: datetime) -> bool:
+        return self.newest.covers(valid)
+
+    def covers_point(self, lat: float, lon: float) -> bool:
+        return self.newest.covers_point(lat, lon)
+
+    def in_domain(self, lat: float, lon: float) -> bool:
+        return self.newest.in_domain(lat, lon)
+
+    def edr(self, lat: float, lon: float, altitude_ft: float, valid: datetime) -> float:
+        newest = self.newest.edr(lat, lon, altitude_ft, valid)
+        if newest >= SEVERE_EDR:
+            return newest
+        total, weight = newest * self.WEIGHTS[0], self.WEIGHTS[0]
+        for member, w in zip(self.members[1:], self.WEIGHTS[1:]):
+            if member.covers(valid):
+                total += member.edr(lat, lon, altitude_ft, valid) * w
+                weight += w
+        return total / weight

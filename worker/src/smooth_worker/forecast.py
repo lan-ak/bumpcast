@@ -1,22 +1,33 @@
 """Combine a flight profile with turbulence data into a grade and a timeline."""
 
+import os
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from typing import Protocol
 
+from . import hazards as hazards_mod
 from . import severity
 from .airports import Airport
 from .route import RoutePoint, build_profile
 
 FORECAST_WINDOW = timedelta(hours=48)
 
-# Rough box around the US GTG (HRRR) domain, used before any grid is loaded.
+# Worldwide forecasts (per-source coverage, warnings, per-stretch sources). Off until the
+# app ships the matching screens and the forecasts table has the new columns.
+GLOBAL_COVERAGE = os.environ.get("SMOOTH_GLOBAL") == "1"
+
+# Rough box around the US GTG (HRRR) domain: the whole coverage area while GLOBAL_COVERAGE is off.
 COVERAGE_LAT = (22.0, 52.0)
 COVERAGE_LON = (-128.0, -64.0)
 
 # A stretch of bumps ends after this many smooth minutes.
 SEGMENT_GAP_MIN = 2
 MIN_SEGMENT_MIN = 2
+
+# Over GTG's last hours, ease towards the GFS outlook so the forecast doesn't jump where
+# one hands over to the other. GTG keeps most of the weight: it's the better forecast.
+HANDOFF_HOURS = 3
+HANDOFF_MIN_WEIGHT = 0.75
 
 
 class Source(Protocol):
@@ -39,9 +50,14 @@ class Forecast:
     segments: list[dict] = field(default_factory=list)
     samples: list[dict] = field(default_factory=list)
     route: list[list[float]] = field(default_factory=list)
+    # Worldwide fields, written only when GLOBAL_COVERAGE is on.
+    sources: list[dict] = field(default_factory=list)  # [{start_min, end_min, source}]
+    warnings: list[dict] = field(default_factory=list)  # [{start_min, end_min, kind, hazard, severity, label}]
+    noaa_possible: bool | None = None  # can GTG ever cover the whole route?
+    extended: bool = False
 
     def to_row(self) -> dict:
-        return {
+        row = {
             "status": self.status,
             "source": self.source,
             "model_run": self.model_run.isoformat() if self.model_run else None,
@@ -53,6 +69,9 @@ class Forecast:
             "samples": self.samples,
             "route": self.route,
         }
+        if self.extended:
+            row |= {"sources": self.sources, "warnings": self.warnings, "noaa_possible": self.noaa_possible}
+        return row
 
 
 def in_coverage(points: list[RoutePoint]) -> bool:
@@ -61,33 +80,78 @@ def in_coverage(points: list[RoutePoint]) -> bool:
     )
 
 
+def _covers_point(source: Source, lat: float, lon: float) -> bool:
+    check = getattr(source, "covers_point", None)
+    return check(lat, lon) if check else True
+
+
+def _handoff_weight(source: Source, valid: datetime) -> float:
+    """GTG's share near the end of its horizon (1 = GTG only)."""
+    horizon = getattr(source, "horizon_h", None)
+    if horizon is None:
+        return 1.0
+    hours_left = horizon - (valid - source.cycle).total_seconds() / 3600
+    if hours_left >= HANDOFF_HOURS:
+        return 1.0
+    return HANDOFF_MIN_WEIGHT + (1 - HANDOFF_MIN_WEIGHT) * max(hours_left, 0) / HANDOFF_HOURS
+
+
 def compute(
     origin: Airport,
     destination: Airport,
     departure: datetime,
     now: datetime,
     sources: list[Source],
+    hazards: list | None = None,
+    global_coverage: bool | None = None,
 ) -> Forecast:
-    """`sources` in priority order (most accurate first); each minute uses the first that covers it."""
+    """`sources` in priority order (most accurate first); each minute uses the first that covers it.
+
+    With global coverage a source must cover the minute's place as well as its time, and
+    `hazards` (warnings and pilot reports) can raise any minute they cover.
+    """
+    global_coverage = GLOBAL_COVERAGE if global_coverage is None else global_coverage
     if departure - now > FORECAST_WINDOW:
-        return Forecast(status="too_early")
+        return Forecast(status="too_early", extended=global_coverage)
 
     points = build_profile(origin, destination, departure)
-    if not in_coverage(points):
+    if not global_coverage and not in_coverage(points):
         return Forecast(status="out_of_coverage")
+    hazards = hazards or []
 
-    samples, used = [], set()
+    samples, used, per_minute, flagged = [], set(), [], []
     for p in points:
-        source = next((s for s in sources if s.covers(p.time)), None)
-        if source is None:
+        if global_coverage:
+            candidates = [s for s in sources if s.covers(p.time) and _covers_point(s, p.lat, p.lon)]
+        else:
+            candidates = [s for s in sources if s.covers(p.time)]
+        if not candidates:
+            if global_coverage:
+                return Forecast(status="out_of_coverage", extended=True)
             raise RuntimeError(f"No turbulence data covers {p.time.isoformat()}")
+        source = candidates[0]
         used.add(source)
+        per_minute.append(source.name)
         edr = source.edr(p.lat, p.lon, p.altitude_ft, p.time)
+        weight = _handoff_weight(source, p.time)
+        if weight < 1 and len(candidates) > 1:
+            edr = weight * edr + (1 - weight) * candidates[1].edr(p.lat, p.lon, p.altitude_ft, p.time)
+        hazard = hazards_mod.strongest(hazards, p.lat, p.lon, p.altitude_ft, p.time) if hazards else None
+        if hazard and hazard.floor > edr:
+            edr = hazard.floor
+        flagged.append(hazard)
         samples.append({"min": p.minute, "edr": round(edr, 3), "altitude_ft": p.altitude_ft, "phase": p.phase})
 
     segments = _segments(samples)
     grade, score = _grade(samples)
     primary = min(used, key=sources.index)
+    gtg = next((s for s in sources if s.name == "gtg"), None)
+    if not global_coverage:
+        noaa_possible = True
+    elif gtg is not None and hasattr(gtg, "in_domain"):
+        noaa_possible = all(gtg.in_domain(p.lat, p.lon) for p in points)
+    else:
+        noaa_possible = in_coverage(points)
     return Forecast(
         status="ready",
         source=primary.name if len(used) == 1 else "mixed",
@@ -101,7 +165,28 @@ def compute(
         route=[[round(p.lat, 3), round(p.lon, 3)] for p in points[:: max(len(points) // 40, 1)]] + [
             [round(points[-1].lat, 3), round(points[-1].lon, 3)]
         ],
+        sources=_stretches([(p.minute, name) for p, name in zip(points, per_minute)], key=lambda v: {"source": v}),
+        warnings=_stretches(
+            [(p.minute, h) for p, h in zip(points, flagged)],
+            key=lambda h: {"kind": h.kind, "hazard": h.hazard, "severity": h.severity, "label": h.label},
+        ),
+        noaa_possible=noaa_possible,
+        extended=global_coverage,
     )
+
+
+def _stretches(values: list[tuple[int, object]], key) -> list[dict]:
+    """Runs of consecutive minutes with the same value (None = no stretch)."""
+    out: list[dict] = []
+    for minute, value in values:
+        if value is None:
+            continue
+        fields = key(value)
+        if out and out[-1]["end_min"] == minute - 1 and all(out[-1][k] == v for k, v in fields.items()):
+            out[-1]["end_min"] = minute
+        else:
+            out.append({"start_min": minute, "end_min": minute, **fields})
+    return out
 
 
 def _segments(samples: list[dict]) -> list[dict]:
