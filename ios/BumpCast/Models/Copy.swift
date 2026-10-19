@@ -76,7 +76,13 @@ extension Forecast.Confidence {
         case .early: "Advance forecast"
         case .partly: "Partly confirmed"
         case .confirmed: "Confirmed forecast"
+        case .globalOutlook: "Global outlook"
         }
+    }
+
+    /// The badge carries a BETA tag on global outlooks.
+    var isBeta: Bool {
+        if case .globalOutlook = self { true } else { false }
     }
 
     var symbol: String {
@@ -84,18 +90,19 @@ extension Forecast.Confidence {
         case .early: "binoculars"
         case .partly: "checkmark.seal"
         case .confirmed: "checkmark.seal.fill"
+        case .globalOutlook: "globe"
         }
     }
 
     var color: Color {
         switch self {
-        case .early: Theme.secondaryInk
+        case .early, .globalOutlook: Theme.secondaryInk
         case .partly, .confirmed: Theme.accent
         }
     }
 
     /// One line under the grade, for everyone: when the forecast firms up (the badge says which kind).
-    func statusLine(now: Date = .now) -> String {
+    func statusLine(now: Date = .now, durationMin: Int? = nil) -> String {
         switch self {
         case .early(let expected):
             guard expected > now else { return "Being confirmed now" }
@@ -104,6 +111,11 @@ extension Forecast.Confidence {
             return "Fully confirmed within the hour"
         case .confirmed:
             return "Updated hourly until you fly"
+        case .globalOutlook(let confirmed):
+            guard let text = Self.confirmedText(confirmed, durationMin: durationMin) else {
+                return "Updated every 6 hours until you fly"
+            }
+            return "\(text) The rest is a beta outlook, updated every 6 hours."
         }
     }
 
@@ -117,6 +129,8 @@ extension Forecast.Confidence {
             return "Partly confirmed"
         case .confirmed:
             return "Confirmed"
+        case .globalOutlook:
+            return "Global outlook · beta"
         }
     }
 
@@ -125,12 +139,36 @@ extension Forecast.Confidence {
         case .early(let expected):
             return "An early look at your flight, so it can still change. "
                 + "We'll confirm it \(expected.dayAndTime) with a more detailed forecast, and let you know if anything changes."
-        case .partly(let minutes):
-            return "The first \(minutes.durationText) of your flight is confirmed. "
+        case .partly(let confirmed):
+            return "\(Self.confirmedText(confirmed) ?? "Part of your flight is confirmed.") "
                 + "The rest is still an advance forecast (faded in the chart) and will be confirmed closer to departure, usually within the hour."
         case .confirmed:
             return "Confirmed with our detailed forecast for your route and altitude. "
                 + "We keep updating it every hour until you fly."
+        case .globalOutlook:
+            return GlobalOutlookCopy.body
+        }
+    }
+
+    /// "First 41 min confirmed." · "First 41 min and last 30 min confirmed." ·
+    /// "Confirmed from 1 h 10 min to 2 h 05 min in." · "3 stretches confirmed, 2 h 15 min in total."
+    /// `nil` when nothing is confirmed. Pass the flight's length to recognise "last".
+    static func confirmedText(_ stretches: [ClosedRange<Int>], durationMin: Int? = nil) -> String? {
+        guard let first = stretches.first else { return nil }
+        let isLast = { (r: ClosedRange<Int>) in durationMin.map { r.upperBound >= $0 } ?? false }
+        func length(_ r: ClosedRange<Int>) -> String { (r.count).durationText }
+        switch stretches.count {
+        case 1 where first.lowerBound == 0:
+            return "First \(length(first)) confirmed."
+        case 1 where isLast(first):
+            return "Last \(length(first)) confirmed."
+        case 1:
+            return "Confirmed from \(first.lowerBound.clockText) to \((first.upperBound + 1).clockText) in."
+        case 2 where first.lowerBound == 0 && isLast(stretches[1]):
+            return "First \(length(first)) and last \(length(stretches[1])) confirmed."
+        default:
+            let total = stretches.map(\.count).reduce(0, +)
+            return "\(stretches.count) stretches confirmed, \(total.durationText) in total."
         }
     }
 }
@@ -185,5 +223,16 @@ extension Int {
         let h = self / 60, m = self % 60
         if h == 0 { return "\(m) min" }
         return m == 0 ? "\(h) h" : "\(h) h \(m) min"
+    }
+
+    /// A point in the flight, minutes zero-padded once there are hours: 125 -> "2 h 05 min", 70 -> "1 h 10 min".
+    var clockText: String {
+        let h = self / 60, m = self % 60
+        return h == 0 ? "\(m) min" : "\(h) h \(String(format: "%02d", m)) min"
+    }
+
+    /// Outlook times are approximate: the nearest 10 min under an hour, the nearest 30 min above.
+    var roughMinutes: Int {
+        self < 60 ? Swift.max(10, (self + 5) / 10 * 10) : (self + 15) / 30 * 30
     }
 }

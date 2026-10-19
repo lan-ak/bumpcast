@@ -35,6 +35,10 @@ enum Services {
     /// Supabase when configured in Secrets.xcconfig, otherwise demo mode.
     static let flights: FlightService = {
         let info = Bundle.main.infoDictionary ?? [:]
+        #if DEBUG
+            // Development: `-demo` uses the bundled demo data even when Supabase is configured.
+            if ProcessInfo.processInfo.arguments.contains("-demo") { return DemoFlightService() }
+        #endif
         if let urlString = info["SupabaseURL"] as? String, let url = URL(string: urlString), url.host() != nil,
             let key = info["SupabaseAnonKey"] as? String, !key.isEmpty
         {
@@ -194,14 +198,22 @@ actor DemoFlightService: FlightService {
             Flight(id: UUID(), origin: "KORD", destination: "KDEN", departureAt: soon.addingTimeInterval(4 * 86400)),
             Flight(id: UUID(), origin: "CYYZ", destination: "EGLL", departureAt: soon.addingTimeInterval(86400)),
         ]
+        // `-demoGlobal`: an outlook-only route with an official warning, for the global outlook (beta) screens.
+        if ProcessInfo.processInfo.arguments.contains("-demoGlobal") {
+            stored.append(Flight(id: UUID(), origin: "SBGR", destination: "LPPT", departureAt: soon.addingTimeInterval(2 * 3600)))
+        }
     }
 
-    static let sampleForecast: Forecast = {
-        let url = Bundle.main.url(forResource: "sample_forecast", withExtension: "json")!
+    static let sampleForecast: Forecast = load("sample_forecast")
+
+    static func load(_ name: String) -> Forecast {
+        let url = Bundle.main.url(forResource: name, withExtension: "json")!
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
-        return try! decoder.decode(Forecast.self, from: Data(contentsOf: url))
-    }()
+        var forecast = try! decoder.decode(Forecast.self, from: Data(contentsOf: url))
+        forecast.issuedAt = forecast.issuedAt ?? .now
+        return forecast
+    }
 
     func signIn() async throws -> UUID { UUID(uuidString: "00000000-0000-4000-8000-000000000000")! }
 
@@ -243,9 +255,12 @@ actor DemoFlightService: FlightService {
             return nil
         }
         if !Coverage.covers(flight) {
-            return Forecast(
-                status: .outOfCoverage, issuedAt: .now, source: nil, modelRun: nil, grade: nil, score: nil,
-                durationMin: nil, cruiseFt: nil, segments: [], samples: [], route: [])
+            // Real worker output: JFK→LHR (confirmed over the US, outlook after) and GRU→LIS
+            // (outlook only, with an official thunderstorm warning).
+            let startsInUS = flight.originAirport.map {
+                Coverage.latitude.contains($0.lat) && Coverage.longitude.contains($0.lon)
+            } ?? false
+            return Self.load(startsInUS ? "sample_partly_outlook" : "sample_global_outlook")
         }
         return Self.sampleForecast
     }

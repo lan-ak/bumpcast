@@ -14,6 +14,7 @@ struct TurbulenceMapView: View {
     @Environment(Router.self) private var router
     @Environment(\.verticalSizeClass) private var verticalSizeClass
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.scenePhase) private var scenePhase
     @AppStorage("haptics.enabled") private var hapticsEnabled = true
 
     @State private var level = 34000
@@ -73,6 +74,14 @@ struct TurbulenceMapView: View {
             .task { await loadAll() }
             .task(id: showReports) { if showReports { await loadReports() } }
             .onChange(of: route?.flightID) { openOnRoute() }
+            // A refreshed forecast means a newer model run: pull fresh grids too.
+            .onChange(of: forecast?.issuedAt ?? forecast?.modelRun) { Task { await loadAll(maxAge: 0) } }
+            .onChange(of: scenePhase) { _, phase in
+                if phase == .active { Task { await loadAll(maxAge: 5 * 60) } }
+            }
+            .onChange(of: cruiseLevel) { _, cruise in
+                if let cruise { level = cruise }
+            }
             .onChange(of: scope) { reframe() }
             .onChange(of: isLandscape) { reframe() }
             .sheet(item: $selectedReport) { report in
@@ -80,7 +89,6 @@ struct TurbulenceMapView: View {
                     selectedReport = nil
                     router.openFlight(id)
                 }
-                .font(.bcBody)
                 .presentationDetents([.medium, .large])
             }
             .sheet(isPresented: $showTeaser) {
@@ -88,7 +96,6 @@ struct TurbulenceMapView: View {
                     showTeaser = false
                     paywalls.unlock(.pilotReportsLocked) { showReports = true }
                 }
-                .font(.bcBody)
                 .presentationDetents([.medium])
             }
         }
@@ -178,14 +185,14 @@ struct TurbulenceMapView: View {
                     HStack(spacing: 6) {
                         Circle()
                             .fill(severity.map(Theme.color) ?? .clear)
-                            .strokeBorder(severity == nil ? Color.secondary.opacity(0.5) : .white.opacity(0.8), lineWidth: severity == nil ? 1 : 1.5)
+                            .strokeBorder(severity == nil ? Theme.secondaryInk.opacity(0.5) : Theme.mapHalo.opacity(0.8), lineWidth: severity == nil ? 1 : 1.5)
                             .frame(width: 10, height: 10)
                         Text(Self.ladderLabel(height))
                             .font(.bcCaptionStrong)
                             .monospacedDigit()
                     }
                     .frame(width: 72, height: isLandscape ? 34 : 40)
-                    .foregroundStyle(height == level ? Theme.onAccent : Color.primary)
+                    .foregroundStyle(height == level ? Theme.onAccent : Theme.ink)
                     .background {
                         if height == level {
                             Capsule().fill(Theme.accent)
@@ -396,11 +403,13 @@ struct TurbulenceMapView: View {
         return route.mapRect(range)
     }
 
-    private func loadAll() async {
-        if let loadedAt, loadedAt > .now.addingTimeInterval(-30 * 60), !layers.isEmpty {
+    private func loadAll(maxAge: TimeInterval = 30 * 60) async {
+        if let loadedAt, loadedAt > .now.addingTimeInterval(-maxAge), !layers.isEmpty {
             openOnRoute()
             return
         }
+        guard !isLoading else { return }
+        let selectedTime = layer?.grid.validAt
         isLoading = true
         defer { isLoading = false }
         let service = store.service
@@ -419,7 +428,12 @@ struct TurbulenceMapView: View {
         } catch {
             loadFailed = true
         }
-        if openedFlightID == nil { timeIndex = nowIndex }
+        // Keep the hour the user was looking at if the new run still has it.
+        if openedFlightID == nil {
+            timeIndex = nowIndex
+        } else if let selectedTime {
+            timeIndex = max(nowIndex, times.firstIndex { $0.grid.validAt == selectedTime } ?? nowIndex)
+        }
         openOnRoute()
     }
 
@@ -452,7 +466,7 @@ private struct Chip: View {
             .font(.bcSubheadlineStrong)
             .padding(.horizontal, 14)
             .frame(minHeight: 36)
-            .foregroundStyle(selected ? Theme.onAccent : Color.primary)
+            .foregroundStyle(selected ? Theme.onAccent : Theme.ink)
             .background { if selected { Capsule().fill(Theme.accent) } }
             .glassEffect(selected ? .identity : .regular, in: .capsule)
             .contentShape(.capsule)
@@ -514,7 +528,7 @@ private struct PilotReportSheet: View {
             }
             .padding(20)
         }
-        .background { SkyBackground(sky: .day) }
+        .skyBackground(.day)
     }
 
     private var ago: String {
@@ -563,7 +577,7 @@ private struct PilotReportsTeaser: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Image(systemName: "dot.radiowaves.up.forward")
-                .font(.system(size: 34, weight: .light))
+                .font(.bcSymbolHero)
                 .foregroundStyle(Theme.accent)
                 .accessibilityHidden(true)
             Text("See what pilots are feeling right now").font(.bcTitle)
@@ -583,6 +597,6 @@ private struct PilotReportsTeaser: View {
                 .tint(Theme.accent)
         }
         .padding(24)
-        .background { SkyBackground(sky: .day) }
+        .skyBackground(.day)
     }
 }

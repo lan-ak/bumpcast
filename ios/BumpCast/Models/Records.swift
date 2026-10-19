@@ -133,11 +133,14 @@ struct ProfileRecord: Codable, Sendable {
     let isPro: Bool
     let notificationsEnabled: Bool
     let timezone: String
+    /// Left out until the person answers, so profiles keep saving before the beta column exists.
+    var globalBeta: Bool? = nil
 
     enum CodingKeys: String, CodingKey {
         case timezone
         case isPro = "is_pro"
         case notificationsEnabled = "notifications_enabled"
+        case globalBeta = "global_beta"
     }
 }
 

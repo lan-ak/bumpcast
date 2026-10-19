@@ -47,8 +47,7 @@ struct CalmView: View {
                 }
                 .scrollBounceBehavior(.basedOnSize)
             }
-            .background { SkyBackground(sky: .night) }
-            .onSky(.night)
+            .skyBackground(.night)
             .toolbar(.hidden, for: .navigationBar)
             .toolbarColorScheme(.dark, for: .navigationBar)
         }
@@ -58,10 +57,10 @@ struct CalmView: View {
     private func orb(diameter: CGFloat) -> some View {
         Circle()
             .fill(RadialGradient(
-                colors: [Color(hex: 0xF4FBFD), Color(hex: 0xA8DBE3), Color(hex: 0x4F9BAB)],
+                colors: Theme.orb,
                 center: UnitPoint(x: 0.38, y: 0.32), startRadius: 0, endRadius: diameter * 0.6))
             .frame(width: diameter, height: diameter)
-            .shadow(color: Color(hex: 0x8FD7E0).opacity(0.35), radius: diameter * 0.2)
+            .shadow(color: Theme.orbGlow.opacity(0.35), radius: diameter * 0.2)
             .scaleEffect(reduceMotion ? 1 : (breathing ? 1 : 0.88))
             .opacity(reduceMotion ? (breathing ? 1 : 0.7) : 1)
             .animation(.easeInOut(duration: 5).repeatForever(autoreverses: true), value: breathing)
@@ -112,7 +111,8 @@ struct NextStretch {
     @MainActor
     static func current(store: FlightStore, inFlight: InFlight, now: Date = .now) -> NextStretch? {
         for flight in store.flights {
-            guard let forecast = store.forecasts[flight.id], inFlight.isFlying(flight, forecast: forecast, now: now) else { continue }
+            guard let forecast = store.forecasts[flight.id], forecast.isShown, inFlight.isFlying(flight, forecast: forecast, now: now)
+            else { continue }
             let takeoff = inFlight.effectiveTakeoff(of: flight)
             let minute = Int(now.timeIntervalSince(takeoff) / 60)
             guard let segment = forecast.segments.first(where: { $0.endMin >= minute }) else { return nil }
@@ -187,8 +187,7 @@ struct BreathingView: View {
             }
             .padding(28)
         }
-        .background { SkyBackground(sky: .night) }
-        .onSky(.night)
+        .skyBackground(.night)
         .onAppear {
             startedAt = .now
             if hapticsEnabled { Haptics.shared.startBreathing(inhale: Self.inhale, exhale: Self.exhale) }

@@ -39,7 +39,7 @@ def confidence(source: str | None, noaa_possible: bool | None = None) -> str:
     return "confirmed" if source == "gtg" else "partly confirmed" if source == "mixed" else "early"
 
 
-def _overlaps(a: dict, b: dict, slack: int = 5) -> bool:
+def overlaps(a: dict, b: dict, slack: int = 5) -> bool:
     return a["start_min"] <= b["end_min"] + slack and b["start_min"] <= a["end_min"] + slack
 
 
@@ -58,7 +58,7 @@ def describe(old: dict | None, new: dict, tz: str | None = None) -> list[str]:
 
     old_segs, new_segs = old.get("segments") or [], new.get("segments") or []
     for seg in new_segs:
-        match = next((o for o in old_segs if _overlaps(o, seg)), None)
+        match = next((o for o in old_segs if overlaps(o, seg)), None)
         label = SEVERITY_TITLES.get(seg["severity"], seg["severity"])
         if match is None:
             points.append(f"New: {label} {when_text(seg['start_min'])}, while {PHASES.get(seg['phase'], 'cruising')}.")
@@ -66,7 +66,7 @@ def describe(old: dict | None, new: dict, tz: str | None = None) -> list[str]:
             was = SEVERITY_TITLES.get(match["severity"], match["severity"])
             points.append(f"The bumps {when_text(seg['start_min'])} are now {label} (were {was}).")
     for seg in old_segs:
-        if not any(_overlaps(seg, n) for n in new_segs):
+        if not any(overlaps(seg, n) for n in new_segs):
             label = SEVERITY_TITLES.get(seg["severity"], seg["severity"])
             points.append(f"Eased: the {label} {when_text(seg['start_min'])} is no longer expected.")
     def shape(segs: list[dict]) -> list[tuple]:

@@ -14,7 +14,7 @@ struct LearnView: View {
                 }
                 .padding()
             }
-            .background { SkyBackground(sky: Sky(date: .now)) }
+            .skyBackground(Sky(date: .now))
             .navigationTitle("Learn")
             .navigationDestination(for: Explainer.self) { ExplainerView(explainer: $0) }
         }
@@ -83,7 +83,7 @@ struct ExplainerView: View {
             }
             .padding()
         }
-        .background { SkyBackground(sky: Sky(date: .now)) }
+        .skyBackground(Sky(date: .now))
         .navigationBarTitleDisplayMode(.inline)
     }
 

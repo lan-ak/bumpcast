@@ -56,7 +56,7 @@ struct NativeOnboardingView: View {
             ZStack(alignment: .bottom) {
                 LinearGradient(colors: palette.sky, startPoint: .top, endPoint: .bottom)
                 if isNight {
-                    SkyBackground(sky: .night)
+                    Sky.night.gradient
                 }
                 sunrise(width: geo.size.width)
             }
@@ -90,9 +90,9 @@ struct NativeOnboardingView: View {
                     go(to: Step(rawValue: step.rawValue - 1) ?? .welcome, forward: false)
                 } label: {
                     Image(systemName: "chevron.left")
-                        .font(.system(size: 17, weight: .semibold))
+                        .font(.bcSymbolControl)
                         .frame(width: 44, height: 44)
-                        .background(.white.opacity(isNight ? 0.1 : 0.6), in: .circle)
+                        .skySurface(Circle())
                 }
                 .accessibilityLabel("Back")
                 ProgressView(value: Double(step.rawValue), total: Double(Step.allCases.count - 1))
@@ -334,28 +334,24 @@ private struct OptionRow: View {
     let isSelected: Bool
     var multi = false
     let action: () -> Void
-    @Environment(\.colorScheme) private var colorScheme
-
-    private var fill: Double {
-        colorScheme == .dark ? (isSelected ? 0.16 : 0.08) : (isSelected ? 0.95 : 0.6)
-    }
 
     var body: some View {
         Button(action: action) {
             HStack(spacing: 12) {
                 if multi {
                     Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                        .font(.system(size: 22))
+                        .font(.bcSymbolSelect)
                         .foregroundStyle(Theme.accent)
                 }
                 Text(label).font(.bcBody).frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding(.horizontal, 16)
             .frame(minHeight: 52)
-            .background(.white.opacity(fill), in: .rect(cornerRadius: 18, style: .continuous))
+            .skySurface(.rect(cornerRadius: 18, style: .continuous), raised: isSelected)
             .overlay {
-                RoundedRectangle(cornerRadius: 18, style: .continuous)
-                    .strokeBorder(isSelected ? Theme.accent : .white.opacity(colorScheme == .dark ? 0.12 : 0.7), lineWidth: isSelected ? 2 : 0.5)
+                if isSelected {
+                    RoundedRectangle(cornerRadius: 18, style: .continuous).strokeBorder(Theme.accent, lineWidth: 2)
+                }
             }
         }
         .buttonStyle(.plain)
@@ -368,7 +364,6 @@ private struct OptionRow: View {
 private struct PrimaryButton: View {
     let title: String
     let action: () -> Void
-    @Environment(\.colorScheme) private var colorScheme
 
     init(_ title: String, action: @escaping () -> Void) {
         self.title = title
@@ -379,7 +374,7 @@ private struct PrimaryButton: View {
         Button(action: action) {
             Text(title)
                 .font(.bcHeadline)
-                .foregroundStyle(colorScheme == .dark ? Color(hex: 0x0B1322) : .white)
+                .foregroundStyle(Theme.onAccent)
                 .frame(maxWidth: .infinity, minHeight: 54)
         }
         .buttonStyle(.borderedProminent)
@@ -564,7 +559,7 @@ private struct CalmLineScene: View {
                     path.move(to: CGPoint(x: sunX - 14, y: horizon + 47))
                     path.addLine(to: CGPoint(x: sunX + 14, y: horizon + 47))
                 }
-                .stroke(.white.opacity(0.7), style: StrokeStyle(lineWidth: 5, lineCap: .round))
+                .stroke(palette.glint, style: StrokeStyle(lineWidth: 5, lineCap: .round))
                 Path { path in
                     path.move(to: CGPoint(x: 50, y: horizon))
                     path.addCurve(to: CGPoint(x: 118, y: horizon - 36), control1: CGPoint(x: 80, y: horizon), control2: CGPoint(x: 92, y: horizon - 36))
@@ -579,9 +574,4 @@ private struct CalmLineScene: View {
 
 #Preview {
     NativeOnboardingView()
-}
-
-extension Theme {
-    /// The icon's line colour (DESIGN_SPEC §8), for onboarding eyebrows.
-    static let brandLine = Color(light: 0x1F5F6E, dark: 0x8FD7E0)
 }

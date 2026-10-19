@@ -2,15 +2,15 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Familjen+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: review board for Lanre. Each section states the rule, then shows phone mockups in a wrapping row; a state gallery up top shows every badge and status line side by side. */
+/* Layout: review board for Lanre. Rules first, then phone mockups per area; the outlook must look and read rougher than a confirmed forecast. */
 :root {
-  --bg: #e9eff3; --panel: #ffffff; --fg: #15253a; --fg2: #4b5d72; --rule: #cdd9e2; --accent: #2a7385; --flag: #8a5a12;
+  --bg: #e9eff3; --panel: #ffffff; --fg: #15253a; --fg2: #4b5d72; --rule: #cdd9e2; --accent: #2a7385;
   --display: "Familjen Grotesk", "Avenir Next", system-ui, sans-serif;
   --body: "Atkinson Hyperlegible", "Helvetica Neue", system-ui, sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
 }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #0e1724; --panel: #152233; --fg: #e3ecf4; --fg2: #a3b4c6; --rule: #2a3c51; --accent: #6fbccc; --flag: #e0b54e; color-scheme: dark } }
-:root[data-theme="dark"] { --bg: #0e1724; --panel: #152233; --fg: #e3ecf4; --fg2: #a3b4c6; --rule: #2a3c51; --accent: #6fbccc; --flag: #e0b54e; color-scheme: dark }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #0e1724; --panel: #152233; --fg: #e3ecf4; --fg2: #a3b4c6; --rule: #2a3c51; --accent: #6fbccc; color-scheme: dark } }
+:root[data-theme="dark"] { --bg: #0e1724; --panel: #152233; --fg: #e3ecf4; --fg2: #a3b4c6; --rule: #2a3c51; --accent: #6fbccc; color-scheme: dark }
 body { background: var(--bg); color: var(--fg); font: 16px/1.55 var(--body); }
 .wrap { max-width: 1320px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 44px 72px; display: grid; gap: 56px; }
 h1, h2 { font-family: var(--display); margin: 0; line-height: 1.15; text-wrap: balance; }
@@ -18,7 +18,7 @@ h1 { font-size: clamp(2rem, 4.5vw, 3rem); letter-spacing: -0.02em; }
 h2 { font-size: 1.7rem; }
 p { margin: 0; }
 .eb { font: 500 0.75rem/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
-.prose { max-width: 72ch; color: var(--fg2); }
+.prose { max-width: 74ch; color: var(--fg2); }
 section { display: grid; gap: 20px; }
 .head { display: grid; gap: 8px; }
 .row { display: flex; flex-wrap: wrap; gap: 28px; align-items: flex-start; }
@@ -26,29 +26,28 @@ figure { margin: 0; display: grid; gap: 10px; width: 300px; max-width: 100%; }
 figcaption { font-size: 0.86rem; color: var(--fg2); }
 figcaption b { color: var(--fg); font-family: var(--display); font-size: 0.95rem; display: block; }
 code { font-family: var(--mono); font-size: 0.85em; background: var(--panel); border: 1px solid var(--rule); border-radius: 5px; padding: 0 4px; }
-.decide { background: var(--panel); border: 1px solid var(--rule); border-left: 0; border-radius: 14px; padding: 16px 18px; display: grid; gap: 8px; max-width: 900px; }
-.decide b { font-family: var(--display); }
-.decide ol { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; color: var(--fg2); }
-.decide ol strong { color: var(--fg); }
-
-/* state gallery */
+.box { background: var(--panel); border: 1px solid var(--rule); border-radius: 14px; padding: 16px 18px; display: grid; gap: 8px; max-width: 980px; }
+.box b { font-family: var(--display); }
+.box ol, .box ul { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; color: var(--fg2); }
+.box strong { color: var(--fg); }
 .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
 .state { background: var(--panel); border: 1px solid var(--rule); border-radius: 16px; padding: 14px 16px; display: grid; gap: 8px; align-content: start; min-width: 0; }
 .state .when { font: 500 0.72rem/1.3 var(--mono); color: var(--fg2); letter-spacing: .04em; }
 .badge { justify-self: start; display: inline-flex; gap: 6px; align-items: center; font-weight: 700; font-size: 0.85rem; border-radius: 999px; padding: 4px 11px; background: var(--bg); }
 .badge.acc { color: var(--accent); }
 .badge.neu { color: var(--fg2); }
+.beta { font: 700 0.68rem var(--mono); letter-spacing: .06em; border: 1px solid currentColor; border-radius: 6px; padding: 0 4px; }
 .state .line { font-weight: 700; font-size: 0.92rem; }
 .state .short { font: 400 0.8rem var(--mono); color: var(--fg2); }
 
 /* phone */
 .ph { width: 300px; max-width: 100%; border-radius: 42px; background: #0a1018; padding: 9px; box-sizing: border-box; box-shadow: 0 20px 40px -26px rgba(10,25,45,.55); }
 .sc {
-  --ink: #15253a; --ink2: #45576c; --card: rgba(255,255,255,.68); --edge: rgba(255,255,255,.92); --acc: #2a7385; --onacc: #ffffff; --line: #d6e0e8; --flagc: #8a5a12; --flagbg: rgba(201,154,46,.16);
+  --ink: #15253a; --ink2: #45576c; --card: rgba(255,255,255,.7); --edge: rgba(255,255,255,.92); --acc: #2a7385; --onacc: #ffffff; --line: #d6e0e8; --warnbg: #15253a; --warnfg: #ffffff;
   --sky: linear-gradient(180deg, #e7c3c9 0%, #d3cbe0 30%, #c6d0e2 100%);
   border-radius: 33px; padding: 46px 16px 22px; min-height: 560px; box-sizing: border-box; background: var(--sky); color: var(--ink); font: 14px/1.4 var(--body); display: flex; flex-direction: column; gap: 11px; overflow: hidden;
 }
-.dk .sc { --ink: #f2f5f8; --ink2: #b7c3d0; --card: rgba(255,255,255,.08); --edge: rgba(255,255,255,.15); --acc: #6fbccc; --onacc: #0f1c2c; --line: rgba(255,255,255,.16); --flagc: #e0b54e; --flagbg: rgba(224,181,78,.16); --sky: linear-gradient(180deg, #1b2a45 0%, #121d31 50%, #0b1322 100%); }
+.dk .sc { --ink: #f2f5f8; --ink2: #b7c3d0; --card: rgba(255,255,255,.08); --edge: rgba(255,255,255,.15); --acc: #6fbccc; --onacc: #0f1c2c; --line: rgba(255,255,255,.16); --warnbg: #f2f5f8; --warnfg: #0f1c2c; --sky: linear-gradient(180deg, #1b2a45 0%, #121d31 50%, #0b1322 100%); }
 .hc .sc { --ink2: #26364a; --card: #ffffff; --edge: #15253a; --line: #8597a8; }
 .hc .card { border-width: 1.5px; }
 .ax .sc { font-size: 19px; }
@@ -62,29 +61,39 @@ code { font-family: var(--mono); font-size: 0.85em; background: var(--panel); bo
 .m { font-family: var(--mono); font-variant-numeric: tabular-nums; }
 .s2 { color: var(--ink2); }
 .card { background: var(--card); border: 1px solid var(--edge); border-radius: 18px; padding: 12px 14px; display: grid; gap: 6px; }
-.pill { justify-self: start; display: inline-flex; gap: 6px; align-items: center; font-size: 12px; font-weight: 700; border-radius: 999px; padding: 4px 10px; background: rgba(255,255,255,.7); }
+.pill { justify-self: start; display: inline-flex; gap: 6px; align-items: center; font-size: 12px; font-weight: 700; border-radius: 999px; padding: 4px 10px; background: rgba(255,255,255,.7); color: var(--ink2); }
 .dk .pill { background: rgba(255,255,255,.1); }
-.pill.acc { color: var(--acc); }
-.pill.neu { color: var(--ink2); }
+.pill .beta { font-size: 9.5px; }
 .ico { width: 14px; height: 14px; flex: none; }
 .btn { min-height: 46px; border-radius: 16px; background: var(--acc); color: var(--onacc); display: grid; place-items: center; font: 600 16px var(--display); }
 .btn2 { min-height: 42px; border-radius: 14px; border: 1px solid var(--line); color: var(--ink); display: grid; place-items: center; font: 700 14px var(--body); }
 .lnk { color: var(--acc); font-weight: 700; }
 .grow { flex: 1; }
 .hr { height: 1px; background: var(--line); }
-.flagtag { display: inline-flex; gap: 5px; align-items: center; color: var(--flagc); background: var(--flagbg); border-radius: 999px; padding: 2px 9px; font-size: 12px; font-weight: 700; justify-self: start; }
+.warn { background: var(--warnbg); color: var(--warnfg); border-radius: 16px; padding: 11px 13px; display: grid; grid-template-columns: 22px 1fr auto; gap: 2px 10px; align-items: center; }
+.warn .k { font: 500 10px var(--mono); letter-spacing: .12em; text-transform: uppercase; opacity: .8; grid-column: 2; }
+.warn b { grid-column: 2; font-size: 14.5px; line-height: 1.25; }
+.warn .chev { grid-row: 1 / span 2; grid-column: 3; opacity: .7; }
+.warn svg { grid-row: 1 / span 2; }
 .chart svg { width: 100%; height: auto; display: block; }
 .legend { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 11.5px; color: var(--ink2); }
 .legend i { display: inline-block; width: 14px; height: 4px; border-radius: 2px; vertical-align: middle; margin-right: 4px; }
 .seg { display: grid; grid-template-columns: 26px 1fr; gap: 2px 10px; padding: 10px 0; border-top: 1px solid var(--line); }
 .seg:first-child { border-top: 0; }
 .glass { width: 22px; height: 28px; }
+.standing { font-size: 12.5px; color: var(--ink2); }
 .lock { background: linear-gradient(180deg, #2b3f63 0%, #3c5a7c 45%, #c9a99a 100%); color: #fff; }
 .lock .clock { font: 600 58px/1 var(--display); text-align: center; letter-spacing: -0.03em; }
 .lock .date { text-align: center; font-weight: 700; opacity: .9; }
 .notif { background: rgba(240,244,248,.84); color: #15253a; border-radius: 22px; padding: 11px 13px; display: grid; grid-template-columns: 30px 1fr; gap: 2px 10px; font-size: 13px; line-height: 1.3; }
 .notif .ic { grid-row: span 3; width: 30px; height: 30px; border-radius: 8px; overflow: hidden; }
 .notif .ap { display: flex; justify-content: space-between; font-size: 11.5px; color: #4b5d72; }
+.tog { width: 46px; height: 28px; border-radius: 14px; background: var(--acc); position: relative; flex: none; }
+.tog::after { content: ""; position: absolute; right: 2px; top: 2px; width: 24px; height: 24px; border-radius: 12px; background: #fff; }
+.tog.off { background: var(--line); }
+.tog.off::after { right: auto; left: 2px; }
+.rate { display: grid; gap: 8px; }
+.rate span { border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; font-weight: 700; background: var(--card); }
 .meter { display: inline-flex; gap: 3px; }
 .meter span { width: 16px; height: 6px; border-radius: 3px; background: var(--line); }
 .meter span.on { background: var(--acc); }
@@ -94,209 +103,269 @@ footer { color: var(--fg2); font-size: 0.88rem; border-top: 1px solid var(--rule
 <div class="wrap">
 
 <header class="head">
-  <span class="eb">BumpCast · worldwide routes · for Lanre's approval</span>
-  <h1>Forecasts beyond the US, mixed by place</h1>
-  <p class="prose">International routes now get a forecast. One route can mix forecast kinds <b>by place</b> as well as by time: JFK → LHR is confirmed for the first 41 min over the US, then an outlook over the Atlantic. These screens show how each state reads, how the chart shows which stretches are confirmed, and how a recent pilot report is shown. Copy and rules are in <code>docs/design/global-forecasts-copy.md</code>. No app code changes until you approve.</p>
-  <div class="decide">
-    <b>Decisions for you</b>
+  <span class="eb">BumpCast · worldwide routes · revision 2 · approved by Lanre</span>
+  <h1>Forecasts beyond the US, honest about how sure they are</h1>
+  <p class="prose">The global outlook is less reliable than a confirmed forecast. Over the US it missed about two-thirds of moderate pilot reports, against a third for the confirmed forecast. For a nervous flyer, the worst outcome is "calm" followed by a bumpy flight. So outlook stretches look and read rougher: a beta label, no score, approximate times, ranges instead of one level, and never "smooth". Official warnings are the most credible signal outside the US, so they are prominent. The full copy is in <code>docs/design/global-forecasts-copy.md</code>. Approved by Lanre on revision 2.</p>
+  <div class="box">
+    <b>Trust rules for outlook stretches</b> (outlook-only routes, and the outlook parts of partly confirmed ones)
     <ol>
-      <li><strong>Saying what the outlook is based on.</strong> The explanation sheet says "worldwide weather forecasts, checked against official turbulence advisories and recent pilot reports". It names no source, but it does describe the basis, which the earlier no-sources pass avoided. Keep it, or cut it to "less detailed than our forecasts for US routes"?</li>
-      <li><strong>The step 1 coverage line.</strong> Change "We have the strongest coverage in the US, and we're expanding rapidly." to "Forecasts for flights worldwide, most detailed in the US."?</li>
+      <li><strong>Label:</strong> "Global outlook (beta)". The first rollout is opt-in for waitlist users.</li>
+      <li><strong>No numeric score.</strong> Grade only.</li>
+      <li><strong>Approximate times:</strong> "about 3 h in, for around 40 min". The chart draws outlook stretches as coarse 30-minute blocks.</li>
+      <li><strong>Ranges, not one level:</strong> "Light to moderate possible".</li>
+      <li><strong>Never "smooth".</strong> Instead: "No major bumps expected", with a standing line, "Light bumps are possible on any flight."</li>
+      <li><strong>Official warnings are prominent:</strong> a dark banner above the chart and a solid marker on it, e.g. "Official warning: thunderstorms over Recife".</li>
+      <li><strong>Always ask for a rating</strong> after these flights land.</li>
+      <li><strong>Paywall:</strong> never implies the outlook matches US quality. Two options are below.</li>
+      <li><strong>Opt-in:</strong> from the waitlist card, Settings, or when adding an international flight.</li>
+    </ol>
+  </div>
+  <div class="box">
+    <b>Decisions (approved)</b>
+    <ol>
+      <li><strong>Paywall: option B.</strong> The global outlook (beta) is included in Pro, with plain copy that says exactly what you get (section 5).</li>
+      <li><strong>"Based on" line:</strong> kept: "worldwide weather forecasts, checked against official warnings and recent pilot reports".</li>
+      <li><strong>Step 1 coverage line:</strong> unchanged: "We have the strongest coverage in the US, and we're expanding rapidly."</li>
     </ol>
   </div>
 </header>
 
-<!-- STATE GALLERY -->
+<!-- 1 STATES -->
 <section>
-  <div class="head"><span class="eb">1 · Every state</span><h2>Badge, status line and list label</h2>
-  <p class="prose">The badge depends on whether the whole route can ever be confirmed (<code>noaa_possible</code>), then on time. A Global outlook never promises a confirm time. Confirmed stretches are described by where they fall in the flight, so they don't have to be next to each other.</p></div>
+  <div class="head"><span class="eb">1 · Every state</span><h2>Badge, status line and list label</h2></div>
   <div class="gallery">
-    <div class="state"><span class="when">US route · more than 18 h out</span><span class="badge neu"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><circle cx="5" cy="9" r="3" fill="none" stroke="currentColor" stroke-width="1.5"></circle><circle cx="11" cy="9" r="3" fill="none" stroke="currentColor" stroke-width="1.5"></circle></svg>Advance forecast</span><span class="line">Confirmed Wed around 3:40 PM</span><span class="short">List: Advance · confirms Wed</span></div>
-    <div class="state"><span class="when">US route · confirming now</span><span class="badge acc"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.3" fill="none" stroke="currentColor" stroke-width="1.5"></circle><path d="M5 8.2l2 2 4-4.3" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"></path></svg>Partly confirmed</span><span class="line">First 2 h 10 min confirmed. Fully confirmed within the hour.</span><span class="short">List: Partly confirmed</span></div>
-    <div class="state"><span class="when">US route · 0–18 h out</span><span class="badge acc"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="currentColor"></circle><path d="M4.8 8.2l2.1 2.1 4.3-4.6" stroke="var(--panel)" stroke-width="1.6" fill="none" stroke-linecap="round"></path></svg>Confirmed forecast</span><span class="line">Updated hourly until you fly</span><span class="short">List: Confirmed</span></div>
-    <div class="state"><span class="when">International · no part over the US</span><span class="badge neu"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.3" fill="none" stroke="currentColor" stroke-width="1.4"></circle><path d="M1.8 8h12.4M8 1.8c2 2 2 10.4 0 12.4M8 1.8c-2 2-2 10.4 0 12.4" fill="none" stroke="currentColor" stroke-width="1.2"></path></svg>Global outlook</span><span class="line">Updated every 6 hours until you fly</span><span class="short">List: Global outlook</span></div>
-    <div class="state"><span class="when">JFK → LHR · 6 h out</span><span class="badge neu"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.3" fill="none" stroke="currentColor" stroke-width="1.4"></circle><path d="M1.8 8h12.4M8 1.8c2 2 2 10.4 0 12.4M8 1.8c-2 2-2 10.4 0 12.4" fill="none" stroke="currentColor" stroke-width="1.2"></path></svg>Global outlook</span><span class="line">First 41 min confirmed. The rest updates every 6 hours.</span><span class="short">List: Global outlook</span></div>
-    <div class="state"><span class="when">SEA → ANC · 6 h out</span><span class="badge neu"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.3" fill="none" stroke="currentColor" stroke-width="1.4"></circle><path d="M1.8 8h12.4M8 1.8c2 2 2 10.4 0 12.4M8 1.8c-2 2-2 10.4 0 12.4" fill="none" stroke="currentColor" stroke-width="1.2"></path></svg>Global outlook</span><span class="line">First 41 min and last 30 min confirmed. The rest updates every 6 hours.</span><span class="short">List: Global outlook</span></div>
-    <div class="state"><span class="when">Stretch rules for other shapes</span><span class="line" style="font-weight:400">Confirmed from 1 h 10 min to 2 h 05 min in<br>3 stretches confirmed, 2 h 15 min in total<br>Last 30 min confirmed</span></div>
-    <div class="state"><span class="when">Route we still can't forecast</span><span class="badge neu"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4h8l-1.1 10H7.1z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-dasharray="2 2"></path></svg>Can't forecast yet</span><span class="line">Routes over the far north are next on our list.</span><span class="short">List: Can't forecast yet</span></div>
+    <div class="state"><span class="when">US route · more than 18 h out</span><span class="badge neu">Advance forecast</span><span class="line">Confirmed Wed around 3:40 PM</span><span class="short">List: Advance · confirms Wed</span></div>
+    <div class="state"><span class="when">US route · 0–18 h out</span><span class="badge acc">Confirmed forecast</span><span class="line">Updated hourly until you fly</span><span class="short">List: Confirmed</span></div>
+    <div class="state"><span class="when">Outlook only (e.g. LHR → DXB)</span><span class="badge neu">Global outlook <span class="beta">BETA</span></span><span class="line">Updated every 6 hours until you fly</span><span class="short">List: Global outlook (beta)</span></div>
+    <div class="state"><span class="when">Partly confirmed by place (JFK → LHR)</span><span class="badge neu">Global outlook <span class="beta">BETA</span></span><span class="line">First 41 min confirmed. The rest is a beta outlook, updated every 6 hours.</span><span class="short">List: Global outlook (beta)</span></div>
+    <div class="state"><span class="when">Any outlook route with an official warning</span><span class="badge neu">Global outlook <span class="beta">BETA</span></span><span class="line">Official warning on your route</span><span class="short">List: Official warning on route</span></div>
+    <div class="state"><span class="when">Outlook headline when the grade is smooth or mostly smooth</span><span class="line">No major bumps expected</span><span class="short">Always with: Light bumps are possible on any flight.</span></div>
+    <div class="state"><span class="when">International route, beta off</span><span class="badge neu">Not forecast yet</span><span class="line">Try the global outlook (beta)</span><span class="short">List: Beta available</span></div>
   </div>
 </section>
 
-<!-- FORECAST SCREENS -->
+<!-- 2 FORECAST -->
 <section>
-  <div class="head"><span class="eb">2 · Forecast screen</span><h2>Fade the outlook stretches</h2>
-  <p class="prose">The chart fades only outlook stretches, wherever they fall. A thin coverage strip under the time axis shows confirmed (solid) and outlook (dotted). Official advisories still raise a stretch, but there's no extra marker for them: the stretch simply shows its level, which keeps the chart clean. Only a recent pilot report gets a small flag, as it does on the map. Outlook stretches are capped at moderate. A stretch shows strong only when an advisory or a pilot report points to it, and then it says "possible".</p></div>
+  <div class="head"><span class="eb">2 · Forecast screen</span><h2>Warnings up front, outlook stretches coarse</h2>
+  <p class="prose">An official warning gets a dark banner above the chart and a solid marker over its stretch; tap either for the details. Confirmed stretches keep exact minute bars and times. Outlook stretches are drawn as faded 30-minute blocks, and their rows give ranges and approximate times. There's no score on these screens.</p></div>
   <div class="row">
 
     <figure><div class="ph"><div class="sc">
       <div class="nav"><span class="l">‹</span><span class="t">Forecast</span><span></span></div>
+      <span class="e">TP 82 · TAP</span>
+      <b style="font:700 28px var(--display)">GRU → LIS</b>
+      <div class="warn"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true" style="width:20px;height:20px"><path d="M3 15V2M3 2.5h9l-2 3 2 3H3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg><span class="k">Official warning</span><b>Thunderstorms over Recife, about 1 h 30 min in</b><span class="chev">›</span></div>
+      <div class="card" style="gap:7px">
+        <span class="pill">Global outlook <span class="beta">BETA</span></span>
+        <b style="font:700 24px/1.08 var(--display)">Bumpy in places.</b>
+        <span>Moderate to strong possible near the warning. Light bumps are possible on any flight.</span>
+        <span class="s2" style="font-size:12.5px;font-weight:700">Updated every 6 hours until you fly</span>
+      </div>
+      <div class="card chart" style="gap:6px">
+        <b style="font:600 15px var(--display)">Bumps along the way</b>
+        <div data-chart="gru"></div>
+        <div class="legend"><span><i style="background:var(--ink2);opacity:.45"></i>Outlook, approximate</span><span style="font-weight:700;color:var(--ink)">⚑ Official warning</span></div>
+      </div>
+      <div class="card" style="gap:0;padding:0 14px">
+        <div class="seg"><svg class="glass" viewBox="0 0 28 34" aria-hidden="true"><path d="M5 3h18l-2.4 27H7.4z" fill="none" stroke="#8e4a6b" stroke-width="1.6" stroke-linejoin="round"></path><path d="M6.2 14c1.2 0 1.4-3.2 2.6-3.2s1.4 3.2 2.6 3.2 1.4-3.2 2.6-3.2 1.4 3.2 2.6 3.2 1.4-3.2 2.6-3.2 1.4 3.2 2.6 3.2l-1.4 15.4H7.6z" fill="#8e4a6b" opacity=".55"></path></svg><span><b>About 1 h 30 min in, for around 30 min</b><br>Moderate to strong possible near Recife.<br><span style="font-weight:700">⚑ Official warning · thunderstorms</span></span></div>
+        <div class="seg"><svg class="glass" viewBox="0 0 28 34" aria-hidden="true"><path d="M5 3h18l-2.4 27H7.4z" fill="none" stroke="#c99a2e" stroke-width="1.6" stroke-linejoin="round"></path><path d="M6.2 14c2.4 0 2.8-1.8 4.3-1.8s2 1.8 3.6 1.8h7.7l-1.4 15.4H7.6z" fill="#c99a2e" opacity=".55"></path></svg><span><b>About 7 h in, for around 40 min</b><br>Light to moderate possible over the Atlantic.</span></div>
+      </div>
+    </div></div><figcaption><b>Outlook only, with an official warning (GRU → LIS)</b>The warning is the first thing you see. Rows use "about" and "around", and a range of levels.</figcaption></figure>
+
+    <figure><div class="ph dk"><div class="sc">
+      <div class="nav"><span class="l">‹</span><span class="t">Forecast</span><span></span></div>
       <span class="e">BA 178 · British Airways</span>
       <b style="font:700 28px var(--display)">JFK → LHR</b>
-      <div class="card" style="gap:8px">
-        <span class="pill neu"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.3" fill="none" stroke="currentColor" stroke-width="1.4"></circle><path d="M1.8 8h12.4M8 1.8c2 2 2 10.4 0 12.4M8 1.8c-2 2-2 10.4 0 12.4" fill="none" stroke="currentColor" stroke-width="1.2"></path></svg>Global outlook</span>
-        <b style="font:700 24px/1.08 var(--display)">Bumpy in places.</b>
-        <span>Mostly calm, with a moderate stretch over the mid-Atlantic.</span>
-        <span class="s2" style="font-size:12.5px;font-weight:700">First 41 min confirmed. The rest updates every 6 hours.</span>
+      <div class="card" style="gap:7px">
+        <span class="pill">Global outlook <span class="beta">BETA</span></span>
+        <b style="font:700 24px/1.08 var(--display)">A few bumps possible.</b>
+        <span class="s2" style="font-size:12.5px;font-weight:700">First 41 min confirmed. The rest is a beta outlook, updated every 6 hours.</span>
       </div>
       <div class="card chart" style="gap:6px">
         <b style="font:600 15px var(--display)">Bumps along the way</b>
         <div data-chart="lhr"></div>
-        <div class="legend"><span><i style="background:var(--acc)"></i>Confirmed</span><span><i style="background:repeating-linear-gradient(90deg,var(--ink2) 0 2px,transparent 2px 4px)"></i>Outlook (faded)</span></div>
+        <div class="legend"><span><i style="background:var(--acc)"></i>Confirmed, exact</span><span><i style="background:var(--ink2);opacity:.45"></i>Outlook, approximate</span></div>
       </div>
       <div class="card" style="gap:0;padding:0 14px">
-        <div class="seg"><svg class="glass" viewBox="0 0 28 34" aria-hidden="true"><path d="M5 3h18l-2.4 27H7.4z" fill="none" stroke="#c9733a" stroke-width="1.6" stroke-linejoin="round"></path><path d="M6.2 14c1.6 0 2-2.6 3.4-2.6s1.8 2.6 3.4 2.6 2-2.6 3.4-2.6 1.8 2.6 4.1 2.6l-1.4 15.4H7.6z" fill="#c9733a" opacity=".55"></path></svg><span><b>3 h 20 min in</b><br>Moderate for about 12 min over the mid-Atlantic.</span></div>
+        <div class="seg"><svg class="glass" viewBox="0 0 28 34" aria-hidden="true"><path d="M5 3h18l-2.4 27H7.4z" fill="none" stroke="#e0b54e" stroke-width="1.6" stroke-linejoin="round"></path><path d="M6.2 14c2.4 0 2.8-1.8 4.3-1.8s2 1.8 3.6 1.8h7.7l-1.4 15.4H7.6z" fill="#e0b54e" opacity=".55"></path></svg><span><b>Right after takeoff</b><br>Light chop for about 4 min while climbing.</span></div>
+        <div class="seg"><svg class="glass" viewBox="0 0 28 34" aria-hidden="true"><path d="M5 3h18l-2.4 27H7.4z" fill="none" stroke="#e38f55" stroke-width="1.6" stroke-linejoin="round"></path><path d="M6.2 14c1.6 0 2-2.6 3.4-2.6s1.8 2.6 3.4 2.6 2-2.6 3.4-2.6 1.8 2.6 4.1 2.6l-1.4 15.4H7.6z" fill="#e38f55" opacity=".55"></path></svg><span><b>About 3 h in, for around 30 min</b><br>Light to moderate possible over the mid-Atlantic.<br><span class="s2" style="font-size:12px">Beta outlook</span></span></div>
       </div>
-    </div></div><figcaption><b>International, part confirmed (JFK → LHR)</b>The badge stays "Global outlook" because the whole route can never be confirmed. The moderate stretch comes from an official advisory, but it reads like any other stretch.</figcaption></figure>
-
-    <figure><div class="ph dk"><div class="sc">
-      <div class="nav"><span class="l">‹</span><span class="t">Forecast</span><span></span></div>
-      <span class="e">AS 83 · Alaska</span>
-      <b style="font:700 28px var(--display)">SEA → ANC</b>
-      <div class="card" style="gap:8px">
-        <span class="pill neu"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.3" fill="none" stroke="currentColor" stroke-width="1.4"></circle><path d="M1.8 8h12.4M8 1.8c2 2 2 10.4 0 12.4M8 1.8c-2 2-2 10.4 0 12.4" fill="none" stroke="currentColor" stroke-width="1.2"></path></svg>Global outlook</span>
-        <b style="font:700 24px/1.08 var(--display)">Mostly smooth.</b>
-        <span class="s2" style="font-size:12.5px;font-weight:700">First 41 min and last 30 min confirmed. The rest updates every 6 hours.</span>
-      </div>
-      <div class="card chart" style="gap:6px">
-        <b style="font:600 15px var(--display)">Bumps along the way</b>
-        <div data-chart="anc"></div>
-        <div class="legend"><span><i style="background:var(--acc)"></i>Confirmed</span><span><i style="background:repeating-linear-gradient(90deg,var(--ink2) 0 2px,transparent 2px 4px)"></i>Outlook (faded)</span><span style="color:var(--flagc);font-weight:700">⚑ Pilot report</span></div>
-      </div>
-      <span class="s2" style="font-size:12.5px">Tap the strip under the chart to see what each part is based on.</span>
-    </div></div><figcaption><b>Confirmed at both ends (SEA → ANC, dark)</b>Fading follows each stretch, not one cut-off. A pilot report over Canada raises a short stretch to light chop and gets the only flag.</figcaption></figure>
+    </div></div><figcaption><b>Partly confirmed by place (JFK → LHR, dark)</b>The confirmed first stretch keeps exact minutes. The outlook part follows the trust rules. The badge stays beta because the whole route can never be confirmed.</figcaption></figure>
 
     <figure><div class="ph ax hc"><div class="sc">
-      <span class="e">JFK → LHR</span>
+      <span class="e">LHR → DXB</span>
       <div class="card" style="gap:10px">
-        <span class="pill neu" style="font-size:16px"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true" style="width:18px;height:18px"><circle cx="8" cy="8" r="6.3" fill="none" stroke="currentColor" stroke-width="1.4"></circle><path d="M1.8 8h12.4M8 1.8c2 2 2 10.4 0 12.4M8 1.8c-2 2-2 10.4 0 12.4" fill="none" stroke="currentColor" stroke-width="1.2"></path></svg>Global outlook</span>
-        <b style="font:700 28px/1.08 var(--display)">Bumpy in places.</b>
-        <span style="font-weight:700">First 41 min confirmed.</span>
-        <span style="font-weight:700">The rest updates every 6 hours.</span>
+        <span class="pill" style="font-size:16px">Global outlook <span class="beta">BETA</span></span>
+        <b style="font:700 28px/1.08 var(--display)">No major bumps expected.</b>
+        <span>Light bumps are possible on any flight.</span>
+        <span class="s2" style="font-size:16px;font-weight:700">Updated every 6 hours until you fly.</span>
       </div>
-      <div class="card" style="gap:8px">
-        <span style="display:flex;gap:10px;align-items:center"><span style="width:28px;height:6px;border-radius:3px;background:var(--acc)"></span>Confirmed: takeoff to 41 min</span>
-        <span style="display:flex;gap:10px;align-items:center"><span style="width:28px;height:6px;border-radius:3px;background:repeating-linear-gradient(90deg,var(--ink2) 0 3px,transparent 3px 6px)"></span>Outlook: 41 min to landing</span>
-      </div>
-    </div></div><figcaption><b>Large text with Increase Contrast</b>At accessibility sizes the strip becomes a written list. The status line splits in two.</figcaption></figure>
+      <span class="lnk">What's a global outlook?</span>
+    </div></div><figcaption><b>Never "smooth" (large text, Increase Contrast)</b>A smooth grade on the outlook reads "No major bumps expected", always with the standing line.</figcaption></figure>
   </div>
 </section>
 
-<!-- SHEETS -->
+<!-- 3 SHEETS -->
 <section>
-  <div class="head"><span class="eb">3 · Explanation sheets</span><h2>Plain words about what each forecast is</h2>
-  <p class="prose">Tap the badge or the coverage strip to open the state's sheet, or tap a pilot-report flag for its sheet. The agreement row only appears once the backend sends <code>agreement</code>.</p></div>
+  <div class="head"><span class="eb">3 · Explanation sheets</span><h2>What it is, what it's based on, what it can't do</h2></div>
   <div class="row">
 
     <figure><div class="ph sheet"><div class="sc">
       <span style="align-self:center;width:38px;height:5px;border-radius:3px;background:var(--line)"></span>
-      <span class="pill neu"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.3" fill="none" stroke="currentColor" stroke-width="1.4"></circle><path d="M1.8 8h12.4M8 1.8c2 2 2 10.4 0 12.4M8 1.8c-2 2-2 10.4 0 12.4" fill="none" stroke="currentColor" stroke-width="1.2"></path></svg>Global outlook</span>
-      <p class="h1">Global outlook</p>
-      <span>Your route leaves the area we can forecast in full detail, so this is our worldwide outlook. It's less detailed than our forecasts for US routes, and it updates every 6 hours until you fly.</span>
-      <div class="card" style="gap:4px"><span class="e">Based on</span><span>Worldwide weather forecasts, checked against official turbulence advisories and recent pilot reports.</span></div>
-      <div class="card" style="gap:4px"><span class="e">What it can't do</span><span>It won't call strong turbulence on its own. Strong bumps only show when an official advisory or a pilot report points to them.</span></div>
-      <div class="card" style="gap:4px"><span class="e">Confirmed part</span><span>The first 41 min, over the US, uses our detailed forecast and updates hourly.</span></div>
-      <div class="card" style="gap:6px"><span class="e">How sure we are · when available</span><span class="meter"><span class="on"></span><span class="on"></span><span></span></span><span>Forecasts mostly agree along your route.</span></div>
-    </div></div><figcaption><b>Global outlook sheet</b>"Based on" is Decision 1. The agreement row is a slot for later and stays hidden until the data exists.</figcaption></figure>
+      <span class="pill">Global outlook <span class="beta">BETA</span></span>
+      <p class="h1">Global outlook (beta)</p>
+      <span>Your route leaves the area we can forecast in full detail, so this is our worldwide outlook. It's newer and less detailed than our forecasts for US routes, and it updates every 6 hours until you fly.</span>
+      <div class="card" style="gap:4px"><span class="e">Based on</span><span>Worldwide weather forecasts, checked against official warnings and recent pilot reports.</span></div>
+      <div class="card" style="gap:4px"><span class="e">How to read it</span><span>Times are approximate and levels are ranges. It can miss bumps, so treat it as a guide and keep your seatbelt fastened.</span></div>
+      <div class="card" style="gap:6px"><span class="e">Help us improve it</span><span>After you land, tell us how it felt. Every rating makes the outlook better.</span></div>
+    </div></div><figcaption><b>Global outlook sheet</b>Says plainly it can miss bumps. "Based on" is decision 2. An agreement row can slot in later.</figcaption></figure>
 
-
-    <figure><div class="ph sheet"><div class="sc">
+    <figure><div class="ph sheet dk"><div class="sc">
       <span style="align-self:center;width:38px;height:5px;border-radius:3px;background:var(--line)"></span>
-      <span class="flagtag">⚑ Pilot report</span>
-      <p class="h1">Pilots reported bumps here</p>
-      <span>A crew flying over northern British Columbia in the last few hours reported light chop. We've raised that stretch to match.</span>
-      <div class="card"><span>Pilots share reports like this so the planes behind them can find smoother air.</span></div>
-      <span class="grow"></span>
-      <span class="lnk">Why pilots share reports</span>
-    </div></div><figcaption><b>Pilot report sheet</b>Matches the map's pilot-report wording.</figcaption></figure>
+      <div class="warn"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true" style="width:20px;height:20px"><path d="M3 15V2M3 2.5h9l-2 3 2 3H3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg><span class="k">Official warning</span><b>Thunderstorms over Recife</b></div>
+      <p class="h1" style="font-size:22px">What this means for your flight</p>
+      <span>Aviation weather offices issue warnings where strong turbulence or storms are likely. This one covers about 30 min of your route, around 1 h 30 min after takeoff.</span>
+      <div class="card"><span><b>Your crew has this warning too.</b> Pilots fly around storms, often by many miles, and turn the seatbelt sign on early.</span></div>
+      <div class="card" style="gap:4px"><span class="e">What you might feel</span><span>Moderate to strong bumps are possible near the storms. Keep your seatbelt fastened from about 1 h in.</span></div>
+      <span class="s2" style="font-size:12.5px">Warnings are updated through the day. We'll tell you if this one changes or clears.</span>
+    </div></div><figcaption><b>Official warning sheet (dark)</b>Credible and specific, followed straight away by what the crew does and what to do.</figcaption></figure>
   </div>
 </section>
 
-<!-- LIST + ADD -->
+<!-- 4 RATING -->
 <section>
-  <div class="head"><span class="eb">4 · Flights list, adding a flight, the waitlist</span><h2>International routes just work</h2>
-  <p class="prose">The add-flight sheet stops sending international routes to the waitlist; they save and get a Global outlook. What's left of the waitlist is only routes the worker still can't forecast, such as polar ones, and it comes from the worker's status rather than the US box in <code>Coverage.swift</code>. People already on the waitlist get one push when their route is covered.</p></div>
+  <div class="head"><span class="eb">4 · After landing</span><h2>Always ask how it felt</h2>
+  <p class="prose">Every beta flight gets the landing notification, and an in-app card stays on the flight until it's answered or dismissed. The ratings measure how good the outlook is.</p></div>
   <div class="row">
-
+    <figure><div class="ph"><div class="sc lock">
+      <span class="date">Friday 23 October</span><span class="clock">7:42</span><span class="grow"></span>
+      <div class="notif"><span class="ic"><svg viewBox="0 0 200 200" width="30" height="30" aria-hidden="true"><rect width="200" height="200" fill="#e9dccf"></rect><rect y="118" width="200" height="82" fill="#8fb2d4"></rect><circle cx="128" cy="118" r="30" fill="#fff3e8"></circle><path d="M26 118 C42 118 48 98 62 98 S82 118 98 118 L212 118" fill="none" stroke="#1f5f6e" stroke-width="14" stroke-linecap="round"></path></svg></span><span class="ap"><span>BUMPCAST</span><span>now</span></span><b>Welcome to Lisbon</b><span>How bumpy was it? You flew with our beta global outlook, and your two taps help us improve it.</span></div>
+    </div></div><figcaption><b>Landing notification</b>Sent for every beta flight. The notification gaps fix already sends it for every flight that has a forecast.</figcaption></figure>
     <figure><div class="ph"><div class="sc">
-      <p class="h1" style="font-size:28px">Flights</p>
-      <div class="card" style="gap:4px"><div style="display:flex;justify-content:space-between"><b>BA 178 · JFK → LHR</b><span class="s2" style="font-size:12px;font-weight:700">Bumpy in places</span></div><span class="m s2" style="font-size:12px">Thu, Oct 22 · 6:30 PM EDT</span><span class="s2" style="font-size:12px;font-weight:700">Global outlook</span></div>
-      <div class="card" style="gap:4px"><div style="display:flex;justify-content:space-between"><b>AS 83 · SEA → ANC</b><span class="s2" style="font-size:12px;font-weight:700">Mostly smooth</span></div><span class="m s2" style="font-size:12px">Fri, Oct 23 · 9:15 AM PDT</span><span class="s2" style="font-size:12px;font-weight:700">Global outlook</span></div>
-      <div class="card" style="gap:4px"><div style="display:flex;justify-content:space-between"><b>B6 23 · JFK → LAX</b><span class="s2" style="font-size:12px;font-weight:700">Mostly smooth</span></div><span class="m s2" style="font-size:12px">Sat, Oct 24 · 7:15 AM EDT</span><span style="font-size:12px;font-weight:700;color:var(--acc)">Advance · confirms Fri</span></div>
-      <div class="card" style="gap:4px"><div style="display:flex;justify-content:space-between"><b>EWR → HKG</b><span class="s2" style="font-size:12px;font-weight:700">Can't forecast yet</span></div><span class="m s2" style="font-size:12px">Mon, Nov 2 · 1:00 PM EST</span><span class="s2" style="font-size:12px">Polar route</span></div>
-    </div></div><figcaption><b>Flights list</b>The short status says which kind of forecast it is. A recent pilot report on the route adds "· pilot report".</figcaption></figure>
-
-    <figure><div class="ph sheet"><div class="sc">
-      <div class="nav"><span class="l">Back</span><span class="t">Add a flight</span><span class="r"></span></div>
-      <p class="h1">Check your flight</p>
-      <div class="card" style="gap:8px">
-        <span class="e">BA 178 · British Airways</span>
-        <div style="display:flex;justify-content:space-between;align-items:baseline"><b class="m" style="font-size:24px;font-weight:500">JFK</b><span class="s2">→</span><b class="m" style="font-size:24px;font-weight:500">LHR</b></div>
-        <div class="hr"></div>
-        <span><b>Thu 22 Oct, 6:30 PM EDT</b> · about 6 h 55 min</span>
+      <p class="h1" style="font-size:24px">GRU → LIS</p>
+      <div class="card" style="gap:10px">
+        <span class="pill">Global outlook <span class="beta">BETA</span></span>
+        <b style="font:600 20px var(--display)">How did it compare?</b>
+        <div class="rate"><span>Smoother than the outlook</span><span>About what it said</span><span>Bumpier than the outlook</span></div>
+        <span class="s2" style="font-size:12.5px">Your answer helps us improve global outlooks.</span>
       </div>
-      <div class="card" style="grid-template-columns:20px 1fr;align-items:start"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true" style="width:18px;height:18px"><circle cx="8" cy="8" r="6.3" fill="none" stroke="var(--acc)" stroke-width="1.4"></circle><path d="M1.8 8h12.4M8 1.8c2 2 2 10.4 0 12.4M8 1.8c-2 2-2 10.4 0 12.4" fill="none" stroke="var(--acc)" stroke-width="1.2"></path></svg><span>Global outlook for this route, updated every 6 hours from 48 hours before you fly.</span></div>
-      <span class="grow"></span>
-      <span class="btn">Add flight</span>
-      <span class="btn2">Add a connecting flight</span>
-    </div></div><figcaption><b>International route, add flight</b>No warning and no waitlist, just one line saying what kind of forecast to expect.</figcaption></figure>
+    </div></div><figcaption><b>In-app rating card</b>Stays on the flight until it's answered or dismissed.</figcaption></figure>
+  </div>
+</section>
 
+<!-- 5 OPT-IN + PAYWALL -->
+<section>
+  <div class="head"><span class="eb">5 · Opt-in and paywall</span><h2>Turning the beta on, and what it costs</h2></div>
+  <div class="row">
     <figure><div class="ph dk"><div class="sc">
       <div class="nav"><span class="l">‹</span><span class="t">Forecast</span><span></span></div>
-      <b style="font:700 28px var(--display)">EWR → HKG</b>
+      <b style="font:700 28px var(--display)">BOS → LHR</b>
       <div class="card" style="gap:8px">
-        <b style="font:600 19px var(--display)">We can't forecast this route yet</b>
-        <span class="s2">Routes over the far north are next on our list. We'll still save your flight.</span>
-        <span class="btn">Notify me when we can</span>
+        <span class="pill">Global outlook <span class="beta">BETA</span></span>
+        <b style="font:600 19px var(--display)">Try the global outlook for this flight</b>
+        <span class="s2">A newer, less detailed forecast for routes outside the US. Times are approximate and it can miss bumps.</span>
+        <span class="btn">Turn on the beta</span>
+        <span class="lnk" style="text-align:center">Not now</span>
       </div>
-    </div></div><figcaption><b>What's left of the waitlist (dark)</b>Only for routes the worker reports as out of coverage.</figcaption></figure>
+    </div></div><figcaption><b>From the waitlist card (dark)</b>Replaces "Notify me" for routes the beta covers.</figcaption></figure>
 
-    <figure><div class="ph"><div class="sc lock">
-      <span class="date">Tuesday 20 October</span>
-      <span class="clock">9:00</span>
+    <figure><div class="ph sheet"><div class="sc">
+      <div class="nav"><span class="l"></span><span class="t">Settings</span><span style="justify-self:end;color:var(--acc)">Done</span></div>
+      <div class="card" style="gap:8px">
+        <div style="display:flex;gap:10px;align-items:center"><span class="grow"><b>Global outlooks</b> <span class="beta" style="color:var(--ink2)">BETA</span></span><span class="tog"></span></div>
+        <span class="s2" style="font-size:12.5px">Forecasts for flights outside the US. Less detailed than US forecasts, and updated every 6 hours. After each one, we'll ask how it felt.</span>
+      </div>
+    </div></div><figcaption><b>Settings</b>One switch for all international flights.</figcaption></figure>
+
+    <figure><div class="ph sheet"><div class="sc">
+      <div class="nav"><span class="l">Back</span><span class="t">Add a flight</span><span></span></div>
+      <p class="h1">Check your flight</p>
+      <div class="card"><span class="e">BA 178</span><b class="m" style="font-size:22px;font-weight:500">JFK → LHR</b></div>
+      <div class="card" style="gap:8px"><b>Get the global outlook (beta) for this flight?</b><span class="s2" style="font-size:12.5px">The first part, over the US, is confirmed. The rest is our newer worldwide outlook.</span><div style="display:flex;gap:10px;align-items:center"><span class="grow">Turn on the beta</span><span class="tog"></span></div></div>
       <span class="grow"></span>
-      <div class="notif"><span class="ic"><svg viewBox="0 0 200 200" width="30" height="30" aria-hidden="true"><rect width="200" height="200" fill="#e9dccf"></rect><rect y="118" width="200" height="82" fill="#8fb2d4"></rect><circle cx="128" cy="118" r="30" fill="#fff3e8"></circle><path d="M26 118 C42 118 48 98 62 98 S82 118 98 118 L212 118" fill="none" stroke="#1f5f6e" stroke-width="14" stroke-linecap="round"></path></svg></span><span class="ap"><span>BUMPCAST</span><span>now</span></span><b>Your flight now has a forecast</b><span>BOS → LHR on Thu 22 Oct now has a global outlook. Tap to see it.</span></div>
-    </div></div><figcaption><b>Waitlist follow-up</b>Sent once per flight to people who asked to be told. Quiet hours apply.</figcaption></figure>
+      <span class="btn">Add flight</span>
+    </div></div><figcaption><b>Adding an international flight</b>Asked once; the answer becomes the Settings switch.</figcaption></figure>
+
+    <figure><div class="ph"><div class="sc" style="background:linear-gradient(180deg,#f6d9c4 0%,#dfe6ef 45%,#a9c6e2 100%)">
+      <span class="grow"></span>
+      <span class="e">Option A · not chosen</span>
+      <p class="h1">Global outlooks are free during the beta</p>
+      <span>Try our newer forecast for flights outside the US. It's less detailed than our US forecasts, and your ratings help it improve.</span>
+      <div class="card" style="font-size:13px;gap:6px"><span>Pro still adds the full timeline, updates and live status on every flight.</span></div>
+      <span class="btn">See Pro</span>
+    </div></div><figcaption><b>Option A: free during the beta (not chosen)</b>Kept for reference.</figcaption></figure>
+
+    <figure><div class="ph"><div class="sc" style="background:linear-gradient(180deg,#f6d9c4 0%,#dfe6ef 45%,#a9c6e2 100%)">
+      <span class="grow"></span>
+      <span class="e">Option B · approved</span>
+      <p class="h1">BumpCast Pro</p>
+      <div class="card" style="font-size:13px;gap:6px"><span>✓&nbsp; Detailed, hourly forecasts for US flights</span><span>✓&nbsp; Global outlook (beta) for international flights: approximate, updated every 6 hours</span><span>✓&nbsp; Live status and delay alerts</span></div>
+      <span class="btn">See Pro plans</span>
+    </div></div><figcaption><b>Option B: in Pro, with plain copy (approved)</b>The beta line says exactly what you get, so it can't be read as US-quality.</figcaption></figure>
   </div>
 </section>
 
-<footer>The routes, flights and times are examples. Draft for Lanre's approval. After approval, the spec goes back to the "Global data coverage options" session for the backend and app work.</footer>
+<!-- 6 LIST -->
+<section>
+  <div class="head"><span class="eb">6 · Flights list</span><h2>The kind of forecast is always visible</h2></div>
+  <div class="row">
+    <figure><div class="ph"><div class="sc">
+      <p class="h1" style="font-size:28px">Flights</p>
+      <div class="card" style="gap:4px"><div style="display:flex;justify-content:space-between"><b>TP 82 · GRU → LIS</b><span class="s2" style="font-size:12px;font-weight:700">Bumpy in places</span></div><span class="m s2" style="font-size:12px">Thu, Oct 22 · 9:40 PM BRT</span><span style="font-size:12px;font-weight:700">⚑ Official warning on route</span></div>
+      <div class="card" style="gap:4px"><div style="display:flex;justify-content:space-between"><b>BA 178 · JFK → LHR</b><span class="s2" style="font-size:12px;font-weight:700">A few bumps possible</span></div><span class="m s2" style="font-size:12px">Fri, Oct 23 · 6:30 PM EDT</span><span class="s2" style="font-size:12px;font-weight:700">Global outlook (beta)</span></div>
+      <div class="card" style="gap:4px"><div style="display:flex;justify-content:space-between"><b>EK 2 · LHR → DXB</b><span class="s2" style="font-size:12px;font-weight:700">No major bumps</span></div><span class="m s2" style="font-size:12px">Sun, Oct 25 · 2:15 PM GMT</span><span class="s2" style="font-size:12px;font-weight:700">Global outlook (beta)</span></div>
+      <div class="card" style="gap:4px"><div style="display:flex;justify-content:space-between"><b>B6 23 · JFK → LAX</b><span class="s2" style="font-size:12px;font-weight:700">Mostly smooth</span></div><span class="m s2" style="font-size:12px">Sat, Oct 24 · 7:15 AM EDT</span><span style="font-size:12px;font-weight:700;color:var(--acc)">Confirmed</span></div>
+    </div></div><figcaption><b>Flights list</b>"Smooth" only ever appears on confirmed or advance US forecasts. A warning is called out on the card.</figcaption></figure>
+  </div>
+</section>
+
+<footer>The routes, flights and times are examples. Revision 2 adds the trust rules approved in the "Global data coverage options" session and brings official warnings back, now prominent. Approved by Lanre with paywall option B. The spec has gone to that session for the backend and app work.</footer>
 </div>
 
 <script>
 (function () {
   var sev = function (v) { return v < 0.10 ? "#3a9a8f" : v < 0.22 ? "#c99a2e" : v < 0.34 ? "#c9733a" : "#8e4a6b"; };
   var routes = {
-    lhr: { total: 415, confirmed: [[0, 41]], flags: [], prof: function (m) {
-      var v = 0.05 + 0.02 * Math.sin(m / 9);
-      if (m < 8) v = 0.13;
-      if (m >= 200 && m <= 212) v = 0.26;
-      if (m > 330 && m < 345) v = 0.12;
+    gru: { total: 600, confirmed: [], warn: [[80, 115, "Official warning"]], prof: function (m) {
+      var v = 0.05 + 0.02 * Math.sin(m / 11);
+      if (m >= 80 && m <= 115) v = 0.33;
+      if (m >= 410 && m <= 450) v = 0.17;
       return v; } },
-    anc: { total: 230, confirmed: [[0, 41], [200, 230]], flags: [[95, 104, "Pilot report"]], prof: function (m) {
-      var v = 0.045 + 0.015 * Math.sin(m / 7);
-      if (m < 6) v = 0.12;
-      if (m >= 95 && m <= 104) v = 0.14;
+    lhr: { total: 415, confirmed: [[0, 41]], warn: [], prof: function (m) {
+      var v = 0.05 + 0.02 * Math.sin(m / 9);
+      if (m < 6) v = 0.13;
+      if (m >= 175 && m <= 205) v = 0.2;
       return v; } }
   };
-  function isConfirmed(r, m) { return r.confirmed.some(function (c) { return m >= c[0] && m < c[1]; }); }
+  function conf(r, m) { return r.confirmed.some(function (c) { return m >= c[0] && m < c[1]; }); }
   document.querySelectorAll("[data-chart]").forEach(function (el) {
     var r = routes[el.getAttribute("data-chart")];
-    var W = 268, H = 128, top = 22, base = 100, n = 60, bw = W / n;
-    var out = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Turbulence along the flight. Confirmed stretches solid, outlook stretches faded, flagged stretches marked.">';
-    [0.10, 0.22, 0.34].forEach(function (t) { var y = base - t / 0.4 * (base - top); out += '<line x1="0" x2="' + W + '" y1="' + y + '" y2="' + y + '" stroke="currentColor" stroke-opacity=".18" stroke-dasharray="2 3"></line>'; });
+    var W = 268, H = 132, top = 26, base = 102;
+    var y = function (v) { return Math.max(3, v / 0.4 * (base - top)); };
+    var out = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Turbulence along the flight. Confirmed stretches as exact bars, outlook as approximate blocks, official warnings marked.">';
+    [0.10, 0.22, 0.34].forEach(function (t) { var yy = base - y(t); out += '<line x1="0" x2="' + W + '" y1="' + yy + '" y2="' + yy + '" stroke="currentColor" stroke-opacity=".18" stroke-dasharray="2 3"></line>'; });
+    var n = 80, bw = W / n;
     for (var i = 0; i < n; i++) {
-      var m = (i + 0.5) * r.total / n, v = r.prof(m), h = Math.max(2, v / 0.4 * (base - top));
-      out += '<rect x="' + (i * bw + 0.4) + '" y="' + (base - h) + '" width="' + (bw - 0.8) + '" height="' + h + '" rx="1" fill="' + sev(v) + '" opacity="' + (isConfirmed(r, m) ? 1 : 0.4) + '"></rect>';
+      var m = (i + 0.5) * r.total / n;
+      if (!conf(r, m)) continue;
+      var v = r.prof(m), h = y(v);
+      out += '<rect x="' + (i * bw + 0.4) + '" y="' + (base - h) + '" width="' + (bw - 0.8) + '" height="' + h + '" rx="1" fill="' + sev(v) + '"></rect>';
     }
-    out += '<line x1="0" x2="' + W + '" y1="' + (base + 7) + '" y2="' + (base + 7) + '" stroke="currentColor" stroke-opacity=".5" stroke-width="2" stroke-dasharray="1.5 3"></line>';
+    for (var s = 0; s < r.total; s += 30) {
+      var mid = s + 15;
+      if (conf(r, mid)) continue;
+      var mx = 0; for (var k = s; k < Math.min(s + 30, r.total); k += 2) mx = Math.max(mx, r.prof(k));
+      var hh = y(mx), x = s / r.total * W, w = Math.min(30, r.total - s) / r.total * W;
+      out += '<rect x="' + (x + 1) + '" y="' + (base - hh) + '" width="' + (w - 2) + '" height="' + hh + '" rx="4" fill="' + sev(mx) + '" opacity="0.42"></rect>';
+    }
     r.confirmed.forEach(function (c) { out += '<rect x="' + (c[0] / r.total * W) + '" y="' + (base + 5) + '" width="' + ((c[1] - c[0]) / r.total * W) + '" height="4" rx="2" style="fill:var(--acc)"></rect>'; });
-    r.flags.forEach(function (f) {
-      var x1 = f[0] / r.total * W, x2 = f[1] / r.total * W, label = "⚑ " + f[2], w = label.length * 5.6 + 12, cx = Math.min(Math.max((x1 + x2) / 2 - w / 2, 0), W - w);
-      out += '<line x1="' + x1 + '" x2="' + x2 + '" y1="16" y2="16" style="stroke:var(--flagc)" stroke-width="1.5"></line>';
-      out += '<rect x="' + cx + '" y="2" width="' + w + '" height="14" rx="7" style="fill:var(--flagbg)"></rect><text x="' + (cx + w / 2) + '" y="12.5" text-anchor="middle" font-size="9.5" font-weight="700" style="fill:var(--flagc)" font-family="Atkinson Hyperlegible, sans-serif">' + label + '</text>';
+    r.warn.forEach(function (f) {
+      var x1 = f[0] / r.total * W, x2 = f[1] / r.total * W, label = "⚑ " + f[2], w = label.length * 5.7 + 14, cx = Math.min(Math.max((x1 + x2) / 2 - w / 2, 0), W - w);
+      out += '<rect x="' + x1 + '" y="20" width="' + (x2 - x1) + '" height="' + (base - 20) + '" rx="4" style="fill:var(--warnbg)" opacity="0.12"></rect>';
+      out += '<rect x="' + cx + '" y="2" width="' + w + '" height="16" rx="8" style="fill:var(--warnbg)"></rect><text x="' + (cx + w / 2) + '" y="13.5" text-anchor="middle" font-size="9.5" font-weight="700" style="fill:var(--warnfg)" font-family="Atkinson Hyperlegible, sans-serif">' + label + '</text>';
     });
-    var hours = Math.floor(r.total / 60);
-    for (var hh = 0; hh <= hours; hh++) { var x = hh * 60 / r.total * W; out += '<text x="' + Math.min(x + 1, W - 14) + '" y="' + (H - 4) + '" font-size="9" fill="currentColor" fill-opacity=".7" font-family="IBM Plex Mono, monospace">' + (hh === 0 ? "Takeoff" : hh + " h") + '</text>'; }
+    var hours = Math.floor(r.total / 60), step = hours > 6 ? 2 : 1;
+    for (var hr = 0; hr <= hours; hr += step) { var tx = hr * 60 / r.total * W; out += '<text x="' + Math.min(tx + 1, W - 14) + '" y="' + (H - 4) + '" font-size="9" fill="currentColor" fill-opacity=".7" font-family="IBM Plex Mono, monospace">' + (hr === 0 ? "Takeoff" : hr + " h") + '</text>'; }
     out += "</svg>";
     el.innerHTML = out;
   });

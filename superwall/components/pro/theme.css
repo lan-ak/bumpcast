@@ -34,7 +34,7 @@
   --ink: #f2f5f8;
   --ink-2: #b7c3d0;
   --accent: #6fbccc;
-  --on-accent: #0b1322;
+  --on-accent: #0f1c2c;
   --brand-line: #8fd7e0;
   --sky-top: #1b2a45;
   --sky-bottom: #121d31;
@@ -129,6 +129,9 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 }
 
 .feature { display: flex; align-items: center; gap: 12px; margin-bottom: 13px; font-size: 16px; line-height: 1.3; }
+/* Coverage pair: quieter than the selling lines, and never hidden on short screens. */
+.feature--coverage { margin-bottom: 8px; font-size: 14px; color: var(--ink-2); }
+.feature--coverage .feature-icon { width: 26px; height: 26px; background: none; }
 .feature-icon {
   display: flex;
   width: 34px;
@@ -201,7 +204,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 @media (max-height: 700px) {
   .pw-hero { flex-basis: 196px; min-height: 196px; }
   .pw-hero { padding-top: 60px; padding-bottom: 96px; }
-  .feature + .feature { display: none; }
+  .feature + .feature:not(.feature--coverage) { display: none; }
   .pw-title { font-size: 26px; }
 }
 .pw-sub { margin-top: 8px; color: var(--ink-2); font-size: 16px; }

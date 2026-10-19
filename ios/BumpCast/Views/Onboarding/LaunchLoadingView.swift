@@ -47,29 +47,6 @@ struct LaunchLoadingView: View {
     private var palette: CalmLinePalette { colorScheme == .dark ? .dark : .light }
 }
 
-/// The app icon's colours by appearance (DESIGN_SPEC §8 "Colours by appearance").
-struct CalmLinePalette {
-    let sky: [Color]
-    let water: [Color]
-    let sun: Color
-    let line: Color
-    let ink: Color
-
-    static let light = CalmLinePalette(
-        sky: [Color(hex: 0xF6D9C4), Color(hex: 0xDFE6EF)],
-        water: [Color(hex: 0xA9C6E2), Color(hex: 0x7FA6CC)],
-        sun: Color(hex: 0xFFF3E8, opacity: 0.95),
-        line: Color(hex: 0x1F5F6E),
-        ink: Color(hex: 0x15253A))
-
-    static let dark = CalmLinePalette(
-        sky: [Color(hex: 0x1B2A45), Color(hex: 0x2C4262)],
-        water: [Color(hex: 0x13203A), Color(hex: 0x0B1322)],
-        sun: Color(hex: 0xF2D8B8, opacity: 0.85),
-        line: Color(hex: 0x8FD7E0),
-        ink: Color(hex: 0xF2F5F8))
-}
-
 /// The icon drawn live, on the 1024-point master geometry, so the line and sun can animate.
 struct CalmLineIcon: View {
     let palette: CalmLinePalette
@@ -98,7 +75,7 @@ struct CalmLineIcon: View {
                     path.move(to: CGPoint(x: 614 * unit, y: 737 * unit))
                     path.addLine(to: CGPoint(x: 696 * unit, y: 737 * unit))
                 }
-                .stroke(Color.white.opacity(0.7 * sunRise), style: StrokeStyle(lineWidth: 15 * unit, lineCap: .round))
+                .stroke(palette.glint.opacity(sunRise), style: StrokeStyle(lineWidth: 15 * unit, lineCap: .round))
                 CalmLineShape()
                     .trim(from: 0, to: lineProgress)
                     .stroke(palette.line, style: StrokeStyle(lineWidth: 51 * unit, lineCap: .round, lineJoin: .round))

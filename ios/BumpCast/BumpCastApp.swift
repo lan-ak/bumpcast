@@ -80,22 +80,24 @@ struct RootView: View {
         @Bindable var router = router
         TabView(selection: $router.tab) {
             Tab("Flights", systemImage: "airplane", value: Router.Tab.flights) {
-                FlightsListView().font(.bcBody)
+                FlightsListView()
             }
             Tab("Map", systemImage: "map", value: Router.Tab.map) {
-                TurbulenceMapView().font(.bcBody)
+                TurbulenceMapView()
             }
             Tab("Learn", systemImage: "book.pages", value: Router.Tab.learn) {
-                LearnView().font(.bcBody)
+                LearnView()
             }
             Tab("Calm", systemImage: "wind", value: Router.Tab.calm, role: calmRole) {
-                CalmView().font(.bcBody)
+                CalmView()
             }
         }
-        .tint(Theme.accent)
         .overlay(alignment: .top) { ToastView(text: router.toast) }
-        .fullScreenCover(isPresented: $router.showBreathing) { BreathingView().font(.bcBody) }
-        .overlay { OnboardingCover().font(.bcBody) }
+        .fullScreenCover(isPresented: $router.showBreathing) { BreathingView() }
+        .overlay { OnboardingCover() }
+        // The one root for type, ink and tint; sheets and covers inherit it.
+        .bumpCastTheme()
+        .nightAppearanceAfterDark()
     }
 }
 

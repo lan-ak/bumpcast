@@ -14,15 +14,21 @@ struct ForecastView: View {
     /// Set when this forecast moved from advance to confirmed since the user last saw it.
     @State private var justConfirmed = false
     @State private var rowsVisible = false
+    @State private var openWarning: Forecast.Warning?
+    @State private var showOutlookSheet = false
 
     var body: some View {
         let confidence = forecast.confidence(departure: flight.departureAt)
         let fullAccess = paywalls.hasFullAccess(to: flight)
         VStack(alignment: .leading, spacing: 18) {
-            if let grade = forecast.grade {
-                GradeCard(grade: grade, forecast: forecast, confidence: confidence)
+            // An official warning is the first thing on the screen.
+            if let warning = forecast.officialWarnings.first {
+                WarningBanner(warning: warning) { openWarning = warning }
             }
-            StatTiles(forecast: forecast)
+            if let grade = forecast.grade {
+                GradeCard(grade: grade, forecast: forecast, confidence: confidence) { showOutlookSheet = true }
+            }
+            StatTiles(forecast: forecast, flight: flight)
             if fullAccess {
                 TimelineCard(
                     forecast: forecast, flight: flight, confidence: confidence,
@@ -31,8 +37,18 @@ struct ForecastView: View {
                 if !forecast.segments.isEmpty {
                     VStack(alignment: .leading, spacing: 12) {
                         Text("What to expect").font(.bcSection)
-                        ForEach(Array(forecast.segments.enumerated()), id: \.element.startMin) { index, segment in
-                            SegmentRow(segment: segment, isMain: segment.startMin == mainStretch?.startMin)
+                        ForEach(Array(forecast.expectedStretches(departure: flight.departureAt).enumerated()), id: \.element.startMin) {
+                            index, segment in
+                            Group {
+                                if forecast.isOutlook(segment, departure: flight.departureAt) {
+                                    OutlookSegmentRow(
+                                        segment: segment, warning: forecast.warning(for: segment),
+                                        showsBetaTag: !forecast.confirmedStretches.isEmpty
+                                    ) { openWarning = $0 }
+                                } else {
+                                    SegmentRow(segment: segment, isMain: segment.startMin == mainStretch?.startMin)
+                                }
+                            }
                                 .opacity(rowsVisible ? 1 : 0)
                                 .offset(y: rowsVisible || reduceMotion ? 0 : 14)
                                 .animation(Theme.motion(reduceMotion).delay(0.15 * Double(index)), value: rowsVisible)
@@ -53,6 +69,15 @@ struct ForecastView: View {
             .buttonStyle(.bordered)
             .tint(Theme.accent)
             ForecastFooter(forecast: forecast, confidence: confidence)
+        }
+        .sheet(item: $openWarning) { warning in
+            Group {
+                if warning.isOfficial { WarningSheet(warning: warning) } else { PilotReportNoteSheet(warning: warning) }
+            }
+            .presentationDetents([.medium, .large])
+        }
+        .sheet(isPresented: $showOutlookSheet) {
+            GlobalOutlookSheet().presentationDetents([.medium, .large])
         }
         .sensoryFeedback(.impact(flexibility: .soft, intensity: 0.5), trigger: justConfirmed) { _, new in new && hapticsEnabled }
         .onAppear {
@@ -75,7 +100,7 @@ enum ConfidenceMemory {
         let key = "confidence.\(flight)"
         let previous = UserDefaults.standard.string(forKey: key)
         UserDefaults.standard.set(confidence.attributeValue, forKey: key)
-        return previous == "early" && confidence.attributeValue != "early"
+        return previous == "early" && ["partly_confirmed", "confirmed"].contains(confidence.attributeValue)
     }
 }
 
@@ -83,21 +108,31 @@ private struct GradeCard: View {
     let grade: Forecast.Grade
     let forecast: Forecast
     let confidence: Forecast.Confidence
+    let openOutlook: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            ConfidenceBadge(confidence: confidence)
+            if confidence.isBeta {
+                Button(action: openOutlook) { ConfidenceBadge(confidence: confidence) }
+                    .buttonStyle(.plain)
+                    .accessibilityHint("Explains the global outlook")
+            } else {
+                ConfidenceBadge(confidence: confidence)
+            }
             AdaptiveStack {
                 WaterGlass(severity: forecast.worstSeverity, size: 44)
-                Text(grade.headline)
+                Text(forecast.isGlobalOutlook ? grade.outlookHeadline : grade.headline)
                     .font(.bcDisplay)
                     .displayTypeLimit()
                     .fixedSize(horizontal: false, vertical: true)
             }
-            Text(grade.summary)
+            Text(forecast.isGlobalOutlook ? grade.outlookSummary : grade.summary)
             // Shown to everyone, free included: an advance forecast firms up closer to the flight.
             TimelineView(.everyMinute) { context in
-                Text(confidence.statusLine(now: context.date))
+                Text(
+                    forecast.officialWarnings.isEmpty
+                        ? confidence.statusLine(now: context.date, durationMin: forecast.durationMin)
+                        : GlobalOutlookCopy.statusWarning)
                     .font(.bcSubheadlineStrong)
                     .foregroundStyle(.secondary)
             }
@@ -112,7 +147,10 @@ struct ConfidenceBadge: View {
 
     var body: some View {
         Label {
-            Text(confidence.title)
+            HStack(spacing: 6) {
+                Text(confidence.title)
+                if confidence.isBeta { BetaTag() }
+            }
         } icon: {
             Image(systemName: confidence.symbol)
                 .contentTransition(.symbolEffect(.replace))
@@ -129,16 +167,35 @@ struct ConfidenceBadge: View {
 /// Time in the air, minutes of light chop, minutes of moderate or stronger.
 private struct StatTiles: View {
     let forecast: Forecast
+    let flight: Flight
     @Environment(\.dynamicTypeSize) private var typeSize
 
     var body: some View {
+        if forecast.isGlobalOutlook {
+            outlookTiles
+        } else {
+            exactTiles
+        }
+    }
+
+    /// Outlook routes: no exact minutes of chop. The flight's length and an approximate total.
+    private var outlookTiles: some View {
+        let bumpy = forecast.segments.map(\.minutes).reduce(0, +)
+        return HStack(alignment: .top, spacing: 10) {
+            tile("In the air", (forecast.durationMin ?? 0).durationText)
+            tile("Bumps possible", bumpy == 0 ? "None major" : "About \(bumpy.roughMinutes.durationText)")
+        }
+        .fixedSize(horizontal: false, vertical: true)
+    }
+
+    private var exactTiles: some View {
         let light = forecast.samples.filter { $0.severity == .light }.count
         let moderate = forecast.samples.filter { $0.severity >= .moderate }.count
         // Three across, all the same height; one per row at accessibility sizes.
         let layout = typeSize.isAccessibilitySize
             ? AnyLayout(VStackLayout(spacing: 10))
             : AnyLayout(HStackLayout(alignment: .top, spacing: 10))
-        layout {
+        return layout {
             tile("In the air", (forecast.durationMin ?? 0).durationText)
             tile("Light chop", "\(light) min")
             tile("Moderate", "\(moderate) min")
@@ -207,14 +264,36 @@ private struct TimelineCard: View {
             }
             .accessibilityChartDescriptor(TimelineAudioGraph(forecast: forecast))
             Legend()
+            if forecast.isGlobalOutlook {
+                OutlookLegend(hasConfirmed: !forecast.confirmedStretches.isEmpty)
+            }
         }
         .skyCard()
         .onAppear(perform: animateIn)
     }
 
+    private var yMax: Double { max(0.4, forecast.samples.map(\.edr).max() ?? 0) }
+
+    /// Global outlook: confirmed minutes stay exact; outlook minutes become coarse 30-minute blocks.
+    private var exactSamples: [Forecast.Sample] {
+        forecast.isGlobalOutlook ? forecast.samples.filter { !isAdvance($0.min) } : forecast.samples
+    }
+
+    private var outlookBlocks: [OutlookBlock] {
+        guard forecast.isGlobalOutlook else { return [] }
+        let outlook = forecast.samples.filter { isAdvance($0.min) }
+        return Dictionary(grouping: outlook) { $0.min / OutlookBlock.minutes }
+            .values
+            .compactMap { group in
+                guard let first = group.map(\.min).min(), let last = group.map(\.min).max() else { return nil }
+                return OutlookBlock(start: first, end: last + 1, edr: group.map(\.edr).max() ?? 0)
+            }
+            .sorted { $0.start < $1.start }
+    }
+
     private func chart(dimmed: Bool) -> some View {
         Chart {
-            ForEach(forecast.samples, id: \.min) { sample in
+            ForEach(exactSamples, id: \.min) { sample in
                 RectangleMark(
                     xStart: .value("Minutes into flight", sample.min),
                     xEnd: .value("Minutes into flight", sample.min + 1),
@@ -222,7 +301,60 @@ private struct TimelineCard: View {
                     yEnd: .value("Bumpiness", max(sample.edr, 0.02))
                 )
                 .foregroundStyle(Theme.color(sample.severity).gradient)
-                .opacity(!dimmed && isAdvance(sample.min) ? 0.4 : 1)
+                .opacity(!dimmed && !forecast.isGlobalOutlook && isAdvance(sample.min) ? 0.4 : 1)
+            }
+            ForEach(outlookBlocks, id: \.start) { block in
+                RectangleMark(
+                    xStart: .value("Minutes into flight", block.start),
+                    xEnd: .value("Minutes into flight", block.end),
+                    yStart: .value("Bumpiness", 0),
+                    yEnd: .value("Bumpiness", max(block.edr, 0.02))
+                )
+                .foregroundStyle(Theme.color(Severity(edr: block.edr)))
+                .opacity(OutlookBlock.opacity)
+            }
+            if forecast.isGlobalOutlook {
+                // A solid accent strip under the axis marks what's confirmed.
+                ForEach(forecast.confirmedStretches, id: \.lowerBound) { range in
+                    RectangleMark(
+                        xStart: .value("Minutes into flight", range.lowerBound),
+                        xEnd: .value("Minutes into flight", range.upperBound + 1),
+                        yStart: .value("Bumpiness", 0),
+                        yEnd: .value("Bumpiness", yMax * 0.025)
+                    )
+                    .foregroundStyle(Theme.accent)
+                }
+            }
+            if !dimmed {
+                ForEach(forecast.warnings ?? []) { warning in
+                    if warning.isOfficial {
+                        RectangleMark(
+                            xStart: .value("Minutes into flight", warning.startMin),
+                            xEnd: .value("Minutes into flight", warning.endMin + 1),
+                            yStart: .value("Bumpiness", 0),
+                            yEnd: .value("Bumpiness", yMax)
+                        )
+                        .foregroundStyle(Theme.ink.opacity(0.08))
+                        .annotation(position: .overlay, alignment: .top) {
+                            Text("⚑ Official warning")
+                                .font(.bcCaption2Strong)
+                                .foregroundStyle(Theme.onAccent)
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 3)
+                                .background(Theme.ink, in: .capsule)
+                                .fixedSize()
+                        }
+                    } else {
+                        PointMark(
+                            x: .value("Minutes into flight", warning.startMin),
+                            y: .value("Bumpiness", yMax * 0.92)
+                        )
+                        .symbolSize(0)
+                        .annotation(position: .overlay) {
+                            Image(systemName: "flag").font(.bcCaption2Strong).foregroundStyle(Theme.secondaryInk)
+                        }
+                    }
+                }
             }
             if !dimmed, let nowMinute {
                 RuleMark(x: .value("Now", nowMinute))
@@ -236,14 +368,16 @@ private struct TimelineCard: View {
                 RuleMark(x: .value("Selected", selectedMinute))
                     .foregroundStyle(Theme.secondaryInk)
                     .annotation(position: .top, overflowResolution: .init(x: .fit, y: .disabled)) {
-                        Text("\(selectedMinute == 0 ? "Takeoff" : "\(selectedMinute.durationText) in") · \(sample.severity.title)")
+                        Text(selectionText(selectedMinute, sample))
                             .font(.bcCaptionStrong.monospacedDigit())
                             .padding(6)
                             .background(.regularMaterial, in: .capsule)
                     }
             }
         }
-        .chartYScale(domain: 0...max(0.4, forecast.samples.map(\.edr).max() ?? 0))
+        .chartYScale(domain: 0...yMax)
+        // Takeoff to landing: wide marks (outlook blocks, warning bands) mustn't pad it below zero.
+        .chartXScale(domain: 0...max((forecast.samples.last?.min ?? 0) + 1, 1))
         .chartYAxis {
             AxisMarks(values: [0.10, 0.22, 0.34]) { value in
                 AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5, dash: [3, 3]))
@@ -265,9 +399,20 @@ private struct TimelineCard: View {
     private func isAdvance(_ minute: Int) -> Bool {
         switch confidence {
         case .early: true
-        case .partly(let until): minute >= until
+        case .partly(let ranges), .globalOutlook(let ranges): !ranges.contains { $0.contains(minute) }
         case .confirmed: false
         }
+    }
+
+    /// Exact for confirmed minutes; approximate with a range on outlook minutes.
+    private func selectionText(_ minute: Int, _ sample: Forecast.Sample) -> String {
+        guard forecast.isGlobalOutlook, isAdvance(minute) else {
+            return "\(minute == 0 ? "Takeoff" : "\(minute.durationText) in") · \(sample.severity.title)"
+        }
+        let when = minute < 5 ? "Soon after takeoff" : "About \(minute.roughMinutes.durationText) in"
+        let segment = forecast.segments.first { $0.startMin <= minute && minute <= $0.endMin }
+        let level = segment.map { $0.outlookRange(warning: forecast.warning(for: $0)) } ?? "No major bumps"
+        return "\(when) · \(level)"
     }
 
     private func sample(at minute: Int) -> Forecast.Sample? {
@@ -277,8 +422,14 @@ private struct TimelineCard: View {
     private var selectedSeverity: Severity? { selectedMinute.flatMap { sample(at: $0)?.severity } }
 
     private var accessibilityStretch: String {
-        guard forecast.segments.indices.contains(focusedStretch) else { return "Smooth the whole way" }
+        guard forecast.segments.indices.contains(focusedStretch) else {
+            return forecast.isGlobalOutlook ? "No major bumps expected" : "Smooth the whole way"
+        }
         let s = forecast.segments[focusedStretch]
+        if forecast.isOutlook(s, departure: flight.departureAt) {
+            return "\(s.approximateTiming): \(s.outlookRange(warning: forecast.warning(for: s)).lowercased()). "
+                + "Stretch \(focusedStretch + 1) of \(forecast.segments.count)."
+        }
         let when = s.startMin == 0 ? "Right after takeoff" : "\(s.startMin.durationText) in"
         return "\(when), \(s.severity.title.lowercased()) for \(s.minutes) minutes. Stretch \(focusedStretch + 1) of \(forecast.segments.count)."
     }
@@ -317,6 +468,38 @@ private struct TimelineAudioGraph: AXChartDescriptorRepresentable {
         return AXChartDescriptor(
             title: "Turbulence timeline", summary: forecast.grade?.summary, xAxis: x, yAxis: y,
             additionalAxes: [], series: [series])
+    }
+}
+
+/// A coarse block of outlook minutes on the chart.
+private struct OutlookBlock {
+    static let minutes = 30
+    static let opacity = 0.42
+    let start: Int
+    let end: Int
+    let edr: Double
+}
+
+/// "Confirmed, exact" · "Outlook, approximate" under global outlook charts.
+private struct OutlookLegend: View {
+    let hasConfirmed: Bool
+
+    var body: some View {
+        HStack(spacing: 14) {
+            if hasConfirmed {
+                HStack(spacing: 4) {
+                    Capsule().fill(Theme.accent).frame(width: 14, height: 4)
+                    Text(GlobalOutlookCopy.legendConfirmed)
+                }
+            }
+            HStack(spacing: 4) {
+                RoundedRectangle(cornerRadius: 2).fill(Theme.secondaryInk.opacity(OutlookBlock.opacity)).frame(width: 14, height: 8)
+                Text(GlobalOutlookCopy.legendOutlook)
+            }
+        }
+        .font(.bcCaption)
+        .foregroundStyle(.secondary)
+        .accessibilityElement(children: .combine)
     }
 }
 
@@ -409,10 +592,20 @@ private struct ForecastFooter: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Label(confidence.title, systemImage: confidence.symbol)
-                .font(.bcCardTitle)
-                .foregroundStyle(confidence.color)
+            Label {
+                HStack(spacing: 6) {
+                    Text(confidence.title)
+                    if confidence.isBeta { BetaTag() }
+                }
+            } icon: {
+                Image(systemName: confidence.symbol)
+            }
+            .font(.bcCardTitle)
+            .foregroundStyle(confidence.color)
             Text(confidence.explanation).font(.bcSubheadline)
+            if confidence.isBeta {
+                Text("Based on: \(GlobalOutlookCopy.basedOn)").font(.bcSubheadline).foregroundStyle(.secondary)
+            }
             Group {
                 if let issued = forecast.issuedAt {
                     Text("Updated \(issued.formatted(date: .omitted, time: .shortened))")
@@ -427,6 +620,8 @@ private struct ForecastFooter: View {
 
     private func nextUpdate(after issued: Date) -> String? {
         switch confidence {
+        case .globalOutlook: max(issued.addingTimeInterval(6 * 3600), .now.addingTimeInterval(300))
+            .formatted(date: .omitted, time: .shortened)
         case .early(let expected): expected > .now ? expected.formatted(date: .omitted, time: .shortened) : nil
         case .partly, .confirmed: max(issued.addingTimeInterval(3600), .now.addingTimeInterval(300))
             .formatted(date: .omitted, time: .shortened)

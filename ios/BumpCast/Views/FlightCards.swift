@@ -1,7 +1,8 @@
 import StoreKit
 import SwiftUI
 
-/// Before and during the flight: "We've taken off" starts the Live Activity and offline reminders.
+/// Before and during the flight. At the gate the countdown is armed (and sold, to free users,
+/// while there's still a connection); in the air "We've taken off" re-times it to wheels-up.
 struct InFlightCard: View {
     let flight: Flight
     let forecast: Forecast
@@ -9,12 +10,14 @@ struct InFlightCard: View {
     @Environment(InFlight.self) private var inFlight
     @Environment(Paywalls.self) private var paywalls
     @Environment(FlightStore.self) private var store
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var showsOfflineNote = false
 
     var body: some View {
         if inFlight.isFlying(flight, forecast: forecast) {
             flying
         } else if inFlight.canTakeOff(flight, forecast: forecast) {
-            boarding
+            if inFlight.isArmed(flight) { armed } else { boarding }
         } else if paywalls.hasFullAccess(to: flight), let synced = store.syncedAt,
             flight.departureAt.timeIntervalSinceNow < 24 * 3600
         {
@@ -25,21 +28,62 @@ struct InFlightCard: View {
         }
     }
 
+    private var takeoffTime: String {
+        flight.estimatedTakeoff.formatted(date: .omitted, time: .shortened)
+    }
+
+    /// Not armed yet. Before departure it's "get it ready"; after, the user is telling us they're up.
     private var boarding: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Label("Boarding soon?", systemImage: "airplane.departure").font(.bcCardTitle)
-            Text("Tap when you take off. We'll count down to each bumpy stretch on your Lock Screen and remind you before it starts. Works without wifi.")
+        let beforeDeparture = Date.now < flight.expectedDeparture
+        return VStack(alignment: .leading, spacing: 10) {
+            Label(beforeDeparture ? "Boarding soon?" : "In the air?", systemImage: "airplane.departure")
+                .font(.bcCardTitle)
+            Text(beforeDeparture
+                ? "Get your bump countdown ready before you board. It starts on your Lock Screen at takeoff, around \(takeoffTime), and reminds you before each bumpy stretch. Works without wifi."
+                : "Tap when you take off. We'll count down to each bumpy stretch on your Lock Screen and remind you before it starts. Works without wifi.")
                 .font(.bcSubheadline)
                 .foregroundStyle(.secondary)
             Button {
-                paywalls.unlock(.liveActivityLocked, flight: flight) {
-                    inFlight.takeOff(flight, forecast: forecast)
+                paywalls.unlock(.liveActivityLocked, flight: flight, whenOffline: { showsOfflineNote = true }) {
+                    showsOfflineNote = false
+                    inFlight.getReady(flight, forecast: forecast)
                 }
+            } label: {
+                Label(beforeDeparture ? "Get the countdown ready" : "We've taken off", systemImage: "airplane")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent)
+            if showsOfflineNote {
+                Label(beforeDeparture
+                    ? "Connect to wifi to unlock the countdown. Once it's ready, it works without a connection."
+                    : "Connect to wifi to unlock the countdown, or get it ready before your next flight.",
+                    systemImage: "wifi")
+                    .font(.bcFootnote)
+                    .foregroundStyle(.secondary)
+                    .transition(.opacity)
+            }
+        }
+        .skyCard()
+        .animation(Theme.motion(reduceMotion), value: showsOfflineNote)
+    }
+
+    /// Armed, still on the ground. "We've taken off" corrects the timing if wheels-up differs.
+    private var armed: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Label("Countdown ready", systemImage: "checkmark.circle").font(.bcCardTitle)
+            Text("It starts on your Lock Screen at takeoff, around \(takeoffTime), and reminds you before each bumpy stretch. Works without wifi.")
+                .font(.bcSubheadline)
+                .foregroundStyle(.secondary)
+            Button {
+                inFlight.takeOff(flight, forecast: forecast)
             } label: {
                 Label("We've taken off", systemImage: "airplane")
                     .frame(maxWidth: .infinity)
             }
-            .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent)
+            .buttonStyle(.bordered)
+            Text("Tap when the wheels leave the ground and we'll match the countdown to it.")
+                .font(.bcFootnote)
+                .foregroundStyle(.secondary)
         }
         .skyCard()
     }
@@ -59,8 +103,15 @@ struct InFlightCard: View {
                         .font(.bcMeta)
                 }
                 Text("The countdown is on your Lock Screen too.").font(.bcFootnote).foregroundStyle(.secondary)
-                Button("We've landed") { inFlight.land(flight) }
-                    .buttonStyle(.bordered)
+                HStack {
+                    // Armed flights count from the estimated wheels-up until the user says otherwise.
+                    if inFlight.takeoff(of: flight) == nil {
+                        Button("We've taken off") { inFlight.takeOff(flight, forecast: forecast) }
+                            .buttonStyle(.bordered)
+                    }
+                    Button("We've landed") { inFlight.land(flight) }
+                        .buttonStyle(.bordered)
+                }
             }
             .skyCard()
         }
@@ -89,32 +140,58 @@ struct LandingCheckCard: View {
     @Environment(\.requestReview) private var requestReview
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var isSending = false
+    @State private var dismissed = false
+
+    /// Beta flights always ask, compared with the outlook, until answered or dismissed.
+    private var isBeta: Bool { store.forecasts[flight.id]?.isGlobalOutlook == true }
 
     var body: some View {
+        if !dismissed {
+            card
+                .onAppear { dismissed = UserDefaults.standard.bool(forKey: dismissKey) }
+        }
+    }
+
+    private var dismissKey: String { "landingCheck.dismissed.\(flight.id)" }
+
+    private var card: some View {
         VStack(alignment: .leading, spacing: 12) {
             if let report = store.reports[flight.id] {
                 result(report)
                     .transition(.opacity)
             } else {
-                Text("How did it feel?").font(.bcSection)
+                HStack(alignment: .firstTextBaseline) {
+                    Text(isBeta ? GlobalOutlookCopy.compareTitle : "How did it feel?").font(.bcSection)
+                    Spacer()
+                    if isBeta {
+                        Button("Dismiss", systemImage: "xmark") {
+                            UserDefaults.standard.set(true, forKey: dismissKey)
+                            dismissed = true
+                        }
+                        .labelStyle(.iconOnly)
+                        .foregroundStyle(.secondary)
+                    }
+                }
                 if let forecast = store.forecasts[flight.id], let grade = forecast.grade {
-                    Text("We forecast: \(grade.headline.lowercased())")
+                    Text(isBeta ? "Our outlook: \(grade.outlookHeadline.lowercased())" : "We forecast: \(grade.headline.lowercased())")
                         .font(.bcSubheadline)
                         .foregroundStyle(.secondary)
                 }
-                HStack(spacing: 10) {
+                // Three long answers stack on beta flights; the short ones share a row.
+                let layout = isBeta ? AnyLayout(VStackLayout(spacing: 8)) : AnyLayout(HStackLayout(spacing: 10))
+                layout {
                     ForEach(FeltRating.allCases, id: \.self) { rating in
                         Button {
                             submit(rating)
                         } label: {
-                            Text(rating.title).frame(maxWidth: .infinity)
+                            Text(isBeta ? rating.outlookTitle : rating.title).frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.bordered)
                         .tint(Theme.accent)
                         .disabled(isSending)
                     }
                 }
-                Text("Your answer helps make every forecast more accurate.")
+                Text(isBeta ? GlobalOutlookCopy.compareFooter : "Your answer helps make every forecast more accurate.")
                     .font(.bcFootnote)
                     .foregroundStyle(.secondary)
             }

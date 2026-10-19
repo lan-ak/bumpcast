@@ -52,6 +52,17 @@ struct SettingsView: View {
                     Text("Forecast ready 48 hours before departure, then updates at 24, 6 and 2 hours. Quiet overnight unless you fly early.")
                 }
                 Section {
+                    Toggle(isOn: Binding(get: { GlobalBeta.shared.isOn }, set: { GlobalBeta.shared.set($0) })) {
+                        HStack(spacing: 6) {
+                            Text(GlobalOutlookCopy.settingsLabel)
+                            BetaTag().foregroundStyle(.secondary)
+                        }
+                    }
+                    .tint(Theme.accent)
+                } footer: {
+                    Text(GlobalOutlookCopy.settingsFooter)
+                }
+                Section {
                     Toggle("Haptics", isOn: $hapticsEnabled).tint(Theme.accent)
                 } footer: {
                     Text("Soft taps for breathing and when a forecast is confirmed. Never used as a warning.")
@@ -78,7 +89,7 @@ struct SettingsView: View {
             }
             // The same calm sky as the rest of the app, behind the standard grouped rows.
             .scrollContentBackground(.hidden)
-            .background { SkyBackground(sky: Sky(date: .now)) }
+            .skyBackground(Sky(date: .now))
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -122,7 +133,7 @@ private struct LicensesView: View {
             .padding()
             .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .background { SkyBackground(sky: Sky(date: .now)) }
+        .skyBackground(Sky(date: .now))
         .navigationTitle("Licences")
         .navigationBarTitleDisplayMode(.inline)
     }

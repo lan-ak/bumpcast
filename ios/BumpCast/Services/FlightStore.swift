@@ -248,14 +248,20 @@ final class FlightStore {
 enum ForecastState: Equatable {
     case unlocksAt(Date)
     case building
+    /// A route only the global outlook covers, with the beta off: "Not forecast yet".
+    case betaAvailable
+    /// No forecast can cover this route: "We can't forecast this route yet".
     case outOfCoverage
     case ready(Forecast)
 
-    init(flight: Flight, forecast: Forecast?, now: Date = .now) {
+    init(flight: Flight, forecast: Forecast?, now: Date = .now, betaOn: Bool? = nil) {
+        let betaOn = betaOn ?? GlobalBeta.storedIsOn
         if let forecast, forecast.status == .ready {
-            self = .ready(forecast)
-        } else if forecast?.status == .outOfCoverage || !Coverage.covers(flight) {
+            self = forecast.isGlobalOutlook && !betaOn ? .betaAvailable : .ready(forecast)
+        } else if forecast?.status == .outOfCoverage {
             self = .outOfCoverage
+        } else if !Coverage.covers(flight) && !betaOn {
+            self = .betaAvailable
         } else if now < flight.forecastUnlocksAt {
             self = .unlocksAt(flight.forecastUnlocksAt)
         } else {

@@ -1,4 +1,5 @@
 import Foundation
+import Network
 import Observation
 import SuperwallKit
 import UIKit
@@ -18,7 +19,7 @@ enum Placement: String, CaseIterable {
     case timelineLocked = "timeline_locked"
     /// Gated: "what changed" updates and their notifications.
     case updatesLocked = "updates_locked"
-    /// Gated: "We've taken off", the Live Activity and in-flight reminders.
+    /// Gated: getting the countdown ready at the gate (or "We've taken off"): the Live Activity and in-flight reminders.
     case liveActivityLocked = "live_activity_locked"
     /// Gated: live flight status (delays, gate, cancellations) and delay pushes.
     case liveStatusLocked = "live_status_locked"
@@ -47,11 +48,15 @@ final class Paywalls {
     /// Flights unlocked by a flight pass bought this session (before the pass syncs to Supabase).
     private(set) var unlockedFlights: Set<UUID> = []
     private(set) var isConfigured = false
+    /// Whether the phone can reach the App Store right now. A paywall can't complete a purchase
+    /// without it, so gated features in the air show a calm note instead.
+    private(set) var isOnline = true
 
     /// The flight a paywall was opened for, so a flight pass bought there unlocks that flight.
     @ObservationIgnored private var passFlightID: UUID?
     @ObservationIgnored private var delegateAdapter: DelegateAdapter?
     @ObservationIgnored private let defaults = UserDefaults.standard
+    @ObservationIgnored private let pathMonitor = NWPathMonitor()
 
     func configure() {
         guard let key = Bundle.main.infoDictionary?["SuperwallAPIKey"] as? String, key.hasPrefix("pk_") else { return }
@@ -61,12 +66,26 @@ final class Paywalls {
         Superwall.shared.delegate = adapter
         isConfigured = true
         isPro = Superwall.shared.subscriptionStatus.isActive || Self.debugForcePro
+        pathMonitor.pathUpdateHandler = { [weak self] path in
+            let online = path.status == .satisfied && !Self.debugForceOffline
+            Task { @MainActor in self?.isOnline = online }
+        }
+        pathMonitor.start(queue: DispatchQueue(label: "bumpcast.paywalls.path"))
     }
 
     /// Debug builds only: launch with `-forcePro` to test Pro features without a paywall.
     private static var debugForcePro: Bool {
         #if DEBUG
             ProcessInfo.processInfo.arguments.contains("-forcePro")
+        #else
+            false
+        #endif
+    }
+
+    /// Debug builds only: launch with `-forceOffline` to test the in-air note without airplane mode.
+    nonisolated private static var debugForceOffline: Bool {
+        #if DEBUG
+            ProcessInfo.processInfo.arguments.contains("-forceOffline")
         #else
             false
         #endif
@@ -91,13 +110,23 @@ final class Paywalls {
     /// Superwall can show a paywall. Access is always checked against real entitlements: Superwall
     /// also runs its feature block for holdouts and campaigns without a paywall, and those must not
     /// unlock Pro.
-    func unlock(_ placement: Placement, flight: Flight? = nil, then feature: @escaping @MainActor () -> Void) {
+    ///
+    /// With `whenOffline`, a user without access who has no connection gets that instead of a
+    /// paywall, since the purchase couldn't go through (e.g. in the air).
+    func unlock(
+        _ placement: Placement, flight: Flight? = nil, whenOffline: (@MainActor () -> Void)? = nil,
+        then feature: @escaping @MainActor () -> Void
+    ) {
         let entitled = { [weak self] in
             guard let self else { return false }
             return flight.map(self.hasFullAccess) ?? (self.isPro || !self.isConfigured)
         }
         if entitled() {
             feature()
+            return
+        }
+        if let whenOffline, !isOnline {
+            whenOffline()
             return
         }
         passFlightID = flight?.id
@@ -170,7 +199,7 @@ final class Paywalls {
         attributes["next_flight_confidence"] = nextForecast.flatMap { forecast in
             next.map { forecast.confidence(departure: $0.departureAt).attributeValue }
         }
-        attributes["next_flight_covered"] = next.map(Coverage.covers)
+        attributes["next_flight_covered"] = next.map { Coverage.covers($0) || GlobalBeta.shared.isOn }
         Superwall.shared.setUserAttributes(attributes)
     }
 
@@ -233,6 +262,7 @@ extension Forecast.Confidence {
         case .early: "early"
         case .partly: "partly_confirmed"
         case .confirmed: "confirmed"
+        case .globalOutlook: "global_outlook"
         }
     }
 }

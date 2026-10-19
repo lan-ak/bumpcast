@@ -11,7 +11,7 @@ export default {
     title: {
       timeline_locked: "See exactly when the bumps are.",
       updates_locked: "Know the moment your forecast changes.",
-      live_activity_locked: "A countdown to every bump.",
+      live_activity_locked: "Get your bump countdown ready.",
       pilot_reports_locked: "See what pilots are feeling now.",
       live_status_locked: "Know about delays and gate changes first.",
       flight_limit_reached: "Keep every flight covered.",
@@ -25,6 +25,9 @@ export default {
     featureStatus: "Live delays, gates and terminals for your flight",
     featurePilots: "Live pilot reports on the map",
     featureFlights: "As many upcoming flights as you like",
+    // Coverage, side by side. Never "forecasts worldwide" without the beta qualifier.
+    coverageUS: "Detailed, hourly forecasts for US flights",
+    coverageGlobal: "Global outlook (beta) for international flights: approximate, updated every 6 hours",
 
     yearly: "Yearly",
     monthly: "Monthly",

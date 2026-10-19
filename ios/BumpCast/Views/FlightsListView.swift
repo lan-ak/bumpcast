@@ -41,8 +41,7 @@ struct FlightsListView: View {
                 // A new flight settles in with the house spring.
                 .animation(Theme.motion(reduceMotion), value: store.flights.map(\.id))
             }
-            .background { SkyBackground(sky: sky) }
-            .onSky(sky)  // light text on a night sky
+            .skyBackground(sky)
             .navigationTitle("Flights")
             .navigationDestination(for: UUID.self) { id in
                 FlightDetailView(flightID: id)
@@ -57,8 +56,8 @@ struct FlightsListView: View {
                 }
             }
             .refreshable { await store.reload() }
-            .sheet(isPresented: $isAdding) { AddFlightView().font(.bcBody) }
-            .sheet(isPresented: $isShowingSettings) { SettingsView().font(.bcBody) }
+            .sheet(isPresented: $isAdding) { AddFlightView() }
+            .sheet(isPresented: $isShowingSettings) { SettingsView() }
             .sensoryFeedback(trigger: store.flights.count) { old, new in
                 new > old && hapticsEnabled ? .impact(flexibility: .soft, intensity: 0.5) : nil
             }
@@ -147,7 +146,7 @@ struct NextFlightCard: View {
     let forecast: Forecast?
 
     var body: some View {
-        let state = ForecastState(flight: flight, forecast: forecast)
+        let state = ForecastState(flight: flight, forecast: forecast, betaOn: GlobalBeta.shared.isOn)
         VStack(alignment: .leading, spacing: 12) {
             HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 4) {
@@ -163,13 +162,17 @@ struct NextFlightCard: View {
             switch state {
             case .ready(let forecast):
                 if let grade = forecast.grade {
-                    Text(grade.headline).font(.bcTitle2)
+                    Text(forecast.isGlobalOutlook ? grade.outlookHeadline : grade.headline).font(.bcTitle2)
+                }
+                if !forecast.officialWarnings.isEmpty {
+                    OfficialWarningLabel()
                 }
                 WaveTimeline(forecast: forecast)
                 let confidence = forecast.confidence(departure: flight.departureAt)
                 HStack(spacing: 6) {
                     Image(systemName: confidence.symbol)
                     Text(confidence.title)
+                    if confidence.isBeta { BetaTag() }
                     if let issued = forecast.issuedAt {
                         Text("· updated \(issued.formatted(.relative(presentation: .named)))")
                     }
@@ -182,9 +185,12 @@ struct NextFlightCard: View {
             case .building:
                 Text("Building your forecast").font(.bcTitle2)
                 Text("Checking the latest turbulence data along your route.").foregroundStyle(.secondary)
+            case .betaAvailable:
+                Text(GlobalOutlookCopy.notForecastYet).font(.bcTitle2)
+                Text("\(GlobalOutlookCopy.listBetaAvailable): our global outlook can cover this route.").foregroundStyle(.secondary)
             case .outOfCoverage:
-                Text("Not covered yet").font(.bcTitle2)
-                Text("Forecasts cover US flights for now.").foregroundStyle(.secondary)
+                Text(GlobalOutlookCopy.unsupportedTitle).font(.bcTitle2)
+                Text(GlobalOutlookCopy.unsupportedBody).foregroundStyle(.secondary)
             }
         }
         .skyCard()
@@ -198,7 +204,7 @@ struct FlightRow: View {
     var report: LandingReport? = nil
 
     var body: some View {
-        let state = ForecastState(flight: flight, forecast: forecast)
+        let state = ForecastState(flight: flight, forecast: forecast, betaOn: GlobalBeta.shared.isOn)
         AdaptiveStack {
             WaterGlass(severity: state.severity, size: 30)
             VStack(alignment: .leading, spacing: 4) {
@@ -224,10 +230,14 @@ struct FlightRow: View {
                         .font(.bcCaptionStrong)
                         .foregroundStyle(.secondary)
                 } else if case .ready(let forecast) = state, flight.departureAt > .now {
-                    let confidence = forecast.confidence(departure: flight.departureAt)
-                    Label(confidence.shortStatus(), systemImage: confidence.symbol)
-                        .font(.bcCaptionStrong)
-                        .foregroundStyle(confidence.color)
+                    if !forecast.officialWarnings.isEmpty {
+                        OfficialWarningLabel()
+                    } else {
+                        let confidence = forecast.confidence(departure: flight.departureAt)
+                        Label(confidence.shortStatus(), systemImage: confidence.symbol)
+                            .font(.bcCaptionStrong)
+                            .foregroundStyle(confidence.color)
+                    }
                 } else if case .unlocksAt(let date) = state {
                     Text("Too early · first forecast \(date.relativeDay())")
                         .font(.bcCaptionStrong)
@@ -248,14 +258,16 @@ struct StatusPill: View {
             switch state {
             case .ready(let forecast):
                 if let grade = forecast.grade {
-                    Text(grade.title).foregroundStyle(grade.color)
+                    Text(forecast.isGlobalOutlook ? grade.outlookTitle : grade.title).foregroundStyle(grade.color)
                 }
             case .unlocksAt:
                 Text("Too early").foregroundStyle(.secondary)
             case .building:
                 Text("Preparing").foregroundStyle(.secondary)
+            case .betaAvailable:
+                Text(GlobalOutlookCopy.listBetaAvailable).foregroundStyle(.secondary)
             case .outOfCoverage:
-                Text("Not covered yet").foregroundStyle(.secondary)
+                Text("Can't forecast yet").foregroundStyle(.secondary)
             }
         }
         .font(.bcCaptionStrong)
@@ -286,6 +298,26 @@ private struct LearnCard: View {
             .skyCard(cornerRadius: 18, padding: 14)
         }
         .buttonStyle(.plain)
+    }
+}
+
+/// "⚑ Official warning on route": flags only official warnings, never pilot reports.
+struct OfficialWarningLabel: View {
+    var body: some View {
+        Label(GlobalOutlookCopy.listWarning, systemImage: "flag.fill")
+            .font(.bcCaptionStrong)
+            .foregroundStyle(Theme.ink)
+    }
+}
+
+/// The mono BETA tag on global outlook badges.
+struct BetaTag: View {
+    var body: some View {
+        Text("BETA")
+            .font(.custom(BrandFont.monoMedium, size: 10, relativeTo: .caption2))
+            .padding(.horizontal, 4)
+            .overlay(RoundedRectangle(cornerRadius: 4).stroke(lineWidth: 1))
+            .accessibilityLabel("beta")
     }
 }
 

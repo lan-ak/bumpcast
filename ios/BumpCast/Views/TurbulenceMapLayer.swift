@@ -144,7 +144,7 @@ struct TurbulenceMapLayer: UIViewRepresentable {
                 renderer.lineCap = .round
                 renderer.lineJoin = .round
                 if line.title == "casing" {
-                    renderer.strokeColor = .white
+                    renderer.strokeColor = UIColor(Theme.mapHalo)
                     renderer.lineWidth = 8
                 } else {
                     renderer.strokeColor = UIColor(Theme.routeInk)
@@ -171,11 +171,6 @@ struct TurbulenceMapLayer: UIViewRepresentable {
             onSelectReport(report.report)
         }
     }
-}
-
-extension Theme {
-    /// The route line on the map: a deeper teal than the accent, so it reads over the fields.
-    static let routeInk = Color(light: 0x1B5664, dark: 0x8FD3E0)
 }
 
 // MARK: - Pilot report markers
@@ -206,7 +201,7 @@ private final class ReportMarkerView: MKAnnotationView {
         frame = CGRect(x: 0, y: 0, width: 44, height: 44)
         dot.frame = CGRect(x: 13, y: 13, width: 18, height: 18)
         dot.cornerRadius = 9
-        dot.borderColor = UIColor.white.cgColor
+        dot.borderColor = UIColor(Theme.mapHalo).cgColor
         dot.borderWidth = 2.5
         dot.shadowColor = UIColor.black.cgColor
         dot.shadowOpacity = 0.2

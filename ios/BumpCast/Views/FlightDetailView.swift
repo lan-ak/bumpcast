@@ -23,13 +23,13 @@ struct FlightDetailView: View {
             .multilineTextAlignment(.center)
             .padding()
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background { SkyBackground(sky: Sky(date: .now)) }
+            .skyBackground(Sky(date: .now))
         }
     }
 
     private func content(_ flight: Flight) -> some View {
         let forecast = store.forecasts[flight.id]
-        let state = ForecastState(flight: flight, forecast: forecast)
+        let state = ForecastState(flight: flight, forecast: forecast, betaOn: GlobalBeta.shared.isOn)
         let landed = inFlight.landing(of: flight, forecast: forecast) <= .now
         return ScrollView {
             VStack(alignment: .leading, spacing: 20) {
@@ -47,7 +47,7 @@ struct FlightDetailView: View {
                         InFlightCard(flight: flight, forecast: forecast)
                     }
                 }
-                if !landed, flight.departureAt > .now, !push.isEnabled, state != .outOfCoverage {
+                if !landed, flight.departureAt > .now, !push.isEnabled, state != .outOfCoverage, state != .betaAvailable {
                     NotificationsCard(forecastReady: { if case .ready = state { true } else { false } }())
                 }
                 FlightStatusSection(flight: flight, forecast: forecast)
@@ -85,6 +85,8 @@ struct FlightDetailView: View {
                         title: "Building your forecast",
                         message: "We're checking the latest turbulence data along your route. This usually takes a few minutes."
                     )
+                case .betaAvailable:
+                    BetaInviteCard(flight: flight)
                 case .outOfCoverage:
                     WaitlistCard(flight: flight)
                 }
@@ -92,8 +94,7 @@ struct FlightDetailView: View {
             }
             .padding()
         }
-        .background { SkyBackground(sky: Sky(date: flight.departureAt, timeZone: flight.originAirport?.timeZone ?? .current)) }
-        .onSky(Sky(date: flight.departureAt, timeZone: flight.originAirport?.timeZone ?? .current))
+        .skyBackground(Sky(date: flight.departureAt, timeZone: flight.originAirport?.timeZone ?? .current))
         .navigationTitle("Forecast")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -107,12 +108,14 @@ struct FlightDetailView: View {
                 }
             }
         }
-        .sheet(isPresented: $isEditing) { AddFlightView(flight: flight).font(.bcBody) }
-        .sheet(isPresented: $isAdding) { AddFlightView().font(.bcBody) }
+        .sheet(isPresented: $isEditing) { AddFlightView(flight: flight) }
+        .sheet(isPresented: $isAdding) { AddFlightView() }
         .refreshable { await store.reload() }
         .task(id: state == .building) {
             // While the worker is building the forecast, check back every 30 seconds.
-            while ForecastState(flight: flight, forecast: store.forecasts[flight.id]) == .building, !Task.isCancelled {
+            while ForecastState(flight: flight, forecast: store.forecasts[flight.id], betaOn: GlobalBeta.shared.isOn) == .building,
+                !Task.isCancelled
+            {
                 try? await Task.sleep(for: .seconds(30))
                 await store.refreshForecast(flight.id)
             }
@@ -169,7 +172,43 @@ extension MessageCard where Actions == EmptyView {
     }
 }
 
-/// Outside US coverage: say so plainly and offer to notify when the region launches.
+/// A route only the global outlook covers, with the beta off: offer it, plainly.
+private struct BetaInviteCard: View {
+    let flight: Flight
+    @Environment(FlightStore.self) private var store
+    @State private var dismissed = false
+
+    var body: some View {
+        if dismissed {
+            MessageCard(
+                symbol: "globe",
+                title: GlobalOutlookCopy.notForecastYet,
+                message: "You can turn on global outlooks (beta) in Settings at any time.")
+        } else {
+            MessageCard(symbol: "globe", title: GlobalOutlookCopy.waitlistTitle, message: GlobalOutlookCopy.waitlistBody) {
+                HStack {
+                    Button(GlobalOutlookCopy.turnOn) {
+                        GlobalBeta.shared.set(true)
+                        Task { await store.refreshForecast(flight.id) }
+                    }
+                    .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent).tint(Theme.accent)
+                    Button(GlobalOutlookCopy.notNow) {
+                        GlobalBeta.shared.set(false)
+                        dismissed = true
+                        UserDefaults.standard.set(true, forKey: key)
+                    }
+                    .buttonStyle(.bordered).tint(Theme.accent)
+                }
+                .font(.bcSubheadlineStrong)
+            }
+            .onAppear { dismissed = UserDefaults.standard.bool(forKey: key) }
+        }
+    }
+
+    private var key: String { "betaInvite.dismissed.\(flight.id)" }
+}
+
+/// No forecast can cover this route yet (polar and other routes the worker can't do).
 private struct WaitlistCard: View {
     let flight: Flight
     @Environment(FlightStore.self) private var store
@@ -178,14 +217,13 @@ private struct WaitlistCard: View {
     var body: some View {
         let airport = Coverage.uncoveredAirport(flight)
         let country = airport?.country ?? "XX"
-        let name = Locale.current.localizedString(forRegionCode: country) ?? country
         MessageCard(
             symbol: "globe",
-            title: "We don't cover this route yet",
-            message: "BumpCast forecasts cover US flights for now. Worldwide coverage is next."
+            title: GlobalOutlookCopy.unsupportedTitle,
+            message: GlobalOutlookCopy.unsupportedBody
         ) {
             if store.waitlist.contains(country) {
-                Label("We'll let you know when we cover \(name).", systemImage: "checkmark.circle.fill")
+                Label("We'll let you know when we can forecast it.", systemImage: "checkmark.circle.fill")
                     .foregroundStyle(Theme.accent)
             } else {
                 Button {
@@ -195,7 +233,7 @@ private struct WaitlistCard: View {
                         isJoining = false
                     }
                 } label: {
-                    Label("Notify me when you cover \(name)", systemImage: "bell")
+                    Label(GlobalOutlookCopy.unsupportedAction, systemImage: "bell")
                 }
                 .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent)
                 .disabled(isJoining)

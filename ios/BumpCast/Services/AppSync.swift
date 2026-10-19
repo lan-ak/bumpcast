@@ -10,8 +10,13 @@ enum AppSync {
         let store = FlightStore.shared
         store.onSync = {
             Paywalls.shared.updateAttributes()
+            InFlight.shared.armUpcoming()
+            InFlight.shared.retimeArmed()
             InFlight.shared.refreshActivities()
-            Task { await InFlight.shared.scheduleLandingChecks() }
+            Task {
+                await InFlight.shared.scheduleLandingChecks()
+                await InFlight.shared.scheduleBoardingReminders()
+            }
         }
         let userID = await store.start()
         if let userID { Paywalls.shared.identify(userID) }
@@ -28,7 +33,8 @@ enum AppSync {
         let profile = ProfileRecord(
             isPro: Paywalls.shared.isPro,
             notificationsEnabled: PushNotifications.shared.isEnabled,
-            timezone: TimeZone.current.identifier)
+            timezone: TimeZone.current.identifier,
+            globalBeta: GlobalBeta.shared.choice)
         try? await FlightStore.shared.service.saveProfile(profile)
     }
 

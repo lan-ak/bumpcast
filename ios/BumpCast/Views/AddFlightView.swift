@@ -78,8 +78,7 @@ struct AddFlightView: View {
                 }
             }
             .animation(Theme.motion(reduceMotion), value: step)
-            .background { SkyBackground(sky: sky) }
-            .onSky(sky)
+            .skyBackground(sky)
             .safeAreaInset(edge: .top) { context }
             .safeAreaInset(edge: .bottom) { bottomButtons }
             .navigationTitle(title)
@@ -602,10 +601,19 @@ private struct RouteStep: View {
 
     static func isValid(_ origin: Airport?, _ destination: Airport?, allowOutsideCoverage: Bool) -> Bool {
         guard let origin, let destination, origin != destination else { return false }
-        return allowOutsideCoverage || Coverage.covers(from: origin, to: destination)
+        return allowOutsideCoverage || GlobalBeta.storedIsOn || Coverage.covers(from: origin, to: destination)
     }
 
     private var sameAirport: Bool { origin != nil && origin == destination }
+    private var beta: GlobalBeta { GlobalBeta.shared }
+
+    /// "The first part, over the US, is confirmed." only when the flight starts in the US.
+    private var betaExplanation: String {
+        guard let origin, Coverage.latitude.contains(origin.lat), Coverage.longitude.contains(origin.lon) else {
+            return GlobalOutlookCopy.addExplanationAll
+        }
+        return GlobalOutlookCopy.addFirstPartConfirmed + GlobalOutlookCopy.addExplanation
+    }
     private var outsideCoverage: Bool {
         guard let origin, let destination, origin != destination else { return false }
         return !Coverage.covers(from: origin, to: destination)
@@ -658,22 +666,51 @@ private struct RouteStep: View {
                         }
                     }
                 }
-                if outsideCoverage && !allowOutsideCoverage {
-                    VStack(alignment: .leading, spacing: 10) {
-                        Label("This route is outside our coverage for now", systemImage: "globe")
-                            .font(.bcCardTitle)
-                        Text("You can still save it. We'll show it as not covered and let you know when we cover it.")
-                            .font(.bcSubheadline)
-                            .foregroundStyle(.secondary)
-                        HStack {
-                            Button("Save anyway") { allowOutsideCoverage = true }
-                                .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent).tint(Theme.accent)
-                            Button("Change route") { destination = nil }
-                                .buttonStyle(.bordered).tint(Theme.accent)
+                if outsideCoverage && !allowOutsideCoverage && !beta.isOn {
+                    if beta.hasAnswered {
+                        // Said no before: save it as "Not forecast yet", or turn the beta on.
+                        VStack(alignment: .leading, spacing: 10) {
+                            Label(GlobalOutlookCopy.notForecastYet, systemImage: "globe")
+                                .font(.bcCardTitle)
+                            Text("This route needs the global outlook (beta), which is off. You can still save it.")
+                                .font(.bcSubheadline)
+                                .foregroundStyle(.secondary)
+                            HStack {
+                                Button("Save anyway") { allowOutsideCoverage = true }
+                                    .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent).tint(Theme.accent)
+                                Button(GlobalOutlookCopy.turnOn) {
+                                    beta.set(true)
+                                    allowOutsideCoverage = true
+                                }
+                                    .buttonStyle(.bordered).tint(Theme.accent)
+                            }
+                            .font(.bcSubheadlineStrong)
                         }
-                        .font(.bcSubheadlineStrong)
+                        .skyCard()
+                    } else {
+                        // Asked once; the answer becomes the Settings switch.
+                        VStack(alignment: .leading, spacing: 10) {
+                            Label(GlobalOutlookCopy.addQuestion, systemImage: "globe")
+                                .font(.bcCardTitle)
+                            Text(betaExplanation)
+                                .font(.bcSubheadline)
+                                .foregroundStyle(.secondary)
+                            HStack {
+                                Button(GlobalOutlookCopy.turnOn) {
+                                    beta.set(true)
+                                    allowOutsideCoverage = true
+                                }
+                                    .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent).tint(Theme.accent)
+                                Button(GlobalOutlookCopy.notNow) {
+                                    beta.set(false)
+                                    allowOutsideCoverage = true
+                                }
+                                .buttonStyle(.bordered).tint(Theme.accent)
+                            }
+                            .font(.bcSubheadlineStrong)
+                        }
+                        .skyCard()
                     }
-                    .skyCard()
                 }
                 Label("We have the strongest coverage in the US, and we're expanding rapidly.", systemImage: "info.circle")
                     .font(.bcFootnote)
@@ -778,8 +815,7 @@ private struct AirportSearchView: View {
             .padding()
         }
         .scrollDismissesKeyboard(.interactively)
-        .background { SkyBackground(sky: sky) }
-        .onSky(sky)
+        .skyBackground(sky)
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear { focused = true }
@@ -1144,13 +1180,11 @@ private struct DayPicker: View {
                     Spacer(minLength: 0)
                 }
                 .padding()
-                .background { SkyBackground(sky: Sky(date: departure, timeZone: timeZone)) }
-                .onSky(Sky(date: departure, timeZone: timeZone))
+                .skyBackground(Sky(date: departure, timeZone: timeZone))
                 .toolbar {
                     ToolbarItem(placement: .confirmationAction) { Button("Done") { isPickingDate = false } }
                 }
             }
-            .font(.bcBody)
             .presentationDetents([.fraction(0.72), .large])
         }
     }
@@ -1188,7 +1222,6 @@ private struct DayTile: View {
     let bottom: Text
     let selected: Bool
     let action: () -> Void
-    @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
         let shape = RoundedRectangle(cornerRadius: 16, style: .continuous)
@@ -1198,14 +1231,9 @@ private struct DayTile: View {
                 bottom.font(.bcTitle2)
             }
             .frame(width: 50, height: 66)
-            .foregroundStyle(selected ? Theme.onAccent : Color.primary)
+            .foregroundStyle(selected ? Theme.onAccent : Theme.ink)
             .background {
-                if selected {
-                    shape.fill(Theme.accent)
-                } else {
-                    shape.fill(Color.white.opacity(colorScheme == .dark ? 0.08 : 0.6))
-                        .overlay(shape.strokeBorder(Color.white.opacity(colorScheme == .dark ? 0.12 : 0.7), lineWidth: 0.5))
-                }
+                if selected { shape.fill(Theme.accent) } else { Color.clear.skySurface(shape) }
             }
             .contentShape(shape)
         }
@@ -1288,7 +1316,7 @@ private struct WheelColumn: View {
                     Text(label(value))
                         .font(.bcTitle)
                         .monospacedDigit()
-                        .foregroundStyle(value == (scrolled ?? selection) ? Color.primary : Color.secondary.opacity(0.6))
+                        .foregroundStyle(value == (scrolled ?? selection) ? Theme.ink : Theme.tertiaryInk)
                         .frame(maxWidth: .infinity)
                         .frame(height: Self.rowHeight)
                         .contentShape(.rect)
@@ -1394,7 +1422,7 @@ private struct MonthCalendar: View {
             Text("\(calendar.component(.day, from: day))")
                 .font(selected || isToday ? .bcHeadline : .bcBody)
                 .monospacedDigit()
-                .foregroundStyle(selected ? Theme.onAccent : isToday ? Theme.accent : Color.primary)
+                .foregroundStyle(selected ? Theme.onAccent : isToday ? Theme.accent : Theme.ink)
                 .frame(width: 40, height: 40)
                 .background { if selected { Circle().fill(Theme.accent) } }
                 .frame(maxWidth: .infinity)

@@ -83,3 +83,190 @@ def test_quiet_hours_hold_overnight_unless_flying_early():
     assert not notify.is_quiet(night, "America/Toronto", night + timedelta(hours=3))  # early flight
     day = datetime(2026, 10, 19, 16, tzinfo=UTC)  # noon in Toronto
     assert not notify.is_quiet(day, "America/Toronto", day + timedelta(hours=20))
+
+
+# Connecting flights share a push
+
+
+def leg(fid, origin, destination, departure, user="u1", grade="smooth", forecast_id=None):
+    return {
+        "id": fid,
+        "user_id": user,
+        "origin": origin,
+        "destination": destination,
+        "departure_at": departure.isoformat(),
+        "forecasts": [{**READY, "id": forecast_id or f"fc-{fid}", "grade": grade}],
+    }
+
+
+T0 = datetime(2026, 10, 22, 13, tzinfo=UTC)  # 9 am in Toronto: never quiet hours
+
+
+def test_connections_link_legs_of_one_trip():
+    a = leg("a", "KEWR", "KDEN", T0)
+    b = leg("b", "KDEN", "KSFO", T0 + timedelta(hours=4))
+    other_user = leg("c", "KDEN", "KSFO", T0 + timedelta(hours=4), user="u2")
+    return_trip = leg("d", "KSFO", "KEWR", T0 + timedelta(days=3))
+    assert notify.connections([b, other_user, a, return_trip]) == {"a": b}
+
+
+def test_folds_only_for_short_layovers():
+    a = leg("a", "KEWR", "KDEN", T0)
+    assert notify.folds("48h", a, leg("b", "KDEN", "KSFO", T0 + timedelta(hours=8)))
+    assert not notify.folds("48h", a, leg("b", "KDEN", "KSFO", T0 + timedelta(hours=9)))
+    assert notify.folds("6h", a, leg("b", "KDEN", "KSFO", T0 + timedelta(hours=3)))
+    assert not notify.folds("6h", a, leg("b", "KDEN", "KSFO", T0 + timedelta(hours=4)))
+    assert not notify.folds("2h", a, leg("b", "KDEN", "KSFO", T0 + timedelta(hours=1)))
+
+
+def test_compose_trip():
+    a = leg("a", "KEWR", "KDEN", T0)
+    b = leg("b", "KDEN", "KSFO", T0 + timedelta(hours=4), grade="some_bumps")
+    ready = notify.Plan("48h", "ready", pro_only=False)
+    title, body = notify.compose_trip(ready, a, b, a["forecasts"][0], b["forecasts"][0])
+    assert title == "Your trip via DEN: forecasts ready"
+    assert body.startswith("EWR→DEN: smooth flight. DEN→SFO: a few bumps.")
+    update = notify.Plan("24h", "update", pro_only=True)
+    assert notify.compose_trip(update, a, b, a["forecasts"][0], b["forecasts"][0])[0] == "Your trip via DEN in 24 hours"
+
+
+class FakeDB:
+    def __init__(self, flights, sent=None, pro=False):
+        self.flights, self.sent, self.pro = flights, sent or {}, pro
+        self.rows, self.updates = [], []
+
+    def upcoming_flights_with_latest_forecast(self, now):
+        return self.flights
+
+    def notifications_for(self, ids):
+        return self.sent
+
+    def profiles(self, ids):
+        return {u: {"is_pro": self.pro, "timezone": "America/Toronto"} for u in ids}
+
+    def flights_with_passes(self, ids):
+        return set()
+
+    def devices(self, ids):
+        return {u: [{"token": "t", "environment": "production"}] for u in ids}
+
+    def forecast(self, fid):
+        return None
+
+    def insert_notification(self, row):
+        self.rows.append(row)
+        return f"n{len(self.rows)}"
+
+    def update_notification(self, nid, **outcome):
+        self.updates.append((nid, outcome))
+
+
+class FakeApns:
+    def __init__(self):
+        self.pushes = []
+
+    def send(self, token, environment, payload, collapse_id=None):
+        self.pushes.append(payload)
+
+        class Result:
+            ok, reason, token_dead = True, None, False
+
+        return Result()
+
+
+def test_trip_legs_share_one_ready_push():
+    now = T0 - timedelta(hours=40)  # both legs inside 48 h
+    a = leg("a", "KEWR", "KDEN", T0)
+    b = leg("b", "KDEN", "KSFO", T0 + timedelta(hours=4), grade="some_bumps")
+    db, apns = FakeDB([b, a]), FakeApns()
+    notify.run(db, apns, now)
+    assert len(apns.pushes) == 1
+    assert apns.pushes[0]["aps"]["alert"]["title"] == "Your trip via DEN: forecasts ready"
+    # Each leg keeps its own record, both marked delivered.
+    assert sorted(r["flight_id"] for r in db.rows) == ["a", "b"]
+    assert all(o["delivered"] for _, o in db.updates)
+
+
+def test_first_leg_waits_for_the_second_then_goes_alone():
+    a = leg("a", "KEWR", "KDEN", T0)
+    b = leg("b", "KDEN", "KSFO", T0 + timedelta(hours=4))
+    b["forecasts"] = []  # the second leg's forecast isn't ready yet
+    db, apns = FakeDB([a, b]), FakeApns()
+    notify.run(db, apns, T0 - timedelta(hours=47))  # a is inside 48 h, b isn't yet
+    assert apns.pushes == []
+    notify.run(db, apns, T0 - timedelta(hours=42))  # past the wait: a goes on its own
+    assert apns.pushes[0]["aps"]["alert"]["title"] == "Your EWR→DEN forecast is ready"
+
+
+def test_separate_trips_stay_separate():
+    a = leg("a", "KEWR", "KDEN", T0)
+    b = leg("b", "KDEN", "KSFO", T0 + timedelta(hours=20))  # long layover: no fold for 48 h
+    db, apns = FakeDB([a, b]), FakeApns()
+    notify.run(db, apns, T0 - timedelta(hours=20))
+    titles = sorted(p["aps"]["alert"]["title"] for p in apns.pushes)
+    assert titles == ["Your DEN→SFO forecast is ready", "Your EWR→DEN forecast is ready"]
+
+
+def test_outlook_only_updates_push_only_for_real_changes():
+    worth = notify.outlook_change_worth_pushing
+    old = {"grade": "some_bumps", "warnings": []}
+    outlook = {"noaa_possible": False, "warnings": []}
+    assert not worth(old, {**outlook, "grade": "bumpy"})  # one step: recorded, not pushed
+    assert not worth(old, {**outlook, "grade": "mostly_smooth"})
+    assert worth(old, {**outlook, "grade": "rough"})  # two steps
+    assert worth(old, {**outlook, "grade": "smooth"})
+    warning = {"start_min": 60, "end_min": 120, "kind": "sigmet", "severity": "moderate"}
+    assert worth(old, {**outlook, "grade": "some_bumps", "warnings": [warning]})  # new warning
+    assert not worth({**old, "warnings": [warning]}, {**outlook, "grade": "some_bumps", "warnings": [warning]})
+    # Routes NOAA can cover, and first looks, are unchanged.
+    assert worth(old, {"grade": "bumpy", "noaa_possible": True})
+    assert worth(old, {"grade": "bumpy"})
+    assert worth(None, {**outlook, "grade": "bumpy"})
+
+
+class BetaDB(FakeDB):
+    def __init__(self, flights, beta, waitlisted=(), sent=None):
+        super().__init__(flights, sent=sent)
+        self.beta, self.waiting = beta, set(waitlisted)
+
+    def profiles(self, ids):
+        return {u: {"is_pro": False, "timezone": "America/Toronto", "global_beta": self.beta} for u in ids}
+
+    def waitlisted(self, ids):
+        return self.waiting & set(ids)
+
+
+def outlook_leg(fid="x", **kw):
+    flight = leg(fid, "KBOS", "EGLL", T0, **kw)
+    flight["forecasts"][0]["noaa_possible"] = False
+    return flight
+
+
+def test_outlook_routes_are_quiet_until_the_beta_is_on():
+    db, apns = BetaDB([outlook_leg()], beta=None), FakeApns()
+    notify.run(db, apns, T0 - timedelta(hours=40))
+    assert db.rows == [] and apns.pushes == []
+    db, apns = BetaDB([outlook_leg()], beta=True), FakeApns()
+    notify.run(db, apns, T0 - timedelta(hours=40))
+    assert [r["kind"] for r in db.rows] == ["ready"] and len(apns.pushes) == 1
+
+
+def test_waitlist_hears_once_that_their_route_is_covered():
+    db, apns = BetaDB([outlook_leg()], beta=None, waitlisted={"u1"}), FakeApns()
+    notify.run(db, apns, T0 - timedelta(hours=40))
+    [row] = db.rows
+    assert (row["milestone"], row["kind"], row["pro_only"]) == ("beta", "beta", False)
+    assert row["title"] == "A forecast for your flight is ready to try"
+    assert row["body"] == "BOS → LHR on Thu 22 Oct can use our beta global outlook. Tap to turn it on."
+    # Not again, and not for people who already chose (on or off).
+    sent = {"x": [{"milestone": "beta", "kind": "beta", "source": "mixed"}]}
+    assert notify.beta_invite_due({"status": "ready", "noaa_possible": False}, {"global_beta": None}, True, sent["x"]) is False
+    db, apns = BetaDB([outlook_leg()], beta=False, waitlisted={"u1"}), FakeApns()
+    notify.run(db, apns, T0 - timedelta(hours=40))
+    assert db.rows == []
+
+
+def test_us_routes_ignore_the_beta_switch():
+    db, apns = BetaDB([leg("us", "KEWR", "KDEN", T0)], beta=False), FakeApns()
+    notify.run(db, apns, T0 - timedelta(hours=40))
+    assert [r["kind"] for r in db.rows] == ["ready"]

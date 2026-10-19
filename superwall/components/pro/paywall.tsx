@@ -35,6 +35,12 @@ const FEATURES: { key: string; icon: ReactNode; placement: ProPlacement }[] = [
   { key: "featureFlights", icon: icon("M10.5 13.5 3 11l1.5-1.5 7.5 1 4-4.5a1.8 1.8 0 0 1 2.5 2.5L14 13l1 7.5-1.5 1.5-2.5-7.5-3 3V20l-1.5 1-1-3.5L2 16l1-1.5h2.5z"), placement: "flight_limit_reached" },
 ];
 
+// What Pro covers, always shown together so the outlook never reads as US quality.
+const COVERAGE: { key: string; icon: ReactNode }[] = [
+  { key: "coverageUS", icon: icon("M4 12h16M12 4v16") },
+  { key: "coverageGlobal", icon: icon("M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20") },
+];
+
 /** The sunrise from the onboarding Plans page. */
 function Scene() {
   return (
@@ -152,6 +158,12 @@ export function ProPaywall({
       <div className="pw-sheet">
         {features.map((f) => (
           <div key={f.key} className="feature">
+            <span className="feature-icon">{f.icon}</span>
+            {t(`pro.${f.key}`)}
+          </div>
+        ))}
+        {COVERAGE.map((f) => (
+          <div key={f.key} className="feature feature--coverage">
             <span className="feature-icon">{f.icon}</span>
             {t(`pro.${f.key}`)}
           </div>

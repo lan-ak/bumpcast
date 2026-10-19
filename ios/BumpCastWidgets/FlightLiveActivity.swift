@@ -18,7 +18,7 @@ struct FlightLiveActivity: Widget {
         ActivityConfiguration(for: FlightActivityAttributes.self) { context in
             ActivityRoot(attributes: context.attributes, state: context.state)
                 .activityBackgroundTint(Sky.night.colors[1].opacity(0.85))  // night sky, also in StandBy
-                .activitySystemActionForegroundColor(.white)
+                .activitySystemActionForegroundColor(Theme.nightInk)
                 .widgetURL(URL(string: "bumpcast://flight/\(context.attributes.flightID.uuidString)"))
         } dynamicIsland: { context in
             let a = context.attributes
@@ -86,8 +86,9 @@ private struct ActivityRoot: View {
                 LockScreenView(attributes: attributes, state: state)
             }
         }
-        .foregroundStyle(.white)
-        .font(.bcBody)
+        // The Live Activity is always on the night sky: the house style in its dark appearance.
+        .bumpCastTheme()
+        .themeInk()
         .environment(\.colorScheme, .dark)
     }
 }
@@ -108,7 +109,7 @@ private struct LockScreenView: View {
                 WaterGlass(severity: currentSeverity, size: 28)
                 VStack(alignment: .leading, spacing: 2) {
                     LeadText(attributes: attributes, state: state).font(.bcSection)
-                    NextText(attributes: attributes, state: state).font(.bcCaption).foregroundStyle(.white.opacity(0.75))
+                    NextText(attributes: attributes, state: state).font(.bcCaption).foregroundStyle(.secondary)
                 }
             }
             RouteStrip(attributes: attributes, state: state)
@@ -122,7 +123,7 @@ private struct LockScreenView: View {
                 }
             }
             .font(.bcCaptionStrong)
-            Text(footer).font(.bcCaption2).foregroundStyle(.white.opacity(0.6))
+            Text(footer).font(.bcCaption2).foregroundStyle(.tertiary)
         }
         .padding()
     }
@@ -188,7 +189,7 @@ private struct RouteStrip: View {
                 } currentValueLabel: {
                     EmptyView()
                 }
-                .tint(.white)
+                .tint(Theme.nightInk)
                 GeometryReader { geo in
                     let total = Double(max(attributes.durationMin, 1))
                     ForEach(attributes.stretches, id: \.startMin) { stretch in
@@ -285,7 +286,7 @@ private struct LandedView: View {
                         Text(rating.title).frame(maxWidth: .infinity)
                     }
                     .buttonStyle(.bordered)
-                    .tint(.white)
+                    .tint(Theme.nightInk)
                 }
             }
         }

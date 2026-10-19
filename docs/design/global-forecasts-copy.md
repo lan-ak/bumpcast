@@ -1,107 +1,135 @@
-# BumpCast: worldwide routes and mixed-source forecasts (copy and states)
+# BumpCast: worldwide routes and mixed-source forecasts (copy and states, revision 2)
 
-Draft for Lanre's approval. **No app code changes until approved.** Mockups: `docs/design/global-forecasts.html`.
+**Approved by Lanre (revision 2), with paywall option B.** Mockups are in `docs/design/global-forecasts.html`. After approval, the spec goes to the "Global data coverage options" session.
 
 New forecast fields:
-- `sources` [{start_min, end_min, source: gtg|gfs}]
-- `noaa_possible` (bool)
-- `warnings` [{start_min, end_min, kind: sigmet|pirep, severity, label}]
+- `sources` [{start_min, end_min, source: gtg|gfs}]: which kind of forecast covers each stretch
+- `noaa_possible` (bool): whether the whole route can ever be confirmed
+- `warnings` [{start_min, end_min, kind: sigmet|pirep, severity, label}]: official warnings and pilot reports along the route
 - `agreement` (optional, later)
 
-## 0. Two rules this design keeps
+**Why the outlook must read rougher than a confirmed forecast:** over the US, the global outlook missed about two-thirds of moderate pilot reports. The confirmed forecast missed about a third. For a nervous flyer, the worst failure is "calm" followed by a bumpy flight.
 
-1. **Never name a data source.** No NOAA, GTG, GFS, SIGMET, "global model" or "the US forecast". We describe *what kind* of forecast it is and how often it updates. "Pilot report" names a kind of information, the same way the map already does.
-   > **Decision needed:** the explanation sheet says the global outlook is "based on worldwide weather forecasts". It names no model, but it describes the basis, which the brief asks for and the earlier no-sources pass avoided. The alternative is to drop that sentence and keep only "less detailed than our forecasts for US routes".
-2. **The outlook never implies certainty about strong turbulence.** It's capped at moderate. Only an advisory or a pilot report can raise a stretch to strong, and then the wording is "strong bumps possible", never "strong turbulence expected".
+## 0. Rules
 
-## 1. Which badge a forecast gets
+1. **Never name a data source.** No NOAA, GTG, GFS, SIGMET, "global model" or "the US forecast". "Official warning" and "Pilot report" are kinds of information, and we can name them.
+2. **Trust rules for outlook stretches.** These apply to outlook-only routes (`noaa_possible = false`) and to the outlook parts of partly confirmed routes:
+   1. **Label:** **Global outlook (beta)**. The first rollout is opt-in for waitlist users.
+   2. **No numeric score.** Show the grade only.
+   3. **Approximate times:** "about 3 h in, for around 40 min". Round to the nearest 10 min under 1 h and the nearest 30 min above. The chart draws outlook stretches as coarse 30-minute blocks at 42% opacity.
+   4. **Ranges, not single levels:** "Light to moderate possible", "Moderate to strong possible near the warning". A range is one step: light to moderate, or moderate to strong.
+   5. **Never "smooth".** A smooth or mostly smooth grade reads **No major bumps expected**, always followed by **Light bumps are possible on any flight.** In the list it's shortened to "No major bumps".
+   6. **Official warnings are prominent.** They're the most credible signal outside the US (details in §4).
+   7. **Always ask for a rating** after these flights land (details in §6).
+3. **Confirmed stretches stay exact** (minute bars, exact times, a single level), even on a beta route.
+4. **Strong turbulence is only ever "possible"**, and only when an official warning or a pilot report points to it. The outlook alone is capped at moderate.
 
-The badge follows `noaa_possible` first, then time.
+## 1. Badges
 
-| Condition | Badge | Icon | Colour |
-|---|---|---|---|
-| `noaa_possible = true`, nothing confirmed yet | **Advance forecast** | binoculars | secondary ink |
-| `noaa_possible = true`, some stretches confirmed | **Partly confirmed** | checkmark.seal | accent |
-| `noaa_possible = true`, all confirmed | **Confirmed forecast** | checkmark.seal.fill | accent |
-| `noaa_possible = false` (any time) | **Global outlook** | globe | secondary ink |
-
-A Global outlook never promises a confirm time, because it never becomes "Confirmed". It can still contain confirmed stretches (for example, the part over the US), and the status line says so.
+| Condition | Badge | Colour |
+|---|---|---|
+| `noaa_possible = true`, nothing confirmed yet | Advance forecast | secondary ink |
+| `noaa_possible = true`, some stretches confirmed | Partly confirmed | accent |
+| `noaa_possible = true`, everything confirmed | Confirmed forecast | accent |
+| `noaa_possible = false` | **Global outlook** + a mono **BETA** tag | secondary ink |
+| International route, beta off | Not forecast yet | secondary ink |
 
 ## 2. Status line under the grade
 
-| State | Status line |
+| State | Line |
 |---|---|
-| Advance | Confirmed Wed around 3:40 PM *(unchanged)* |
-| Partly confirmed | see the stretch rules below, then "Fully confirmed within the hour" |
-| Confirmed | Updated hourly until you fly *(unchanged)* |
-| Global outlook, no confirmed stretches | Updated every 6 hours until you fly |
-| Global outlook, with confirmed stretches | {stretches} confirmed. The rest updates every 6 hours. |
+| Global outlook, nothing confirmed | Updated every 6 hours until you fly |
+| Global outlook, some stretches confirmed | First 41 min confirmed. The rest is a beta outlook, updated every 6 hours. |
+| Non-adjacent confirmed stretches | First 41 min and last 30 min confirmed. · Confirmed from 1 h 10 min to 2 h 05 min in. · 3 stretches confirmed, 2 h 15 min in total. |
+| An official warning on the route | Official warning on your route (this replaces the line above) |
 
-**Describing confirmed stretches** (works when they're not next to each other):
-- One stretch at the start: **First 41 min confirmed**
-- One stretch at the end: **Last 30 min confirmed**
-- Start and end: **First 41 min and last 30 min confirmed**
-- One stretch in the middle: **Confirmed from 1 h 10 min to 2 h 05 min in**
-- Three or more: **3 stretches confirmed, 2 h 15 min in total**
+US states (Advance, Partly confirmed, Confirmed) keep their current lines.
 
-## 3. Flights list short status
+## 3. Forecast screen
 
-| State | Short status |
-|---|---|
-| Advance | Advance · confirms Wed *(unchanged)* |
-| Partly confirmed | Partly confirmed *(unchanged)* |
-| Confirmed | Confirmed *(unchanged)* |
-| Global outlook | Global outlook |
-| A recent pilot report on the route | adds "· pilot report", e.g. "Global outlook · pilot report" |
-| Unsupported route | Can't forecast yet |
+- **Headlines** on outlook routes:
+  - Smooth or mostly smooth: "No major bumps expected."
+  - Some bumps: "A few bumps possible."
+  - Bumpy or rough: "Bumpy in places."
+  - The summary always ends with "Light bumps are possible on any flight."
+- **Chart:**
+  - Confirmed stretches: exact minute bars, with a solid accent strip under the axis.
+  - Outlook stretches: faded 30-minute blocks.
+  - Legend: "Confirmed, exact" · "Outlook, approximate".
+- **Stretch rows on the outlook:**
+  - Title: "About 1 h 30 min in, for around 30 min"
+  - Body: "{Range} possible {over the place}."
+  - Small "Beta outlook" tag on partly confirmed routes.
+- **No score anywhere** on outlook routes.
 
-## 4. Chart and wave timeline
+## 4. Official warnings (prominent)
 
-- **Fade by stretch, not by cut-off.** Outlook stretches draw at 40% opacity and confirmed stretches at full, wherever they fall. The mini wave on flight cards follows the same rule.
-- **Coverage strip:** a 4 pt strip under the x-axis. Confirmed stretches are solid accent; outlook stretches are a light dotted line. Tapping the strip opens the explanation sheet. VoiceOver reads "First 41 minutes confirmed, then outlook."
-- **Official advisories raise a stretch with no marker of their own** (Lanre: it adds clutter). The stretch simply shows its level, and its "What to expect" row reads like any other.
-- **Pilot reports** get a small flag capsule above the chart spanning the stretch, labelled **Pilot report**, as on the map. Tapping it opens its sheet.
-- **Legend line:** Solid = confirmed · Faded = outlook · Flag = pilot report (only shown when there is one)
+- **Banner** above the chart, the first thing on the screen.
+  - Dark ink with white text in light mode; light with dark text in dark mode. No red and no warning triangle. It uses a flag icon.
+  - Wording: **OFFICIAL WARNING** (eyebrow), then **Thunderstorms over Recife, about 1 h 30 min in**, then a chevron.
+- **On the chart:** a solid capsule, "⚑ Official warning", above the stretch, plus a light shaded band over the stretch.
+- **In the stretch row:** "⚑ Official warning · thunderstorms".
+- **In the list:** "⚑ Official warning on route".
+- **Sheet** (tap the banner or the marker):
+  - Title: the banner text
+  - Heading: What this means for your flight
+  - Body: Aviation weather offices issue warnings where strong turbulence or storms are likely. This one covers about 30 min of your route, around 1 h 30 min after takeoff.
+  - Crew card: **Your crew has this warning too.** Pilots fly around storms, often by many miles, and turn the seatbelt sign on early.
+  - What you might feel: Moderate to strong bumps are possible near the storms. Keep your seatbelt fastened from about 1 h in.
+  - Footer: Warnings are updated through the day. We'll tell you if this one changes or clears.
+- **Pilot reports** keep the small flag and their sheet, as on the map ("Pilots reported bumps here").
 
-## 5. Explanation sheets (tap the badge, the strip, or a pilot-report flag)
+## 5. Global outlook sheet (tap the badge)
 
-**Global outlook**
-- Title: Global outlook
-- Body: Your route leaves the area we can forecast in full detail, so this is our worldwide outlook. It's less detailed than our forecasts for US routes, and it updates every 6 hours until you fly.
-- Based on: Worldwide weather forecasts, checked against official turbulence advisories and recent pilot reports. *(See Decision 0.1.)* This sheet is the only place advisories are mentioned.
-- What it can't do: It won't call strong turbulence on its own. Strong bumps only show when an official advisory or a pilot report points to them.
-- If part of the route is confirmed: The first 41 min, over the US, uses our detailed forecast and updates hourly.
-- Agreement slot (only when `agreement` exists): **How sure we are:** Forecasts agree well along your route. / Forecasts mostly agree. / Forecasts differ in places, so treat this as a rough guide.
+- **Title:** Global outlook (beta)
+- **Body:** Your route leaves the area we can forecast in full detail, so this is our worldwide outlook. It's newer and less detailed than our forecasts for US routes, and it updates every 6 hours until you fly.
+- **Based on:** Worldwide weather forecasts, checked against official warnings and recent pilot reports. *(Approved: kept.)*
+- **How to read it:** Times are approximate and levels are ranges. It can miss bumps, so treat it as a guide and keep your seatbelt fastened.
+- **Help us improve it:** After you land, tell us how it felt. Every rating makes the outlook better.
+- **Agreement slot (later):** Forecasts agree well / mostly agree / differ in places.
 
-**Partly confirmed**
-- Body: {stretches} of your flight is confirmed with our detailed forecast. The rest is still an advance forecast (faded in the chart) and will be confirmed closer to departure, usually within the hour.
+## 6. After landing: always ask
 
-**Advance** and **Confirmed**: unchanged from today's copy.
+- **Notification** (sent for every beta flight; the notification-gaps branch already covers every flight with a forecast):
+  - Title: Welcome to Lisbon
+  - Body: How bumpy was it? You flew with our beta global outlook, and your two taps help us improve it.
+- **In-app card**, which stays on the flight until it's answered or dismissed:
+  - Title: How did it compare?
+  - Options: Smoother than the outlook · About what it said · Bumpier than the outlook
+  - Footer: Your answer helps us improve global outlooks.
 
-**Pilot report** (tap the flag)
-- Title: Pilots reported bumps here
-- Body: A crew flying near {Denver} in the last few hours reported {light chop}. We've raised that stretch to match.
-- Crew line: Pilots share reports like this so the planes behind them can find smoother air.
+## 7. Opt-in (beta)
 
-## 6. Adding a flight and the waitlist
+- **Waitlist card** (routes the beta covers):
+  - Title: Try the global outlook for this flight
+  - Body: A newer, less detailed forecast for routes outside the US. Times are approximate and it can miss bumps.
+  - Buttons: **Turn on the beta** · Not now
+- **Settings switch:**
+  - Label: Global outlooks BETA
+  - Footer: Forecasts for flights outside the US. Less detailed than US forecasts, and updated every 6 hours. After each one, we'll ask how it felt.
+- **Adding an international flight** (asked once; the answer becomes the Settings switch):
+  - Question: Get the global outlook (beta) for this flight?
+  - Explanation: The first part, over the US, is confirmed. The rest is our newer worldwide outlook. *(First sentence only on partly confirmed routes.)*
+- **Beta off:** the flight shows "Not forecast yet" with the waitlist card, and the list shows "Beta available".
+- **Polar or other routes the worker can't do:** "We can't forecast this route yet", with "Notify me when we can".
+- **People already on the waitlist,** once their route is covered: push "A forecast for your flight is ready to try", then "BOS → LHR on Thu 22 Oct can use our beta global outlook. Tap to turn it on."
 
-- International routes now get a forecast. The add-flight sheet no longer blocks or warns them.
-- **Check your flight** shows one calm line for routes where `noaa_possible = false`: **Global outlook for this route, updated every 6 hours from 48 hours before you fly.**
-- **Step 1 coverage note** (replacing "We have the strongest coverage in the US, and we're expanding rapidly."): **Forecasts for flights worldwide, most detailed in the US.** *(Lanre wrote the current line; changing it is his call.)*
-- **What's left of the waitlist:** only routes the worker still can't forecast, such as polar or very long routes. It's driven by the worker's `out_of_coverage` status, not by the US box in `Coverage.swift`.
-  - Card title: We can't forecast this route yet
-  - Body: Routes over the far north are next on our list. We'll still save your flight.
-  - Button: Notify me when we can
-  - Joined: We'll let you know when we cover this route.
-- **People already on the waitlist** get one push when their route becomes forecastable:
-  - Title: Your flight now has a forecast
-  - Body: BOS → LHR on Thu 22 Oct now has a global outlook. Tap to see it.
-- Flight detail (`FlightDetailView` ~179) shows the forecast in place of the WaitlistCard for these flights. FlightStore's `.outOfCoverage` (~257) comes only from the worker's status, never from `Coverage.covers`.
+## 8. Paywall: option B approved
 
-## 7. Publisher credit
+- **Option A (not chosen): free during the beta.**
+  - Headline: "Global outlooks are free during the beta"
+  - Body: Try our newer forecast for flights outside the US. It's less detailed than our US forecasts, and your ratings help it improve.
+  - Pro line: Pro still adds the full timeline, updates and live status on every flight.
+- **Option B (approved): in Pro, with plain copy.** The Pro list line reads: "Global outlook (beta) for international flights: approximate, updated every 6 hours." It sits next to "Detailed, hourly forecasts for US flights".
+- **Either way,** never write "forecasts worldwide" without the beta qualifier, and never compare the outlook's quality to US forecasts favourably.
 
-None of these screens shows a publisher credit. Where one appears elsewhere (Settings › About, legal pages), it credits **Akinyemi & Co Ltd**.
+## 9. Other decisions
 
-## 8. Changes after Lanre's first review
+- **Step 1 coverage line (approved):** keep "We have the strongest coverage in the US, and we're expanding rapidly." during the opt-in beta.
+- **Publisher credit:** none on these screens. Where a credit appears elsewhere, it's Akinyemi & Co Ltd.
 
-- **Official advisory markers are removed:** the chart flag, the advisory sheet, the "Raised by an official advisory" row line, and "· advisory" in the list. Advisories still raise stretches in the forecast. They're only mentioned in the Global outlook sheet's "Based on" line. Pilot reports keep their small flag.
+## Changes
+
+- **Revision 1 → first review:** advisory markers were removed as clutter.
+- **Revision 2:** added the trust rules from the "Global data coverage options" session. Lanre then chose to make official warnings **more prominent, for trust**, so they're back as a banner, a chart marker, a row line, a list label and a sheet.
+- **Approval:** Lanre approved revision 2 with paywall option B, the "Based on" line kept, and the step 1 coverage line unchanged.

@@ -52,7 +52,7 @@ class Forecast:
     route: list[list[float]] = field(default_factory=list)
     # Worldwide fields, written only when GLOBAL_COVERAGE is on.
     sources: list[dict] = field(default_factory=list)  # [{start_min, end_min, source}]
-    warnings: list[dict] = field(default_factory=list)  # [{start_min, end_min, kind, hazard, severity, label}]
+    warnings: list[dict] = field(default_factory=list)  # [{start_min, end_min, kind, hazard, severity, region, label}]
     noaa_possible: bool | None = None  # can GTG ever cover the whole route?
     extended: bool = False
 
@@ -168,7 +168,9 @@ def compute(
         sources=_stretches([(p.minute, name) for p, name in zip(points, per_minute)], key=lambda v: {"source": v}),
         warnings=_stretches(
             [(p.minute, h) for p, h in zip(points, flagged)],
-            key=lambda h: {"kind": h.kind, "hazard": h.hazard, "severity": h.severity, "label": h.label},
+            key=lambda h: {
+                "kind": h.kind, "hazard": h.hazard, "severity": h.severity, "region": h.region, "label": h.label
+            },
         ),
         noaa_possible=noaa_possible,
         extended=global_coverage,

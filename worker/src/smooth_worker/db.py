@@ -7,8 +7,10 @@ from datetime import datetime, timedelta
 import httpx
 
 FORECAST_FIELDS = "id,issued_at,status,source,model_run,grade,score,duration_min,segments,departure_at"
+PROFILE_FIELDS = "user_id,is_pro,timezone"
 if os.environ.get("SMOOTH_GLOBAL") == "1":  # needs the worldwide-coverage migration
     FORECAST_FIELDS += ",noaa_possible,warnings"
+    PROFILE_FIELDS += ",global_beta"
 STATUS_EMBED = "status:flight_status(*)"
 # Delayed flights stay in play after their scheduled time; callers filter by expected departure.
 LOOKBACK = timedelta(hours=12)
@@ -138,8 +140,15 @@ class Database:
     def profiles(self, user_ids: list[str]) -> dict[str, dict]:
         if not user_ids:
             return {}
-        rows = self._get("/profiles", {"select": "user_id,is_pro,timezone", "user_id": _in(user_ids)})
+        rows = self._get("/profiles", {"select": PROFILE_FIELDS, "user_id": _in(user_ids)})
         return {r["user_id"]: r for r in rows}
+
+    def waitlisted(self, user_ids: list[str]) -> set[str]:
+        """Users who asked to hear when we cover their region."""
+        if not user_ids:
+            return set()
+        rows = self._get("/waitlist", {"select": "user_id", "user_id": _in(user_ids)})
+        return {r["user_id"] for r in rows}
 
     def flights_with_passes(self, flight_ids: list[str]) -> set[str]:
         if not flight_ids:
