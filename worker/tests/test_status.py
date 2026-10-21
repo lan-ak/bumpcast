@@ -407,6 +407,15 @@ def test_delay_push_reaches_free_users():
     assert len(delay) == 1 and not delay[0]["pro_only"]
 
 
+def test_every_15_minutes_in_the_last_3_hours():
+    checked = row(checked_at=(SCHEDULED - timedelta(hours=2, minutes=20)).isoformat())
+    assert not status.is_due(checked, SCHEDULED, SCHEDULED - timedelta(hours=2, minutes=10))
+    assert status.is_due(checked, SCHEDULED, SCHEDULED - timedelta(hours=2, minutes=5))
+    after = row(checked_at=(SCHEDULED + timedelta(minutes=30)).isoformat())
+    assert status.is_due(after, SCHEDULED, SCHEDULED + timedelta(minutes=45))  # until an hour after
+    assert not status.is_due(after, SCHEDULED, SCHEDULED + timedelta(minutes=61))
+
+
 def test_takeoff_watch_checks_every_poll_near_departure():
     checked = row(checked_at=(SCHEDULED - timedelta(minutes=25)).isoformat())
     now = SCHEDULED - timedelta(minutes=20)

@@ -1,0 +1,244 @@
+<title>BumpCast Compact Flight Status</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Familjen+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: proposal board. Before vs after, then each state of the route header; the forecast stays the first card. */
+:root {
+  --bg: #e9eff3; --panel: #ffffff; --fg: #15253a; --fg2: #4b5d72; --rule: #cdd9e2; --accent: #2a7385;
+  --display: "Familjen Grotesk", "Avenir Next", system-ui, sans-serif;
+  --body: "Atkinson Hyperlegible", "Helvetica Neue", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #0e1724; --panel: #152233; --fg: #e3ecf4; --fg2: #a3b4c6; --rule: #2a3c51; --accent: #6fbccc; color-scheme: dark } }
+:root[data-theme="dark"] { --bg: #0e1724; --panel: #152233; --fg: #e3ecf4; --fg2: #a3b4c6; --rule: #2a3c51; --accent: #6fbccc; color-scheme: dark }
+body { background: var(--bg); color: var(--fg); font: 16px/1.55 var(--body); }
+.wrap { max-width: 1320px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 44px 72px; display: grid; gap: 52px; }
+h1, h2 { font-family: var(--display); margin: 0; line-height: 1.15; text-wrap: balance; }
+h1 { font-size: clamp(2rem, 4.5vw, 2.8rem); letter-spacing: -0.02em; }
+h2 { font-size: 1.6rem; }
+p { margin: 0; }
+.eb { font: 500 0.75rem/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+.prose { max-width: 74ch; color: var(--fg2); }
+section { display: grid; gap: 20px; }
+.head { display: grid; gap: 8px; }
+.box { background: var(--panel); border: 1px solid var(--rule); border-radius: 14px; padding: 16px 18px; display: grid; gap: 8px; max-width: 980px; }
+.box b { font-family: var(--display); }
+.box ul { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; color: var(--fg2); }
+.box strong { color: var(--fg); }
+.row { display: flex; flex-wrap: wrap; gap: 28px; align-items: flex-start; }
+figure { margin: 0; display: grid; gap: 10px; width: 300px; max-width: 100%; }
+figcaption { font-size: 0.86rem; color: var(--fg2); }
+figcaption b { color: var(--fg); font-family: var(--display); font-size: 0.95rem; display: block; }
+code { font-family: var(--mono); font-size: 0.85em; background: var(--panel); border: 1px solid var(--rule); border-radius: 5px; padding: 0 4px; }
+
+.ph { width: 300px; max-width: 100%; border-radius: 42px; background: #0a1018; padding: 9px; box-sizing: border-box; box-shadow: 0 20px 40px -26px rgba(10,25,45,.55); }
+.sc {
+  --ink: #15253a; --ink2: #45576c; --card: rgba(255,255,255,.7); --edge: rgba(255,255,255,.92); --acc: #2a7385; --line: #d6e0e8;
+  --sky: linear-gradient(180deg, #e7c3c9 0%, #d3cbe0 30%, #c6d0e2 100%);
+  border-radius: 33px; padding: 46px 16px 22px; height: 600px; box-sizing: border-box; background: var(--sky); color: var(--ink); font: 14px/1.4 var(--body); display: flex; flex-direction: column; gap: 10px; overflow: hidden; position: relative;
+}
+.sc.tall { height: auto; min-height: 600px; }
+.dk .sc { --ink: #f2f5f8; --ink2: #b7c3d0; --card: rgba(255,255,255,.08); --edge: rgba(255,255,255,.15); --acc: #6fbccc; --line: rgba(255,255,255,.16); --sky: linear-gradient(180deg, #1b2a45 0%, #121d31 50%, #0b1322 100%); }
+.hc .sc { --ink2: #26364a; --card: #ffffff; --edge: #15253a; --line: #8597a8; }
+.hc .card { border-width: 1.5px; }
+.ax .sc { font-size: 19px; }
+.fold { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: repeating-linear-gradient(90deg, var(--ink2) 0 6px, transparent 6px 12px); opacity: .5; }
+.foldlbl { position: absolute; right: 12px; bottom: 6px; font: 500 9px var(--mono); color: var(--ink2); letter-spacing: .08em; text-transform: uppercase; }
+.nav { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; min-height: 30px; }
+.nav .l { justify-self: start; color: var(--acc); font-size: 15px; }
+.nav .t { font: 600 15px var(--display); }
+.e { font: 500 10.5px/1.2 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink2); }
+.m { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.s2 { color: var(--ink2); }
+.route { font: 700 30px/1 var(--display); letter-spacing: -0.02em; }
+.card { background: var(--card); border: 1px solid var(--edge); border-radius: 18px; padding: 12px 14px; display: grid; gap: 6px; }
+.pill { justify-self: start; display: inline-flex; gap: 6px; align-items: center; font-size: 12px; font-weight: 700; border-radius: 999px; padding: 4px 10px; background: rgba(255,255,255,.7); color: var(--ink2); }
+.dk .pill { background: rgba(255,255,255,.1); }
+.ico { width: 15px; height: 15px; flex: none; }
+
+/* the route header with times */
+.hdr { display: grid; grid-template-columns: 1fr auto 1fr; gap: 2px 8px; align-items: end; }
+.hdr .side { display: grid; gap: 1px; }
+.hdr .side.r { text-align: right; justify-items: end; }
+.hdr .code { font: 700 32px/1 var(--display); letter-spacing: -0.02em; }
+.hdr .city { font-size: 12px; color: var(--ink2); }
+.hdr .t { font: 500 15px/1.2 var(--mono); font-variant-numeric: tabular-nums; }
+.hdr .t.new { font-weight: 700; }
+.hdr .was { font: 400 11.5px var(--mono); color: var(--ink2); text-decoration: line-through; }
+.hdr .mid { align-self: center; display: grid; justify-items: center; gap: 2px; padding-bottom: 14px; color: var(--ink2); }
+.hdr .mid .plane { width: 20px; height: 20px; }
+.hdr.dim .code, .hdr.dim .t { color: var(--ink2); }
+.hdr .lab { font: 700 12px/1.2 var(--body); color: var(--ink2); text-align: center; max-width: 84px; }
+.hdr .lab.delay { color: var(--acc); }
+.hdr .lab.strong { color: var(--ink); }
+.hdr .lab small { display: block; font-weight: 400; font-size: 10.5px; }
+.hdr .gate { font: 400 11.5px var(--body); color: var(--ink2); }
+.sub { display: flex; gap: 6px; justify-content: center; align-items: center; min-height: 34px; font-size: 13px; font-weight: 700; color: var(--ink2); text-align: center; }
+.sub.delay .w { color: var(--acc); }
+.sub.strong .w { color: var(--ink); }
+.sub .chev { font-weight: 400; }
+.details { display: grid; gap: 6px; padding: 10px 12px; border-radius: 12px; background: var(--card); border: 1px solid var(--edge); font-size: 13px; }
+.drow { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; align-items: baseline; }
+.drow .k { color: var(--ink2); font-size: 12px; }
+.old { color: var(--ink2); text-decoration: line-through; }
+.note { font-size: 12.5px; color: var(--acc); font-weight: 700; display: flex; gap: 6px; align-items: center; }
+.glassrow { display: flex; gap: 12px; align-items: center; }
+.glass { width: 34px; height: 42px; flex: none; }
+.grade { font: 700 23px/1.08 var(--display); }
+.tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.tile { background: var(--card); border: 1px solid var(--edge); border-radius: 14px; padding: 8px; display: grid; }
+.tile b { font: 600 16px var(--display); }
+.tile span { font-size: 11px; color: var(--ink2); }
+.mini { height: 54px; }
+.tbl { display: grid; grid-template-columns: auto repeat(3, minmax(0, 1fr)); gap: 5px 8px; font-size: 12px; }
+.tbl .hd { font: 500 9px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink2); }
+.mini-state { display: grid; gap: 4px; padding: 10px 0; border-top: 1px solid var(--line); }
+.mini-state:first-of-type { border-top: 0; }
+.mini-state .lbl { font: 500 9.5px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink2); }
+.ax .hdr { grid-template-columns: 1fr; gap: 6px; }
+.ax .hdr .side.r { text-align: left; justify-items: start; }
+.ax .hdr .mid { display: none; }
+.ax .hdr .code { font-size: 34px; }
+.ax .hdr .t { font-size: 19px; }
+.ax .sub { justify-content: flex-start; font-size: 17px; text-align: left; }
+footer { color: var(--fg2); font-size: 0.88rem; border-top: 1px solid var(--rule); padding-top: 18px; }
+</style>
+
+<div class="wrap">
+<header class="head">
+  <span class="eb">BumpCast · flight detail · approved by Lanre · revision 3</span>
+  <h1>Status inside the route header, the forecast first</h1>
+  <p class="prose">Flight trackers show a delay inside the route row: the new time next to the old one, struck through, and "2 min late" in the middle. This revision borrows that pattern without the tracker look. Times sit beside the airport codes, the status is one small word under the plane, and there's no extra line, so the header is no taller than before. The forecast is the first card again. There's no red or green, no "Arrived" badge, and no alarm icons.</p>
+  <div class="box">
+    <b>The proposal</b>
+    <ul>
+      <li><strong>The route header carries the times:</strong> "EWR 2:35 PM ✈ YYZ 4:15 PM". The "Flight status" card goes away.</li>
+      <li><strong>A delay shows in place:</strong> the new time in bold, with the old time struck through in grey beneath it, on both sides.</li>
+      <li><strong>No extra line.</strong> The status is a small label under the plane: "On time", "40 min late", "Departed", "Diverted", "Cancelled", "Checking…". A delay is teal, diverted and cancelled are bold ink, and everything else is quiet. Severity colours are never used.</li>
+      <li><strong>Gate only when there is one.</strong> "Gate B22 · T5" appears under the departure time once a gate number is set. A terminal on its own ("Terminal A", no gate) isn't shown at a glance; it's in the details.</li>
+      <li><strong>Tap the header</strong> to show details inline: scheduled, expected and actual times, gate and terminal, and "Updated 4:59 PM · next update around 10:59 PM".</li>
+      <li><strong>Details open automatically, once,</strong> the first time you look at the flight after a change (a new delay, gate, cancellation or diversion). After that the line goes back to closed. When the status is more than 2 h old, the label adds "updated 3 h ago" underneath.</li>
+      <li><strong>The forecast note moves into the forecast card:</strong> "Updated for the new 7:55 AM departure."</li>
+      <li><strong>Still automatic, and fresher near departure (approved):</strong> status refreshes every 6 h from 48 to 18 h out, hourly from 18 h out, and <strong>every 15 min in the last 3 h before departure</strong> until about an hour after. Each check updates the expected and actual departure and arrival times and the gate. If the departure moves, the forecast is recomputed for the new time in the same step, including the time in the air. The delay push is unchanged ("Delayed 40 min, forecast updated").</li>
+      <li><strong>Unchanged:</strong> the cancelled card replaces the forecast, and the diverted card sits above the faded forecast. We don't track landings, so there's no "Arrived" state.</li>
+      <li><strong>Small fix:</strong> the delay icon in the list row changes from <code>clock.badge.exclamationmark</code> to <code>clock</code>.</li>
+    </ul>
+  </div>
+</header>
+
+<section>
+  <div class="head"><span class="eb">1 · Before and after</span><h2>The bumps come back above the fold</h2>
+  <p class="prose">AC 1507, EWR → YYZ, dark theme, as in your screenshot. The dashed line marks the bottom of the first screen.</p></div>
+  <div class="row">
+    <figure><div class="ph dk"><div class="sc">
+      <div class="nav"><span class="l">‹</span><span class="t">Forecast</span><span></span></div>
+      <span class="e">AC 1507 · Air Canada</span>
+      <span class="route">EWR ✈ YYZ</span>
+      <span class="s2">Newark to Toronto</span>
+      <span class="m s2" style="font-size:12px">Thu, Oct 22 · 2:35 PM EDT</span>
+      <div class="card" style="gap:9px">
+        <span class="e">Flight status</span>
+        <b style="font:700 22px var(--display)">On time</b>
+        <div class="tbl"><span></span><span class="hd">Scheduled</span><span class="hd">Expected</span><span class="hd">Actual</span>
+          <b>Departs (EWR)</b><span class="m">2:35 PM</span><span class="m s2">–</span><span class="m s2">–</span>
+          <b>Arrives (YYZ)</b><span class="m">4:15 PM</span><span class="m s2">–</span><span class="m s2">–</span></div>
+        <span>Terminal A · Gate not set yet</span>
+        <span class="s2" style="font-size:12px">Updated 4:59 PM · next update around 10:59 PM</span>
+      </div>
+      <div class="card"><span class="pill">Advance forecast</span><div class="glassrow"><svg class="glass" viewBox="0 0 28 34" aria-hidden="true"><path d="M5 3h18l-2.4 27H7.4z" fill="none" stroke="#e0b54e" stroke-width="1.6" stroke-linejoin="round"></path><path d="M6.2 14c2.4 0 2.8-1.8 4.3-1.8s2 1.8 3.6 1.8h7.7l-1.4 15.4H7.6z" fill="#e0b54e" opacity=".55"></path></svg><span class="grade">A few bumps, mostly calm.</span></div></div>
+      <span class="fold"></span><span class="foldlbl">First screen ends</span>
+    </div></div><figcaption><b>Today</b>Status takes half the first screen. The grade only just fits, and the timeline is below the fold.</figcaption></figure>
+
+    <figure><div class="ph dk"><div class="sc">
+      <div class="nav"><span class="l">‹</span><span class="t">Forecast</span><span></span></div>
+      <span class="e">AC 1507 · Air Canada · Thu, Oct 22</span>
+      <div class="hdr">
+        <div class="side"><span class="code">EWR</span><span class="city">Newark</span><span class="t">2:35 PM</span></div>
+        <div class="mid"><svg class="plane" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8 L9 7 L6 2.5 L5 2.5 L6.5 7 L3 7 L2 5 L1 5 L1.6 8 L1 11 L2 11 L3 9 L6.5 9 L5 13.5 L6 13.5 L9 9 Z" fill="currentColor"></path></svg><span class="lab">On time ›</span></div>
+        <div class="side r"><span class="code">YYZ</span><span class="city">Toronto</span><span class="t">4:15 PM</span></div>
+      </div>
+      <div class="card" style="gap:8px">
+        <span class="pill">Advance forecast</span>
+        <div class="glassrow"><svg class="glass" viewBox="0 0 28 34" aria-hidden="true"><path d="M5 3h18l-2.4 27H7.4z" fill="none" stroke="#e0b54e" stroke-width="1.6" stroke-linejoin="round"></path><path d="M6.2 14c2.4 0 2.8-1.8 4.3-1.8s2 1.8 3.6 1.8h7.7l-1.4 15.4H7.6z" fill="#e0b54e" opacity=".55"></path></svg><span class="grade">A few bumps, mostly calm.</span></div>
+        <span class="s2" style="font-size:12.5px;font-weight:700">Confirmed tomorrow around 9:50 PM</span>
+      </div>
+      <div class="tiles"><div class="tile"><b>1 h 21</b><span>in the air</span></div><div class="tile"><b>9 min</b><span>light chop</span></div><div class="tile"><b>0 min</b><span>moderate</span></div></div>
+      <div class="card" style="gap:4px"><b style="font:600 14px var(--display)">Bumps along the way</b><svg class="mini" viewBox="0 0 260 54" aria-hidden="true"><path d="M0 46 C10 46 12 34 20 34 S30 46 40 46 L150 46 C160 46 165 38 172 38 S182 46 190 46 L260 46" fill="none" style="stroke:var(--acc)" stroke-width="2.5" stroke-linecap="round"></path></svg></div>
+      <span class="fold"></span><span class="foldlbl">First screen ends</span>
+    </div></div><figcaption><b>Proposed</b>Times beside the airports and "On time" under the plane. There's no gate yet, so nothing else shows. The header is no taller than today's, and the grade, tiles and timeline all fit on the first screen.</figcaption></figure>
+
+    <figure><div class="ph dk"><div class="sc">
+      <div class="nav"><span class="l">‹</span><span class="t">Forecast</span><span></span></div>
+      <span class="e">AC 1507 · Air Canada · Thu, Oct 22</span>
+      <div class="hdr">
+        <div class="side"><span class="code">EWR</span><span class="city">Newark</span><span class="t">2:35 PM</span><span class="gate">Gate A28 · Terminal A</span></div>
+        <div class="mid"><svg class="plane" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8 L9 7 L6 2.5 L5 2.5 L6.5 7 L3 7 L2 5 L1 5 L1.6 8 L1 11 L2 11 L3 9 L6.5 9 L5 13.5 L6 13.5 L9 9 Z" fill="currentColor"></path></svg><span class="lab">On time ›</span></div>
+        <div class="side r"><span class="code">YYZ</span><span class="city">Toronto</span><span class="t">4:15 PM</span></div>
+      </div>
+      <div class="card" style="gap:8px">
+        <span class="pill" style="color:var(--acc)">Confirmed forecast</span>
+        <div class="glassrow"><svg class="glass" viewBox="0 0 28 34" aria-hidden="true"><path d="M5 3h18l-2.4 27H7.4z" fill="none" stroke="#e0b54e" stroke-width="1.6" stroke-linejoin="round"></path><path d="M6.2 14c2.4 0 2.8-1.8 4.3-1.8s2 1.8 3.6 1.8h7.7l-1.4 15.4H7.6z" fill="#e0b54e" opacity=".55"></path></svg><span class="grade">A few bumps, mostly calm.</span></div>
+        <span class="s2" style="font-size:12.5px;font-weight:700">Updated hourly until you fly</span>
+      </div>
+      <div class="tiles"><div class="tile"><b>1 h 21</b><span>in the air</span></div><div class="tile"><b>9 min</b><span>light chop</span></div><div class="tile"><b>0 min</b><span>moderate</span></div></div>
+      <div class="card" style="gap:4px"><b style="font:600 14px var(--display)">Bumps along the way</b><svg class="mini" viewBox="0 0 260 54" aria-hidden="true"><path d="M0 46 C10 46 12 34 20 34 S30 46 40 46 L150 46 C160 46 165 38 172 38 S182 46 190 46 L260 46" fill="none" style="stroke:var(--acc)" stroke-width="2.5" stroke-linecap="round"></path></svg></div>
+      <span class="fold"></span><span class="foldlbl">First screen ends</span>
+    </div></div><figcaption><b>On time, gate set</b>Once a gate number is set, "Gate A28 · Terminal A" appears under the departure time: one small line, and the forecast still starts at the same height.</figcaption></figure>
+
+    <figure><div class="ph"><div class="sc tall">
+      <div class="nav"><span class="l">‹</span><span class="t">Forecast</span><span></span></div>
+      <span class="e">B6 23 · JetBlue · Thu, Oct 22</span>
+      <div class="hdr">
+        <div class="side"><span class="code">JFK</span><span class="city">New York</span><span class="t new">7:55 AM</span><span class="was">7:15 AM</span><span class="gate">Gate B22 · T5</span></div>
+        <div class="mid"><svg class="plane" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8 L9 7 L6 2.5 L5 2.5 L6.5 7 L3 7 L2 5 L1 5 L1.6 8 L1 11 L2 11 L3 9 L6.5 9 L5 13.5 L6 13.5 L9 9 Z" fill="currentColor"></path></svg><span class="lab delay">40 min late ⌄</span></div>
+        <div class="side r"><span class="code">LAX</span><span class="city">Los Angeles</span><span class="t new">11:19 AM</span><span class="was">10:41 AM</span></div>
+      </div>
+      <div class="details">
+        <div class="drow"><span class="k">Departs JFK</span><span class="m">7:55 AM expected · <span class="old">7:15 AM</span></span></div>
+        <div class="drow"><span class="k">Arrives LAX</span><span class="m">11:19 AM expected · <span class="old">10:41 AM</span></span></div>
+        <div class="drow"><span class="k">Gate</span><span>B22 · Terminal 5</span></div>
+        <span class="s2" style="font-size:11.5px">Updated 6:12 AM · next update around 7:10 AM</span>
+      </div>
+      <div class="card" style="gap:8px">
+        <span class="pill" style="color:var(--acc)">Confirmed forecast</span>
+        <span class="note"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M13.5 8A5.5 5.5 0 1 1 11.9 4.1M13.5 2.5v3h-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>Updated for the new 7:55 AM departure</span>
+        <div class="glassrow"><svg class="glass" viewBox="0 0 28 34" aria-hidden="true"><path d="M5 3h18l-2.4 27H7.4z" fill="none" stroke="#c99a2e" stroke-width="1.6" stroke-linejoin="round"></path><path d="M6.2 14c2.4 0 2.8-1.8 4.3-1.8s2 1.8 3.6 1.8h7.7l-1.4 15.4H7.6z" fill="#c99a2e" opacity=".55"></path></svg><span class="grade">A few bumps, mostly calm.</span></div>
+      </div>
+    </div></div><figcaption><b>Delayed, first view after the change</b>"40 min late" in teal under the plane, the new times in bold with the old ones struck through, and the gate under departure now that there is one. Details open on their own this once.</figcaption></figure>
+  </div>
+</section>
+
+<section>
+  <div class="head"><span class="eb">2 · Every state</span><h2>What the header and line say</h2></div>
+  <div class="row">
+    <figure><div class="ph"><div class="sc tall" style="gap:0">
+      <div class="mini-state"><span class="lbl">More than 48 h out</span>
+        <div class="hdr"><div class="side"><span class="code" style="font-size:24px">JFK</span><span class="t">7:15 AM</span></div><div class="mid">✈<span class="lab" style="font-weight:400">Live status from Tue</span></div><div class="side r"><span class="code" style="font-size:24px">LAX</span><span class="t">10:41 AM</span></div></div></div>
+      <div class="mini-state"><span class="lbl">Departed</span>
+        <div class="hdr"><div class="side"><span class="code" style="font-size:24px">JFK</span><span class="t new">7:58 AM</span><span class="was">7:15 AM</span></div><div class="mid">✈<span class="lab">Departed ›</span></div><div class="side r"><span class="code" style="font-size:24px">LAX</span><span class="t">11:19 AM</span></div></div></div>
+      <div class="mini-state"><span class="lbl">Stale (no update for 3 h)</span>
+        <div class="hdr"><div class="side"><span class="code" style="font-size:24px">EWR</span><span class="t">2:35 PM</span></div><div class="mid">✈<span class="lab">On time ›<small>updated 3 h ago</small></span></div><div class="side r"><span class="code" style="font-size:24px">YYZ</span><span class="t">4:15 PM</span></div></div></div>
+      <div class="mini-state"><span class="lbl">Diverted</span>
+        <div class="hdr"><div class="side"><span class="code" style="font-size:24px">ORD</span><span class="t">4:47 PM</span></div><div class="mid">✈<span class="lab strong">Diverted ›</span></div><div class="side r"><span class="code" style="font-size:24px">COS</span><span class="was" style="font-size:13px">DEN</span></div></div></div>
+      <div class="mini-state"><span class="lbl">Cancelled</span>
+        <div class="hdr dim"><div class="side"><span class="code" style="font-size:24px">JFK</span><span class="t">7:15 AM</span></div><div class="mid">✈<span class="lab strong">Cancelled</span></div><div class="side r"><span class="code" style="font-size:24px">LAX</span><span class="t">10:41 AM</span></div></div>
+        <span class="s2" style="font-size:12px;text-align:center">The cancelled card replaces the forecast below.</span></div>
+      <div class="mini-state"><span class="lbl">Checking, unavailable, or no flight number</span>
+        <span class="s2" style="font-size:12.5px;text-align:center">Checking: the label reads "Checking…". Unavailable, or added without a number: scheduled times and no label. The details say why.</span></div>
+    </div></div><figcaption><b>All states</b>One small label under the plane, never an extra line. Quiet ink by default, teal for a delay, bold ink for diverted and cancelled. A diversion swaps the destination code and strikes through the old one.</figcaption></figure>
+
+    <figure><div class="ph ax hc"><div class="sc tall">
+      <span class="e">B6 23 · Thu, Oct 22</span>
+      <div class="hdr">
+        <div class="side"><span class="code">JFK</span><span class="t new">7:55 AM</span><span class="was" style="font-size:15px">7:15 AM</span></div>
+        <div class="mid"></div>
+        <div class="side r"><span class="code">LAX</span><span class="t new">11:19 AM</span><span class="was" style="font-size:15px">10:41 AM</span></div>
+      </div>
+      <div class="sub delay"><span class="w">40 min late</span> · Gate B22 <span class="chev">›</span></div>
+      <div class="card" style="gap:8px"><span class="pill" style="font-size:15px;color:var(--acc)">Confirmed forecast</span><span class="grade" style="font-size:28px">A few bumps, mostly calm.</span></div>
+    </div></div><figcaption><b>Large text with Increase Contrast</b>The airports stack, so the label moves to its own line under them and wraps rather than truncating. The whole header is one button.</figcaption></figure>
+  </div>
+</section>
+
+<footer>The flights and times are examples. Approved by Lanre, including the 15-minute refresh in the last 3 hours. The spec has gone to the "BumpCast bugs and improvements" session to build: times move into the <code>FlightDetailView</code> route header, a small status label under the plane, plus details on tap, replaces <code>FlightStatusSection</code>'s card, details open once after a change, and the forecast-shift note moves into <code>ForecastView</code>.</footer>
+</div>

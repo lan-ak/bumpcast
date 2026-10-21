@@ -212,6 +212,11 @@ actor DemoFlightService: FlightService {
             Flight(id: UUID(), origin: "KORD", destination: "KDEN", departureAt: soon.addingTimeInterval(4 * 86400)),
             Flight(id: UUID(), origin: "CYYZ", destination: "EGLL", departureAt: soon.addingTimeInterval(86400)),
         ]
+        // The first flight is a numbered one with a 40-minute delay and a gate, for the status header.
+        stored[0].flightNumber = "B6 23"
+        stored[0].airlineName = "JetBlue"
+        stored[0].arrivalAt = soon.addingTimeInterval(386 * 60)
+        stored[0].status = Self.demoStatus(for: stored[0])
         // `-demoGlobal`: an outlook-only route with an official warning, for the global outlook (beta) screens.
         if ProcessInfo.processInfo.arguments.contains("-demoGlobal") {
             stored.append(Flight(id: UUID(), origin: "SBGR", destination: "LPPT", departureAt: soon.addingTimeInterval(2 * 3600)))

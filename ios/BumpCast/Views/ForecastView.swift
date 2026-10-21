@@ -26,7 +26,10 @@ struct ForecastView: View {
                 WarningBanner(warning: warning) { openWarning = warning }
             }
             if let grade = forecast.grade {
-                GradeCard(grade: grade, forecast: forecast, confidence: confidence) { showOutlookSheet = true }
+                GradeCard(
+                    grade: grade, forecast: forecast, confidence: confidence,
+                    departureNote: flight.status?.forecastNote(for: flight, forecast: forecast)
+                ) { showOutlookSheet = true }
             }
             StatTiles(forecast: forecast, flight: flight)
             if fullAccess {
@@ -108,6 +111,8 @@ private struct GradeCard: View {
     let grade: Forecast.Grade
     let forecast: Forecast
     let confidence: Forecast.Confidence
+    /// "Updated for the new 7:55 AM departure", when a delay moved the forecast.
+    var departureNote: String?
     let openOutlook: () -> Void
 
     var body: some View {
@@ -118,6 +123,11 @@ private struct GradeCard: View {
                     .accessibilityHint("Explains the global outlook")
             } else {
                 ConfidenceBadge(confidence: confidence)
+            }
+            if let departureNote {
+                Label(departureNote, systemImage: "arrow.clockwise")
+                    .font(.bcFootnoteStrong)
+                    .foregroundStyle(Theme.accent)
             }
             AdaptiveStack {
                 WaterGlass(severity: forecast.worstSeverity, size: 44)

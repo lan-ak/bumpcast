@@ -1,7 +1,7 @@
 """Live flight status and published schedules, free for every flight with a number.
 
-Status is refreshed in the same pass as the forecast and on the same rhythm: every 6 hours
-from 48 h out, hourly in the last 18 h, until about an hour after departure. When the
+Status is refreshed in the same pass as the forecast: every 6 hours from 48 h out, hourly
+from 18 h out, and every 15 minutes from 3 h before departure until about an hour after. When the
 departure moves, the forecast is recomputed for the new time in that pass, and one push
 says both ("Delayed 40 min, forecast updated"). Gate changes never push.
 
@@ -19,6 +19,9 @@ WINDOW = timedelta(hours=48)
 HOURLY_FROM = timedelta(hours=18)
 SLOW_REFRESH = timedelta(hours=6)
 FAST_REFRESH = timedelta(hours=1)
+# The last 3 hours before departure, until it's checked off: every 15 minutes.
+DEPARTURE_WINDOW = timedelta(hours=3)
+DEPARTURE_REFRESH = timedelta(minutes=15)
 # Status keeps updating until this long after departure, then stops.
 AFTER_DEPARTURE = timedelta(hours=1)
 # Smaller moves than this stay in the app.
@@ -66,6 +69,8 @@ def is_due(status: dict | None, departure: datetime, now: datetime, watching: bo
 
 
 def refresh_interval(departure: datetime, now: datetime) -> timedelta:
+    if departure - now <= DEPARTURE_WINDOW:
+        return DEPARTURE_REFRESH
     return FAST_REFRESH if departure - now <= HOURLY_FROM else SLOW_REFRESH
 
 

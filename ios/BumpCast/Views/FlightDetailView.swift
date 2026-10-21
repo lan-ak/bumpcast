@@ -33,7 +33,7 @@ struct FlightDetailView: View {
         let landed = inFlight.landing(of: flight, forecast: forecast) <= .now
         return ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                FlightHeader(flight: flight)
+                FlightRouteHeader(flight: flight)
                 ScheduleNote(flight: flight)
                 if store.isOffline, let synced = store.syncedAt {
                     Label("Offline. Saved \(synced.formatted(.relative(presentation: .named))).", systemImage: "wifi.slash")
@@ -50,7 +50,6 @@ struct FlightDetailView: View {
                 if !landed, flight.departureAt > .now, !push.isEnabled, state != .outOfCoverage, state != .betaAvailable {
                     NotificationsCard(forecastReady: { if case .ready = state { true } else { false } }())
                 }
-                FlightStatusSection(flight: flight, forecast: forecast)
                 if flight.status?.state == .cancelled {
                     CancelledCard(flight: flight, addFlight: { isAdding = true }) {
                         Task {
@@ -118,32 +117,6 @@ struct FlightDetailView: View {
             {
                 try? await Task.sleep(for: .seconds(30))
                 await store.refreshForecast(flight.id)
-            }
-        }
-    }
-}
-
-private struct FlightHeader: View {
-    let flight: Flight
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            if let number = flight.flightNumber {
-                Text(flight.airlineName.map { "\(number) · \($0)" } ?? number).eyebrow().foregroundStyle(.secondary)
-            }
-            HStack(alignment: .firstTextBaseline) {
-                Text(flight.originAirport?.iata ?? flight.origin)
-                Image(systemName: "airplane").font(.bcTitle2).foregroundStyle(.secondary)
-                Text(flight.destinationAirport?.iata ?? flight.destination)
-            }
-            .font(.bcDisplay)
-            Text("\(flight.originAirport?.city ?? "") to \(flight.destinationAirport?.city ?? "")")
-                .foregroundStyle(.secondary)
-            Text(flight.departureText).font(.bcMeta).foregroundStyle(.secondary)
-            if flight.schedulePending {
-                Label("We'll fill in the details when the airline publishes this flight.", systemImage: "calendar.badge.clock")
-                    .font(.bcFootnote)
-                    .foregroundStyle(.secondary)
             }
         }
     }
