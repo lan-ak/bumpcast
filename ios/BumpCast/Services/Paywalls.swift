@@ -1,6 +1,7 @@
 import Foundation
 import Network
 import Observation
+import StoreKit
 import SuperwallKit
 import UIKit
 
@@ -21,8 +22,6 @@ enum Placement: String, CaseIterable {
     case updatesLocked = "updates_locked"
     /// Gated: getting the countdown ready at the gate (or "We've taken off"): the Live Activity and in-flight reminders.
     case liveActivityLocked = "live_activity_locked"
-    /// Gated: live flight status (delays, gate, cancellations) and delay pushes.
-    case liveStatusLocked = "live_status_locked"
     /// Gated: pilot reports on the map.
     case pilotReportsLocked = "pilot_reports_locked"
     /// Gated: saving more than the free number of upcoming flights.
@@ -90,6 +89,42 @@ final class Paywalls {
             false
         #endif
     }
+
+    /// Superwall keeps the last status it saw, and a subscription that simply runs out sends no
+    /// transaction, so Pro could outlive its expiry until the next relaunch. StoreKit is checked
+    /// whenever the app comes forward, and again at the moment the current period ends.
+    func verifyEntitlements() async {
+        guard isConfigured, isPro, !Self.debugForcePro else { return }
+        var expires: Date?
+        var active = false
+        for await result in Transaction.currentEntitlements {
+            guard case .verified(let transaction) = result,
+                [Products.proMonthly, Products.proAnnual].contains(transaction.productID),
+                transaction.revocationDate == nil
+            else { continue }
+            let end = transaction.expirationDate ?? .distantFuture
+            if end > .now {
+                active = true
+                expires = max(expires ?? end, end)
+            }
+        }
+        guard active else {
+            isPro = false
+            updateAttributes()
+            await AppSync.saveProfile()
+            return
+        }
+        expiryCheck?.cancel()
+        if let expires, expires < .now.addingTimeInterval(24 * 3600) {
+            expiryCheck = Task { [weak self] in
+                try? await Task.sleep(for: .seconds(max(1, expires.timeIntervalSinceNow + 1)))
+                guard !Task.isCancelled else { return }
+                await self?.verifyEntitlements()
+            }
+        }
+    }
+
+    @ObservationIgnored private var expiryCheck: Task<Void, Never>?
 
     func identify(_ userID: UUID) {
         guard isConfigured else { return }
@@ -224,7 +259,7 @@ final class Paywalls {
 
     // MARK: Delegate callbacks
 
-    fileprivate func statusChanged(_ status: SubscriptionStatus) {
+    fileprivate func statusChanged(_ status: SuperwallKit.SubscriptionStatus) {
         isPro = status.isActive || Self.debugForcePro
         updateAttributes()
         Task { await AppSync.saveProfile() }
@@ -245,7 +280,7 @@ final class Paywalls {
         weak var owner: Paywalls?
         init(owner: Paywalls) { self.owner = owner }
 
-        @MainActor func subscriptionStatusDidChange(from oldValue: SubscriptionStatus, to newValue: SubscriptionStatus) {
+        @MainActor func subscriptionStatusDidChange(from oldValue: SuperwallKit.SubscriptionStatus, to newValue: SuperwallKit.SubscriptionStatus) {
             owner?.statusChanged(newValue)
         }
 

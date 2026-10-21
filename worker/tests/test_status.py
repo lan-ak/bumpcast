@@ -3,6 +3,7 @@ from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 
 import smooth_worker
+from smooth_worker.apns import SendResult
 from smooth_worker import flightdata, notify, status
 
 # flight_b6_23.json is a made-up delay in the provider's shape; flight_b6_123_recorded.json is a
@@ -79,6 +80,13 @@ def test_departed_uses_the_gate_time():
     leg = flightdata.parse_leg({"number": "DL 5859", "status": "Departed", "departure": departure, "arrival": {"airport": {"icao": "KDCA"}}})
     row = status.build(leg, {**FLIGHT, "destination": "KDCA"}, None, datetime(2026, 10, 18, 19, 40, tzinfo=UTC))
     assert (row["status"], row["departure_actual"], row["delay_min"]) == ("departed", "2026-10-18T19:01:00+00:00", 1)
+    assert row["takeoff_at"] == "2026-10-18T19:34:00+00:00"  # wheels-up is the runway time
+
+
+def test_takeoff_without_a_runway_time_adds_taxi():
+    departed = status.build(leg(status="Departed"), FLIGHT, None, SCHEDULED + timedelta(minutes=45))
+    assert departed["takeoff_at"] == "2026-10-22T12:10:00+00:00"  # 11:55 off the gate + 15 min
+    assert status.build(leg(), FLIGHT, None, NOW)["takeoff_at"] is None
 
 
 def test_find_leg_prefers_the_operating_flight():
@@ -300,6 +308,9 @@ class FakeDB:
     def flights_with_passes(self, ids):
         return set()
 
+    def flights_with_live_activities(self, ids):
+        return set()
+
     def devices(self, user_ids):
         return {}
 
@@ -369,15 +380,40 @@ def test_run_once_refreshes_status_and_forecasts_the_new_departure(monkeypatch):
     assert db.forecasts[0]["departure_at"] == expected.isoformat()
 
 
-def test_run_once_skips_status_for_free_users(monkeypatch):
+def test_run_once_checks_status_for_free_users(monkeypatch):
     now = datetime.now(UTC)
     flight = {**FLIGHT, "departure_at": (now + timedelta(hours=3)).isoformat(), "forecasts": [], "status": None}
     monkeypatch.setattr(smooth_worker, "load_sources", lambda now: [])
     monkeypatch.setattr(smooth_worker.forecast, "compute", lambda *a: smooth_worker.forecast.Forecast("ready"))
     db, data = FakeDB([flight], pro=False), FakeData(legs())
     smooth_worker.run_once(db, data)
-    assert data.calls == [] and db.statuses == []
-    assert len(db.forecasts) == 1  # the forecast itself is unchanged for free users
+    assert len(data.calls) == 1 and len(db.statuses) == 1  # live status is free
+
+
+def test_delay_push_reaches_free_users():
+    now = datetime.now(UTC).replace(hour=15)
+    scheduled = now + timedelta(hours=6)
+    expected = scheduled + timedelta(minutes=40)
+    current = row(
+        departure_scheduled=scheduled.isoformat(),
+        departure_expected=expected.isoformat(),
+        notified_departure=scheduled.isoformat(),
+        checked_at=now.isoformat(),
+    )
+    new = {**SMOOTH, "id": "fc2", "departure_at": expected.isoformat()}
+    db = FakeDB([{**FLIGHT, "departure_at": scheduled.isoformat(), "status": current, "forecasts": [new]}], pro=False)
+    notify.run(db, None, now)
+    delay = [n for n in db.notifications if n["kind"] == "delay"]
+    assert len(delay) == 1 and not delay[0]["pro_only"]
+
+
+def test_takeoff_watch_checks_every_poll_near_departure():
+    checked = row(checked_at=(SCHEDULED - timedelta(minutes=25)).isoformat())
+    now = SCHEDULED - timedelta(minutes=20)
+    assert not status.is_due(checked, SCHEDULED, now)  # hourly without a Live Activity
+    assert status.is_due(checked, SCHEDULED, now, watching=True)
+    landed = {**checked, "takeoff_at": SCHEDULED.isoformat()}
+    assert not status.is_due(landed, SCHEDULED, now, watching=True)  # wheels-up known: back to normal
 
 
 def test_delay_push_once_with_the_new_forecast():
@@ -397,7 +433,7 @@ def test_delay_push_once_with_the_new_forecast():
     delay = [n for n in db.notifications if n["kind"] == "delay"]
     assert len(delay) == 1
     assert delay[0]["title"] == "Delayed 40 min"  # same forecast at the new time
-    assert delay[0]["pro_only"] and delay[0]["forecast_id"] == "fc2"
+    assert not delay[0]["pro_only"] and delay[0]["forecast_id"] == "fc2"
     assert db.status_updates == [{"notified_status": "delayed", "notified_departure": expected.isoformat()}]
 
 
@@ -428,3 +464,48 @@ def test_schedule_check_fills_in_the_flight():
     db.flights = [{**PENDING, "status": {"checked_at": now.isoformat()}}]
     notify.check_schedules(db, data, None, now + timedelta(hours=3))
     assert data.calls == []
+
+
+class FakeApns:
+    def __init__(self):
+        self.sent = []
+
+    def send(self, token, environment, payload, collapse_id=None, push_type="alert"):
+        self.sent.append((token, push_type, payload))
+        return SendResult(True)
+
+
+class TakeoffDB:
+    def __init__(self, activities):
+        self.activities, self.marked = activities, []
+
+    def live_activities_to_retime(self, now):
+        return self.activities
+
+    def mark_live_activity(self, token, **fields):
+        self.marked.append((token, fields))
+
+    def devices(self, user_ids):
+        return {u: [{"token": "dev", "environment": "sandbox"}] for u in user_ids}
+
+
+def test_takeoff_pushed_once_to_the_live_activity_and_wakes_the_app():
+    takeoff = SCHEDULED + timedelta(minutes=20)
+    activity = {
+        "token": "la",
+        "flight_id": "f1",
+        "user_id": "u1",
+        "environment": "sandbox",
+        "pushed_takeoff": None,
+        "flight": {"id": "f1", "origin": "KJFK", "status": {"takeoff_at": takeoff.isoformat()}},
+    }
+    db, apns = TakeoffDB([activity]), FakeApns()
+    assert notify.push_takeoffs(db, apns, takeoff + timedelta(minutes=5)) == 1
+    (token, kind, payload), (device, wake, _) = apns.sent
+    assert (token, kind, device, wake) == ("la", "liveactivity", "dev", "background")
+    state = payload["aps"]["content-state"]
+    assert state["takeoff"] == (takeoff - notify.APPLE_EPOCH).total_seconds()
+    assert db.marked == [("la", {"pushed_takeoff": takeoff.isoformat()})]
+
+    pushed = {**activity, "pushed_takeoff": takeoff.isoformat()}
+    assert notify.push_takeoffs(TakeoffDB([pushed]), FakeApns(), takeoff + timedelta(minutes=10)) == 0

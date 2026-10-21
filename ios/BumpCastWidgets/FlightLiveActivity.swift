@@ -121,6 +121,8 @@ private struct LockScreenView: View {
                 Link(destination: URL(string: "bumpcast://flight/\(attributes.flightID.uuidString)")!) {
                     Label("Full forecast", systemImage: "chart.bar")
                 }
+                Spacer()
+                EndButton(flightID: attributes.flightID)
             }
             .font(.bcCaptionStrong)
             Text(footer).font(.bcCaption2).foregroundStyle(.tertiary)
@@ -279,7 +281,11 @@ private struct LandedView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             Label("Landed · \(attributes.route)", systemImage: "airplane.arrival").font(.bcFootnoteStrong)
-            Text("How did it feel?").font(.bcSection)
+            HStack {
+                Text("How did it feel?").font(.bcSection)
+                Spacer()
+                EndButton(flightID: attributes.flightID, title: "Skip")
+            }
             HStack {
                 ForEach(FeltRating.allCases, id: \.self) { rating in
                     Button(intent: RateFlightIntent(flightID: attributes.flightID, rating: rating)) {
@@ -291,5 +297,20 @@ private struct LandedView: View {
             }
         }
         .padding()
+    }
+}
+
+/// Takes the countdown off the Lock Screen. The in-flight reminders stay.
+private struct EndButton: View {
+    let flightID: UUID
+    var title: String = "End"
+
+    var body: some View {
+        Button(intent: EndFlightActivityIntent(flightID: flightID)) {
+            Label(title, systemImage: "xmark")
+        }
+        .buttonStyle(.plain)
+        .foregroundStyle(.secondary)
+        .accessibilityLabel(title == "End" ? "End the countdown" : "Skip rating")
     }
 }

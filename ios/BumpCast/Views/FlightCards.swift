@@ -81,7 +81,7 @@ struct InFlightCard: View {
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.bordered)
-            Text("Tap when the wheels leave the ground and we'll match the countdown to it.")
+            Text("We'll match the countdown to your real takeoff time once it's reported. Tap if you're up first.")
                 .font(.bcFootnote)
                 .foregroundStyle(.secondary)
         }

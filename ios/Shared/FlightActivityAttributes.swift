@@ -88,8 +88,29 @@ struct RateFlightIntent: LiveActivityIntent {
     }
 }
 
-/// Set by the app at launch; the widget extension never runs the intent itself.
+/// "End" on the Live Activity: takes it off the Lock Screen. Runs in the app process.
+struct EndFlightActivityIntent: LiveActivityIntent {
+    static let title: LocalizedStringResource = "End the bump countdown"
+
+    @Parameter(title: "Flight") var flightID: String
+
+    init() {}
+
+    init(flightID: UUID) {
+        self.flightID = flightID.uuidString
+    }
+
+    func perform() async throws -> some IntentResult {
+        if let id = UUID(uuidString: flightID), let end = await MainActor.run(body: { FlightRatingHandler.end }) {
+            await end(id)
+        }
+        return .result()
+    }
+}
+
+/// Set by the app at launch; the widget extension never runs the intents itself.
 @MainActor
 enum FlightRatingHandler {
     static var submit: (@MainActor (UUID, FeltRating) async -> Void)?
+    static var end: (@MainActor (UUID) async -> Void)?
 }

@@ -9,7 +9,7 @@ flights unlocked with a flight pass, and shown locked in the app for everyone el
 
 import logging
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from zoneinfo import ZoneInfo
 
 from . import airports, changes, flightdata, status
@@ -33,6 +33,8 @@ HELD = "held: quiet hours"
 HELD_WINDOW = timedelta(hours=12)
 # How long a delay push waits for the forecast at the new time before going without it.
 FORECAST_WAIT = timedelta(minutes=15)
+# A takeoff found later than this is too stale to move the countdown.
+TAKEOFF_PUSH_LIMIT = timedelta(hours=2)
 # Connecting flights: a leg that leaves from where the user's earlier flight lands, within this
 # long of that flight's departure, is the same trip.
 CONNECTION_WINDOW = timedelta(hours=30)
@@ -424,14 +426,14 @@ def _deliver(db, apns, notification_id, flight, kind, milestone, title, body, ta
     return 1
 
 
-# Live status (Pro or a flight pass) and published schedules (free)
+# Live status and published schedules (free for everyone)
 
 
 def _status_event(db, apns, flight, forecast, profiles, passes, devices, now) -> int:
     """Push a delay, cancellation or diversion once, combined with the forecast it caused."""
     current = flight.get("status")
     profile = profiles.get(flight["user_id"], {})
-    if not current or not (profile.get("is_pro") or flight["id"] in passes):
+    if not current:
         return 0
     event = status.plan(current)
     if event is None:
@@ -472,7 +474,7 @@ def _status_event(db, apns, flight, forecast, profiles, passes, devices, now) ->
             "title": title,
             "body": body,
             "changes": [{"text": body}],
-            "pro_only": True,
+            "pro_only": False,
         },
     )
 
@@ -559,3 +561,56 @@ def _deliver_held(db, apns, now: datetime) -> None:
         if not targets or is_quiet(now, profiles.get(n["user_id"], {}).get("timezone"), departure):
             continue
         _deliver(db, apns, n["id"], {**flight, "user_id": n["user_id"]}, n["kind"], n["milestone"], n["title"], n["body"], targets)
+
+
+# Wheels-up: re-time the in-flight countdown from the airline's data
+
+
+# Apple's reference date for Date values in Live Activity content state.
+APPLE_EPOCH = datetime(2001, 1, 1, tzinfo=UTC)
+
+
+def push_takeoffs(db, apns: Apns | None, now: datetime) -> int:
+    """Send each open Live Activity the real wheels-up once the airline reports it, and wake the
+    app so its local stretch reminders move too. Each takeoff time is pushed once per activity."""
+    if apns is None:
+        return 0
+    count = 0
+    woken: set[str] = set()
+    for activity in db.live_activities_to_retime(now):
+        flight = activity.get("flight") or {}
+        takeoff = status._time((flight.get("status") or {}).get("takeoff_at"))
+        if takeoff is None or takeoff < now - TAKEOFF_PUSH_LIMIT:
+            continue
+        if status._time(activity.get("pushed_takeoff")) == takeoff:
+            continue
+        reference = (takeoff - APPLE_EPOCH).total_seconds()
+        when = status.local_time(takeoff, flight.get("origin") or "")
+        payload = {
+            "aps": {
+                "timestamp": int(now.timestamp()),
+                "event": "update",
+                "content-state": {"takeoff": reference, "updatedAt": (now - APPLE_EPOCH).total_seconds()},
+                "alert": {
+                    "title": "Wheels up",
+                    "body": f"Your countdown is timed to takeoff at {when}.",
+                },
+            }
+        }
+        result = apns.send(activity["token"], activity["environment"], payload, push_type="liveactivity")
+        if result.ok:
+            db.mark_live_activity(activity["token"], pushed_takeoff=takeoff.isoformat())
+            count += 1
+        elif result.token_dead or result.reason == "ExpiredToken":
+            db.mark_live_activity(activity["token"], ended=True)
+        if result.ok and activity["flight_id"] not in woken:
+            woken.add(activity["flight_id"])
+            for device in db.devices([activity["user_id"]]).get(activity["user_id"], []):
+                apns.send(
+                    device["token"],
+                    device["environment"],
+                    {"aps": {"content-available": 1}, "flight_id": activity["flight_id"], "kind": "takeoff"},
+                    push_type="background",
+                )
+        log.info("takeoff %s at %s: %s", activity["flight_id"], takeoff, "pushed" if result.ok else result.reason)
+    return count

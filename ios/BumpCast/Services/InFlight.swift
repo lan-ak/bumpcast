@@ -1,11 +1,13 @@
 import ActivityKit
 import Foundation
 import Observation
+import UIKit
 import UserNotifications
 
 /// Arming at the gate schedules the Live Activity for departure and local reminders before each
-/// bumpy stretch; "We've taken off" re-times both to the real wheels-up. Everything works offline,
-/// which is the point: there's usually no signal up there.
+/// bumpy stretch. Wheels-up from the airline's data re-times both, by push to the Live Activity
+/// and a background wake for the reminders; "We've taken off" does the same by hand. Everything
+/// works offline, which is the point: there's usually no signal up there.
 @Observable @MainActor
 final class InFlight {
     static let shared = InFlight()
@@ -13,8 +15,12 @@ final class InFlight {
     /// Actual takeoff and landing times the user tapped, by flight. Persisted across relaunches.
     private(set) var takeoffs: [UUID: Date] = [:]
     private(set) var landings: [UUID: Date] = [:]
-    /// Flights armed on the ground, with the takeoff the countdown was timed to. Persisted too.
+    /// Flights with a countdown, and the takeoff it was timed to. Persisted too.
     private(set) var armed: [UUID: Date] = [:]
+    /// Flights whose Live Activity the user ended. Syncs don't bring it back; tapping does.
+    private(set) var dismissed: Set<UUID> = []
+    /// Activities whose push tokens are being sent to the worker.
+    @ObservationIgnored private var observedTokens: Set<String> = []
 
     private let defaults = UserDefaults.standard
     /// Remind a little before each stretch so there's time to settle in.
@@ -27,18 +33,21 @@ final class InFlight {
         takeoffs = Self.load("takeoffs", from: defaults)
         landings = Self.load("landings", from: defaults)
         armed = Self.load("armed", from: defaults)
+        dismissed = Set((defaults.stringArray(forKey: "dismissed") ?? []).compactMap(UUID.init(uuidString:)))
     }
 
-    func takeoff(of flight: Flight) -> Date? { takeoffs[flight.id] }
+    /// Wheels-up the user tapped, or the airline reported.
+    func takeoff(of flight: Flight) -> Date? { flight.status?.takeoffAt ?? takeoffs[flight.id] }
 
-    /// Best estimate of wheels-up: the tapped time, else the schedule.
-    func effectiveTakeoff(of flight: Flight) -> Date { takeoffs[flight.id] ?? flight.estimatedTakeoff }
+    /// Best estimate of wheels-up: the airline's, else the tapped time, else the schedule.
+    func effectiveTakeoff(of flight: Flight) -> Date {
+        flight.status?.takeoffAt ?? takeoffs[flight.id] ?? flight.estimatedTakeoff
+    }
 
     func landing(of flight: Flight, forecast: Forecast?) -> Date {
         if let landed = landings[flight.id] { return landed }
-        guard let tapped = takeoffs[flight.id] else { return flight.estimatedLanding(forecast) }
         let minutes = forecast?.durationMin.map(Double.init) ?? flight.estimatedAirMinutes
-        return tapped.addingTimeInterval(minutes * 60)
+        return effectiveTakeoff(of: flight).addingTimeInterval(minutes * 60)
     }
 
     func isArmed(_ flight: Flight) -> Bool { armed[flight.id] != nil }
@@ -74,10 +83,15 @@ final class InFlight {
     /// On the ground: the Live Activity starts at departure (live when known, else scheduled) and
     /// reminders are timed to the estimated wheels-up. A later "We've taken off" re-times both.
     func arm(_ flight: Flight, forecast: Forecast) {
-        let takeoff = flight.estimatedTakeoff
+        dismissed.remove(flight.id)
+        retime(flight, forecast: forecast, takeoff: effectiveTakeoff(of: flight))
+    }
+
+    /// Times the countdown and reminders to `takeoff`, updating a running Live Activity in place.
+    private func retime(_ flight: Flight, forecast: Forecast, takeoff: Date) {
         armed[flight.id] = takeoff
         persist()
-        startActivity(flight, forecast: forecast, takeoff: takeoff, at: flight.expectedDeparture)
+        startActivity(flight, forecast: forecast, takeoff: takeoff, at: min(flight.expectedDeparture, takeoff))
         Task { await scheduleStretchReminders(flight, forecast: forecast, takeoff: takeoff) }
         Task { await scheduleLandingChecks() }
         Paywalls.shared.updateAttributes()
@@ -100,16 +114,17 @@ final class InFlight {
         }
     }
 
-    /// After a sync: follow delays for armed flights that haven't been tapped yet, and pick up the
-    /// latest forecast's stretches so the reminders match what the app shows.
+    /// After a sync: follow delays and the airline's wheels-up for flights with a countdown, and
+    /// pick up the latest forecast's stretches so the reminders match what the app shows.
     func retimeArmed() {
         let store = FlightStore.shared
         for flight in store.flights {
-            guard let timed = armed[flight.id], takeoffs[flight.id] == nil, landings[flight.id] == nil,
+            guard let timed = armed[flight.id], landings[flight.id] == nil,
                 let forecast = store.forecasts[flight.id], forecast.isShown
             else { continue }
-            if abs(timed.timeIntervalSince(flight.estimatedTakeoff)) >= 60 {
-                arm(flight, forecast: forecast)
+            let target = effectiveTakeoff(of: flight)
+            if abs(timed.timeIntervalSince(target)) >= 60 {
+                retime(flight, forecast: forecast, takeoff: target)
             } else {
                 Task { await scheduleStretchReminders(flight, forecast: forecast, takeoff: timed) }
             }
@@ -118,6 +133,8 @@ final class InFlight {
 
     func takeOff(_ flight: Flight, forecast: Forecast, at date: Date = .now) {
         takeoffs[flight.id] = date
+        armed[flight.id] = date
+        dismissed.remove(flight.id)
         persist()
         startActivity(flight, forecast: forecast, takeoff: date, at: date)
         Task { await scheduleStretchReminders(flight, forecast: forecast, takeoff: date) }
@@ -132,6 +149,7 @@ final class InFlight {
             for activity in Activity<FlightActivityAttributes>.activities where activity.attributes.flightID == flight.id {
                 await activity.end(nil, dismissalPolicy: .immediate)
             }
+            try? await FlightStore.shared.service.endLiveActivity(flightID: flight.id)
         }
         UNUserNotificationCenter.current().removePendingNotificationRequests(
             withIdentifiers: stretchIdentifiers(flight.id))
@@ -139,12 +157,16 @@ final class InFlight {
         Paywalls.shared.updateAttributes()
     }
 
-    /// Ends the flight's Live Activity, e.g. once it has been rated.
+    /// Ends the flight's Live Activity, e.g. once it has been rated or the user tapped End. It
+    /// stays gone until the user starts the countdown again; the reminders are left as they are.
     func endActivity(_ flightID: UUID) {
+        dismissed.insert(flightID)
+        persist()
         Task {
             for activity in Activity<FlightActivityAttributes>.activities where activity.attributes.flightID == flightID {
                 await activity.end(nil, dismissalPolicy: .immediate)
             }
+            try? await FlightStore.shared.service.endLiveActivity(flightID: flightID)
         }
     }
 
@@ -153,6 +175,7 @@ final class InFlight {
         takeoffs[flightID] = nil
         landings[flightID] = nil
         armed[flightID] = nil
+        dismissed.remove(flightID)
         persist()
         UNUserNotificationCenter.current().removePendingNotificationRequests(
             withIdentifiers: stretchIdentifiers(flightID) + ["landing-\(flightID)", "boarding-\(flightID)"])
@@ -167,6 +190,7 @@ final class InFlight {
     func refreshActivities() {
         Task {
             for activity in Activity<FlightActivityAttributes>.activities {
+                observePushToken(id: activity.id, flightID: activity.attributes.flightID)
                 var state = activity.content.state
                 let landing = activity.attributes.landing(state)
                 // Kept for a while after landing so "How did it feel?" can be answered from it.
@@ -183,9 +207,13 @@ final class InFlight {
 
     // MARK: Live Activity
 
-    /// Starts the activity now, or schedules it to start at `start` when that's still ahead.
+    /// Starts the activity now, or schedules it to start at `start` when that's still ahead. A
+    /// running one with the same stretches is moved to the new takeoff instead, which also works
+    /// in the background (a new activity can only be started from the foreground).
     private func startActivity(_ flight: Flight, forecast: Forecast, takeoff: Date, at start: Date) {
-        guard ActivityAuthorizationInfo().areActivitiesEnabled, let duration = forecast.durationMin else { return }
+        guard ActivityAuthorizationInfo().areActivitiesEnabled, !dismissed.contains(flight.id),
+            let duration = forecast.durationMin
+        else { return }
         let attributes = FlightActivityAttributes(
             flightID: flight.id,
             route: flight.routeText,
@@ -196,21 +224,60 @@ final class InFlight {
             confidenceTitle: forecast.confidence(departure: flight.departureAt).title,
             issuedAt: forecast.issuedAt)
         let state = FlightActivityAttributes.ContentState(takeoff: takeoff, updatedAt: .now)
+        let inForeground = UIApplication.shared.applicationState == .active
         Task {
+            let stretches = attributes.stretches
+            for running in Activity<FlightActivityAttributes>.activities where running.attributes.flightID == flight.id {
+                let same = running.attributes.stretches == stretches && running.attributes.durationMin == duration
+                guard same || !inForeground else { break }
+                observePushToken(id: running.id, flightID: flight.id)
+                let content = ActivityContent(state: state, staleDate: running.attributes.nextBoundary(after: .now, state))
+                await running.update(content)
+                return
+            }
             for activity in Activity<FlightActivityAttributes>.activities where activity.attributes.flightID == flight.id {
                 await activity.end(nil, dismissalPolicy: .immediate)
             }
             let content = ActivityContent(state: state, staleDate: attributes.nextBoundary(after: max(start, .now), state))
+            let activity: Activity<FlightActivityAttributes>?
             if start > .now.addingTimeInterval(60) {
-                _ = try? Activity.request(
-                    attributes: attributes, content: content, pushType: nil, style: .standard,
+                activity = try? Activity.request(
+                    attributes: attributes, content: content, pushType: .token, style: .standard,
                     alertConfiguration: AlertConfiguration(
                         title: "Your bump countdown is on",
                         body: "We'll remind you a couple of minutes before each bumpy stretch.",
                         sound: .default),
                     start: start)
             } else {
-                _ = try? Activity.request(attributes: attributes, content: content, pushType: nil)
+                activity = try? Activity.request(attributes: attributes, content: content, pushType: .token)
+            }
+            if let id = activity?.id { observePushToken(id: id, flightID: flight.id) }
+        }
+    }
+
+    /// Sends the activity's push token to the worker whenever it changes, so the airline's
+    /// wheels-up can re-time the countdown with the app closed.
+    private func observePushToken(_ activity: Activity<FlightActivityAttributes>) {
+        observePushToken(id: activity.id, flightID: activity.attributes.flightID)
+    }
+
+    /// By id: the activity is looked up again inside the task, so it never crosses isolation.
+    private func observePushToken(id: String, flightID: UUID) {
+        guard observedTokens.insert(id).inserted else { return }
+        #if DEBUG
+            let environment = "sandbox"
+        #else
+            let environment = "production"
+        #endif
+        Task {
+            guard let activity = Activity<FlightActivityAttributes>.activities.first(where: { $0.id == id }) else {
+                observedTokens.remove(id)
+                return
+            }
+            for await data in activity.pushTokenUpdates {
+                let token = data.map { String(format: "%02x", $0) }.joined()
+                try? await FlightStore.shared.service.registerLiveActivity(
+                    flightID: flightID, token: token, environment: environment)
             }
         }
     }
@@ -329,6 +396,7 @@ final class InFlight {
                 Dictionary(uniqueKeysWithValues: values.map { ($0.key.uuidString, $0.value.timeIntervalSince1970) }),
                 forKey: name)
         }
+        defaults.set(dismissed.map(\.uuidString), forKey: "dismissed")
     }
 
     private static func load(_ name: String, from defaults: UserDefaults) -> [UUID: Date] {

@@ -140,10 +140,13 @@ struct FlightsListView: View {
     }
 }
 
-/// The next flight, large: route, time, water glass, grade, wave timeline and confidence.
+/// The next flight, large: route, time, live status, water glass, grade, wave timeline and
+/// confidence. Free users see the grade and gate; the flight's full path of bumps is Pro.
 struct NextFlightCard: View {
     let flight: Flight
     let forecast: Forecast?
+
+    @Environment(Paywalls.self) private var paywalls
 
     var body: some View {
         let state = ForecastState(flight: flight, forecast: forecast, betaOn: GlobalBeta.shared.isOn)
@@ -167,7 +170,13 @@ struct NextFlightCard: View {
                 if !forecast.officialWarnings.isEmpty {
                     OfficialWarningLabel()
                 }
-                WaveTimeline(forecast: forecast)
+                if paywalls.hasFullAccess(to: flight) {
+                    WaveTimeline(forecast: forecast)
+                } else {
+                    LockedWaveTimeline(forecast: forecast) {
+                        paywalls.unlock(.timelineLocked, flight: flight) {}
+                    }
+                }
                 let confidence = forecast.confidence(departure: flight.departureAt)
                 HStack(spacing: 6) {
                     Image(systemName: confidence.symbol)
@@ -195,6 +204,29 @@ struct NextFlightCard: View {
         }
         .skyCard()
         .accessibilityElement(children: .combine)
+    }
+}
+
+/// The wave's shape, blurred, with a way in. Never the real stretch timings.
+private struct LockedWaveTimeline: View {
+    let forecast: Forecast
+    let unlock: () -> Void
+
+    var body: some View {
+        Button(action: unlock) {
+            ZStack {
+                WaveTimeline(forecast: forecast).blur(radius: 6)
+                Label("See when the bumps are", systemImage: "lock")
+                    .font(.bcCaptionStrong)
+                    .foregroundStyle(Theme.ink)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 5)
+                    .background(.regularMaterial, in: .capsule)
+            }
+            .contentShape(.rect)
+        }
+        .buttonStyle(.borderless)
+        .accessibilityLabel("See when the bumps are. Pro.")
     }
 }
 

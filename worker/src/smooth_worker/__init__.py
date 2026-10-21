@@ -101,14 +101,9 @@ def is_due(flight: dict, now: datetime, departure: datetime | None = None) -> bo
     return now - issued >= refresh
 
 
-def entitled_flights(db, flights: list[dict]) -> set[str]:
-    """Flights with live status: the user is Pro, or bought a flight pass for the flight."""
-    numbered = [f for f in flights if f.get("flight_number")]
-    if not numbered:
-        return set()
-    profiles = db.profiles(sorted({f["user_id"] for f in numbered}))
-    passes = db.flights_with_passes([f["id"] for f in numbered])
-    return {f["id"] for f in numbered if profiles.get(f["user_id"], {}).get("is_pro") or f["id"] in passes}
+def status_flights(flights: list[dict]) -> set[str]:
+    """Flights with live status: every flight saved with a number. Status is free."""
+    return {f["id"] for f in flights if f.get("flight_number")}
 
 
 def refresh_status(db, data: FlightData, flight: dict, previous: dict | None, now: datetime) -> dict | None:
@@ -129,13 +124,16 @@ def refresh_status(db, data: FlightData, flight: dict, previous: dict | None, no
 def run_once(db, data: FlightData | None = None) -> int:
     now = datetime.now(UTC)
     flights = db.flights_with_latest_forecast(now)
-    entitled = entitled_flights(db, flights) if data else set()
+    numbered = status_flights(flights) if data else set()
+    watched = db.flights_with_live_activities(sorted(numbered)) if numbered else set()
     count, sources, current_hazards = 0, None, None
     for flight in flights:
         try:
             # Status only counts for flights that have live status.
-            current = flight.get("status") if flight["id"] in entitled else None
-            if flight["id"] in entitled and status.is_due(current, status.effective_departure(flight, current), now):
+            current = flight.get("status") if flight["id"] in numbered else None
+            if flight["id"] in numbered and status.is_due(
+                current, status.effective_departure(flight, current), now, watching=flight["id"] in watched
+            ):
                 current = refresh_status(db, data, flight, current, now)
                 count += 1
             departure = status.effective_departure(flight, current)
@@ -173,6 +171,7 @@ def poll(db, apns: Apns | None, data: FlightData | None = None) -> None:
     steps = [
         ("forecasts", lambda: f"processed {run_once(db, data)} status/forecast update(s)"),
         ("notifications", lambda: f"{notify.run(db, apns, datetime.now(UTC))} notification(s)"),
+        ("takeoffs", lambda: f"{notify.push_takeoffs(db, apns, datetime.now(UTC))} takeoff(s) pushed"),
         ("schedules", lambda: f"{notify.check_schedules(db, data, apns, datetime.now(UTC))} schedule(s) published"),
         ("pireps", lambda: f"{mapdata.refresh_pireps(db, datetime.now(UTC))} pilot report(s)"),
         ("map", lambda: f"{refresh_map(db)} map layer(s)"),

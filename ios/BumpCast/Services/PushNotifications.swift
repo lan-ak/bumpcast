@@ -64,28 +64,37 @@ final class PushNotifications: NSObject {
     }
 }
 
+// Completion-handler variants on purpose: the async ones return on a background thread, and UIKit
+// aborts when the tap's completion runs off the main thread (TestFlight crash, build 3).
 extension PushNotifications: UNUserNotificationCenterDelegate {
     nonisolated func userNotificationCenter(
-        _ center: UNUserNotificationCenter, willPresent notification: UNNotification
-    ) async -> UNNotificationPresentationOptions {
+        _ center: UNUserNotificationCenter, willPresent notification: UNNotification,
+        withCompletionHandler completionHandler: @escaping @Sendable (UNNotificationPresentationOptions) -> Void
+    ) {
         let kind = notification.request.content.userInfo["kind"] as? String ?? ""
-        if PushNotifications.forecastKinds.contains(kind) {
-            await FlightStore.shared.reload()
+        DispatchQueue.main.async {
+            completionHandler([.banner, .sound, .list])
+            if PushNotifications.forecastKinds.contains(kind) {
+                Task { @MainActor in await FlightStore.shared.reload() }
+            }
         }
-        return [.banner, .sound, .list]
     }
 
     nonisolated func userNotificationCenter(
-        _ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse
-    ) async {
+        _ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse,
+        withCompletionHandler completionHandler: @escaping @Sendable () -> Void
+    ) {
         let userInfo = response.notification.request.content.userInfo
         let flightID = userInfo["flight_id"] as? String
         let kind = userInfo["kind"] as? String
-        await MainActor.run {
-            var info: [AnyHashable: Any] = [:]
-            info["flight_id"] = flightID
-            info["kind"] = kind
-            PushNotifications.shared.handleTap(info)
+        DispatchQueue.main.async {
+            MainActor.assumeIsolated {
+                var info: [AnyHashable: Any] = [:]
+                info["flight_id"] = flightID
+                info["kind"] = kind
+                PushNotifications.shared.handleTap(info)
+            }
+            completionHandler()
         }
     }
 }

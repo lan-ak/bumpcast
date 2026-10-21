@@ -14,7 +14,7 @@ struct Flight: Codable, Hashable, Identifiable, Sendable {
     var arrivalAt: Date?
     /// Saved by number before the airline published this date; the times are the user's for now.
     var schedulePending: Bool = false
-    /// Live status (Pro or a flight pass), written by the worker.
+    /// Live status, written by the worker for every flight with a number.
     var status: FlightStatus?
 
     enum CodingKeys: String, CodingKey {
@@ -71,7 +71,7 @@ struct Flight: Codable, Hashable, Identifiable, Sendable {
 
     /// Matches the worker's assumption: wheels up 15 minutes after departure. Follows delays,
     /// like the forecast does.
-    var estimatedTakeoff: Date { expectedDeparture.addingTimeInterval(Forecast.taxiOut) }
+    var estimatedTakeoff: Date { status?.takeoffAt ?? expectedDeparture.addingTimeInterval(Forecast.taxiOut) }
 
     /// Landing from the forecast's flight time, or a rough great-circle estimate before there is one.
     func estimatedLanding(_ forecast: Forecast?) -> Date {
@@ -123,9 +123,12 @@ struct FlightStatus: Codable, Hashable, Sendable {
     var checkedAt: Date
     var nextCheckAt: Date?
     var finished: Bool = false
+    /// Wheels-up from the airline's data (runway time, else gate time plus taxi). Nil until it left.
+    var takeoffAt: Date?
 
     enum CodingKeys: String, CodingKey {
         case live, finished
+        case takeoffAt = "takeoff_at"
         case state = "status"
         case departureScheduled = "departure_scheduled"
         case departureExpected = "departure_expected"

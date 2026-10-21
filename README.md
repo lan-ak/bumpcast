@@ -18,11 +18,11 @@ supabase/   Database schema (migrations) and config (project "smooth")
   - a grade, a minute-by-minute timeline, and plain-language bumpy stretches;
   - labelled as an "Early outlook" (our score) or a "NOAA forecast" (GTG).
 - **Notifications:**
-  - "ready" at 48 h for everyone;
+  - "ready" at 48 h for everyone, plus delays, cancellations and diversions (live status is free);
   - updates at 24, 6 and 2 h, plus "confirmed by NOAA", for Pro or a flight pass;
   - each update says what changed and why, and they also form an in-app feed.
 - **"We've taken off":**
-  - a Live Activity and Dynamic Island countdown to each stretch;
+  - a Live Activity and Dynamic Island countdown to each stretch, re-timed by push to the airline's wheels-up (or a tap), with an End button;
   - local reminders 2 minutes before each stretch;
   - both work offline.
 - **Calm tools:** breathing paced to the next stretch, and six explainers.

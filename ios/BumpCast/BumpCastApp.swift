@@ -14,6 +14,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
             _ = await FlightStore.shared.submitLandingReport(flightID: flightID, rating: rating)
             InFlight.shared.endActivity(flightID)
         }
+        FlightRatingHandler.end = { flightID in InFlight.shared.endActivity(flightID) }
         return true
     }
 
@@ -26,11 +27,15 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
     }
 
     /// A forecast notification arrived: pull the new forecast so it's saved for offline use.
+    /// Completion-handler form: the async one can finish off the main thread, which UIKit rejects.
     func application(
-        _ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]
-    ) async -> UIBackgroundFetchResult {
-        await FlightStore.shared.reload()
-        return FlightStore.shared.isOffline ? .failed : .newData
+        _ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any],
+        fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void
+    ) {
+        Task { @MainActor in
+            await FlightStore.shared.reload()
+            completionHandler(FlightStore.shared.isOffline ? .failed : .newData)
+        }
     }
 }
 
@@ -58,6 +63,7 @@ struct BumpCastApp: App {
                     case .active:
                         InFlight.shared.refreshActivities()
                         Task { await PushNotifications.shared.refreshStatus() }
+                        Task { await Paywalls.shared.verifyEntitlements() }
                     case .background:
                         AppSync.scheduleBackgroundRefresh()
                     default:

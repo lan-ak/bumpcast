@@ -168,6 +168,29 @@ class Database:
     def delete_device(self, token: str) -> None:
         self.http.delete("/devices", params={"token": f"eq.{token}"}).raise_for_status()
 
+    # Live Activities
+
+    def flights_with_live_activities(self, flight_ids: list[str]) -> set[str]:
+        if not flight_ids:
+            return set()
+        rows = self._get("/live_activities", {"select": "flight_id", "flight_id": _in(flight_ids), "ended": "is.false"})
+        return {r["flight_id"] for r in rows}
+
+    def live_activities_to_retime(self, now: datetime) -> list[dict]:
+        """Open Live Activities for recent flights, with the latest wheels-up, to compare with what was pushed."""
+        return self._get(
+            "/live_activities",
+            {
+                "select": f"token,flight_id,user_id,environment,pushed_takeoff,flight:flights!inner(id,origin,flight_number,{STATUS_EMBED})",
+                "ended": "is.false",
+                "flight.departure_at": f"gte.{(now - LOOKBACK).isoformat()}",
+            },
+        )
+
+    def mark_live_activity(self, token: str, **fields) -> None:
+        r = self.http.patch("/live_activities", params={"token": f"eq.{token}"}, json=fields, headers={"Prefer": "return=minimal"})
+        r.raise_for_status()
+
     # Flight status
 
     def upsert_flight_status(self, row: dict) -> None:

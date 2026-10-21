@@ -1,6 +1,6 @@
 import SwiftUI
 
-// Live flight status (Pro or a flight pass) and published-schedule notes (free).
+// Live flight status and published-schedule notes, free for every flight with a number.
 // docs/design/flight-status-1.1-copy.md §1a, §2 and §3. Status never borrows the severity
 // colours: ink and accent teal, with words carrying the meaning. Never say where status
 // comes from, and never imply live tracking (no position, no "Landed").
@@ -39,11 +39,9 @@ extension FlightStatus {
     var divertedAirport: Airport? { divertedTo.flatMap { AirportStore.shared.airport($0) } }
 }
 
-/// The compact status row on the flight card: live status for Pro, a lock for everyone else.
+/// The compact status row on the flight card: gate, delays and cancellations, free for everyone.
 struct LiveStatusRow: View {
     let flight: Flight
-
-    @Environment(Paywalls.self) private var paywalls
 
     var body: some View {
         if flight.flightNumber == nil || flight.expectedDeparture < .now.addingTimeInterval(-3 * 3600) {
@@ -52,13 +50,11 @@ struct LiveStatusRow: View {
             Label("We'll fill in the details when the airline publishes this flight.", systemImage: "calendar.badge.clock")
                 .font(.bcCaptionStrong)
                 .foregroundStyle(.secondary)
-        } else if paywalls.hasFullAccess(to: flight) {
+        } else {
             Label(text, systemImage: symbol)
                 .font(.bcCaptionStrong)
                 .foregroundStyle(flight.status?.isDelayed == true ? Theme.accent : Theme.secondaryInk)
                 .fixedSize(horizontal: false, vertical: true)
-        } else {
-            LockedLiveStatusRow(flight: flight)
         }
     }
 
@@ -99,50 +95,14 @@ struct LiveStatusRow: View {
     }
 }
 
-/// "Live status · Delays and gate changes" with a Pro tag. Never a blurred or fake status.
-struct LockedLiveStatusRow: View {
-    let flight: Flight
-    @Environment(Paywalls.self) private var paywalls
-
-    var body: some View {
-        Button {
-            paywalls.unlock(.liveStatusLocked, flight: flight) {}
-        } label: {
-            HStack(spacing: 6) {
-                Image(systemName: "lock").imageScale(.small)
-                Text("Live status").font(.bcCaptionStrong)
-                Text("· Delays and gate changes").font(.bcCaption)
-                Text("Pro")
-                    .font(.bcCaption2Strong)
-                    .padding(.horizontal, 6)
-                    .padding(.vertical, 2)
-                    .background(Theme.accent.opacity(0.14), in: .capsule)
-                    .foregroundStyle(Theme.accent)
-            }
-            .foregroundStyle(.secondary)
-            .contentShape(.rect)
-        }
-        .buttonStyle(.borderless)
-        .accessibilityLabel("Live status, delays and gate changes. Pro.")
-    }
-}
-
 /// The detail view's "Flight status" card.
 struct FlightStatusSection: View {
     let flight: Flight
     let forecast: Forecast?
 
-    @Environment(Paywalls.self) private var paywalls
-
     var body: some View {
         if flight.flightNumber == nil || flight.schedulePending {
             EmptyView()
-        } else if !paywalls.hasFullAccess(to: flight) {
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Flight status").font(.bcSection)
-                LockedLiveStatusRow(flight: flight)
-            }
-            .skyCard()
         } else if let status = flight.status, status.hasStatus {
             if status.state == .cancelled {
                 EmptyView()  // CancelledCard replaces the forecast

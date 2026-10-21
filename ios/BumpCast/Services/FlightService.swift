@@ -15,6 +15,9 @@ protocol FlightService: Sendable {
     func routeFlights(origin: String, destination: String, date: String) async throws -> FlightSearchResult
 
     func registerDevice(token: String, environment: String) async throws
+    /// The Live Activity's push token, so wheels-up from the airline's data can re-time it.
+    func registerLiveActivity(flightID: UUID, token: String, environment: String) async throws
+    func endLiveActivity(flightID: UUID) async throws
     func saveProfile(_ profile: ProfileRecord) async throws
 
     func passFlightIDs() async throws -> Set<UUID>
@@ -121,6 +124,17 @@ struct SupabaseFlightService: FlightService {
 
     func registerDevice(token: String, environment: String) async throws {
         try await client.rpc("register_device", params: ["p_token": token, "p_environment": environment]).execute()
+    }
+
+    func registerLiveActivity(flightID: UUID, token: String, environment: String) async throws {
+        try await client.rpc(
+            "register_live_activity",
+            params: ["p_flight_id": flightID.uuidString, "p_token": token, "p_environment": environment]
+        ).execute()
+    }
+
+    func endLiveActivity(flightID: UUID) async throws {
+        try await client.rpc("end_live_activity", params: ["p_flight_id": flightID.uuidString]).execute()
     }
 
     func saveProfile(_ profile: ProfileRecord) async throws {
@@ -324,6 +338,8 @@ actor DemoFlightService: FlightService {
     }
 
     func registerDevice(token: String, environment: String) async throws {}
+    func registerLiveActivity(flightID: UUID, token: String, environment: String) async throws {}
+    func endLiveActivity(flightID: UUID) async throws {}
     func saveProfile(_ profile: ProfileRecord) async throws {}
     func passFlightIDs() async throws -> Set<UUID> { passes }
     func recordPass(_ pass: FlightPassRecord) async throws { passes.insert(pass.flightId) }

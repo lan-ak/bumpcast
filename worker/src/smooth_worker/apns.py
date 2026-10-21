@@ -52,12 +52,21 @@ class Apns:
             self._token = (token, issued)
         return self._token[0]
 
-    def send(self, device_token: str, environment: str, payload: dict, collapse_id: str | None = None) -> SendResult:
+    def send(
+        self,
+        device_token: str,
+        environment: str,
+        payload: dict,
+        collapse_id: str | None = None,
+        push_type: str = "alert",
+    ) -> SendResult:
+        """`push_type`: alert, background (silent, wakes the app) or liveactivity."""
+        topic = f"{self.topic}.push-type.liveactivity" if push_type == "liveactivity" else self.topic
         headers = {
             "authorization": f"bearer {self._bearer()}",
-            "apns-topic": self.topic,
-            "apns-push-type": "alert",
-            "apns-priority": "10",
+            "apns-topic": topic,
+            "apns-push-type": push_type,
+            "apns-priority": "5" if push_type == "background" else "10",
         }
         if collapse_id:
             headers["apns-collapse-id"] = collapse_id[:64]

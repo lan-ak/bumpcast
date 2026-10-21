@@ -1,4 +1,4 @@
-"""Live flight status (Pro or a flight pass) and published schedules (free, part of search).
+"""Live flight status and published schedules, free for every flight with a number.
 
 Status is refreshed in the same pass as the forecast and on the same rhythm: every 6 hours
 from 48 h out, hourly in the last 18 h, until about an hour after departure. When the
@@ -25,6 +25,12 @@ AFTER_DEPARTURE = timedelta(hours=1)
 PUSH_THRESHOLD = timedelta(minutes=15)
 # "Delayed" from this many minutes late; under it is "On time".
 DELAYED_FROM_MIN = 5
+# Around departure, flights with a Live Activity are checked every poll so wheels-up reaches the
+# countdown within minutes and nobody has to tap "We've taken off".
+TAKEOFF_WATCH_FROM = timedelta(minutes=30)
+TAKEOFF_REFRESH = timedelta(minutes=5)
+# Assumed when only the gate departure is known; matches the app and the forecast route.
+TAXI_OUT = timedelta(minutes=15)
 # Polls run every 5 minutes; don't miss a refresh by a few seconds.
 SLACK = timedelta(minutes=2)
 
@@ -44,8 +50,9 @@ def effective_departure(flight: dict, status: dict | None) -> datetime:
     return _time(status.get("departure_actual")) or _time(status.get("departure_expected")) or _time(flight["departure_at"])
 
 
-def is_due(status: dict | None, departure: datetime, now: datetime) -> bool:
-    """Whether to fetch a fresh status for a flight leaving at `departure`."""
+def is_due(status: dict | None, departure: datetime, now: datetime, watching: bool = False) -> bool:
+    """Whether to fetch a fresh status for a flight leaving at `departure`. `watching`: the flight
+    has a Live Activity waiting for wheels-up."""
     if status and (status.get("finished") or status.get("status") == "cancelled"):
         return False
     if departure - now > WINDOW or now > departure + AFTER_DEPARTURE:
@@ -53,6 +60,8 @@ def is_due(status: dict | None, departure: datetime, now: datetime) -> bool:
     checked = _time((status or {}).get("checked_at")) if status and status.get("status") else None
     if checked is None:
         return True
+    if watching and departure - now <= TAKEOFF_WATCH_FROM and not (status or {}).get("takeoff_at"):
+        return now - checked >= TAKEOFF_REFRESH - SLACK
     return now - checked >= refresh_interval(departure, now) - SLACK
 
 
@@ -82,6 +91,7 @@ def build(leg: Leg, flight: dict, previous: dict | None, now: datetime) -> dict:
         state = "scheduled"
 
     departure = actual or expected or scheduled
+    takeoff = (dep.runway if dep.runway and dep.runway <= now else actual + TAXI_OUT) if departed and actual else None
     finished = state == "cancelled" or now > departure + AFTER_DEPARTURE
     next_check = None if finished else min(now + refresh_interval(departure, now), departure + AFTER_DEPARTURE)
     previous = previous or {}
@@ -101,6 +111,7 @@ def build(leg: Leg, flight: dict, previous: dict | None, now: datetime) -> dict:
         "departure_terminal": dep.terminal,
         "arrival_terminal": arr.terminal,
         "diverted_to": diverted_to,
+        "takeoff_at": _iso(takeoff),
         "checked_at": now.isoformat(),
         "next_check_at": _iso(next_check),
         "finished": finished,
