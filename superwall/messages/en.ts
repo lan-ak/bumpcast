@@ -34,6 +34,9 @@ export default {
     monthlyEquivalent: "{price}/month",
     cancelAnytime: "Cancel anytime",
     trialBadge: "{days} days free",
+    thisFlight: "This flight",
+    oneTime: "one time",
+    noSubscription: "No subscription",
 
     ctaTrial: "Start {days}-day free trial",
     ctaSubscribe: "Subscribe",
@@ -43,12 +46,25 @@ export default {
     altPassBare: "Or unlock just this flight",
     altTrial: "Or try Pro free for {days} days",
     altPro: "Or get Pro for every flight",
+    moreOptions: "More options",
 
     legalTrial: "Free for {days} days, then {price}/year. Renews automatically. Cancel anytime in Settings.",
     legalAnnual: "{price}/year. Renews automatically. Cancel anytime in Settings.",
     legalMonthly: "{price}/month. Renews automatically. Cancel anytime in Settings.",
     legalBare: "Renews automatically. Cancel anytime in Settings.",
     legalPass: "The flight pass is a one-time purchase and doesn't renew.",
+
+    // Shorter lines for the forecast moment, where the flight ticket takes the room.
+    short: {
+      featureTimeline: "When the bumps are, and for how long",
+      featureUpdates: "Updates as your flight changes",
+      featureLive: "Bump countdown on your Lock Screen",
+      featurePilots: "Live pilot reports",
+      featureFlights: "Unlimited upcoming flights",
+      coverageUS: "Hourly detail for US flights",
+      coverageGlobal: "Global outlook (beta) elsewhere: approximate",
+      legalPass: "One-time purchase. Doesn't renew.",
+    },
   },
 
   forecast: {
@@ -57,5 +73,12 @@ export default {
     eyebrowBare: "Your forecast",
     gradeBare: "Your forecast is ready.",
     sub: "See exactly when, and for how long.",
+    yourFlight: "Your flight",
+    departsIn: "Departs in {hours} h",
+    confidence: {
+      partly_confirmed: "Advanced forecast",
+      confirmed: "Confirmed",
+      global_outlook: "Global outlook (beta)",
+    },
   },
 } as const;

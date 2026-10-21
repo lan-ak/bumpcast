@@ -11,7 +11,7 @@ export const PLACEMENTS = [
 ] as const;
 export type ProPlacement = (typeof PLACEMENTS)[number];
 
-export type Confidence = "early" | "partly_confirmed" | "confirmed";
+export type Confidence = "early" | "partly_confirmed" | "confirmed" | "global_outlook";
 export type Grade = "smooth" | "mostly_smooth" | "some_bumps" | "bumpy" | "rough";
 
 export interface FlightContext {
@@ -43,7 +43,7 @@ export function usePlacementContext() {
     hours: num(params.hours_to_departure),
     grade: oneOf(params.grade, ["smooth", "mostly_smooth", "some_bumps", "bumpy", "rough"] as const),
     gradeTitle: str(params.grade_title),
-    confidence: oneOf(params.confidence, ["early", "partly_confirmed", "confirmed"] as const),
+    confidence: oneOf(params.confidence, ["early", "partly_confirmed", "confirmed", "global_outlook"] as const),
     bumpyMinutes: num(params.bumpy_minutes),
   };
   const flightLimit = num(user.free_flight_limit);

@@ -1,0 +1,61 @@
+/* The flight ticket on the forecast moment's sky: route, cities and the forecast's status. */
+.tk {
+  margin: 0 0 22px;
+  padding: 16px 18px 14px;
+  border-radius: 22px;
+  border: 0.5px solid var(--card-border);
+  background: var(--card);
+  text-align: left;
+}
+:root:not(.dark) .tk { background: rgba(255, 255, 255, 0.55); }
+
+.tk-top {
+  margin-bottom: 10px;
+  font: 500 12px/1.2 var(--mono);
+  letter-spacing: 0.06em;
+  color: var(--ink-2);
+  text-align: center;
+}
+
+.tk-row { display: flex; align-items: flex-start; gap: 8px; }
+.tk-end { display: flex; min-width: 0; flex: 1 1 0; flex-direction: column; }
+.tk-end--end { align-items: flex-end; text-align: right; }
+.tk-code { font: 700 44px/1 var(--display); letter-spacing: -0.01em; }
+.tk-city { margin-top: 4px; overflow: hidden; color: var(--ink-2); font-size: 14px; white-space: nowrap; text-overflow: ellipsis; max-width: 100%; }
+.tk-path { flex: none; width: 64px; height: 24px; margin-top: 12px; color: var(--brand-line); }
+
+.tk-pills { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 12px; }
+.tk-pill {
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: var(--tint);
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 13px;
+}
+
+/* The hero grows to fit the ticket instead of holding its fixed height. */
+.pw-hero:has(.tk) { flex-basis: auto; padding-top: 64px; padding-bottom: 96px; }
+/* The ticket says what the subtitle did; dropping it keeps the button on screen. */
+.pw:has(.tk) .pw-sub { display: none; }
+
+/* Short screens (iPhone SE): the ticket and the button both stay in view; the countdown eyebrow
+   and the selling line give way, and the sky tightens around the grade. */
+@media (max-height: 700px) {
+  .tk { margin-bottom: 10px; padding: 12px 14px; }
+  .tk-top { margin-bottom: 8px; }
+  .tk-code { font-size: 32px; }
+  .tk-pills { margin-top: 10px; }
+  .pw-hero:has(.tk) { padding-top: 54px; padding-bottom: 86px; }
+  .pw:has(.tk) .pw-eyebrow { display: none; }
+  .pw:has(.tk) .feature:not(.feature--coverage) { display: none; }
+  .pw:has(.tk) .pw-sheet { padding-top: 18px; }
+  .pw:has(.tk) .plan-grid--three { margin: 12px 0 10px; }
+  .pw:has(.tk) .plan-grid--three .plan { padding-top: 10px; padding-bottom: 10px; }
+  .pw:has(.tk) .plan-grid--three .plan--on { padding-top: 8.5px; padding-bottom: 8.5px; }
+  .pw:has(.tk) .plan-grid--three .plan-note { display: none; }
+}
+
+/* "More options" open: they're choosing a plan now, so the selling lines give way to the three
+   cards (coverage stays, it's what each plan buys). */
+.pw:has(.tk):has(.plan-grid--three) .feature:not(.feature--coverage) { display: none; }

@@ -69,6 +69,9 @@ export function ProPaywall({
   title,
   subtitle,
   highlight,
+  moreOptions = false,
+  hero,
+  short = false,
 }: {
   lead: Lead;
   eyebrow?: string;
@@ -76,6 +79,15 @@ export function ProPaywall({
   subtitle?: string;
   /** The feature to list first, when it isn't the placement's own. */
   highlight?: ProPlacement;
+  /**
+   * With the pass leading, swap the trial link for "More options", which opens the pass, Yearly
+   * and Monthly as one choice (the forecast moment: they need this flight, Pro is there if wanted).
+   */
+  moreOptions?: boolean;
+  /** Drawn above the headline on the sky (the forecast moment's flight ticket). */
+  hero?: ReactNode;
+  /** Shorter feature, coverage and pass lines (`pro.short.*`), for a hero that takes more room. */
+  short?: boolean;
 }) {
   const { t } = useTranslation();
   const haptics = useHaptics();
@@ -85,10 +97,13 @@ export function ProPaywall({
   const { eligible } = useIntroductoryOffer();
   const { placement, flight } = usePlacementContext();
   const [plan, setPlan] = useState<"annual" | "monthly">("annual");
+  const [choice, setChoice] = useState<"pass" | "annual" | "monthly">("pass");
+  const [expanded, setExpanded] = useState(false);
   const [restoreFailed, setRestoreFailed] = useState(false);
 
   const canPass = flight.flightID !== undefined;
   const passLeads = lead === "pass" && canPass;
+  const showMore = passLeads && moreOptions;
 
   const annual = getProduct("annual")?.variables;
   const monthly = getProduct("monthly")?.variables;
@@ -113,11 +128,25 @@ export function ProPaywall({
       : monthly?.price
         ? t("pro.legalMonthly", { price: monthly.price })
         : t("pro.legalBare");
-  const legal = !canPass
-    ? subscriptionLegal
-    : passLeads
-      ? `${t("pro.legalPass")} ${subscriptionLegal}`
-      : `${subscriptionLegal} ${t("pro.legalPass")}`;
+  const passLegal = t(short ? "pro.short.legalPass" : "pro.legalPass");
+  const choiceLegal =
+    choice === "pass"
+      ? passLegal
+      : choice === "annual"
+        ? annualLegal
+        : monthly?.price
+          ? t("pro.legalMonthly", { price: monthly.price })
+          : t("pro.legalBare");
+  // "More options" shows the terms of whatever is selected; closed, only the pass is on offer.
+  const legal = showMore
+    ? expanded
+      ? choiceLegal
+      : passLegal
+    : !canPass
+      ? subscriptionLegal
+      : passLeads
+        ? `${t("pro.legalPass")} ${subscriptionLegal}`
+        : `${subscriptionLegal} ${t("pro.legalPass")}`;
 
   const buy = (product: "annual" | "monthly" | "pass") => {
     haptics.light();
@@ -127,6 +156,11 @@ export function ProPaywall({
     haptics.selection();
     setPlan(p);
   };
+  const pick = (p: "pass" | "annual" | "monthly") => {
+    haptics.selection();
+    setChoice(p);
+  };
+  const passCta = passPrice ? t("pro.ctaPass", { price: passPrice }) : t("pro.ctaPassBare");
 
   return (
     <main className="pw">
@@ -148,6 +182,7 @@ export function ProPaywall({
           </button>
         </div>
         <div className="pw-heading">
+          {hero}
           {eyebrow && <p className="pw-eyebrow">{eyebrow}</p>}
           <h1 className="pw-title">{title ?? t(`pro.title.${placement ?? "fallback"}`)}</h1>
           {subtitle && <p className="pw-sub">{subtitle}</p>}
@@ -159,24 +194,61 @@ export function ProPaywall({
         {features.map((f) => (
           <div key={f.key} className="feature">
             <span className="feature-icon">{f.icon}</span>
-            {t(`pro.${f.key}`)}
+            {t(short ? `pro.short.${f.key}` : `pro.${f.key}`)}
           </div>
         ))}
         {COVERAGE.map((f) => (
           <div key={f.key} className="feature feature--coverage">
             <span className="feature-icon">{f.icon}</span>
-            {t(`pro.${f.key}`)}
+            {t(short ? `pro.short.${f.key}` : `pro.${f.key}`)}
           </div>
         ))}
 
-        {passLeads ? (
+        {showMore && expanded ? (
+          <>
+            <div className="plan-grid plan-grid--three" role="radiogroup">
+              <button type="button" role="radio" aria-checked={choice === "pass"} className={`plan${choice === "pass" ? " plan--on" : ""}`} onClick={() => pick("pass")}>
+                <span className="plan-name">{t("pro.thisFlight")}</span>
+                {passPrice && <span className="plan-price">{passPrice}</span>}
+                <span className="secondary footnote">{t("pro.oneTime")}</span>
+                <span className="plan-note">{t("pro.noSubscription")}</span>
+              </button>
+              <button type="button" role="radio" aria-checked={choice === "annual"} className={`plan${choice === "annual" ? " plan--on" : ""}`} onClick={() => pick("annual")}>
+                {trialDays > 0 && <span className="plan-badge">{t("pro.trialBadge", { days: trialDays })}</span>}
+                <span className="plan-name">{t("pro.yearly")}</span>
+                {annual?.price && <span className="plan-price">{annual.price}</span>}
+                <span className="secondary footnote">{t("pro.perYear")}</span>
+                {annual?.monthlyPrice && <span className="plan-note">{t("pro.monthlyEquivalent", { price: annual.monthlyPrice })}</span>}
+              </button>
+              <button type="button" role="radio" aria-checked={choice === "monthly"} className={`plan${choice === "monthly" ? " plan--on" : ""}`} onClick={() => pick("monthly")}>
+                <span className="plan-name">{t("pro.monthly")}</span>
+                {monthly?.price && <span className="plan-price">{monthly.price}</span>}
+                <span className="secondary footnote">{t("pro.perMonth")}</span>
+                <span className="plan-note">{t("pro.cancelAnytime")}</span>
+              </button>
+            </div>
+            <button type="button" className="cta" onClick={() => buy(choice)}>
+              {choice === "pass"
+                ? passCta
+                : choice === "annual" && trialDays
+                  ? t("pro.ctaTrial", { days: trialDays })
+                  : t("pro.ctaSubscribe")}
+            </button>
+          </>
+        ) : passLeads ? (
           <>
             <button type="button" className="cta cta--spaced" onClick={() => buy("pass")}>
-              {passPrice ? t("pro.ctaPass", { price: passPrice }) : t("pro.ctaPassBare")}
+              {passCta}
             </button>
+            {showMore ? (
+              <button type="button" className="alt" onClick={() => { haptics.selection(); setExpanded(true); }}>
+                {t("pro.moreOptions")}
+              </button>
+            ) : (
             <button type="button" className="alt" onClick={() => buy("annual")}>
               {trialDays ? t("pro.altTrial", { days: trialDays }) : t("pro.altPro")}
             </button>
+            )}
           </>
         ) : (
           <>

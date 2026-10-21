@@ -145,6 +145,13 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 }
 
 .plan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 14px 0; }
+/* Pass, Yearly and Monthly side by side: tighter cards so three fit a 320pt screen. */
+.plan-grid--three { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.plan-grid--three .plan { display: flex; flex-direction: column; justify-content: flex-start; padding: 12px 10px; }
+.plan-grid--three .plan--on { padding: 10.5px 8.5px; }
+.plan-grid--three .plan-price { font-size: 20px; }
+.plan-grid--three .plan-note { font-size: 12px; }
+.plan-grid--three .plan-badge { right: 6px; white-space: nowrap; }
 .plan {
   position: relative;
   display: block;
