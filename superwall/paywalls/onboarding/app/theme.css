@@ -103,6 +103,12 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 
 .shell { display: flex; flex: 1 1 auto; flex-direction: column; color: var(--ink); }
 [data-sw-routes] { z-index: 1; }
+/* Pages are transparent, and going back the router leaves the page under the returning one showing
+   (unanimated) until the transition settles, so it would bleed through. Hide it. */
+[data-sw-route][data-sw-state="behind"][data-sw-direction="back"] { visibility: hidden; }
+/* No over-scroll: `scrollEnabled: false` locks the SDK's webview, and this stops each page (its
+   own scroll container) from rubber-banding past its edges. Content that overflows still scrolls. */
+html, body, [data-sw-route] { overscroll-behavior: none; }
 
 .backdrop {
   position: absolute;
@@ -390,6 +396,22 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
   .page--help .option { min-height: 46px; margin-bottom: 8px; padding: 11px 16px; font-size: 16px; line-height: 1.3; }
   .page--help .option--on { padding: 9.5px 14.5px; }
   .page--help .page-footer { padding-top: 8px; }
+}
+
+/* Phones shorter than the iPhone 17 (mini, 14, 16, SE): the plans page gets a shorter sunrise and
+   tighter rows, and the generic last benefit goes, so it fits without scrolling. */
+@media (max-height: 860px) {
+  .plans-hero { flex-basis: 158px; min-height: 158px; }
+  .plans-title { top: 46px; font-size: 26px; }
+  .plans-scene { height: 96px; }
+  .plans-sheet { padding-top: 18px; }
+  .feature { margin-bottom: 9px; font-size: 15px; }
+  .feature-icon { width: 30px; height: 30px; }
+  .plans-sheet .feature:nth-child(4) { display: none; }
+  .plan-grid { margin: 10px 0; }
+  .plan { padding: 11px 12px; }
+  .plan--on { padding: 9.5px 10.5px; }
+  .plan-price { font-size: 22px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

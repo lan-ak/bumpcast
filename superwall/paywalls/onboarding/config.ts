@@ -11,5 +11,6 @@ export default definePaywall({
   background: { light: "#EAE0DA", dark: "#121D31" },
   presentation: { style: "fullscreen" },
   featureGating: "nonGated",
-  scrollEnabled: true,
+  // Every page fits the screen; scrolling only let the whole flow rubber-band under a drag.
+  scrollEnabled: false,
 });

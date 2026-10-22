@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useActions, useTranslation } from "superwall/hooks";
-import { useRouter } from "superwall/navigation";
 import { answers, type Frequency } from "../components/answers";
+import { useNext } from "../components/next";
 import { Option, Page } from "../components/ui";
 
 const OPTIONS: [Frequency, "yearly" | "few" | "monthly"][] = [
@@ -11,7 +11,7 @@ const OPTIONS: [Frequency, "yearly" | "few" | "monthly"][] = [
 ];
 
 export default function FrequencyPage() {
-  const router = useRouter();
+  const next = useNext("source", 380);
   const { t } = useTranslation();
   const { setUserAttributes } = useActions();
   const [selected, setSelected] = useState(answers.frequency);
@@ -20,7 +20,7 @@ export default function FrequencyPage() {
     setSelected(value);
     answers.frequency = value;
     setUserAttributes({ fly_frequency: value });
-    setTimeout(() => router.push("source"), 380);
+    next();
   };
 
   return (

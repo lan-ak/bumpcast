@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "superwall/hooks";
-import { useIsFocused, useRouter } from "superwall/navigation";
+import { useIsFocused } from "superwall/navigation";
 import { answers } from "../components/answers";
 import { Glass } from "../components/art";
+import { useNext } from "../components/next";
 import { Page, PrimaryButton } from "../components/ui";
 
 export default function Reassure() {
-  const router = useRouter();
+  const next = useNext("how");
   const { t } = useTranslation();
   const focused = useIsFocused();
   const [drawn, setDrawn] = useState(false);
@@ -16,7 +17,7 @@ export default function Reassure() {
 
   const calm = answers.feeling === "calm";
   return (
-    <Page className="" footer={<PrimaryButton onPress={() => router.push("how")}>{t("reassure.cta")}</PrimaryButton>}>
+    <Page className="" footer={<PrimaryButton onPress={next}>{t("reassure.cta")}</PrimaryButton>}>
       <div className="page-body spread">
         <div>
           <h1>{t(calm ? "reassure.titleCalm" : "reassure.titleAnxious")}</h1>

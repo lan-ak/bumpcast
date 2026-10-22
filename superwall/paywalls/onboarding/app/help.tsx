@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useActions, useTranslation } from "superwall/hooks";
-import { useRouter } from "superwall/navigation";
 import { answers, type Help } from "../components/answers";
+import { useNext } from "../components/next";
 import { Option, Page, PrimaryButton } from "../components/ui";
 
 const OPTIONS: [Help, "when" | "howLong" | "normal" | "calmDown" | "delays"][] = [
@@ -13,7 +13,7 @@ const OPTIONS: [Help, "when" | "howLong" | "normal" | "calmDown" | "delays"][] =
 ];
 
 export default function HelpPage() {
-  const router = useRouter();
+  const goNext = useNext("frequency");
   const { t } = useTranslation();
   const { setUserAttributes } = useActions();
   const [selected, setSelected] = useState<Help[]>(answers.help);
@@ -32,7 +32,7 @@ export default function HelpPage() {
       return;
     }
     setUserAttributes({ help_most: selected.join(","), help_most_count: selected.length });
-    router.push("frequency");
+    goNext();
   };
 
   return (

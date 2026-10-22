@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useActions, useHaptics, useTranslation } from "superwall/hooks";
-import { useRouter } from "superwall/navigation";
 import { AppIcon } from "../components/art";
+import { useNext } from "../components/next";
 import { Page, PrimaryButton } from "../components/ui";
 
 export default function Notifications() {
-  const router = useRouter();
+  const next = useNext("plans");
   const { t } = useTranslation();
   const haptics = useHaptics();
   const { requestPermission, setUserAttributes } = useActions();
@@ -17,13 +17,13 @@ export default function Notifications() {
     const status = await requestPermission("notification");
     setUserAttributes({ notifications_prompt: status });
     setAsking(false);
-    router.push("plans");
+    next();
   };
 
   const later = () => {
     haptics.light();
     setUserAttributes({ notifications_prompt: "not-now" });
-    router.push("plans");
+    next();
   };
 
   return (

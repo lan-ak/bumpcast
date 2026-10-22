@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useHaptics, useTranslation } from "superwall/hooks";
-import { useIsFocused, useRouter } from "superwall/navigation";
+import { useIsFocused } from "superwall/navigation";
+import { useNext } from "../components/next";
 import { Page, PrimaryButton } from "../components/ui";
 
 const BARS = [2, 3, 3, 4, 3, 9, 12, 10, 4, 3, 3, 2, 3, 3, 4, 3, 3, 8, 11, 4, 3, 3, 2, 2, 3, 2];
@@ -11,7 +12,7 @@ const STAGES = [
 ] as const;
 
 export default function How() {
-  const router = useRouter();
+  const next = useNext("help");
   const { t } = useTranslation();
   const haptics = useHaptics();
   const focused = useIsFocused();
@@ -31,7 +32,7 @@ export default function How() {
       footer={
         <>
           <p className="secondary footnote" style={{ textAlign: "center", marginBottom: 10 }}>{t("how.pro")}</p>
-          <PrimaryButton onPress={() => router.push("help")}>{t("how.cta")}</PrimaryButton>
+          <PrimaryButton onPress={next}>{t("how.cta")}</PrimaryButton>
         </>
       }
     >

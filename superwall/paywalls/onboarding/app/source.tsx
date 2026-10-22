@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useActions, useTranslation } from "superwall/hooks";
-import { useRouter } from "superwall/navigation";
 import { answers, type Source } from "../components/answers";
+import { useNext } from "../components/next";
 import { Option, Page } from "../components/ui";
 
 const OPTIONS: [Source, "appStore" | "social" | "friend" | "other"][] = [
@@ -12,7 +12,7 @@ const OPTIONS: [Source, "appStore" | "social" | "friend" | "other"][] = [
 ];
 
 export default function SourcePage() {
-  const router = useRouter();
+  const next = useNext("notifications", 380);
   const { t } = useTranslation();
   const { setUserAttributes } = useActions();
   const [selected, setSelected] = useState(answers.source);
@@ -21,7 +21,7 @@ export default function SourcePage() {
     setSelected(value);
     answers.source = value;
     setUserAttributes({ source: value });
-    setTimeout(() => router.push("notifications"), 380);
+    next();
   };
 
   return (

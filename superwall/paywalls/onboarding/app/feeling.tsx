@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useActions, useTranslation } from "superwall/hooks";
-import { useRouter } from "superwall/navigation";
 import { answers, type Feeling } from "../components/answers";
+import { useNext } from "../components/next";
 import { Option, Page } from "../components/ui";
 
 const OPTIONS: [Feeling, "calm" | "uneasy" | "nervous" | "anxious"][] = [
@@ -12,7 +12,7 @@ const OPTIONS: [Feeling, "calm" | "uneasy" | "nervous" | "anxious"][] = [
 ];
 
 export default function FeelingPage() {
-  const router = useRouter();
+  const next = useNext("reassure", 380);
   const { t } = useTranslation();
   const { setUserAttributes } = useActions();
   const [selected, setSelected] = useState(answers.feeling);
@@ -21,7 +21,7 @@ export default function FeelingPage() {
     setSelected(value);
     answers.feeling = value;
     setUserAttributes({ fly_feeling: value });
-    setTimeout(() => router.push("reassure"), 380);
+    next();
   };
 
   return (
