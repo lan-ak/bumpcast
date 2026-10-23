@@ -454,6 +454,41 @@ html, body, [data-sw-route] { overscroll-behavior: none; }
 .fp .feature--coverage .feature-icon { width: 26px; height: 26px; background: none; }
 .fp .legal-links { gap: 20px; }
 .fp-cta { margin-top: 10px; }
+/* Two plan cards and the trial button take more room than a single pass button did: a tighter
+   sky, ticket, rows and cards keep everything down to Terms on screen. */
+.fp-hero { padding: 50px 24px 68px; }
+.fp-title { font-size: 26px; }
+.fp-sub { margin-top: 6px; font-size: 15px; line-height: 1.3; }
+.fp .plans-scene { height: 104px; }
+.fp .tk { margin-bottom: 14px; padding: 12px 16px 10px; }
+.fp .tk-code { font-size: 38px; }
+.fp .plans-sheet { padding-top: 18px; }
+.fp .feature { margin-bottom: 9px; font-size: 15px; }
+.fp .feature-icon { width: 30px; height: 30px; }
+.fp .feature--coverage { margin-bottom: 4px; font-size: 13px; }
+.fp .plan-grid { margin: 10px 0; }
+.fp .plan { padding: 11px 12px; }
+.fp .plan--on { padding: 9.5px 10.5px; }
+.fp .plan-price { font-size: 22px; }
+/* The ticket already says "Your flight". */
+.fp .tk + .fp-eyebrow { display: none; }
+@media (max-height: 900px) {
+  .fp-hero { padding-top: 44px; padding-bottom: 58px; }
+  .fp .tk { margin-bottom: 10px; }
+  .fp .tk-city { display: none; }
+  .fp .tk-code { font-size: 34px; }
+}
+@media (max-height: 860px) {
+  .fp .plans-sheet { padding-top: 14px; }
+  .fp .feature { margin-bottom: 6px; }
+  .fp .feature--coverage { margin-bottom: 2px; }
+  .fp .plan { padding: 9px 12px; }
+  .fp .plan--on { padding: 7.5px 10.5px; }
+}
+@media (max-height: 830px) {
+  .fp-hero { padding-bottom: 50px; }
+  .fp-title { font-size: 24px; }
+}
 :root.dark .fp .plans-sheet { border-top: 0.5px solid var(--card-border); }
 .alt {
   width: 100%;
@@ -467,12 +502,6 @@ html, body, [data-sw-route] { overscroll-behavior: none; }
   font-size: 15px;
   cursor: pointer;
 }
-.plan-grid--three { grid-template-columns: repeat(3, 1fr); gap: 8px; }
-.plan-grid--three .plan { display: flex; flex-direction: column; justify-content: flex-start; padding: 12px 10px; }
-.plan-grid--three .plan--on { padding: 10.5px 8.5px; }
-.plan-grid--three .plan-price { font-size: 20px; }
-.plan-grid--three .plan-note { font-size: 12px; }
-.plan-grid--three .plan-badge { right: 6px; white-space: nowrap; }
 
 /* The flight ticket (as on the forecast-moment paywall) */
 .tk {
@@ -508,12 +537,6 @@ html, body, [data-sw-route] { overscroll-behavior: none; }
   .fp-sub { margin-top: 6px; font-size: 14px; line-height: 1.3; }
   .fp .plans-sheet { padding-top: 18px; }
   .fp .feature:not(.feature--coverage) { display: none; }
-  .fp .plan-grid--three { margin: 12px 0 10px; }
-  .fp .plan-grid--three .plan { padding-top: 10px; padding-bottom: 10px; }
-  .fp .plan-grid--three .plan--on { padding-top: 8.5px; padding-bottom: 8.5px; }
-  .fp .plan-grid--three .plan-note { display: none; }
-  /* Choosing a plan: the three cards need the confidence pill's room. */
-  .fp:has(.plan-grid--three) .tk-pills { display: none; }
 }
 /* The onboarding Plans page drops its 4th row on shorter phones; here that's coverage, which stays. */
 @media (max-height: 860px) {
