@@ -29,8 +29,10 @@ final class Onboarding {
     private static let timeout: Duration = .seconds(8)
     /// Long enough for the logo to draw itself before the flow slides in.
     private static let minimumLogoTime: Duration = .seconds(1.8)
-    /// The paywall's name on the dashboard (`superwall/paywalls/onboarding/config.ts`).
-    private static let paywallName = "Onboarding"
+    /// The onboarding flow's paywalls, by identifier (their directories under `superwall/paywalls`):
+    /// the hard and soft sides of the flight-paywall test. Matched by identifier, not name, so the
+    /// dashboard names can say which is which. (1.0 and 1.0.1 match the name "Onboarding".)
+    private static let paywallIdentifiers: Set<String> = ["onboarding", "onboarding-soft"]
 
     @ObservationIgnored private let defaults = UserDefaults.standard
     @ObservationIgnored private var started = false
@@ -88,10 +90,10 @@ final class Onboarding {
     /// campaign is prioritized). `Paywalls` forwards the webview events here.
     func paywallWebviewEvent(_ event: SuperwallEvent) {
         switch event {
-        case .paywallWebviewLoadComplete(let info) where info.name == Self.paywallName:
+        case .paywallWebviewLoadComplete(let info) where Self.paywallIdentifiers.contains(info.identifier):
             webviewReady = true
-        case .paywallWebviewLoadFail(let info) where info.name == Self.paywallName,
-            .paywallWebviewLoadTimeout(let info) where info.name == Self.paywallName:
+        case .paywallWebviewLoadFail(let info) where Self.paywallIdentifiers.contains(info.identifier),
+            .paywallWebviewLoadTimeout(let info) where Self.paywallIdentifiers.contains(info.identifier):
             webviewFailed = true
         default:
             break
