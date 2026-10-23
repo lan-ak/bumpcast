@@ -1,15 +1,16 @@
 import { useState } from "react";
-import { useActions, useHaptics, useTranslation } from "superwall/hooks";
+import { useActions, useDevice, useHaptics, useTranslation } from "superwall/hooks";
 import { AppIcon } from "../components/art";
-import { fliesSoon } from "../components/answers";
+import { canAddFlight, fliesSoon } from "../components/answers";
 import { useNext } from "../components/next";
 import { Page, PrimaryButton } from "../components/ui";
 
 export default function Notifications() {
-  // Flying soon: add the flight next. Everyone else: the plans.
+  // Flying soon, on an app that can add the flight from here: add it next. Everyone else: the plans.
+  const { appVersion } = useDevice();
   const toPlans = useNext("plans");
   const toFind = useNext("find");
-  const next = () => (fliesSoon() ? toFind : toPlans)();
+  const next = () => (fliesSoon() && canAddFlight(appVersion) ? toFind : toPlans)();
   const { t } = useTranslation();
   const haptics = useHaptics();
   const { requestPermission, setUserAttributes } = useActions();

@@ -17,3 +17,17 @@ export const answers: {
 
 /** Flying in the next 3 days: they add the flight in the flow and end on its paywall. */
 export const fliesSoon = () => answers.nextFlight === "24h" || answers.nextFlight === "3d";
+
+/** The first app version that answers the flow's `add_flight` and `flight_forecast` callbacks. */
+const ADD_FLIGHT_SINCE = [1, 0, 1];
+
+/** Whether this app build can open Add flight from the flow. 1.0 can't: it gets the plans. */
+export function canAddFlight(appVersion: unknown): boolean {
+  if (typeof appVersion !== "string") return false;
+  const parts = appVersion.split(".").map((n) => Number.parseInt(n, 10) || 0);
+  for (let i = 0; i < ADD_FLIGHT_SINCE.length; i++) {
+    const a = parts[i] ?? 0;
+    if (a !== ADD_FLIGHT_SINCE[i]) return a > ADD_FLIGHT_SINCE[i];
+  }
+  return true;
+}
