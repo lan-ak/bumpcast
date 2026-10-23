@@ -3,6 +3,7 @@ import { useActions, useHaptics, useProducts, usePurchase, useTranslation } from
 import { useRouter } from "superwall/navigation";
 import { flight } from "../components/flight";
 import { Ticket } from "../components/ticket";
+import { variant } from "../components/variant";
 
 const TERMS_URL = "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/";
 const PRIVACY_URL = "https://docs.google.com/document/d/1wgxMmBIa1OiTJesX83nBVIJl1c2EAz-TxvpMndDK7T0/preview";
@@ -21,13 +22,13 @@ const FEATURES: { key: string; icon: ReactNode }[] = [
 /**
  * After someone closes the App Store sheet on the flight paywall: just this flight, one payment,
  * no subscription. The app links a pass bought in the flow to the flight added in it. "Back to
- * plans" returns to Yearly and Monthly; there's no close, as on the flight paywall.
+ * plans" returns to Yearly and Monthly. Closable only on `onboarding-soft`, as the flight paywall.
  */
 export default function PassOffer() {
   const { t } = useTranslation();
   const haptics = useHaptics();
   const router = useRouter();
-  const { openUrl } = useActions();
+  const { close, openUrl } = useActions();
   const { getProduct } = useProducts();
   const { purchase } = usePurchase();
   const [buying, setBuying] = useState(false);
@@ -46,6 +47,13 @@ export default function PassOffer() {
   return (
     <main className="page plans fp">
       <div className="plans-hero fp-hero">
+        {variant.soft && (
+          <div className="plans-bar fp-bar fp-bar--soft">
+            <button type="button" className="round-button" aria-label={t("plans.close")} onClick={() => { haptics.light(); close(); }}>
+              {icon("M6 6l12 12M18 6 6 18")}
+            </button>
+          </div>
+        )}
         <div className="fp-heading">
           {added && <Ticket added={added} forecast={forecast} />}
           <p className="fp-eyebrow">{t("passOffer.eyebrow")}</p>

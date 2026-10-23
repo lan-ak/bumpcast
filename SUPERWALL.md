@@ -117,6 +117,16 @@ Flights outside coverage, flights saved offline, and app versions without the ca
 6. **Ask Superwall to turn on `enable_config_refresh_v2`** for app 58179, so a launch without network falls back to the cached config instead of losing paywalls for the session (doesn't help test-store users).
 7. **Test store:** after a re-sign-in, add the new anonymous user ID to the test store users (only `5DD2668A…` is listed), and before release, check no real user is listed there.
 
+## Running experiments
+
+**Onboarding: hard vs soft flight paywall** (Onboarding campaign 113534, 50/50, started 2026-10-23). The two paywalls are the same flow:
+- `onboarding` (281980) is **hard**: the flight paywall and the pass offer have no close button.
+- `onboarding-soft` (284375) is **soft**: both have one.
+
+`onboarding-soft` re-exports every page of `onboarding` and only sets `variant.soft` in its layout, so edit `onboarding` and publish both. Its name must stay "Onboarding": the app waits for that paywall name before it presents the flow.
+
+Only people flying in the next 3 days who add their flight (app 1.0.1+) reach the flight paywall; everyone else sees the closable Plans page in both. Each flow sets `onboarding_paywall_variant` (`hard` / `soft`) when it opens. Superwall's experiment view on the campaign shows onboarding conversion per variant; `docs/superwall/onboarding-hard-vs-soft.sql` also counts flight passes bought later in the app, split by that attribute.
+
 ## Before launch: verify purchases on the server
 
 Two things are currently trusted from the app, which is fine for TestFlight but not for launch:

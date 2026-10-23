@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type PropsWithChildren } from "react";
-import { useHaptics, useSuperwallSnapshot, useTranslation, useUser } from "superwall/hooks";
+import { useActions, useHaptics, useSuperwallSnapshot, useTranslation, useUser } from "superwall/hooks";
 import { useRouter } from "superwall/navigation";
+import { variantName } from "../components/variant";
 import "./theme.css";
 
 /**
@@ -45,7 +46,13 @@ export default function Layout({ children }: PropsWithChildren) {
   const haptics = useHaptics();
   const { t } = useTranslation();
   const opened = useSuperwallSnapshot().paywall !== undefined;
+  const { setUserAttributes } = useActions();
   useHostSafeArea();
+
+  // Which side of the hard-vs-soft test this user is on, for splitting later flight passes by it.
+  useEffect(() => {
+    if (opened) setUserAttributes({ onboarding_paywall_variant: variantName() });
+  }, [opened, setUserAttributes]);
 
   const name = router.name;
   const mode: SceneMode = SCENE[name] ?? "off";

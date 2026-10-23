@@ -445,6 +445,7 @@ html, body, [data-sw-route] { overscroll-behavior: none; }
    the same hero, sheet, rows and spacing, laid out on the onboarding's own sky. */
 .fp-hero { flex-basis: auto; display: flex; flex-direction: column; justify-content: center; padding: 58px 24px 96px; }
 .fp-bar { top: 8px; justify-content: flex-end; }
+.fp-bar--soft { justify-content: space-between; }
 .fp-heading { position: relative; z-index: 1; text-align: center; }
 .fp-eyebrow { margin: 0 0 8px; font: 500 12px/1.2 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--brand-line); }
 .fp-title { margin: 0; }

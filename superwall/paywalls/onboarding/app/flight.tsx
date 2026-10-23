@@ -3,6 +3,7 @@ import { useActions, useHaptics, useIntroductoryOffer, useProducts, usePurchase,
 import { useRouter } from "superwall/navigation";
 import { flight, unlockText } from "../components/flight";
 import { Ticket } from "../components/ticket";
+import { variant } from "../components/variant";
 
 const TERMS_URL = "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/";
 const PRIVACY_URL = "https://docs.google.com/document/d/1wgxMmBIa1OiTJesX83nBVIJl1c2EAz-TxvpMndDK7T0/preview";
@@ -28,8 +29,8 @@ const COVERAGE: { key: string; icon: ReactNode }[] = [
 /**
  * The hard paywall for people flying in the next 3 days: their flight, what we know so far (the
  * grade, when it's ready), and Pro: Yearly with the free trial, Monthly as the fallback. No close
- * button: buying or restoring is the way on. Closing the App Store sheet offers the flight pass
- * (`pass-offer`), once.
+ * button on `onboarding` (buying or restoring is the way on); `onboarding-soft` adds one, for the
+ * hard-vs-soft test. Closing the App Store sheet offers the flight pass (`pass-offer`), once.
  */
 export default function FlightPaywall() {
   const { t } = useTranslation();
@@ -96,7 +97,12 @@ export default function FlightPaywall() {
   return (
     <main className="page plans fp">
       <div className="plans-hero fp-hero">
-        <div className="plans-bar fp-bar">
+        <div className={`plans-bar fp-bar${variant.soft ? " fp-bar--soft" : ""}`}>
+          {variant.soft && (
+            <button type="button" className="round-button" aria-label={t("plans.close")} onClick={() => { haptics.light(); close(); }}>
+              {icon("M6 6l12 12M18 6 6 18")}
+            </button>
+          )}
           <button
             type="button"
             className="link"
