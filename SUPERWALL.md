@@ -112,7 +112,6 @@ Flights outside coverage, flights saved offline, and app versions without the ca
    - paywall timing.
 5. **Keep the house rules:**
    - no fake discounts;
-   - the paywall must be closable (never lock the whole app);
    - cancelling is in Settings → "Manage or cancel subscription".
 6. **Ask Superwall to turn on `enable_config_refresh_v2`** for app 58179, so a launch without network falls back to the cached config instead of losing paywalls for the session (doesn't help test-store users).
 7. **Test store:** after a re-sign-in, add the new anonymous user ID to the test store users (only `5DD2668A…` is listed), and before release, check no real user is listed there.
