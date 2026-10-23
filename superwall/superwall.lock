@@ -8,25 +8,25 @@
     "onboarding": {
       "ios": {
         "paywallId": "281980",
-        "snapshot": "ea7e3a19ccc4aed8b6f0fdf5acb7f4bda459d56b93125c14254dd8b826720abe"
+        "snapshot": "1a7bb46a62ad120ebcc4dae737c1d99a922373ad3e6be77aaa4cc40073b537f3"
       }
     },
     "forecast-moment": {
       "ios": {
         "paywallId": "281983",
-        "snapshot": "5021c384e94f7f1e354463ec6773d02cbf572b6c245e6b5f917438b679107b22"
+        "snapshot": "a63366bbe2095e3a422d5616486f9d467eeb861f4554f93cbe3f4411dab1d4ca"
       }
     },
     "pro-features": {
       "ios": {
         "paywallId": "281984",
-        "snapshot": "40b717c6d40d92b8f5c103001483ba6b1946c3ac9e232d019902d93c2610132a"
+        "snapshot": "6fb2d420dcb4b323c2a701d72d7671e86a5b4f89af083959ba19d319e9c91708"
       }
     },
     "pro-features-pass-first": {
       "ios": {
         "paywallId": "281985",
-        "snapshot": "e04b6d6ab6d899df59f4e72ef61a36d7d734cce1b620414c093a29dd15f496d9"
+        "snapshot": "877f13b5d75a05fdcc29168ad4690c056ab0c3bc13b1a7514a1f6f98ed9d60a5"
       }
     }
   },
