@@ -5,6 +5,7 @@ struct SettingsView: View {
     @Environment(Paywalls.self) private var paywalls
     @Environment(PushNotifications.self) private var push
     @Environment(FlightStore.self) private var store
+    @Environment(Router.self) private var router
     @Environment(\.dismiss) private var dismiss
     @Environment(\.openURL) private var openURL
     @State private var isManagingSubscription = false
@@ -30,6 +31,13 @@ struct SettingsView: View {
                         }
                     }
                     Button("Restore purchases") {
+                        guard paywalls.isOnline else {
+                            // A network that isn't answering (plane wifi, a weak signal) isn't "offline".
+                            restoreMessage = Connectivity.shared.hasPath
+                                ? "Your connection isn't reaching the internet right now. Try again in a moment."
+                                : "You're offline. Connect to wifi to restore purchases."
+                            return
+                        }
                         Task {
                             restoreMessage = await paywalls.restorePurchases() ? "Purchases restored." : "Nothing to restore."
                         }
@@ -72,6 +80,9 @@ struct SettingsView: View {
                         LabeledContent("Flights checked", value: "\(stats.reports)")
                         LabeledContent("Felt about right", value: "\(exact)%")
                         LabeledContent("Within one level", value: "\(close)%")
+                    } else if stats == nil, !Connectivity.shared.isOnline {
+                        Text("Shown when you're online.")
+                            .foregroundStyle(.secondary)
                     } else {
                         Text("Not enough landed flights yet. Rate your flights after landing to help.")
                             .foregroundStyle(.secondary)
@@ -99,8 +110,14 @@ struct SettingsView: View {
             .alert(restoreMessage ?? "", isPresented: .constant(restoreMessage != nil)) {
                 Button("OK") { restoreMessage = nil }
             }
-            .task { stats = try? await store.service.accuracyStats() }
+            // Offline the request would only hang; it loads once the phone is back online.
+            .task(id: Connectivity.shared.isOnline) {
+                guard Connectivity.shared.isOnline, stats == nil else { return }
+                stats = try? await store.service.accuracyStats()
+            }
         }
+        // Settings is a sheet, so notes from "Get BumpCast Pro" show here, not under it.
+        .overlay(alignment: .top) { ToastView(text: router.toast, systemImage: router.toastSymbol) }
     }
 }
 

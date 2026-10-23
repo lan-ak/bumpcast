@@ -11,7 +11,7 @@ const OPTIONS: [Frequency, "yearly" | "few" | "monthly"][] = [
 ];
 
 export default function FrequencyPage() {
-  const next = useNext("source", 380);
+  const next = useNext("when", 380);
   const { t } = useTranslation();
   const { setUserAttributes } = useActions();
   const [selected, setSelected] = useState(answers.frequency);

@@ -5,6 +5,8 @@ export default definePaywall({
   products: {
     annual: "bumpcast_pro_annual",
     monthly: "bumpcast_pro_monthly",
+    // The flight pass, sold on the flight page to people flying in the next 3 days.
+    pass: "bumpcast_flight_pass",
   },
   transition: "slide",
   // Matches the dawn sky (light) and the night sky (dark) so the load never flashes.

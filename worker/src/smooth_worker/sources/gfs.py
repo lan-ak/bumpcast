@@ -35,11 +35,14 @@ LEVELS_MB = [850, 700, 600, 500, 400, 350, 300, 250, 200, 150]
 NEEDED_FHR = 78  # 48 h lead + longest flights (~19 h) + cycle latency
 EARTH_RADIUS_M = 6_371_000.0
 FT_PER_M = 1 / 0.3048
+KT = 3600 / 1852  # per m/s
 G = 9.81
 
 TILE_LON, TILE_LAT = 40, 30
 TILE_MARGIN = 1.0  # deg; room for gradients and the neighbourhood at tile edges
 MAX_TILES_IN_MEMORY = 200  # each is well under 1 MB
+# Winds for ground speeds are kept on a 1-degree grid (every 4th point): plenty for a jet stream.
+WIND_EVERY = 4
 
 # Each diagnostic -> EDR, as piecewise-linear (index, EDR) points.
 # Ellrod's own TI guidance (x1e-7 s^-2): ~4 light-moderate, ~8 moderate, ~12 moderate-severe.
@@ -63,9 +66,11 @@ MW_MAX_FT = 45000
 # over the US on 2026-10-18; recheck once after-landing ratings come in.
 BLEND_TOP = 2
 NEIGHBOURHOOD = 1  # +/- cells (0.25 deg, ~25 km) averaged around each point
-# One global model can't credibly call severe turbulence; only GTG (or an official
-# warning) may. Cap just below the severe threshold.
-MAX_OUTLOOK_EDR = 0.30
+# One global model can't credibly call moderate or severe turbulence: on its own the outlook stays
+# light, and only GTG or an official warning or pilot report (hazards) may go higher. EWR-YYZ on
+# 2026-10-20..22 sat at the old 0.30 cap (moderate) at cruise for two days while every GTG run said
+# light (peak 0.16) and pilot reports along the route were light.
+MAX_OUTLOOK_EDR = 0.20
 
 
 def latest_cycle(now: datetime | None = None) -> datetime | None:
@@ -161,6 +166,8 @@ class GfsSource:
         self.cache_dir.mkdir(parents=True, exist_ok=True)
         # (fhr, tile) -> (lats, lons, layer_mid_ft, edr)
         self._tiles: dict[tuple[int, tuple[int, int]], tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]] = {}
+        # (fhr, tile) -> (lats, lons, height_ft[L, ny, nx], u_kt, v_kt) on a coarser grid, for ground speeds
+        self._winds: dict[tuple[int, tuple[int, int]], tuple[np.ndarray, ...]] = {}
 
     def covers(self, valid: datetime) -> bool:
         fhr = (valid - self.cycle).total_seconds() / 3600
@@ -195,10 +202,15 @@ class GfsSource:
 
     def _load(self, fhr: int, tile: tuple[int, int]):
         key = (fhr, tile)
-        if key in self._tiles:
-            return self._tiles[key]
+        if key not in self._tiles:
+            self._decode(fhr, tile)
+        return self._tiles[key]
+
+    def _decode(self, fhr: int, tile: tuple[int, int]) -> None:
+        key = (fhr, tile)
         while len(self._tiles) >= MAX_TILES_IN_MEMORY:
-            self._tiles.pop(next(iter(self._tiles)))
+            self._winds.pop(oldest := next(iter(self._tiles)), None)
+            self._tiles.pop(oldest)
         fields: dict[tuple[str, int], np.ndarray] = {}
         lats = lons = None
         with self._download(fhr, tile).open("rb") as f:
@@ -218,9 +230,34 @@ class GfsSource:
                 finally:
                     eccodes.codes_release(gid)
         mids, edr = blend_edr(fields, lats, lons)
-        loaded = (lats, lons % 360, mids, edr)
-        self._tiles[key] = loaded
-        return loaded
+        self._tiles[key] = (lats, lons % 360, mids, edr)
+        levels = [mb for mb in LEVELS_MB if all((k, mb) in fields for k in ("u", "v", "gh"))]
+        if levels:
+            coarse = (slice(None, None, WIND_EVERY), slice(None, None, WIND_EVERY))
+
+            def stack(name: str, scale: float) -> np.ndarray:
+                return (np.stack([fields[(name, mb)][coarse] for mb in levels]) * scale).astype(np.float32)
+
+            self._winds[key] = (
+                lats[::WIND_EVERY], (lons % 360)[::WIND_EVERY], stack("gh", FT_PER_M), stack("u", KT), stack("v", KT)
+            )
+
+    def wind(self, lat: float, lon: float, altitude_ft: float, valid: datetime) -> tuple[float, float] | None:
+        """(east, north) wind in knots, from the tiles edr() reads, for ground speeds along the route.
+        Minutes before the run began read its start; None beyond what the run covers."""
+        valid = max(valid, self.cycle)
+        if not self.covers(valid):
+            return None
+        key = (round((valid - self.cycle).total_seconds() / 3600), tile_of(lat, lon))
+        if key not in self._tiles:
+            self._decode(*key)
+        if key not in self._winds:
+            return None  # a tile without winds
+        lats, lons, heights, u, v = self._winds[key]
+        j = int(np.abs(lats - lat).argmin())
+        i = int(np.abs(lons - (lon % 360)).argmin())
+        column = heights[:, j, i]
+        return float(np.interp(altitude_ft, column, u[:, j, i])), float(np.interp(altitude_ft, column, v[:, j, i]))
 
     def edr(self, lat: float, lon: float, altitude_ft: float, valid: datetime) -> float:
         fhr = round((valid - self.cycle).total_seconds() / 3600)

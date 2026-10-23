@@ -7,7 +7,10 @@
 
 declare module "superwall/navigation" {
   interface SuperwallRoutes {
+    "checking": true;
     "feeling": true;
+    "find": true;
+    "flight": true;
     "frequency": true;
     "help": true;
     "how": true;
@@ -16,6 +19,7 @@ declare module "superwall/navigation" {
     "plans": true;
     "reassure": true;
     "source": true;
+    "when": true;
   }
 }
 

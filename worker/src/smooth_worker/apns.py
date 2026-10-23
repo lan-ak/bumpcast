@@ -59,14 +59,16 @@ class Apns:
         payload: dict,
         collapse_id: str | None = None,
         push_type: str = "alert",
+        priority: int | None = None,
     ) -> SendResult:
-        """`push_type`: alert, background (silent, wakes the app) or liveactivity."""
+        """`push_type`: alert, background (silent, wakes the app) or liveactivity. `priority`
+        overrides the default (10, or 5 for background), e.g. 5 for a quiet Live Activity update."""
         topic = f"{self.topic}.push-type.liveactivity" if push_type == "liveactivity" else self.topic
         headers = {
             "authorization": f"bearer {self._bearer()}",
             "apns-topic": topic,
             "apns-push-type": push_type,
-            "apns-priority": "5" if push_type == "background" else "10",
+            "apns-priority": str(priority) if priority else ("5" if push_type == "background" else "10"),
         }
         if collapse_id:
             headers["apns-collapse-id"] = collapse_id[:64]

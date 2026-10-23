@@ -47,6 +47,43 @@ struct LandingReport: Codable, Hashable, Sendable {
     }
 }
 
+extension LandingReport {
+    /// What the database will score a rating as, for showing it before it's sent: compared with
+    /// the forecast the phone showed (the server's trigger does the same once it arrives).
+    init(flightId: UUID, rating: FeltRating, forecast: Forecast?) {
+        let shown = forecast?.status == .ready ? forecast : nil
+        self.init(
+            flightId: flightId, felt: nil, feltRelative: rating,
+            forecastWorst: shown.map { $0.segments.map(\.severity).max() ?? .smooth },
+            matched: shown == nil ? nil : rating == .aboutRight)
+    }
+
+    /// The same rating for the flight saved again under a new id.
+    func moved(to flightID: UUID) -> LandingReport {
+        LandingReport(
+            flightId: flightID, felt: felt, feltRelative: feltRelative, forecastWorst: forecastWorst, matched: matched)
+    }
+}
+
+/// A landing rating given without a connection, sent on the next sync.
+struct PendingLandingReport: Codable, Hashable, Sendable {
+    let rating: FeltRating
+    /// Shown on the phone until the server has it.
+    let report: LandingReport
+    /// Minutes after takeoff the user noted the seatbelt sign.
+    let seatbeltMins: [Int]?
+    /// The forecast the phone was showing, so the rating is scored against that one.
+    let forecastIssuedAt: Date?
+
+    var flightId: UUID { report.flightId }
+
+    func moved(to flightID: UUID) -> PendingLandingReport {
+        PendingLandingReport(
+            rating: rating, report: report.moved(to: flightID), seatbeltMins: seatbeltMins,
+            forecastIssuedAt: forecastIssuedAt)
+    }
+}
+
 struct AccuracyStats: Codable, Hashable, Sendable {
     let reports: Int
     let exact: Int
@@ -127,6 +164,11 @@ struct FlightPassRecord: Codable, Sendable {
         case flightId = "flight_id"
         case productId = "product_id"
     }
+
+    /// The same purchase for the flight saved again under a new id.
+    func moved(to flightID: UUID) -> FlightPassRecord {
+        FlightPassRecord(transactionId: transactionId, flightId: flightID, productId: productId)
+    }
 }
 
 struct ProfileRecord: Codable, Sendable {
@@ -135,12 +177,16 @@ struct ProfileRecord: Codable, Sendable {
     let timezone: String
     /// Left out until the person answers, so profiles keep saving before the beta column exists.
     var globalBeta: Bool? = nil
+    /// SHA-256 (lowercase hex) of this install's secret, so a later account on this phone can take
+    /// over this one's flights. Left out until the phone has it.
+    var adoptSecretHash: String? = nil
 
     enum CodingKeys: String, CodingKey {
         case timezone
         case isPro = "is_pro"
         case notificationsEnabled = "notifications_enabled"
         case globalBeta = "global_beta"
+        case adoptSecretHash = "adopt_secret_hash"
     }
 }
 

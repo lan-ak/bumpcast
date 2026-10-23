@@ -114,6 +114,12 @@ class FlightData:
     @staticmethod
     @cache
     def from_env() -> "FlightData | None":
+        """The poll loop's client, made once."""
+        return FlightData.create()
+
+    @staticmethod
+    def create() -> "FlightData | None":
+        """A new client (each thread has its own), or None without a key."""
         key = os.environ.get("AERODATABOX_API_KEY")
         if not key:
             return None

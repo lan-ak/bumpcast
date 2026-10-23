@@ -67,6 +67,41 @@ def test_describe_changes():
     assert points[-1] == "Why: your forecast is now confirmed with our detailed forecast."
 
 
+def test_a_replanned_flight_moves_its_stretches_without_change_notes():
+    """A new flight-path model (or new winds) lands BAW112 JFK-LHR at 352 min instead of 405: the
+    same light chop is now 261-269 min in, not 300-310. Same weather, so no "New"/"Eased"."""
+    old = {"grade": "some_bumps", "source": "gfs", "duration_min": 405}
+    old["segments"] = [seg(20, 26, "light", "climb"), seg(300, 310, "light")]
+    new = {"grade": "some_bumps", "source": "gfs", "duration_min": 352}
+    new["segments"] = [seg(17, 23, "light", "climb"), seg(261, 269, "light")]
+    points = changes.describe(old, new)
+    assert points[:2] == ["Still a few bumps.", "The bumpy stretches have shifted slightly."]
+    assert len(points) == 3
+    from smooth_worker import status
+
+    assert status.forecast_changed({**old, "status": "ready"}, {**new, "status": "ready"}) is False
+    # A real change on the new timeline is still news.
+    rougher = {**new, "segments": [seg(17, 23, "light", "climb"), seg(261, 269, "moderate")]}
+    assert "The bumps 4 h 21 min in are now moderate bumps (were light chop)." in changes.describe(old, rougher)
+    assert status.forecast_changed({**old, "status": "ready"}, {**rougher, "status": "ready"}) is True
+
+
+def test_a_stretch_that_moved_a_little_is_not_compared_with_its_neighbour():
+    """Light chop then moderate bumps, both a few minutes later: no "now moderate (were light)"."""
+    old = {"grade": "some_bumps", "source": "gtg", "segments": [seg(10, 14, "light"), seg(16, 20, "moderate")]}
+    new = {"grade": "some_bumps", "source": "gtg", "segments": [seg(12, 16, "light"), seg(19, 23, "moderate")]}
+    points = changes.describe(old, new)
+    assert points[1] == "The bumpy stretches have shifted slightly." and len(points) == 3
+
+
+def test_old_stretches_only_move_with_a_similar_flight_time():
+    old = {"duration_min": 100, "segments": [seg(50, 60, "light")]}
+    assert changes.on_timeline(old, {"duration_min": 110})[0]["start_min"] == 55
+    assert changes.on_timeline(old, {"duration_min": 200})[0]["start_min"] == 50  # a different flight
+    assert changes.on_timeline(old, {})[0]["start_min"] == 50
+    assert changes.on_timeline({"segments": [seg(50, 60, "light")]}, {"duration_min": 110})[0]["start_min"] == 50
+
+
 def test_describe_unchanged_uses_model_run_time():
     f = {"grade": "smooth", "source": "gfs", "segments": [], "model_run": "2026-10-18T12:00:00+00:00"}
     points = changes.describe(f, f, tz="America/Toronto")
@@ -270,3 +305,14 @@ def test_us_routes_ignore_the_beta_switch():
     db, apns = BetaDB([leg("us", "KEWR", "KDEN", T0)], beta=False), FakeApns()
     notify.run(db, apns, T0 - timedelta(hours=40))
     assert [r["kind"] for r in db.rows] == ["ready"]
+
+
+def test_a_new_flight_profile_is_not_described_as_new_weather():
+    old = {"grade": "some_bumps", "segments": [seg(11, 12, "light"), seg(21, 29, "light")], "model_run": "2026-10-22T16:00:00+00:00"}
+    new = {**old, "profile": 2, "segments": [seg(14, 16, "light"), seg(25, 33, "light")]}
+    points = changes.describe(old, new)
+    assert points[0] == "Still a few bumps."
+    assert not any("are now" in p or p.startswith("New:") or p.startswith("Eased:") for p in points)
+    assert points[-1] == "Why: we've improved how we model your flight."
+    # Both built with the new model: changes are described as usual.
+    assert changes.describe({**old, "profile": 2}, new)[-1].startswith("Why: updated with the latest forecast data")

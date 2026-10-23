@@ -1,5 +1,4 @@
 import Foundation
-import Network
 import Observation
 import StoreKit
 import SuperwallKit
@@ -43,19 +42,25 @@ final class Paywalls {
     /// Free users can keep this many upcoming flights; Pro is unlimited.
     static let freeUpcomingFlights = 2
 
+    /// Pro is what Superwall says. It merges App Store, web, promo-code and test-store purchases,
+    /// and its campaign audiences (`size(device.activeEntitlements) == 0`) check the same thing,
+    /// so a lock always gets either the content or a paywall.
     private(set) var isPro = false
     /// Flights unlocked by a flight pass bought this session (before the pass syncs to Supabase).
     private(set) var unlockedFlights: Set<UUID> = []
     private(set) var isConfigured = false
+    /// While a lock is waiting on Superwall, so repeated taps don't queue more requests.
+    private(set) var isOpening = false
+
     /// Whether the phone can reach the App Store right now. A paywall can't complete a purchase
-    /// without it, so gated features in the air show a calm note instead.
-    private(set) var isOnline = true
+    /// without it (in the air, or on wifi that isn't answering), so locks show a calm note instead.
+    var isOnline: Bool { Connectivity.shared.isOnline }
 
     /// The flight a paywall was opened for, so a flight pass bought there unlocks that flight.
     @ObservationIgnored private var passFlightID: UUID?
     @ObservationIgnored private var delegateAdapter: DelegateAdapter?
     @ObservationIgnored private let defaults = UserDefaults.standard
-    @ObservationIgnored private let pathMonitor = NWPathMonitor()
+    @ObservationIgnored private var openingReset: Task<Void, Never>?
 
     func configure() {
         guard let key = Bundle.main.infoDictionary?["SuperwallAPIKey"] as? String, key.hasPrefix("pk_") else { return }
@@ -65,11 +70,6 @@ final class Paywalls {
         Superwall.shared.delegate = adapter
         isConfigured = true
         isPro = Superwall.shared.subscriptionStatus.isActive || Self.debugForcePro
-        pathMonitor.pathUpdateHandler = { [weak self] path in
-            let online = path.status == .satisfied && !Self.debugForceOffline
-            Task { @MainActor in self?.isOnline = online }
-        }
-        pathMonitor.start(queue: DispatchQueue(label: "bumpcast.paywalls.path"))
     }
 
     /// Debug builds only: launch with `-forcePro` to test Pro features without a paywall.
@@ -81,50 +81,75 @@ final class Paywalls {
         #endif
     }
 
-    /// Debug builds only: launch with `-forceOffline` to test the in-air note without airplane mode.
-    nonisolated private static var debugForceOffline: Bool {
-        #if DEBUG
-            ProcessInfo.processInfo.arguments.contains("-forceOffline")
-        #else
-            false
-        #endif
-    }
-
-    /// Superwall keeps the last status it saw, and a subscription that simply runs out sends no
-    /// transaction, so Pro could outlive its expiry until the next relaunch. StoreKit is checked
-    /// whenever the app comes forward, and again at the moment the current period ends.
+    /// Brings Pro back in line with Superwall whenever the app comes forward. StoreKit's cache on
+    /// the phone is never used to take Pro away: it can lag a renewal (in the air), and Pro from
+    /// the web, a promo code or the test store has no App Store transaction at all. Superwall
+    /// re-reads purchases itself on launch and on transaction updates; the delegate follows it.
+    ///
+    /// A subscription that simply runs out sends no transaction, though, so Superwall would keep
+    /// it until the next launch. When StoreKit plainly shows it ended (refunded, or expired and
+    /// not renewing), Superwall is asked to read purchases again, at most every few hours per
+    /// transaction (that read can fail quietly on a weak connection), and Pro follows whatever it
+    /// then says. It's checked again at the moment the current period ends.
     func verifyEntitlements() async {
+        refreshPro()
         guard isConfigured, isPro, !Self.debugForcePro else { return }
-        var expires: Date?
-        var active = false
-        for await result in Transaction.currentEntitlements {
-            guard case .verified(let transaction) = result,
-                [Products.proMonthly, Products.proAnnual].contains(transaction.productID),
-                transaction.revocationDate == nil
-            else { continue }
-            let end = transaction.expirationDate ?? .distantFuture
-            if end > .now {
-                active = true
-                expires = max(expires ?? end, end)
+        var latest: Transaction?
+        for id in [Products.proMonthly, Products.proAnnual] {
+            if case .verified(let transaction)? = await Transaction.latest(for: id),
+                transaction.purchaseDate > latest?.purchaseDate ?? .distantPast
+            {
+                latest = transaction
             }
         }
-        guard active else {
-            isPro = false
-            updateAttributes()
-            await AppSync.saveProfile()
+        guard let latest, let status = await latest.subscriptionStatus else { return }
+        var renews = false
+        if case .verified(let renewal) = status.renewalInfo { renews = renewal.willAutoRenew }
+        if status.state == .revoked || (status.state == .expired && !renews) {
+            let id = String(latest.id)
+            // Superwall needs its config to re-read, and the network to fetch it.
+            let checkedAt = defaults.object(forKey: Self.endedCheckedAtKey) as? Date ?? .distantPast
+            let recentlyChecked = defaults.string(forKey: Self.endedCheckedKey) == id
+                && checkedAt.timeIntervalSinceNow > -Self.endedRecheck
+            guard isOnline, Superwall.shared.configurationStatus == .configured,
+                Superwall.shared.subscriptionStatus.isActive, !recentlyChecked
+            else { return }
+            // Noted before the read, so two calls (foreground, expiry timer) can't both start one.
+            defaults.set(id, forKey: Self.endedCheckedKey)
+            defaults.set(Date.now, forKey: Self.endedCheckedAtKey)
+            await Superwall.shared.refreshConfiguration()
+            refreshPro()
             return
         }
         expiryCheck?.cancel()
-        if let expires, expires < .now.addingTimeInterval(24 * 3600) {
+        if let end = latest.expirationDate, end > .now, end < .now.addingTimeInterval(24 * 3600) {
             expiryCheck = Task { [weak self] in
-                try? await Task.sleep(for: .seconds(max(1, expires.timeIntervalSinceNow + 1)))
+                try? await Task.sleep(for: .seconds(max(1, end.timeIntervalSinceNow + 1)))
                 guard !Task.isCancelled else { return }
                 await self?.verifyEntitlements()
             }
         }
     }
 
+    /// The ended App Store transaction Superwall was last asked to re-read purchases for, and when.
+    private static let endedCheckedKey = "pro.endedTransactionChecked"
+    private static let endedCheckedAtKey = "pro.endedTransactionCheckedAt"
+    /// Pro from the web or a promo code outlives an ended App Store subscription, so a read that
+    /// still says Pro is only tried again after a while.
+    private static let endedRecheck: TimeInterval = 6 * 3600
     @ObservationIgnored private var expiryCheck: Task<Void, Never>?
+
+    /// Pro follows Superwall's subscription status, so the app is never stricter than the
+    /// paywall gate. While Superwall hasn't worked the status out yet, Pro stays as it was.
+    fileprivate func refreshPro(_ latest: SuperwallKit.SubscriptionStatus? = nil) {
+        let status: SuperwallKit.SubscriptionStatus = latest ?? (isConfigured ? Superwall.shared.subscriptionStatus : .inactive)
+        if case .unknown = status, !Self.debugForcePro { return }
+        let pro = Self.debugForcePro || status.isActive
+        guard pro != isPro else { return }
+        isPro = pro
+        updateAttributes()
+        Task { await AppSync.saveProfile() }
+    }
 
     func identify(_ userID: UUID) {
         guard isConfigured else { return }
@@ -146,8 +171,9 @@ final class Paywalls {
     /// also runs its feature block for holdouts and campaigns without a paywall, and those must not
     /// unlock Pro.
     ///
-    /// With `whenOffline`, a user without access who has no connection gets that instead of a
-    /// paywall, since the purchase couldn't go through (e.g. in the air).
+    /// Every tap ends in the feature, a paywall, or a short note (offline, still connecting,
+    /// couldn't load, unavailable). With `whenOffline`, a user without access who has no
+    /// connection gets that instead of the offline note (an inline note on the card).
     func unlock(
         _ placement: Placement, flight: Flight? = nil, whenOffline: (@MainActor () -> Void)? = nil,
         then feature: @escaping @MainActor () -> Void
@@ -156,17 +182,56 @@ final class Paywalls {
             guard let self else { return false }
             return flight.map(self.hasFullAccess) ?? (self.isPro || !self.isConfigured)
         }
+        refreshPro()
         if entitled() {
             feature()
             return
         }
-        if let whenOffline, !isOnline {
-            whenOffline()
+        guard isOnline else {
+            // The purchase couldn't go through (in the air, or wifi that isn't answering).
+            if let whenOffline { whenOffline() } else { notify(.offline) }
             return
         }
+        guard !isOpening else {
+            notify(.connecting)
+            return
+        }
+        setOpening(true)
+        // Superwall is still fetching its config (up to a couple of minutes on plane wifi).
+        if Superwall.shared.configurationStatus != .configured { notify(.connecting) }
         passFlightID = flight?.id
-        Superwall.shared.register(placement: placement.rawValue, params: params(for: flight)) {
+
+        let handler = PaywallPresentationHandler()
+        handler.onPresent { [weak self] _ in
+            Task { @MainActor in self?.setOpening(false) }
+        }
+        // Audiences only show paywalls to people with no active entitlement, so a skip usually
+        // means Superwall already counts them as Pro (the feature block below then opens it).
+        // A holdout or a placement with no campaign gets a note instead of nothing.
+        handler.onSkip { [weak self] _ in
             Task { @MainActor in
+                guard let self else { return }
+                self.setOpening(false)
+                self.refreshPro()
+                if !entitled() { self.notify(.unavailable) }
+            }
+        }
+        handler.onError { [weak self] error in
+            let code = (error as NSError).code
+            Task { @MainActor in
+                guard let self else { return }
+                self.setOpening(false)
+                switch code {
+                case 102: break  // a paywall is already on screen
+                case 104: self.notify(.notLoaded)  // Superwall gave up on its config; only a relaunch retries
+                default: self.notify(self.isOnline ? .failed : .offline)
+                }
+            }
+        }
+        Superwall.shared.register(placement: placement.rawValue, params: params(for: flight), handler: handler) { [weak self] in
+            // Purchased, restored, a closed non-gated paywall, or a skip.
+            Task { @MainActor in
+                self?.refreshPro()
                 // Subscription status can land a moment after the purchase completes.
                 for _ in 0..<10 where !entitled() {
                     try? await Task.sleep(for: .milliseconds(300))
@@ -176,11 +241,64 @@ final class Paywalls {
         }
     }
 
-    /// Registers a placement that isn't gating anything (soft paywalls, onboarding).
+    /// Marks a lock as waiting on Superwall. Superwall always answers with a paywall, a skip or
+    /// an error, but if it somehow doesn't, taps work again after 30 s.
+    private func setOpening(_ opening: Bool) {
+        isOpening = opening
+        openingReset?.cancel()
+        guard opening else { return }
+        openingReset = Task { [weak self] in
+            try? await Task.sleep(for: .seconds(30))
+            guard !Task.isCancelled else { return }
+            self?.isOpening = false
+        }
+    }
+
+    private enum Note { case offline, connecting, notLoaded, unavailable, failed }
+
+    /// The short note a lock shows when it can't open anything, so a tap never does nothing.
+    private func notify(_ note: Note) {
+        let text: String
+        var symbol = "exclamationmark.circle"
+        switch note {
+        case .offline where Connectivity.shared.hasPath:
+            // Wifi that isn't answering, or a weak cellular signal: the words fit either.
+            text = "Your connection isn't reaching the internet right now. Try again in a moment."
+            symbol = "network.slash"
+        case .offline:
+            text = "You're offline. Connect to wifi to unlock this."
+            symbol = "wifi.slash"
+        case .connecting:
+            text = "Connecting to the App Store. This can take a minute on plane wifi."
+            symbol = "hourglass"
+        case .notLoaded:
+            text = "Couldn't reach BumpCast Pro. Once you're connected, close and reopen the app."
+        case .unavailable:
+            text = "BumpCast Pro isn't available right now. Please try again later."
+        case .failed:
+            text = "Couldn't open BumpCast Pro. Please try again."
+        }
+        Router.shared.showToast(text, systemImage: symbol)
+    }
+
+    /// Registers a placement that isn't gating anything (soft paywalls). Offline it does nothing:
+    /// the paywall couldn't sell anything, and a queued one would pop up later, out of context.
     func show(_ placement: Placement, flight: Flight? = nil) {
-        guard isConfigured else { return }
+        guard isConfigured, isOnline else { return }
         passFlightID = flight?.id
         Superwall.shared.register(placement: placement.rawValue, params: params(for: flight))
+    }
+
+    /// A paywall already on screen now sells a pass for this flight (the onboarding flow's
+    /// paywall, once the user has added their flight).
+    func sellPass(for flightID: UUID) {
+        passFlightID = flightID
+    }
+
+    /// A flight saved again under a new id (FlightStore's reAdd) keeps a pass bought this session.
+    func moveUnlock(from old: UUID, to new: UUID) {
+        if unlockedFlights.remove(old) != nil { unlockedFlights.insert(new) }
+        if passFlightID == old { passFlightID = new }
     }
 
     /// Onboarding answers and other one-off attributes (the native onboarding fallback uses this).
@@ -189,8 +307,9 @@ final class Paywalls {
         Superwall.shared.setUserAttributes(attributes)
     }
 
+    /// Offline, the moment waits for the next grade seen online.
     func firstGradeViewed(_ flight: Flight) {
-        guard isConfigured, !hasFullAccess(to: flight), !defaults.bool(forKey: "firstGrade.registered") else { return }
+        guard isConfigured, isOnline, !hasFullAccess(to: flight), !defaults.bool(forKey: "firstGrade.registered") else { return }
         defaults.set(true, forKey: "firstGrade.registered")
         show(.firstGradeViewed, flight: flight)
     }
@@ -203,6 +322,7 @@ final class Paywalls {
     func restorePurchases() async -> Bool {
         guard isConfigured else { return false }
         let result = await Superwall.shared.restorePurchases()
+        refreshPro()
         if case .restored = result { return true }
         return false
     }
@@ -260,9 +380,7 @@ final class Paywalls {
     // MARK: Delegate callbacks
 
     fileprivate func statusChanged(_ status: SuperwallKit.SubscriptionStatus) {
-        isPro = status.isActive || Self.debugForcePro
-        updateAttributes()
-        Task { await AppSync.saveProfile() }
+        refreshPro(status)
     }
 
     fileprivate func handle(_ event: SuperwallEvent) {
@@ -282,6 +400,12 @@ final class Paywalls {
 
         @MainActor func subscriptionStatusDidChange(from oldValue: SuperwallKit.SubscriptionStatus, to newValue: SuperwallKit.SubscriptionStatus) {
             owner?.statusChanged(newValue)
+        }
+
+        /// Superwall re-read purchases (launch, refresh, a renewal or a transaction update). The
+        /// status callback only fires on a logical change, so a renewal the app missed lands here.
+        @MainActor func customerInfoDidChange(from oldValue: SuperwallKit.CustomerInfo, to newValue: SuperwallKit.CustomerInfo) {
+            owner?.refreshPro()
         }
 
         @MainActor func handleSuperwallEvent(withInfo eventInfo: SuperwallEventInfo) {

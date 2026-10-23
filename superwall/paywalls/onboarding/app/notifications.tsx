@@ -1,11 +1,15 @@
 import { useState } from "react";
 import { useActions, useHaptics, useTranslation } from "superwall/hooks";
 import { AppIcon } from "../components/art";
+import { fliesSoon } from "../components/answers";
 import { useNext } from "../components/next";
 import { Page, PrimaryButton } from "../components/ui";
 
 export default function Notifications() {
-  const next = useNext("plans");
+  // Flying soon: add the flight next. Everyone else: the plans.
+  const toPlans = useNext("plans");
+  const toFind = useNext("find");
+  const next = () => (fliesSoon() ? toFind : toPlans)();
   const { t } = useTranslation();
   const haptics = useHaptics();
   const { requestPermission, setUserAttributes } = useActions();

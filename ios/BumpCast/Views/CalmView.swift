@@ -30,7 +30,11 @@ struct CalmView: View {
                             .font(.bcDisplay)
                             .displayTypeLimit()
                             .multilineTextAlignment(.center)
-                        Text(subtitle).multilineTextAlignment(.center).foregroundStyle(.secondary)
+                        // On the flight's own minutes, like the flight screen, so the two agree.
+                        TimelineView(.flightMinutes(takeoff: NextStretch.current(store: store, inFlight: inFlight)?.takeoff ?? .now)) {
+                            context in
+                            Text(subtitle(at: max(context.date, .now))).multilineTextAlignment(.center).foregroundStyle(.secondary)
+                        }
                         Button {
                             router.showBreathing = true
                         } label: {
@@ -94,40 +98,50 @@ struct CalmView: View {
         }
     }
 
-    private var subtitle: String {
-        if let next = NextStretch.current(store: store, inFlight: inFlight) {
-            return next.headsUp(now: .now)
+    private func subtitle(at now: Date) -> String {
+        if let next = NextStretch.current(store: store, inFlight: inFlight, now: now) {
+            return next.headsUp(now: now)
         }
         return "Breathe in for 4, out for 6. A longer out-breath steadies your body when the plane moves."
     }
 }
 
-/// The next bumpy stretch of the flight in progress, for heads-ups.
+/// The flight in progress, for heads-ups: the stretch it's in, the next one, or that none is left.
+/// Only for people with the countdown, since stretch timing is what it sells, and never for a
+/// cancelled or diverted flight.
 struct NextStretch {
-    let severity: Severity
-    let start: Date
-    let end: Date
+    let forecast: Forecast
+    let takeoff: Date
+    let departure: Date
 
     @MainActor
     static func current(store: FlightStore, inFlight: InFlight, now: Date = .now) -> NextStretch? {
         for flight in store.flights {
-            guard let forecast = store.forecasts[flight.id], forecast.isShown, inFlight.isFlying(flight, forecast: forecast, now: now)
+            guard let forecast = store.forecasts[flight.id], forecast.isShown,
+                InFlightMode.isFlying(flight, forecast: forecast, inFlight: inFlight, now: now)
             else { continue }
-            let takeoff = inFlight.effectiveTakeoff(of: flight)
-            let minute = Int(now.timeIntervalSince(takeoff) / 60)
-            guard let segment = forecast.segments.first(where: { $0.endMin >= minute }) else { return nil }
-            return NextStretch(
-                severity: segment.severity,
-                start: takeoff.addingTimeInterval(TimeInterval(segment.startMin * 60)),
-                end: takeoff.addingTimeInterval(TimeInterval((segment.endMin + 1) * 60)))
+            guard Paywalls.shared.hasFullAccess(to: flight) else { return nil }
+            return NextStretch(forecast: forecast, takeoff: inFlight.effectiveTakeoff(of: flight), departure: flight.departureAt)
         }
         return nil
     }
 
+    /// "Moderate bumps in about 6 min, for about 27 min." · "Light chop now, about 4 min to go." ·
+    /// "Smooth to landing." Outlook stretches stay approximate.
     func headsUp(now: Date) -> String {
-        if now >= end { return "That stretch has passed. Smooth air now." }
-        if now >= start { return "\(severity.title) now, about \(Int(end.timeIntervalSince(now) / 60) + 1) min to go." }
-        return "\(severity.title) in about \(Int(start.timeIntervalSince(now) / 60) + 1) min."
+        let minute = max(0, Int(now.timeIntervalSince(takeoff) / 60))
+        if let current = forecast.segments.first(where: { $0.startMin <= minute && minute <= $0.endMin }) {
+            if forecast.isOutlook(current, departure: departure) { return "Bumps possible now." }
+            return "\(current.severity.phrase.sentenceCased) now, about \((current.endMin - minute + 1).durationText) to go."
+        }
+        if let next = forecast.segments.first(where: { $0.startMin > minute }) {
+            let wait = next.startMin - minute
+            if forecast.isOutlook(next, departure: departure) {
+                return "Bumps possible in about \(wait.roughMinutes.durationText)."
+            }
+            return "\(next.severity.phrase.sentenceCased) in about \(wait.durationText), for about \(next.minutes.durationText)."
+        }
+        return InFlightCopy.clearToLanding(outlook: forecast.isGlobalOutlook) + "."
     }
 }
 

@@ -5,14 +5,23 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
     func application(
         _ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
+        // First: everything else asks it whether there's a connection.
+        Connectivity.shared.start()
+        // The airport index is decoded on first use (the first list render); do it now, off the main thread.
+        Task.detached(priority: .userInitiated) { _ = AirportStore.shared.all.count }
         Paywalls.shared.configure()
         BrandFont.applyToSystemControls()
         UNUserNotificationCenter.current().delegate = PushNotifications.shared
         AppSync.registerBackgroundRefresh()
         // "How did it feel?" buttons on the Live Activity after landing.
         FlightRatingHandler.submit = { flightID, rating in
-            _ = await FlightStore.shared.submitLandingReport(flightID: flightID, rating: rating)
-            InFlight.shared.endActivity(flightID)
+            // Offline the rating is kept on the phone and sent later. The activity stays only if
+            // the server refused it, so the buttons are still there to try again. An activity
+            // carried over from a flight's old id rates the flight under its new one.
+            let id = InFlight.shared.currentID(of: flightID)
+            if await FlightStore.shared.submitLandingReport(flightID: id, rating: rating) != nil {
+                InFlight.shared.endActivity(id)
+            }
         }
         FlightRatingHandler.end = { flightID in InFlight.shared.endActivity(flightID) }
         return true
@@ -52,6 +61,7 @@ struct BumpCastApp: App {
                 .environment(Paywalls.shared)
                 .environment(PushNotifications.shared)
                 .environment(InFlight.shared)
+                .environment(Connectivity.shared)
                 .task {
                     // First launch: present the onboarding flow while the rest of the app syncs.
                     Onboarding.shared.start()
@@ -62,6 +72,8 @@ struct BumpCastApp: App {
                     switch phase {
                     case .active:
                         InFlight.shared.refreshActivities()
+                        // Coming back to the app on a connection picks up new forecasts and status.
+                        Task { await FlightStore.shared.refreshIfStale() }
                         Task { await PushNotifications.shared.refreshStatus() }
                         Task { await Paywalls.shared.verifyEntitlements() }
                     case .background:
@@ -98,7 +110,7 @@ struct RootView: View {
                 CalmView()
             }
         }
-        .overlay(alignment: .top) { ToastView(text: router.toast) }
+        .overlay(alignment: .top) { ToastView(text: router.toast, systemImage: router.toastSymbol) }
         .fullScreenCover(isPresented: $router.showBreathing) { BreathingView() }
         .overlay { OnboardingCover() }
         // The one root for type, ink and tint; sheets and covers inherit it.
@@ -129,15 +141,16 @@ private struct OnboardingCover: View {
 }
 
 /// Brief confirmation at the top of the screen. Slides in with the house spring; fades with
-/// Reduce Motion. Read out by VoiceOver.
-private struct ToastView: View {
+/// Reduce Motion. Read out by VoiceOver. Sheets show their own (the root's is hidden under them).
+struct ToastView: View {
     let text: String?
+    var systemImage = "checkmark.circle.fill"
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         ZStack {
             if let text {
-                Label(text, systemImage: "checkmark.circle.fill")
+                Label(text, systemImage: systemImage)
                     .font(.bcSubheadlineStrong)
                     .foregroundStyle(Theme.ink)
                     .padding(.horizontal, 16)

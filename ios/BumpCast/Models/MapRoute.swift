@@ -172,21 +172,11 @@ struct RouteProfile {
         guard overall > .smooth, let run = longestRun(atLeast: overall) else { return "Smooth along your route at this height." }
         let middle = route.points[(run.lowerBound + run.upperBound) / 2]
         let place = Geo.nearestCity(to: middle).map { " near \($0)" } ?? ""
-        return "\(overall.mapHeadline) · \(overall.phrase)\(place) for about \(route.minutes(samples: run.count)) min"
+        return "\(overall.mapHeadline) · \(overall.phrase.sentenceCased)\(place) for about \(route.minutes(samples: run.count)) min"
     }
 }
 
 extension Severity {
-    /// How a stretch reads in a sentence: "Light chop near Denver".
-    var phrase: String {
-        switch self {
-        case .smooth: "Smooth air"
-        case .light: "Light chop"
-        case .moderate: "Moderate bumps"
-        case .severe: "Strong bumps"
-        }
-    }
-
     var mapHeadline: String {
         switch self {
         case .smooth: "Smooth"

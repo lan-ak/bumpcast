@@ -11,6 +11,13 @@ extension Flight {
 
     var originTimeZone: TimeZone { originAirport?.timeZone ?? .current }
     var destinationTimeZone: TimeZone { destinationAirport?.timeZone ?? .current }
+
+    /// Cancelled: no countdown, reminders or in-flight progress for it.
+    var isCancelled: Bool { status?.state == .cancelled }
+
+    /// Cancelled or diverted: the countdown and in-flight progress follow the planned flight, so
+    /// the screens never show them.
+    var isDisrupted: Bool { isCancelled || status?.state == .diverted }
 }
 
 extension FlightStatus {
@@ -27,12 +34,27 @@ extension FlightStatus {
         }
     }
 
-    var gateText: String? {
+    /// Close to departure, a gate that still isn't known is often only on the airport screens.
+    static let gateScreensWindow: TimeInterval = 90 * 60
+
+    /// "Gate B22 · Terminal 5", "Terminal A · Gate not announced yet", or nothing when neither is
+    /// known. Never promises a gate is coming: some flights only show it at the airport.
+    func gateText(departure: Date, now: Date = .now) -> String? {
         switch (departureGate, departureTerminal) {
         case let (gate?, terminal?): "Gate \(gate) · Terminal \(terminal)"
         case let (gate?, nil): "Gate \(gate)"
-        case let (nil, terminal?): "Terminal \(terminal) · Gate not set yet"
+        case let (nil, terminal?):
+            departure.timeIntervalSince(now) > Self.gateScreensWindow
+                ? "Terminal \(terminal) · Gate not announced yet" : "Terminal \(terminal) · Gate on airport screens"
         case (nil, nil): nil
+        }
+    }
+
+    /// The gate stops mattering once the plane has left, or isn't leaving from here.
+    var showsGate: Bool {
+        switch state {
+        case .departed?, .cancelled?, .diverted?: false
+        default: takeoffAt.map { $0 > .now } ?? true
         }
     }
 
@@ -71,7 +93,7 @@ struct LiveStatusRow: View {
         case .delayed? where status.isDelayed:
             var parts = [status.headline]
             if let expected = status.departureExpected { parts.append("now \(expected.localTime(in: tz))") }
-            if let gate = status.departureGate { parts.append("Gate \(gate)") }
+            if let gate = status.departureGate, status.showsGate { parts.append("Gate \(gate)") }
             return parts.joined(separator: " · ")
         case .departed?:
             return status.departureActual.map { "Departed \($0.localTime(in: tz))" } ?? "Departed"
@@ -80,7 +102,8 @@ struct LiveStatusRow: View {
         case .diverted?:
             return status.divertedAirport.map { "Diverted to \($0.iata)" } ?? "Diverted"
         default:
-            return ["On time", status.gateText ?? "Gate not set yet"].joined(separator: " · ")
+            let gate = status.showsGate ? status.gateText(departure: flight.expectedDeparture) : nil
+            return (["On time"] + [gate].compactMap { $0 }).joined(separator: " · ")
         }
     }
 
@@ -169,7 +192,7 @@ struct FlightRouteHeader: View {
             Text(flight.originAirport?.iata ?? flight.origin).font(.bcDisplay)
             Text(flight.originAirport?.city ?? "").font(.bcFootnote).foregroundStyle(.secondary)
             TimePair(current: current, scheduled: scheduled, tz: flight.originTimeZone, alignment: .leading)
-            if let gate = status?.departureGate {
+            if let gate = status?.departureGate, status?.showsGate == true {
                 ViewThatFits(in: .horizontal) {
                     Text(Self.gateLine(gate, status?.departureTerminal, short: false))
                     Text(Self.gateLine(gate, status?.departureTerminal, short: true))
@@ -331,6 +354,8 @@ private struct FlightStatusDetails: View {
     let flight: Flight
     let status: FlightStatus
 
+    @Environment(FlightStore.self) private var store
+
     var body: some View {
         let from = flight.originAirport?.iata ?? flight.origin
         let to = flight.destinationAirport?.iata ?? flight.destination
@@ -341,8 +366,15 @@ private struct FlightStatusDetails: View {
                 row("Arrives \(to)", actual: status.arrivalActual, expected: status.arrivalExpected,
                     scheduled: scheduled, tz: flight.destinationTimeZone)
             }
-            if let gate = gateText {
+            if status.showsGate, let gate = gateText {
                 detail("Gate") { Text(gate) }
+                if status.departureGate == nil,
+                    flight.expectedDeparture.timeIntervalSinceNow <= FlightStatus.gateScreensWindow
+                {
+                    Text("Some flights only show their gate on the airport screens.")
+                        .font(.bcFootnote)
+                        .foregroundStyle(.secondary)
+                }
             }
             Text(freshness).font(.bcFootnote).foregroundStyle(.secondary)
         }
@@ -351,8 +383,11 @@ private struct FlightStatusDetails: View {
     }
 
     private func row(_ title: String, actual: Date?, expected: Date?, scheduled: Date, tz: TimeZone) -> some View {
-        detail(title) {
-            if let actual {
+        // "Actual" only once it has happened: a runway time still ahead is an estimate.
+        let happened = actual.flatMap { $0 <= .now ? $0 : nil }
+        let expected = happened == nil ? (actual ?? expected) : expected
+        return detail(title) {
+            if let actual = happened {
                 Text("\(actual.localTime(in: tz)) actual").monospacedDigit()
             } else if let expected, abs(expected.timeIntervalSince(scheduled)) >= 60 {
                 HStack(spacing: 4) {
@@ -381,12 +416,12 @@ private struct FlightStatusDetails: View {
         .accessibilityElement(children: .combine)
     }
 
-    /// "B22 · Terminal 5", "Not set yet · Terminal A", or nothing.
+    /// "B22 · Terminal 5", "Not announced yet · Terminal A", or nothing.
     private var gateText: String? {
         switch (status.departureGate, status.departureTerminal) {
         case let (gate?, terminal?): "\(gate) · Terminal \(terminal)"
         case let (gate?, nil): gate
-        case let (nil, terminal?): "Not set yet · Terminal \(terminal)"
+        case let (nil, terminal?): "Not announced yet · Terminal \(terminal)"
         case (nil, nil): nil
         }
     }
@@ -396,15 +431,21 @@ private struct FlightStatusDetails: View {
         guard !status.finished, let next = status.nextCheckAt else {
             return "\(updated) · status updates have finished for this flight"
         }
+        // Offline (in the air, usually) the next check can't happen, so don't name a time.
+        if ConnectionNote(store: store).isConnectionProblem {
+            return "\(updated) · we'll check again when you're back online"
+        }
+        guard next > .now else { return updated }
         return "\(updated) · next update around \(next.localTime(in: .current))"
     }
 }
 
 extension FlightStatus {
-    /// "Updated for the new 7:55 AM departure": the forecast moved with a changed departure.
+    /// "Updated for the new 7:55 AM departure": the forecast moved with a changed departure. Not for
+    /// the old forecast only moved to the new time while a new one is worked out.
     func forecastNote(for flight: Flight, forecast: Forecast) -> String? {
         guard let expected = departureExpected, abs(expected.timeIntervalSince(flight.departureAt)) >= 5 * 60,
-            forecast.status == .ready, let forecastFor = forecast.departureAt,
+            forecast.status == .ready, forecast.retimed != true, let forecastFor = forecast.departureAt,
             abs(forecastFor.timeIntervalSince(expected)) < 60
         else { return nil }
         return "Updated for the new \(expected.localTime(in: flight.originTimeZone)) departure"

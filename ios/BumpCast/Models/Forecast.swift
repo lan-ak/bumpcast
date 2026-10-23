@@ -100,9 +100,11 @@ struct Forecast: Codable, Hashable, Sendable {
     var warnings: [Warning]? = nil
     /// False when the route leaves the area we forecast in full detail: it stays a global outlook.
     var noaaPossible: Bool? = nil
+    /// The previous forecast moved to a delayed departure until a new one is worked out for it.
+    var retimed: Bool? = nil
 
     enum CodingKeys: String, CodingKey {
-        case status, source, grade, score, segments, samples, route, sources, warnings
+        case status, source, grade, score, segments, samples, route, sources, warnings, retimed
         case noaaPossible = "noaa_possible"
         case departureAt = "departure_at"
         case issuedAt = "issued_at"

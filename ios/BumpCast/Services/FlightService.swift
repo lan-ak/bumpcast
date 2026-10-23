@@ -2,8 +2,27 @@ import Foundation
 import Supabase
 
 protocol FlightService: Sendable {
-    func signIn() async throws -> UUID
+    /// The account of the session saved on this phone, even with an expired token (requests
+    /// refresh it once there's a connection). A new anonymous account only when none is saved and
+    /// `allowSignUp`: a refresh that fails in the air is never a reason for a new account.
+    func signIn(allowSignUp: Bool) async throws -> UUID
+    /// The saved session's account, read on the phone without the network. Nil when none is saved
+    /// or it can't be read (before the first unlock).
+    func storedUserID() -> UUID?
+    /// The account requests go out as right now and the token they carry, refreshed first when it
+    /// expires within `margin` seconds. Throws when it can't be refreshed (offline), so a sync keeps
+    /// what's saved. A request that finds the token expired and can't refresh it still goes out,
+    /// with the public key, so answers count only if the token is the same afterwards.
+    func session(refreshingWithin margin: TimeInterval) async throws -> AccountSession
+    /// Moves these flights (with their passes, reports, notifications and Live Activities) from the
+    /// anonymous account `owner` this phone lost to the signed-in one, when `secret` matches the
+    /// hash on that account's profile. Returns the ids the signed-in account owns afterwards. At
+    /// most `adoptLimit` ids per call.
+    func adoptFlights(_ ids: [UUID], from owner: UUID, secret: String) async throws -> Set<UUID>
+
     func flights() async throws -> [Flight]
+    /// One flight, for its latest live status.
+    func flight(_ id: UUID) async throws -> Flight
     func add(_ draft: FlightDraft) async throws -> Flight
     func update(_ id: UUID, _ draft: FlightDraft) async throws -> Flight
     func delete(_ id: UUID) async throws
@@ -18,13 +37,18 @@ protocol FlightService: Sendable {
     /// The Live Activity's push token, so wheels-up from the airline's data can re-time it.
     func registerLiveActivity(flightID: UUID, token: String, environment: String) async throws
     func endLiveActivity(flightID: UUID) async throws
-    func saveProfile(_ profile: ProfileRecord) async throws
+    /// Returns what was saved: without the secret's hash on a database that has no column for it yet.
+    @discardableResult func saveProfile(_ profile: ProfileRecord) async throws -> ProfileRecord
 
     func passFlightIDs() async throws -> Set<UUID>
     func recordPass(_ pass: FlightPassRecord) async throws
 
     func landingReports() async throws -> [LandingReport]
-    func submitLandingReport(flightID: UUID, rating: FeltRating) async throws -> LandingReport
+    /// `seatbeltMins`: minutes after takeoff the seatbelt sign was noted. `forecastIssuedAt`: the
+    /// forecast the phone showed, so the rating is scored against it. Both are left out when nil.
+    func submitLandingReport(
+        flightID: UUID, rating: FeltRating, seatbeltMins: [Int]?, forecastIssuedAt: Date?
+    ) async throws -> LandingReport
     func accuracyStats() async throws -> AccuracyStats?
 
     func waitlistCountries() async throws -> Set<String>
@@ -32,6 +56,27 @@ protocol FlightService: Sendable {
 
     func pilotReports(since: Date) async throws -> [PilotReport]
     func turbulenceGrids(levelFt: Int) async throws -> [TurbulenceGrid]
+}
+
+/// How many flights `adopt_flights` takes in one call.
+let adoptLimit = 200
+
+/// Who requests go out as, and with which access token.
+struct AccountSession: Equatable, Sendable {
+    let userID: UUID
+    let accessToken: String
+}
+
+extension Error {
+    /// Refused for the session, not the request: sent with the public key or an expired token
+    /// (a refresh that failed on the way). The next sync, with a good session, sorts it out.
+    var isSessionRefusal: Bool {
+        if let error = self as? PostgrestError {
+            return ["42501", "PGRST301", "PGRST302", "PGRST303"].contains(error.code ?? "")
+        }
+        if let error = self as? HTTPError { return error.response.statusCode == 401 }
+        return false
+    }
 }
 
 enum Services {
@@ -45,9 +90,23 @@ enum Services {
         if let urlString = info["SupabaseURL"] as? String, let url = URL(string: urlString), url.host() != nil,
             let key = info["SupabaseAnonKey"] as? String, !key.isEmpty
         {
-            return SupabaseFlightService(client: SupabaseClient(supabaseURL: url, supabaseKey: key))
+            let options = SupabaseClientOptions(
+                // The saved session comes up at launch without first waiting on a refresh.
+                auth: .init(emitLocalSessionAsInitialSession: true),
+                global: .init(session: Services.session))
+            return SupabaseFlightService(client: SupabaseClient(supabaseURL: url, supabaseKey: key, options: options))
         }
         return DemoFlightService()
+    }()
+
+    /// Plane and captive wifi often accept a connection and never answer. The SDK gives every
+    /// request its own 60 s timeout and retries token refreshes, so each task is capped as a whole.
+    private static let session: URLSession = {
+        let configuration = URLSessionConfiguration.default
+        configuration.timeoutIntervalForRequest = 15
+        configuration.timeoutIntervalForResource = 30
+        configuration.waitsForConnectivity = false
+        return URLSession(configuration: configuration)
     }()
 
     static var isDemo: Bool { flights is DemoFlightService }
@@ -60,15 +119,52 @@ struct SupabaseFlightService: FlightService {
         "id,origin,destination,departure_at,notify,flight_number,airline_name,arrival_at,schedule_pending,status:flight_status(*)"
     private static let updateColumns = "id,flight_id,milestone,kind,grade,title,body,changes,pro_only,created_at"
 
-    func signIn() async throws -> UUID {
-        if let session = try? await client.auth.session {
-            return session.user.id
-        }
+    func signIn(allowSignUp: Bool) async throws -> UUID {
+        // The saved session even when its token has expired: refreshes fail on planes and behind
+        // captive portals, and signing up then would leave the saved flights behind (AC 1507).
+        if let id = storedUserID() { return id }
+        guard allowSignUp else { throw AuthError.sessionMissing }
         return try await client.auth.signInAnonymously().user.id
+    }
+
+    func storedUserID() -> UUID? { client.auth.currentSession?.user.id }
+
+    func session(refreshingWithin margin: TimeInterval) async throws -> AccountSession {
+        // Refreshes an expired one (the SDK's 30 s margin).
+        var session = try await client.auth.session
+        if session.expiresAt - Date.now.timeIntervalSince1970 < margin {
+            if let latest = client.auth.currentSession, latest.expiresAt - Date.now.timeIntervalSince1970 >= margin {
+                // Refreshed by another request meanwhile.
+                session = latest
+            } else {
+                do {
+                    // The stored refresh token, never an older one: a reused token can end the session.
+                    session = try await client.auth.refreshSession()
+                } catch where !session.isExpired && !(error is CancellationError) {
+                    // Still good for now; the answers are checked against this token afterwards.
+                }
+            }
+        }
+        return AccountSession(userID: session.user.id, accessToken: session.accessToken)
+    }
+
+    func adoptFlights(_ ids: [UUID], from owner: UUID, secret: String) async throws -> Set<UUID> {
+        struct Params: Encodable {
+            let p_flight_ids: [UUID]
+            let p_from_user: UUID
+            let p_secret: String
+        }
+        let params = Params(p_flight_ids: ids, p_from_user: owner, p_secret: secret)
+        let owned: [UUID] = try await client.rpc("adopt_flights", params: params).execute().value
+        return Set(owned)
     }
 
     func flights() async throws -> [Flight] {
         try await client.from("flights").select(Self.flightColumns).order("departure_at").execute().value
+    }
+
+    func flight(_ id: UUID) async throws -> Flight {
+        try await client.from("flights").select(Self.flightColumns).eq("id", value: id).single().execute().value
     }
 
     func add(_ draft: FlightDraft) async throws -> Flight {
@@ -112,12 +208,17 @@ struct SupabaseFlightService: FlightService {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         do {
-            return try await client.functions.invoke(
-                "flight-search", options: FunctionInvokeOptions(body: body), decoder: decoder)
+            // Capped well under the SDK's 150 s, so a wifi that isn't answering offers airports soon.
+            let result: FlightSearchResult = try await client.functions.invoke(
+                "flight-search", options: FunctionInvokeOptions(body: body, timeoutInterval: 20), decoder: decoder)
+            await Connectivity.shared.noteSuccess()
+            return result
         } catch is CancellationError {
             throw CancellationError()
         } catch {
-            // Offline, rate limited or failing: the sheet offers choosing airports instead.
+            // Offline, rate limited or failing: the sheet offers choosing airports instead. A
+            // connection failure also tells the app it's offline, so the sheet says so.
+            await Connectivity.shared.noteFailure(error)
             return .unavailable
         }
     }
@@ -137,8 +238,18 @@ struct SupabaseFlightService: FlightService {
         try await client.rpc("end_live_activity", params: ["p_flight_id": flightID.uuidString]).execute()
     }
 
-    func saveProfile(_ profile: ProfileRecord) async throws {
-        try await client.from("profiles").upsert(profile, onConflict: "user_id").execute()
+    func saveProfile(_ profile: ProfileRecord) async throws -> ProfileRecord {
+        do {
+            try await client.from("profiles").upsert(profile, onConflict: "user_id").execute()
+            return profile
+        } catch let error as PostgrestError where error.code == "PGRST204" && profile.adoptSecretHash != nil {
+            // A database without the secret's column yet: the rest still counts, and the hash is
+            // sent again next time.
+            var older = profile
+            older.adoptSecretHash = nil
+            try await client.from("profiles").upsert(older, onConflict: "user_id").execute()
+            return older
+        }
     }
 
     func passFlightIDs() async throws -> Set<UUID> {
@@ -157,14 +268,30 @@ struct SupabaseFlightService: FlightService {
         try await client.from("landing_reports").select(Self.reportColumns).execute().value
     }
 
-    func submitLandingReport(flightID: UUID, rating: FeltRating) async throws -> LandingReport {
+    func submitLandingReport(
+        flightID: UUID, rating: FeltRating, seatbeltMins: [Int]?, forecastIssuedAt: Date?
+    ) async throws -> LandingReport {
+        // Optionals are left out of the body when nil (synthesized encodeIfPresent).
         struct Insert: Encodable {
             let flight_id: UUID
             let felt_relative: FeltRating
+            let seatbelt_mins: [Int]?
+            let forecast_issued_at: Date?
         }
-        return try await client.from("landing_reports")
-            .insert(Insert(flight_id: flightID, felt_relative: rating))
-            .select(Self.reportColumns).single().execute().value
+        let insert = Insert(
+            flight_id: flightID, felt_relative: rating,
+            seatbelt_mins: seatbeltMins.flatMap { $0.isEmpty ? nil : $0 }, forecast_issued_at: forecastIssuedAt)
+        do {
+            return try await client.from("landing_reports")
+                .insert(insert)
+                .select(Self.reportColumns).single().execute().value
+        } catch let error as PostgrestError where error.code == "PGRST204" {
+            // A database without the newer columns yet: the rating itself still counts.
+            guard insert.seatbelt_mins != nil || insert.forecast_issued_at != nil else { throw error }
+            return try await client.from("landing_reports")
+                .insert(Insert(flight_id: flightID, felt_relative: rating, seatbelt_mins: nil, forecast_issued_at: nil))
+                .select(Self.reportColumns).single().execute().value
+        }
     }
 
     func accuracyStats() async throws -> AccuracyStats? {
@@ -234,9 +361,23 @@ actor DemoFlightService: FlightService {
         return forecast
     }
 
-    func signIn() async throws -> UUID { UUID(uuidString: "00000000-0000-4000-8000-000000000000")! }
+    private static let demoUser = UUID(uuidString: "00000000-0000-4000-8000-000000000000")!
+
+    private enum DemoError: Error { case notFound }
+
+    func signIn(allowSignUp: Bool) async throws -> UUID { Self.demoUser }
+    nonisolated func storedUserID() -> UUID? { Self.demoUser }
+    func session(refreshingWithin margin: TimeInterval) async throws -> AccountSession {
+        AccountSession(userID: Self.demoUser, accessToken: "demo")
+    }
+    func adoptFlights(_ ids: [UUID], from owner: UUID, secret: String) async throws -> Set<UUID> { Set(ids) }
 
     func flights() async throws -> [Flight] { stored.sorted { $0.departureAt < $1.departureAt } }
+
+    func flight(_ id: UUID) async throws -> Flight {
+        guard let flight = stored.first(where: { $0.id == id }) else { throw DemoError.notFound }
+        return flight
+    }
 
     func add(_ draft: FlightDraft) async throws -> Flight {
         var flight = draft.asFlight
@@ -345,12 +486,14 @@ actor DemoFlightService: FlightService {
     func registerDevice(token: String, environment: String) async throws {}
     func registerLiveActivity(flightID: UUID, token: String, environment: String) async throws {}
     func endLiveActivity(flightID: UUID) async throws {}
-    func saveProfile(_ profile: ProfileRecord) async throws {}
+    func saveProfile(_ profile: ProfileRecord) async throws -> ProfileRecord { profile }
     func passFlightIDs() async throws -> Set<UUID> { passes }
     func recordPass(_ pass: FlightPassRecord) async throws { passes.insert(pass.flightId) }
     func landingReports() async throws -> [LandingReport] { Array(reports.values) }
 
-    func submitLandingReport(flightID: UUID, rating: FeltRating) async throws -> LandingReport {
+    func submitLandingReport(
+        flightID: UUID, rating: FeltRating, seatbeltMins: [Int]?, forecastIssuedAt: Date?
+    ) async throws -> LandingReport {
         let worst = Self.sampleForecast.segments.map(\.severity).max() ?? .smooth
         let report = LandingReport(
             flightId: flightID, felt: nil, feltRelative: rating, forecastWorst: worst, matched: rating == .aboutRight)

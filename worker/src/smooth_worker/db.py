@@ -6,13 +6,26 @@ from datetime import datetime, timedelta
 
 import httpx
 
-FORECAST_FIELDS = "id,issued_at,status,source,model_run,grade,score,duration_min,segments,departure_at"
+FORECAST_FIELDS = "id,issued_at,status,source,model_run,grade,score,duration_min,segments,departure_at,retimed,profile"
 PROFILE_FIELDS = "user_id,is_pro,timezone"
 if os.environ.get("SMOOTH_GLOBAL") == "1":  # needs the worldwide-coverage migration
     FORECAST_FIELDS += ",noaa_possible,warnings"
     PROFILE_FIELDS += ",global_beta"
 STATUS_EMBED = "status:flight_status(*)"
-# Delayed flights stay in play after their scheduled time; callers filter by expected departure.
+# What the poll needs of a flight's latest forecast: when it's due, whether a new result would
+# have less of NOAA's detailed forecast than it (id and model_run, see smooth_worker.loses_gtg),
+# and when it lands, for a flight the airline didn't have (status.ends).
+LATEST_FORECAST_FIELDS = "id,issued_at,status,source,model_run,departure_at,retimed,duration_min"
+if os.environ.get("SMOOTH_GLOBAL") == "1":
+    LATEST_FORECAST_FIELDS += ",noaa_possible"
+# What a Live Activity push needs of the latest forecast: its plan and how confirmed it is.
+ACTIVITY_FORECAST_FIELDS = "issued_at,status,source,duration_min,segments"
+if os.environ.get("SMOOTH_GLOBAL") == "1":
+    ACTIVITY_FORECAST_FIELDS += ",sources,noaa_possible"
+# Flights stay in play after their scheduled departure; callers filter by expected departure and
+# landing. Status is checked until landing (status.ends): the longest flights, plus a long delay.
+STATUS_LOOKBACK = timedelta(hours=24)
+# Live Activities: the system ends them 8 hours after they start.
 LOOKBACK = timedelta(hours=12)
 
 
@@ -42,18 +55,48 @@ class Database:
         return self._get(
             "/flights",
             {
-                "select": "id,user_id,origin,destination,departure_at,updated_at,flight_number,"
-                f"forecasts:forecasts!forecasts_flight_id_fkey(issued_at,status,source,departure_at),{STATUS_EMBED}",
-                "departure_at": f"gte.{(now - LOOKBACK).isoformat()}",
+                "select": "id,user_id,origin,destination,departure_at,arrival_at,updated_at,flight_number,"
+                f"forecasts:forecasts!forecasts_flight_id_fkey({LATEST_FORECAST_FIELDS}),{STATUS_EMBED}",
+                "departure_at": f"gte.{(now - STATUS_LOOKBACK).isoformat()}",
                 "forecasts.order": "issued_at.desc",
                 "forecasts.limit": "1",
                 "order": "departure_at.asc",
             },
         )
 
+    def new_flights_without_forecast(self, now: datetime, lookback: timedelta) -> list[dict]:
+        """Flights saved within `lookback` that have no forecast yet, with their status. Includes
+        flights already in the air (callers drop those that have landed, see status.ends)."""
+        rows = self._get(
+            "/flights",
+            {
+                "select": "id,origin,destination,departure_at,arrival_at,flight_number,"
+                f"forecasts:forecasts!forecasts_flight_id_fkey(id),{STATUS_EMBED}",
+                "created_at": f"gte.{(now - lookback).isoformat()}",
+                "departure_at": f"gte.{(now - STATUS_LOOKBACK).isoformat()}",
+                "forecasts.limit": "1",
+            },
+        )
+        return [row for row in rows if not row["forecasts"]]
+
     def insert_forecast(self, flight_id: str, row: dict) -> None:
         r = self.http.post("/forecasts", json={"flight_id": flight_id, **row}, headers={"Prefer": "return=minimal"})
         r.raise_for_status()
+
+    def retime_forecast(self, forecast_id: str, departure: datetime) -> None:
+        """Copy a forecast to a new departure time, marked `retimed`: nothing was recomputed, so
+        it's retried soon and a delay push doesn't say the forecast was checked. It keeps when it
+        was issued (just after, so it's the latest): the data is no newer."""
+        rows = self._get("/forecasts", {"select": "*", "id": f"eq.{forecast_id}"})
+        if not rows:
+            return  # the flight was edited and its forecasts dropped meanwhile
+        row = rows[0]
+        row.pop("id")
+        issued = datetime.fromisoformat(row["issued_at"].replace("Z", "+00:00")) + timedelta(milliseconds=1)
+        self.insert_forecast(
+            row.pop("flight_id"),
+            {**row, "issued_at": issued.isoformat(), "departure_at": departure.isoformat(), "retimed": True},
+        )
 
     def prune_forecasts(self, flight_id: str, keep_after: datetime) -> None:
         """Drop superseded forecasts; keep recent history for 'what changed' messages."""
@@ -85,13 +128,13 @@ class Database:
     # Notifications
 
     def upcoming_flights_with_latest_forecast(self, now: datetime) -> list[dict]:
-        """Flights departing within the next 48 h (or just now), with their full latest forecast."""
+        """Flights departing within the next 48 h or still in the air, with their full latest forecast."""
         return self._get(
             "/flights",
             {
                 "select": f"id,user_id,origin,destination,departure_at,notify,flight_number,"
                 f"forecasts:forecasts!forecasts_flight_id_fkey({FORECAST_FIELDS}),{STATUS_EMBED}",
-                "and": f"(departure_at.gte.{(now - LOOKBACK).isoformat()},"
+                "and": f"(departure_at.gte.{(now - STATUS_LOOKBACK).isoformat()},"
                 f"departure_at.lte.{(now + timedelta(hours=48, minutes=5)).isoformat()})",
                 "forecasts.order": "issued_at.desc",
                 "forecasts.limit": "1",
@@ -170,20 +213,21 @@ class Database:
 
     # Live Activities
 
-    def flights_with_live_activities(self, flight_ids: list[str]) -> set[str]:
-        if not flight_ids:
-            return set()
-        rows = self._get("/live_activities", {"select": "flight_id", "flight_id": _in(flight_ids), "ended": "is.false"})
-        return {r["flight_id"] for r in rows}
-
     def live_activities_to_retime(self, now: datetime) -> list[dict]:
-        """Open Live Activities for recent flights, with the latest wheels-up, to compare with what was pushed."""
+        """Open Live Activities for recent flights, with the latest wheels-up and forecast, to
+        compare with what was pushed. With when the flight was saved and what its other
+        activities (ended ones too) were pushed, so "Wheels up" is said once per flight."""
         return self._get(
             "/live_activities",
             {
-                "select": f"token,flight_id,user_id,environment,pushed_takeoff,flight:flights!inner(id,origin,flight_number,{STATUS_EMBED})",
+                "select": "token,flight_id,user_id,environment,pushed_takeoff,pushed_forecast_at,"
+                f"flight:flights!inner(id,origin,flight_number,created_at,{STATUS_EMBED},"
+                f"forecasts:forecasts!forecasts_flight_id_fkey({ACTIVITY_FORECAST_FIELDS}),"
+                "activities:live_activities(pushed_takeoff))",
                 "ended": "is.false",
                 "flight.departure_at": f"gte.{(now - LOOKBACK).isoformat()}",
+                "flight.forecasts.order": "issued_at.desc",
+                "flight.forecasts.limit": "1",
             },
         )
 

@@ -75,6 +75,9 @@ final class Onboarding {
                     self.present()
                     return
                 }
+                // No network at all (a first launch in the air): Superwall only retries, so go
+                // native as soon as the logo has drawn instead of waiting out the timeout.
+                if !Connectivity.shared.hasPath, ContinuousClock.now - launched >= Self.minimumLogoTime { break }
                 try? await Task.sleep(for: .milliseconds(100))
             }
             self?.fallBack()
@@ -117,6 +120,10 @@ final class Onboarding {
         handler.onError { [weak self] _ in
             Task { @MainActor in self?.fallBack() }
         }
+        // People flying soon add their flight from inside the flow (OnboardingFlight).
+        handler.onCustomCallback { callback in
+            await OnboardingFlight.handle(callback)
+        }
         Superwall.shared.register(placement: Placement.onboarding.rawValue, handler: handler)
 
         // The page is already loaded, so presenting is near-instant; if it somehow isn't, don't
@@ -136,9 +143,10 @@ final class Onboarding {
         #endif
     }
 
-    /// The native flow finished (or the user skipped through it).
-    func finishNative() async {
-        await finish()
+    /// The native flow finished (or the user skipped through it). With `addFlight` (flying in
+    /// the next 3 days), Add flight opens as the flow lifts.
+    func finishNative(addFlight: Bool = false) async {
+        await finish(addFlight: addFlight)
     }
 
     private func fallBack() {
@@ -146,10 +154,16 @@ final class Onboarding {
         phase = .native
     }
 
-    private func finish() async {
+    private func finish(addFlight: Bool = false) async {
         guard phase != .done else { return }
         defaults.set(true, forKey: Self.doneKey)
         phase = .done
+        if addFlight { Router.shared.showAddFlight = true }
+        // A flight added during the flow: open it, so its forecast is the first thing they see.
+        if let id = OnboardingFlight.flightID {
+            OnboardingFlight.forget()
+            if FlightStore.shared.flight(id) != nil { Router.shared.openFlight(id) }
+        }
         // The flow may have asked for notification permission: register for pushes and tell
         // the worker and Superwall.
         await PushNotifications.shared.refreshStatus()

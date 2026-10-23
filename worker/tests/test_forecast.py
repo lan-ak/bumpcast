@@ -33,7 +33,8 @@ def test_profile_shape():
     assert 2100 < distance_nm(jfk, lax) < 2200
     assert 270 < points[-1].minute < 330
     assert points[0].phase == "climb" and points[-1].phase == "descent"
-    assert max(p.altitude_ft for p in points) == 37000
+    # Westbound: FL360 (even levels), then one step climb to FL380, as UAL548 EWR-SFO flew.
+    assert max(p.altitude_ft for p in points) == 38000
     assert points[0].time == NOW + timedelta(minutes=15)  # taxi-out
 
 
@@ -64,32 +65,37 @@ def test_moderate_band_becomes_segment():
 
 
 @pytest.mark.parametrize(
-    ("departure_in", "issued_ago", "status", "edited", "due"),
+    ("departure_in", "issued_ago", "status", "edited", "due", "source"),
     [
-        (timedelta(hours=60), None, None, False, True),  # never forecast
-        (timedelta(hours=60), timedelta(hours=10), "too_early", False, False),
-        (timedelta(hours=47), timedelta(hours=10), "too_early", False, True),  # entered window
-        (timedelta(hours=30), timedelta(hours=2), "ready", False, False),  # GFS, fresh
-        (timedelta(hours=30), timedelta(hours=7), "ready", False, True),  # GFS, stale
-        (timedelta(hours=5), timedelta(minutes=70), "ready", False, True),  # GTG hourly
-        (timedelta(hours=5), timedelta(minutes=10), "ready", True, True),  # flight edited
-        (timedelta(hours=5), timedelta(hours=9), "out_of_coverage", False, False),
+        (timedelta(hours=60), None, None, False, True, None),  # never forecast
+        (timedelta(hours=60), timedelta(hours=10), "too_early", False, False, None),
+        (timedelta(hours=47), timedelta(hours=10), "too_early", False, True, None),  # entered window
+        (timedelta(hours=30), timedelta(hours=2), "ready", False, False, "gfs"),  # GFS, fresh
+        (timedelta(hours=30), timedelta(hours=7), "ready", False, True, "gfs"),  # GFS, stale
+        (timedelta(hours=5), timedelta(minutes=70), "ready", False, True, "gtg"),  # GTG hourly
+        (timedelta(hours=5), timedelta(minutes=10), "ready", True, True, "gtg"),  # flight edited
+        (timedelta(hours=5), timedelta(hours=9), "out_of_coverage", False, False, None),
+        # GFS only where GTG reaches: GTG was missing, so try again within minutes.
+        (timedelta(hours=5), timedelta(minutes=15), "ready", False, True, "gfs"),
+        (timedelta(hours=5), timedelta(minutes=5), "ready", False, False, "gfs"),
+        (timedelta(hours=5), timedelta(minutes=15), "ready", False, False, "gtg"),
+        (timedelta(hours=17), timedelta(minutes=15), "ready", False, False, "gfs"),  # beyond GTG's reach yet
     ],
 )
-def test_is_due(departure_in, issued_ago, status, edited, due):
+def test_is_due(departure_in, issued_ago, status, edited, due, source):
     issued = NOW - issued_ago if issued_ago else None
     flight = {
         "departure_at": (NOW + departure_in).isoformat(),
         "updated_at": ((issued or NOW) + timedelta(minutes=1 if edited else -60)).isoformat(),
-        "forecasts": [{"issued_at": issued.isoformat(), "status": status}] if issued else [],
+        "forecasts": [{"issued_at": issued.isoformat(), "status": status, "source": source}] if issued else [],
     }
     assert is_due(flight, NOW) is due
 
 
-def test_gfs_outlook_never_severe(tmp_path):
+def test_gfs_outlook_stays_light(tmp_path):
     import numpy as np
 
-    from smooth_worker.severity import SEVERE, classify
+    from smooth_worker.severity import LIGHT, MODERATE_EDR, classify
     from smooth_worker.sources.gfs import MAX_OUTLOOK_EDR, GfsSource, tile_of
 
     source = GfsSource(NOW, tmp_path)
@@ -99,7 +105,34 @@ def test_gfs_outlook_never_severe(tmp_path):
     edr = np.full((2, 5, 5), 0.6)  # far beyond severe everywhere
     source._tiles[(2, tile_of(42.5, -73.0))] = (lats, lons, mids, edr)
     value = source.edr(42.5, -73.0, 32000, NOW + timedelta(hours=2))
-    assert value == MAX_OUTLOOK_EDR and classify(value) != SEVERE
+    assert value == MAX_OUTLOOK_EDR == 0.20
+    assert value < MODERATE_EDR and classify(value) == LIGHT
+
+
+def test_ewr_yyz_outlook_is_a_few_bumps_not_bumpy():
+    """The real GFS-only forecast of 2026-10-22 17:20Z: moderate at the old 0.30 cap, while every
+    GTG run said light. Capped at light it grades as GTG did."""
+    import json
+    from pathlib import Path
+
+    from smooth_worker.forecast import _grade, _segments
+    from smooth_worker.severity import MODERATE
+    from smooth_worker.sources.gfs import MAX_OUTLOOK_EDR
+
+    sample = json.loads((Path(__file__).parent / "fixtures" / "ewr_yyz_gfs_2026102212.json").read_text())
+    # The stored minutes (the 52-minute plan of the time); grading reads only the EDR.
+    assert len(sample["edr"]) == 53
+
+    def samples(cap: float) -> list[dict]:
+        return [
+            {"min": minute, "edr": min(edr, cap), "altitude_ft": 31000, "phase": "cruise"}
+            for minute, edr in enumerate(sample["edr"])
+        ]
+
+    assert _grade(samples(0.30))[0] == "bumpy"  # as stored
+    capped = samples(MAX_OUTLOOK_EDR)
+    assert _grade(capped)[0] == "some_bumps"
+    assert all(seg["severity"] != MODERATE for seg in _segments(capped))
 
 
 def _gfs_fields(shear_ms: float, ny: int = 9, nx: int = 9):
@@ -221,3 +254,83 @@ def test_gtg_ensemble_blends_but_keeps_severe():
     assert 0.10 < blended < 0.30
     severe_new = RegionSource("gtg", edr=0.40)
     assert GtgEnsemble([severe_new, RegionSource("gtg", edr=0.05)]).edr(40, -100, 35000, NOW) == 0.40
+
+
+def test_a_forecast_kept_through_a_delay_is_retried_within_minutes():
+    """A GTG forecast copied to a delayed departure (GTG was unavailable) was never computed for
+    that time: it's retried like an outlook, not left for the hourly refresh."""
+    departure = NOW + timedelta(hours=5)
+    copy = {
+        "issued_at": (NOW - timedelta(minutes=15)).isoformat(),
+        "status": "ready",
+        "source": "gtg",
+        "departure_at": departure.isoformat(),
+        "retimed": True,
+    }
+    flight = {
+        "departure_at": (departure - timedelta(minutes=40)).isoformat(),
+        "updated_at": (NOW - timedelta(days=1)).isoformat(),
+        "forecasts": [copy],
+    }
+    assert is_due(flight, NOW, departure)
+    assert not is_due({**flight, "forecasts": [{**copy, "issued_at": (NOW - timedelta(minutes=5)).isoformat()}]}, NOW, departure)
+    # One really computed for that departure waits for the hourly refresh.
+    assert not is_due({**flight, "forecasts": [{**copy, "retimed": False}]}, NOW, departure)
+
+
+class RunSource:
+    """A model run: covers from its start (GTG from half an hour before, its hours are rounded)."""
+
+    def __init__(self, name, cycle, edr=0.05, early=timedelta(0), hours=120):
+        self.name, self.cycle, self.value, self.early, self.hours = name, cycle, edr, early, hours
+        self.read = []
+
+    def covers(self, valid):
+        return self.cycle - self.early <= valid <= self.cycle + timedelta(hours=self.hours)
+
+    def covers_point(self, lat, lon):
+        return True
+
+    def edr(self, lat, lon, altitude_ft, valid):
+        self.read.append(valid)
+        return self.value
+
+
+@pytest.mark.parametrize("wide", [False, True])
+def test_a_flight_saved_in_the_air_before_the_oldest_run_is_forecast(wide):
+    """17:00Z: GTG 15Z and GFS 12Z. JFK-LAX left at 11:30Z, before either run began."""
+    now = datetime(2026, 10, 23, 17, tzinfo=UTC)
+    gtg = RunSource("gtg", datetime(2026, 10, 23, 15, tzinfo=UTC), early=timedelta(minutes=30), hours=18)
+    gfs = RunSource("gfs", datetime(2026, 10, 23, 12, tzinfo=UTC))
+    departure = datetime(2026, 10, 23, 11, 30, tzinfo=UTC)
+    result = forecast.compute(airports.lookup("JFK"), airports.lookup("LAX"), departure, now, [gtg, gfs], global_coverage=wide)
+    assert result.status == "ready" and result.source == "mixed"
+    # The minutes flown before 12Z read GFS's start; everything after reads its own time.
+    assert min(gfs.read) == gfs.cycle and gfs.read.count(gfs.cycle) == 16
+    assert min(gtg.read) == datetime(2026, 10, 23, 14, 30, tzinfo=UTC)
+
+
+@pytest.mark.parametrize("wide", [False, True])
+def test_in_the_air_the_minutes_still_ahead_say_how_confirmed_it_is(wide):
+    """16:00Z, 40 minutes from landing: GTG 15Z covers all of them. The minutes flown before
+    14:30 read GFS, but the rest of the flight is confirmed, not 'partly'."""
+    now = datetime(2026, 10, 23, 16, tzinfo=UTC)
+    gtg = RunSource("gtg", datetime(2026, 10, 23, 15, tzinfo=UTC), early=timedelta(minutes=30), hours=18)
+    gfs = RunSource("gfs", datetime(2026, 10, 23, 12, tzinfo=UTC))
+    departure = datetime(2026, 10, 23, 11, 30, tzinfo=UTC)
+    result = forecast.compute(airports.lookup("JFK"), airports.lookup("LAX"), departure, now, [gtg, gfs], global_coverage=wide)
+    assert gfs.read  # flown minutes did read the outlook
+    assert result.source == "gtg" and result.model_run == gtg.cycle
+    if wide:
+        assert {s["source"] for s in result.sources} == {"gtg"}
+    # A GTG run that ends before landing leaves the rest to the outlook: partly confirmed.
+    short = RunSource("gtg", datetime(2026, 10, 23, 15, tzinfo=UTC), early=timedelta(minutes=30), hours=1.25)
+    result = forecast.compute(airports.lookup("JFK"), airports.lookup("LAX"), departure, now, [short, gfs], global_coverage=wide)
+    assert result.source == "mixed" and result.model_run == short.cycle
+
+
+def test_minutes_still_ahead_that_nothing_covers_are_an_error():
+    now = datetime(2026, 10, 23, 17, tzinfo=UTC)
+    short = RunSource("gtg", datetime(2026, 10, 23, 15, tzinfo=UTC), hours=4)
+    with pytest.raises(RuntimeError):
+        forecast.compute(airports.lookup("JFK"), airports.lookup("LAX"), now, now, [short])

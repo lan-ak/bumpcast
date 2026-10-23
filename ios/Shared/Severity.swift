@@ -17,3 +17,21 @@ enum Severity: String, Codable, Comparable, CaseIterable, Sendable {
         allCases.firstIndex(of: a)! < allCases.firstIndex(of: b)!
     }
 }
+
+extension Severity {
+    /// In a sentence: "Then light chop for about 4 min", "Moderate bumps in about 2 minutes".
+    /// Matches the worker's notification wording.
+    var phrase: String {
+        switch self {
+        case .smooth: "smooth air"
+        case .light: "light chop"
+        case .moderate: "moderate bumps"
+        case .severe: "strong bumps"
+        }
+    }
+}
+
+extension String {
+    /// "moderate bumps" -> "Moderate bumps", for a phrase that starts a sentence.
+    var sentenceCased: String { prefix(1).uppercased() + dropFirst() }
+}

@@ -5,9 +5,12 @@ import SwiftUI
 struct ForecastView: View {
     let forecast: Forecast
     let flight: Flight
+    /// The screen's one clock (a minute tick on the flight's own minutes), shared with the in-flight card.
+    var now: Date = .now
 
     @Environment(Paywalls.self) private var paywalls
     @Environment(InFlight.self) private var inFlight
+    @Environment(FlightStore.self) private var store
     @Environment(Router.self) private var router
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @AppStorage("haptics.enabled") private var hapticsEnabled = true
@@ -19,60 +22,8 @@ struct ForecastView: View {
 
     var body: some View {
         let confidence = forecast.confidence(departure: flight.departureAt)
-        let fullAccess = paywalls.hasFullAccess(to: flight)
-        VStack(alignment: .leading, spacing: 18) {
-            // An official warning is the first thing on the screen.
-            if let warning = forecast.officialWarnings.first {
-                WarningBanner(warning: warning) { openWarning = warning }
-            }
-            if let grade = forecast.grade {
-                GradeCard(
-                    grade: grade, forecast: forecast, confidence: confidence,
-                    departureNote: flight.status?.forecastNote(for: flight, forecast: forecast)
-                ) { showOutlookSheet = true }
-            }
-            StatTiles(forecast: forecast, flight: flight)
-            if fullAccess {
-                TimelineCard(
-                    forecast: forecast, flight: flight, confidence: confidence,
-                    nowMinute: inFlight.elapsedMinutes(flight, forecast: forecast),
-                    sweepFromAdvance: justConfirmed)
-                if !forecast.segments.isEmpty {
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("What to expect").font(.bcSection)
-                        ForEach(Array(forecast.expectedStretches(departure: flight.departureAt).enumerated()), id: \.element.startMin) {
-                            index, segment in
-                            Group {
-                                if forecast.isOutlook(segment, departure: flight.departureAt) {
-                                    OutlookSegmentRow(
-                                        segment: segment, warning: forecast.warning(for: segment),
-                                        showsBetaTag: !forecast.confirmedStretches.isEmpty
-                                    ) { openWarning = $0 }
-                                } else {
-                                    SegmentRow(segment: segment, isMain: segment.startMin == mainStretch?.startMin)
-                                }
-                            }
-                                .opacity(rowsVisible ? 1 : 0)
-                                .offset(y: rowsVisible || reduceMotion ? 0 : 14)
-                                .animation(Theme.motion(reduceMotion).delay(0.15 * Double(index)), value: rowsVisible)
-                        }
-                    }
-                }
-            } else {
-                LockedTimelineCard(forecast: forecast) {
-                    paywalls.unlock(.timelineLocked, flight: flight) {}
-                }
-            }
-            Button {
-                router.showBreathing = true
-            } label: {
-                Label("Practise breathing", systemImage: "wind")
-                    .frame(maxWidth: .infinity)
-            }
-            .buttonStyle(.bordered)
-            .tint(Theme.accent)
-            ForecastFooter(forecast: forecast, confidence: confidence)
-        }
+        // The caller's clock ticks every minute, so in the air "Still ahead", the rows and the marker keep up.
+        content(confidence: confidence, now: now)
         .sheet(item: $openWarning) { warning in
             Group {
                 if warning.isOfficial { WarningSheet(warning: warning) } else { PilotReportNoteSheet(warning: warning) }
@@ -87,6 +38,96 @@ struct ForecastView: View {
             paywalls.firstGradeViewed(flight)
             justConfirmed = ConfidenceMemory.didFirmUp(flight: flight.id, now: confidence)
             rowsVisible = true
+        }
+    }
+
+    @ViewBuilder
+    private func content(confidence: Forecast.Confidence, now: Date) -> some View {
+        let fullAccess = paywalls.hasFullAccess(to: flight)
+        // Minutes since takeoff while flying; nil on the ground (and for a cancelled or diverted flight).
+        let minute = InFlightMode.minute(flight, forecast: forecast, inFlight: inFlight, now: now)
+        // Past departure, nothing more is coming hourly, so nothing promises it.
+        let underWay = minute != nil || now >= flight.expectedDeparture
+        let connection = ConnectionNote(store: store)
+        // The forecast itself was issued after takeoff (and so reached the phone in the air).
+        let inAir = (forecast.issuedAt ?? .distantPast) > inFlight.effectiveTakeoff(of: flight)
+        VStack(alignment: .leading, spacing: 18) {
+            // An official warning is the first thing on the screen.
+            if let warning = forecast.officialWarnings.first {
+                WarningBanner(warning: warning) { openWarning = warning }
+            }
+            if let grade = forecast.grade {
+                GradeCard(
+                    grade: grade, forecast: forecast, confidence: confidence,
+                    departureNote: flight.status?.forecastNote(for: flight, forecast: forecast),
+                    inAirLine: underWay ? confidence.savedLine(issuedAt: forecast.issuedAt, inAir: inAir) : nil,
+                    now: now
+                ) { showOutlookSheet = true }
+            }
+            // Only full access counts the chop still ahead: a total that falls minute by minute
+            // would tell a free user when they're in a stretch and how long it lasts.
+            StatTiles(
+                forecast: forecast, flight: flight, fromMinute: fullAccess ? minute : nil,
+                leftToFly: minute.map { _ in
+                    InFlightCopy.minutesLeft(to: inFlight.landing(of: flight, forecast: forecast), now: now)
+                })
+            if fullAccess {
+                TimelineCard(
+                    forecast: forecast, flight: flight, confidence: confidence,
+                    nowMinute: minute,
+                    sweepFromAdvance: justConfirmed)
+                if !forecast.segments.isEmpty {
+                    // In the air, only what's still ahead; once nothing is, say so.
+                    let stretches = forecast.expectedStretches(departure: flight.departureAt)
+                        .filter { segment in minute.map { segment.endMin >= $0 } ?? true }
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text(minute == nil ? "What to expect" : InFlightCopy.stillAhead).font(.bcSection)
+                        if stretches.isEmpty {
+                            HStack(spacing: 12) {
+                                // An outlook never says smooth, so its glass stays the dashed "not known".
+                                WaterGlass(severity: forecast.isGlobalOutlook ? nil : .smooth, size: 26)
+                                Text(InFlightCopy.clearToLanding(outlook: forecast.isGlobalOutlook) + ".").font(.bcHeadline)
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .skyCard(cornerRadius: 16, padding: 14)
+                        }
+                        ForEach(Array(stretches.enumerated()), id: \.element.startMin) {
+                            index, segment in
+                            Group {
+                                if forecast.isOutlook(segment, departure: flight.departureAt) {
+                                    OutlookSegmentRow(
+                                        segment: segment, warning: forecast.warning(for: segment),
+                                        showsBetaTag: !forecast.confirmedStretches.isEmpty
+                                    ) { openWarning = $0 }
+                                } else {
+                                    SegmentRow(segment: segment, isMain: segment.startMin == mainStretch?.startMin, nowMinute: minute)
+                                }
+                            }
+                                .opacity(rowsVisible ? 1 : 0)
+                                .offset(y: rowsVisible || reduceMotion ? 0 : 14)
+                                .animation(Theme.motion(reduceMotion).delay(0.15 * Double(index)), value: rowsVisible)
+                        }
+                    }
+                }
+            } else {
+                LockedTimelineCard(
+                    forecast: forecast, offlineInAir: minute != nil && connection.isConnectionProblem,
+                    isOpening: paywalls.isOpening
+                ) {
+                    paywalls.unlock(.timelineLocked, flight: flight) {}
+                }
+            }
+            Button {
+                router.showBreathing = true
+            } label: {
+                Label("Practise breathing", systemImage: "wind")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.bordered)
+            .tint(Theme.accent)
+            ForecastFooter(
+                forecast: forecast, confidence: confidence, underWay: underWay, offline: connection != .none,
+                checkedAt: OfflineCopy.lastChecked(syncedAt: store.syncedAt, issued: [forecast.issuedAt]), now: now)
         }
     }
 
@@ -113,6 +154,9 @@ private struct GradeCard: View {
     let confidence: Forecast.Confidence
     /// "Updated for the new 7:55 AM departure", when a delay moved the forecast.
     var departureNote: String?
+    /// Once the flight is under way: what's saved and how old it is, instead of when it firms up.
+    var inAirLine: String?
+    var now: Date = .now
     let openOutlook: () -> Void
 
     var body: some View {
@@ -138,14 +182,12 @@ private struct GradeCard: View {
             }
             Text(forecast.isGlobalOutlook ? grade.outlookSummary : grade.summary)
             // Shown to everyone, free included: an advance forecast firms up closer to the flight.
-            TimelineView(.everyMinute) { context in
-                Text(
-                    forecast.officialWarnings.isEmpty
-                        ? confidence.statusLine(now: context.date, durationMin: forecast.durationMin)
-                        : GlobalOutlookCopy.statusWarning)
-                    .font(.bcSubheadlineStrong)
-                    .foregroundStyle(.secondary)
-            }
+            Text(
+                !forecast.officialWarnings.isEmpty
+                    ? GlobalOutlookCopy.statusWarning
+                    : inAirLine ?? confidence.statusLine(now: now, durationMin: forecast.durationMin))
+                .font(.bcSubheadlineStrong)
+                .foregroundStyle(.secondary)
         }
         .skyCard()
         .accessibilityElement(children: .combine)
@@ -174,10 +216,15 @@ struct ConfidenceBadge: View {
     }
 }
 
-/// Time in the air, minutes of light chop, minutes of moderate or stronger.
+/// Time in the air, minutes of light chop, minutes of moderate or stronger. In the air, time to
+/// landing; with full access, also only the minutes still ahead.
 private struct StatTiles: View {
     let forecast: Forecast
     let flight: Flight
+    /// Minutes since takeoff while flying, with full access: the chop tiles count only what's ahead.
+    var fromMinute: Int?
+    /// Minutes to landing while flying, the same count as the in-flight card's landing line.
+    var leftToFly: Int?
     @Environment(\.dynamicTypeSize) private var typeSize
 
     var body: some View {
@@ -188,27 +235,42 @@ private struct StatTiles: View {
         }
     }
 
+    private var from: Int { max(fromMinute ?? 0, 0) }
+    /// Counting from the plane's minute rather than over the whole flight.
+    private var countsAhead: Bool { fromMinute != nil }
+
+    /// The whole flight on the ground; what's left of it in the air.
+    @ViewBuilder
+    private var timeTile: some View {
+        if let leftToFly {
+            tile("Left to fly", leftToFly.durationText)
+        } else {
+            tile("In the air", (forecast.durationMin ?? 0).durationText)
+        }
+    }
+
     /// Outlook routes: no exact minutes of chop. The flight's length and an approximate total.
     private var outlookTiles: some View {
-        let bumpy = forecast.segments.map(\.minutes).reduce(0, +)
+        let bumpy = forecast.segments.map { max($0.endMin - max($0.startMin, from) + 1, 0) }.reduce(0, +)
         return HStack(alignment: .top, spacing: 10) {
-            tile("In the air", (forecast.durationMin ?? 0).durationText)
-            tile("Bumps possible", bumpy == 0 ? "None major" : "About \(bumpy.roughMinutes.durationText)")
+            timeTile
+            tile(countsAhead ? "Bumps possible ahead" : "Bumps possible", bumpy == 0 ? "None major" : "About \(bumpy.roughMinutes.durationText)")
         }
         .fixedSize(horizontal: false, vertical: true)
     }
 
     private var exactTiles: some View {
-        let light = forecast.samples.filter { $0.severity == .light }.count
-        let moderate = forecast.samples.filter { $0.severity >= .moderate }.count
+        let ahead = forecast.samples.filter { $0.min >= from }
+        let light = ahead.filter { $0.severity == .light }.count
+        let moderate = ahead.filter { $0.severity >= .moderate }.count
         // Three across, all the same height; one per row at accessibility sizes.
         let layout = typeSize.isAccessibilitySize
             ? AnyLayout(VStackLayout(spacing: 10))
             : AnyLayout(HStackLayout(alignment: .top, spacing: 10))
         return layout {
-            tile("In the air", (forecast.durationMin ?? 0).durationText)
-            tile("Light chop", "\(light) min")
-            tile("Moderate", "\(moderate) min")
+            timeTile
+            tile(countsAhead ? "Light chop ahead" : "Light chop", "\(light) min")
+            tile(countsAhead ? "Moderate ahead" : "Moderate", "\(moderate) min")
         }
         .fixedSize(horizontal: false, vertical: true)
     }
@@ -531,6 +593,10 @@ private struct Legend: View {
 /// Free users see the grade; the timeline is Pro. Show its shape without the detail.
 private struct LockedTimelineCard: View {
     let forecast: Forecast
+    /// In the air with no connection: unlocking needs one, so say so instead of offering a button.
+    var offlineInAir = false
+    /// The paywall is on its way (it can take a minute on plane wifi).
+    var isOpening = false
     let unlock: () -> Void
 
     var body: some View {
@@ -540,12 +606,27 @@ private struct LockedTimelineCard: View {
                 .blur(radius: 8)
                 .accessibilityHidden(true)
             Text(teaser).font(.bcSubheadline)
-            Button(action: unlock) {
-                Label(forecast.segments.isEmpty ? "See the full timeline" : "See when the bumps are", systemImage: "lock.open")
+            if offlineInAir {
+                Label(InFlightCopy.timelineOffline, systemImage: "wifi")
+                    .font(.bcSubheadlineStrong)
+                    .foregroundStyle(.secondary)
+            } else {
+                Button(action: unlock) {
+                    Label {
+                        Text(forecast.segments.isEmpty ? "See the full timeline" : "See when the bumps are")
+                    } icon: {
+                        if isOpening {
+                            ProgressView().controlSize(.small).tint(Theme.onAccent)
+                        } else {
+                            Image(systemName: "lock.open")
+                        }
+                    }
                     .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent)
+                .tint(Theme.accent)
+                .disabled(isOpening)
             }
-            .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent)
-            .tint(Theme.accent)
             Text("Includes the full timeline, update alerts and in-flight countdowns.")
                 .font(.bcFootnote)
                 .foregroundStyle(.secondary)
@@ -565,6 +646,8 @@ private struct LockedTimelineCard: View {
 private struct SegmentRow: View {
     let segment: Forecast.Segment
     let isMain: Bool
+    /// Minutes since takeoff while flying, to count down to the stretch (only those still ahead are listed).
+    var nowMinute: Int?
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
@@ -590,15 +673,28 @@ private struct SegmentRow: View {
         .skyCard(cornerRadius: 16, padding: 14)
     }
 
+    /// "Right after takeoff" · "22 min into the flight"; in the air
+    /// "Now · about 4 min to go" · "In about 6 min · 22 min into the flight".
     private var timing: String {
-        segment.startMin == 0 ? "Right after takeoff" : "\(segment.startMin.durationText) into the flight"
+        let into = segment.startMin == 0 ? "Right after takeoff" : "\(segment.startMin.durationText) into the flight"
+        guard let now = nowMinute else { return into }
+        if segment.startMin <= now { return "Now · about \((segment.endMin - now + 1).durationText) to go" }
+        return "In about \((segment.startMin - now).durationText) · \(segment.startMin.durationText) into the flight"
     }
 }
 
-/// Confidence label, when it was updated and when it next updates. No source names.
+/// Confidence label, when it was updated and when it next updates. No source names. Once the
+/// flight is under way, or offline, it says what's saved on the phone instead of promising an update.
 private struct ForecastFooter: View {
     let forecast: Forecast
     let confidence: Forecast.Confidence
+    /// Flying, or past departure.
+    var underWay = false
+    /// Showing what's saved: no connection, or the last update didn't go through.
+    var offline = false
+    /// When the phone last heard from us: the later of its last sync and this forecast.
+    var checkedAt: Date?
+    var now: Date = .now
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
@@ -612,29 +708,29 @@ private struct ForecastFooter: View {
             }
             .font(.bcCardTitle)
             .foregroundStyle(confidence.color)
-            Text(confidence.explanation).font(.bcSubheadline)
+            Text(underWay ? confidence.inFlightExplanation : confidence.explanation(now: now)).font(.bcSubheadline)
             if confidence.isBeta {
                 Text("Based on: \(GlobalOutlookCopy.basedOn)").font(.bcSubheadline).foregroundStyle(.secondary)
             }
-            Group {
-                if let issued = forecast.issuedAt {
-                    Text("Updated \(issued.formatted(date: .omitted, time: .shortened))")
-                        + Text(nextUpdate(after: issued).map { " · next update around \($0)" } ?? "")
-                }
+            if let meta {
+                Text(meta)
+                    .font(.bcMeta)
+                    .foregroundStyle(.secondary)
             }
-            .font(.bcMeta)
-            .foregroundStyle(.secondary)
         }
         .skyCard()
     }
 
-    private func nextUpdate(after issued: Date) -> String? {
-        switch confidence {
-        case .globalOutlook: max(issued.addingTimeInterval(6 * 3600), .now.addingTimeInterval(300))
-            .formatted(date: .omitted, time: .shortened)
-        case .early(let expected): expected > .now ? expected.formatted(date: .omitted, time: .shortened) : nil
-        case .partly, .confirmed: max(issued.addingTimeInterval(3600), .now.addingTimeInterval(300))
-            .formatted(date: .omitted, time: .shortened)
+    /// "Updated 2:20 PM · next update around 3:20 PM" on the ground;
+    /// "Forecast from 1:20 PM · checked for updates at 2:10 PM" in the air or offline. "Checked" can't
+    /// contradict "saved before takeoff": a check in the air can find nothing new.
+    private var meta: String? {
+        guard let issued = forecast.issuedAt else { return nil }
+        let time = { (date: Date) in date.formatted(date: .omitted, time: .shortened) }
+        if underWay || offline {
+            return "Forecast from \(time(issued))" + (checkedAt.map { " · checked for updates at \(time($0))" } ?? "")
         }
+        return "Updated \(time(issued))"
+            + (confidence.nextUpdate(after: issued, now: now).map { " · next update around \(time($0))" } ?? "")
     }
 }

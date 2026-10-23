@@ -1,9 +1,13 @@
 """Live flight status and published schedules, free for every flight with a number.
 
 Status is refreshed in the same pass as the forecast: every 6 hours from 48 h out, hourly
-from 18 h out, and every 15 minutes from 3 h before departure until about an hour after. When the
-departure moves, the forecast is recomputed for the new time in that pass, and one push
-says both ("Delayed 40 min, forecast updated"). Gate changes never push.
+from 18 h out, every 15 minutes from 3 h before departure, every poll from 30 minutes before
+departure until wheels-up (at most an hour after departure), then every 30 minutes until the
+flight lands. When the departure
+moves, the forecast is recomputed for the new time in that pass, and one push says both
+("Delayed 40 min, forecast updated"). Gate changes never push.
+
+Times are only "actual" once they've happened: the airline's runway times can be estimates.
 
 User-facing text never names where status comes from.
 """
@@ -14,6 +18,7 @@ from zoneinfo import ZoneInfo
 
 from . import airports, changes
 from .flightdata import Leg
+from .route import TAXI_OUT_MIN
 
 WINDOW = timedelta(hours=48)
 HOURLY_FROM = timedelta(hours=18)
@@ -22,18 +27,24 @@ FAST_REFRESH = timedelta(hours=1)
 # The last 3 hours before departure, until it's checked off: every 15 minutes.
 DEPARTURE_WINDOW = timedelta(hours=3)
 DEPARTURE_REFRESH = timedelta(minutes=15)
-# Status keeps updating until this long after departure, then stops.
+# Status keeps updating until this long after landing, then stops. The landing is the actual,
+# then expected, then scheduled arrival (moved by any delay), at least an hour after departure.
+AFTER_ARRIVAL = timedelta(minutes=30)
 AFTER_DEPARTURE = timedelta(hours=1)
+# When the arrival isn't known at all: the longest flights.
+MAX_FLIGHT = timedelta(hours=18)
+# In the air: every 30 minutes, for the landing time.
+AIRBORNE_REFRESH = timedelta(minutes=30)
 # Smaller moves than this stay in the app.
 PUSH_THRESHOLD = timedelta(minutes=15)
 # "Delayed" from this many minutes late; under it is "On time".
 DELAYED_FROM_MIN = 5
-# Around departure, flights with a Live Activity are checked every poll so wheels-up reaches the
-# countdown within minutes and nobody has to tap "We've taken off".
+# Around departure, numbered flights are checked every poll so wheels-up reaches the app and the
+# countdown within minutes and nobody has to tap "We've taken off". The watch ends this long after
+# the gate departure, for airports that never report a runway time.
 TAKEOFF_WATCH_FROM = timedelta(minutes=30)
+TAKEOFF_WATCH_UNTIL = timedelta(hours=1)
 TAKEOFF_REFRESH = timedelta(minutes=5)
-# Assumed when only the gate departure is known; matches the app and the forecast route.
-TAXI_OUT = timedelta(minutes=15)
 # Polls run every 5 minutes; don't miss a refresh by a few seconds.
 SLACK = timedelta(minutes=2)
 
@@ -53,19 +64,69 @@ def effective_departure(flight: dict, status: dict | None) -> datetime:
     return _time(status.get("departure_actual")) or _time(status.get("departure_expected")) or _time(flight["departure_at"])
 
 
-def is_due(status: dict | None, departure: datetime, now: datetime, watching: bool = False) -> bool:
-    """Whether to fetch a fresh status for a flight leaving at `departure`. `watching`: the flight
-    has a Live Activity waiting for wheels-up."""
+def ends(flight: dict | None, status: dict | None, departure: datetime) -> datetime:
+    """When status checks stop for a flight leaving at `departure`: half an hour after it lands,
+    and never before an hour after departure. With no arrival time known, MAX_FLIGHT after
+    departure, so a flight saved in the air still gets its first status. One the airline didn't
+    have (a check found nothing) is looked up again until the schedule, else its forecast, says
+    it lands, so a flight saved in the air gets another try; with neither, an hour after departure."""
+    flight, status = flight or {}, status or {}
+    if landed := _time(status.get("arrival_actual")):
+        return landed + AFTER_ARRIVAL
+    if status and not status.get("status"):
+        landing = _time(flight.get("arrival_at")) or _forecast_landing(flight) or departure
+    else:
+        landing = _time(status.get("arrival_expected"))
+        if landing is None and (scheduled := _time(status.get("arrival_scheduled")) or _time(flight.get("arrival_at"))):
+            planned = _time(status.get("departure_scheduled")) or _time(flight.get("departure_at")) or departure
+            landing = scheduled + max(departure - planned, timedelta(0))  # a late departure lands late
+        landing = landing or departure + MAX_FLIGHT
+    return max(landing, departure + AFTER_DEPARTURE) + AFTER_ARRIVAL
+
+
+def _forecast_landing(flight: dict) -> datetime | None:
+    """When the flight's latest forecast lands it: its departure, taxi, then the flight time."""
+    latest = (flight.get("forecasts") or [None])[0] or {}
+    departure = _time(latest.get("departure_at") or flight.get("departure_at"))
+    if not latest.get("duration_min") or departure is None:
+        return None
+    return departure + timedelta(minutes=TAXI_OUT_MIN + int(latest["duration_min"]))
+
+
+def forecast_ends(flight: dict, status: dict | None, departure: datetime) -> datetime:
+    """Until when a flight without a forecast (saved or edited in the air) still gets its first
+    one: until it lands, by the schedule alone when no check has found it, so a lookup that
+    found nothing never costs it the forecast the schedule would give."""
+    return ends(flight, status if (status or {}).get("status") else None, departure)
+
+
+def is_due(
+    status: dict | None, departure: datetime, now: datetime, watching: bool = False, flight: dict | None = None
+) -> bool:
+    """Whether to fetch a fresh status for a flight leaving at `departure`. `watching`: check every
+    poll around departure until wheels-up. `flight` (its arrival_at) tells when it should land."""
     if status and (status.get("finished") or status.get("status") == "cancelled"):
         return False
-    if departure - now > WINDOW or now > departure + AFTER_DEPARTURE:
+    if departure - now > WINDOW or now > ends(flight, status, departure):
         return False
-    checked = _time((status or {}).get("checked_at")) if status and status.get("status") else None
+    # A row without a status is a check that didn't find the flight; it waits like any other.
+    checked = _time((status or {}).get("checked_at"))
     if checked is None:
         return True
-    if watching and departure - now <= TAKEOFF_WATCH_FROM and not (status or {}).get("takeoff_at"):
-        return now - checked >= TAKEOFF_REFRESH - SLACK
-    return now - checked >= refresh_interval(departure, now) - SLACK
+    return now - checked >= check_interval(status, departure, now, watching) - SLACK
+
+
+def check_interval(status: dict | None, departure: datetime, now: datetime, watching: bool = False) -> timedelta:
+    """How long a status stays fresh: short around takeoff, longer in the air and further out."""
+    status = status or {}
+    airborne = status.get("takeoff_at") or status.get("status") == "departed"
+    watch = departure - TAKEOFF_WATCH_FROM <= now <= departure + TAKEOFF_WATCH_UNTIL
+    if watching and watch and not status.get("takeoff_at"):
+        return TAKEOFF_REFRESH
+    # Past the watch, a flight the airline never marks departed is as good as in the air.
+    if airborne or now > departure + TAKEOFF_WATCH_UNTIL:
+        return AIRBORNE_REFRESH
+    return refresh_interval(departure, now)
 
 
 def refresh_interval(departure: datetime, now: datetime) -> timedelta:
@@ -96,12 +157,14 @@ def build(leg: Leg, flight: dict, previous: dict | None, now: datetime) -> dict:
         state = "scheduled"
 
     departure = actual or expected or scheduled
-    takeoff = (dep.runway if dep.runway and dep.runway <= now else actual + TAXI_OUT) if departed and actual else None
-    finished = state == "cancelled" or now > departure + AFTER_DEPARTURE
-    next_check = None if finished else min(now + refresh_interval(departure, now), departure + AFTER_DEPARTURE)
+    # Wheels-up only once a runway time has passed. Never a guess: the app estimates gate time
+    # plus taxi itself, and the countdown and "Wheels up" push treat this as the real takeoff.
+    takeoff = dep.runway if departed and dep.runway and dep.runway <= now else None
+    # A runway time still ahead is the airline's estimate, not a landing.
+    landed = arr.runway if arr.runway and arr.runway <= now else None
     previous = previous or {}
     diverted_to = arr.icao if leg.diverted and arr.icao and arr.icao != flight["destination"] else None
-    return {
+    row = {
         "flight_id": flight["id"],
         "status": state,
         "live": dep.live or arr.live,
@@ -109,8 +172,8 @@ def build(leg: Leg, flight: dict, previous: dict | None, now: datetime) -> dict:
         "departure_expected": _iso(expected),
         "departure_actual": _iso(actual),
         "arrival_scheduled": _iso(arr.scheduled),
-        "arrival_expected": _iso(None if arr.runway else arr.revised),
-        "arrival_actual": _iso(arr.runway),
+        "arrival_expected": _iso(None if landed else (arr.revised or arr.runway)),
+        "arrival_actual": _iso(landed),
         "delay_min": delay,
         "departure_gate": dep.gate,
         "departure_terminal": dep.terminal,
@@ -118,12 +181,17 @@ def build(leg: Leg, flight: dict, previous: dict | None, now: datetime) -> dict:
         "diverted_to": diverted_to,
         "takeoff_at": _iso(takeoff),
         "checked_at": now.isoformat(),
-        "next_check_at": _iso(next_check),
-        "finished": finished,
+        "next_check_at": None,
+        "finished": False,
         # The first status sets the baseline: the user knew the scheduled time.
         "notified_departure": previous.get("notified_departure") or _iso(scheduled),
         "notified_status": previous.get("notified_status"),
     }
+    end = ends(flight, row, departure)
+    row["finished"] = state == "cancelled" or now > end
+    if not row["finished"]:
+        row["next_check_at"] = _iso(min(now + check_interval(row, departure, now, watching=True), end))
+    return row
 
 
 def _iso(value: datetime | None) -> str | None:
@@ -173,12 +241,12 @@ def forecast_changed(old: dict | None, new: dict | None) -> bool | None:
         return None
     if old.get("grade") != new.get("grade"):
         return True
-    return _shape(old) != _shape(new)
+    return _shape(changes.on_timeline(old, new)) != _shape(new.get("segments") or [])
 
 
-def _shape(forecast: dict) -> list[tuple]:
+def _shape(segments: list[dict]) -> list[tuple]:
     """Bumpy stretches by severity and rough start (10-minute buckets), to ignore tiny shifts."""
-    return sorted((s["severity"], round(s["start_min"] / 10)) for s in forecast.get("segments") or [])
+    return sorted((s["severity"], round(s["start_min"] / 10)) for s in segments)
 
 
 def compose(event: Event, flight: dict, status: dict, old: dict | None, new: dict | None) -> tuple[str, str]:

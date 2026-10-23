@@ -19,7 +19,16 @@ struct TurbulenceMapView: View {
 
     @State private var level = 34000
     @State private var layers: [Int: [MapLayer]] = [:]
+    /// When every height was last asked for.
     @State private var loadedAt: Date?
+    /// Heights on screen from the copy saved on this phone, not yet replaced by a fresh load.
+    @State private var savedLevels: Set<Int> = []
+    /// Heights whose last request failed, asked for again on the next chance.
+    @State private var failedLevels: Set<Int> = []
+    /// What the saved copy holds (height, model run, time), so a new copy is written only when that changes.
+    @State private var savedKey: Set<String> = []
+    /// A load (or the offline check) has run, so an empty height is an answer, not a wait.
+    @State private var hasTried = false
     @State private var timeIndex = 0
     @State private var scope = Scope.route
     @State private var reports: [PilotReport] = []
@@ -71,13 +80,25 @@ struct TurbulenceMapView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar(isLandscape ? .hidden : .visible, for: .navigationBar)
             .sensoryFeedback(.selection, trigger: level) { _, _ in hapticsEnabled }
-            .task { await loadAll() }
+            .task {
+                if layers.isEmpty { await showSavedMap() }
+                await loadAll()
+            }
             .task(id: showReports) { if showReports { await loadReports() } }
             .onChange(of: route?.flightID) { openOnRoute() }
             // A refreshed forecast means a newer model run: pull fresh grids too.
-            .onChange(of: forecast?.issuedAt ?? forecast?.modelRun) { Task { await loadAll(maxAge: 0) } }
+            .onChange(of: forecast?.issuedAt ?? forecast?.modelRun) {
+                if Connectivity.shared.isOnline { Task { await loadAll(maxAge: 0) } }
+            }
             .onChange(of: scenePhase) { _, phase in
-                if phase == .active { Task { await loadAll(maxAge: 5 * 60) } }
+                if phase == .active, Connectivity.shared.isOnline { Task { await loadAll(maxAge: 5 * 60) } }
+            }
+            // Back online with only a saved map, a height missing, or nothing: fetch the latest.
+            // Pilot reports skipped while offline load now too.
+            .onChange(of: Connectivity.shared.isOnline) { _, online in
+                guard online, scenePhase == .active else { return }
+                if !savedLevels.isEmpty || !failedLevels.isEmpty || layers.isEmpty { Task { await loadAll() } }
+                if showReports { Task { await loadReports() } }
             }
             .onChange(of: cruiseLevel) { _, cruise in
                 if let cruise { level = cruise }
@@ -253,7 +274,7 @@ struct TurbulenceMapView: View {
                 WaterGlass(severity: profile?.overall, size: 34)
                 VStack(alignment: .leading, spacing: 4) {
                     Text("\(route.routeText) at \(Self.label(level))").font(.bcCardTitle)
-                    Text(profile?.summary(route: route) ?? "Loading the map for your route…")
+                    Text(profile?.summary(route: route) ?? (loadFailed ? "No map for your route yet." : "Loading the map for your route…"))
                         .font(.bcSubheadline)
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
@@ -263,7 +284,7 @@ struct TurbulenceMapView: View {
         } else {
             VStack(alignment: .leading, spacing: 4) {
                 Text("All US at \(Self.label(level))").font(.bcCardTitle)
-                Text(layer?.usSummary ?? "Loading the map…")
+                Text(layer?.usSummary ?? (loadFailed ? "No map yet." : "Loading the map…"))
                     .font(.bcSubheadline)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -294,21 +315,33 @@ struct TurbulenceMapView: View {
 
     @ViewBuilder private var updatedLine: some View {
         if let layer {
-            let time = layer.grid.validAt.formatted(date: .omitted, time: .shortened)
-            Text(isLoading ? "Updating · showing the \(time) layer" : "Updated \(layer.grid.cycle.formatted(date: .omitted, time: .shortened))")
+            Text(updatedText(layer))
                 .font(.bcMeta)
                 .foregroundStyle(.secondary)
         }
+    }
+
+    /// "Updated 2:00 PM", "Saved map · updated 2:00 PM" (with the weekday when not today), or
+    /// "Updating · showing the 3:00 PM layer". The time is the height's own model run.
+    private func updatedText(_ layer: MapLayer) -> String {
+        if isLoading {
+            return "Updating · showing the \(layer.grid.validAt.formatted(date: .omitted, time: .shortened)) layer"
+        }
+        if savedLevels.contains(level) {
+            return "Saved map · updated \(OfflineCopy.time(layer.grid.cycle))"
+        }
+        return "Updated \(layer.grid.cycle.formatted(date: .omitted, time: .shortened))"
     }
 
     // MARK: States
 
     @ViewBuilder private var stateCard: some View {
         if layer == nil {
+            let online = Connectivity.shared.isOnline
             VStack(alignment: .leading, spacing: 10) {
-                if loadFailed {
+                if loadFailed, !online {
                     Label("The map needs a connection", systemImage: "wifi.slash").font(.bcCardTitle)
-                    Text("Your saved flight forecasts still work in airplane mode.")
+                    Text("Your saved flight forecasts still work without one.")
                         .font(.bcSubheadline).foregroundStyle(.secondary)
                     if let flight {
                         Button("Open my forecast") { router.openFlight(flight.id) }
@@ -316,12 +349,29 @@ struct TurbulenceMapView: View {
                             .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent)
                             .tint(Theme.accent)
                     }
-                } else if isLoading {
+                } else if loadFailed {
+                    Label("The map didn't load", systemImage: "exclamationmark.arrow.circlepath").font(.bcCardTitle)
+                    Text("Your saved flight forecasts still work.")
+                        .font(.bcSubheadline).foregroundStyle(.secondary)
+                    tryAgainButton
+                } else if isLoading || !hasTried {
+                    // Also before the first load has started, so "updating" never flashes first.
                     HStack(spacing: 10) {
                         ProgressView()
                         Text("Loading the map…").font(.bcSubheadline)
                     }
+                } else if !online {
+                    // Other heights are saved, this one isn't, and nothing can arrive offline.
+                    Label("No saved map at this height", systemImage: "wifi.slash").font(.bcCardTitle)
+                    Text("Pick another height, or connect to load this one.")
+                        .font(.bcSubheadline).foregroundStyle(.secondary)
+                } else if failedLevels.contains(level) {
+                    Label("This height didn't load", systemImage: "exclamationmark.arrow.circlepath").font(.bcCardTitle)
+                    Text("Pick another height, or try again.")
+                        .font(.bcSubheadline).foregroundStyle(.secondary)
+                    tryAgainButton
                 } else {
+                    // Loaded, with no layers yet for this height.
                     Label("The map is updating", systemImage: "clock.arrow.circlepath").font(.bcCardTitle)
                     Text("The latest layers will appear here shortly.")
                         .font(.bcSubheadline).foregroundStyle(.secondary)
@@ -332,6 +382,14 @@ struct TurbulenceMapView: View {
             .glassEffect(.regular, in: .rect(cornerRadius: 24))
             .padding()
         }
+    }
+
+    private var tryAgainButton: some View {
+        Button("Try again") { Task { await loadAll() } }
+            .font(.bcSubheadlineStrong)
+            .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent)
+            .tint(Theme.accent)
+            .disabled(isLoading)
     }
 
     // MARK: Behaviour
@@ -403,8 +461,32 @@ struct TurbulenceMapView: View {
         return route.mapRect(range)
     }
 
+    /// The copy saved on the phone, so the map opens at once and works offline. Layers more
+    /// than 3 hours past are left out: they no longer describe the sky.
+    private func showSavedMap() async {
+        // Decoding about a megabyte of grids stays off the main thread.
+        guard let saved = await Task.detached(priority: .userInitiated, operation: { LocalStore.shared.loadMap() }).value
+        else { return }
+        let cutoff = Date.now.addingTimeInterval(-3 * 3600)
+        let grids = saved.grids.mapValues { $0.filter { $0.validAt >= cutoff } }.filter { !$0.value.isEmpty }
+        savedKey = Self.key(saved.grids)
+        guard layers.isEmpty, !grids.isEmpty else { return }
+        layers = grids.mapValues { $0.map(MapLayer.init) }
+        savedLevels = Set(grids.keys)
+        timeIndex = nowIndex
+        openOnRoute()
+    }
+
     private func loadAll(maxAge: TimeInterval = 30 * 60) async {
-        if let loadedAt, loadedAt > .now.addingTimeInterval(-maxAge), !layers.isEmpty {
+        let isRecent = loadedAt.map { $0 > .now.addingTimeInterval(-maxAge) } ?? false
+        if isRecent, failedLevels.isEmpty, !layers.isEmpty {
+            openOnRoute()
+            return
+        }
+        // Offline: keep the saved map up and skip the spinner. Without one, say it needs a connection.
+        guard Connectivity.shared.isOnline else {
+            loadFailed = layers.isEmpty
+            hasTried = true
             openOnRoute()
             return
         }
@@ -413,20 +495,44 @@ struct TurbulenceMapView: View {
         isLoading = true
         defer { isLoading = false }
         let service = store.service
-        do {
-            let loaded = try await withThrowingTaskGroup(of: (Int, [TurbulenceGrid]).self) { group in
-                for height in Self.levels {
-                    group.addTask { (height, try await service.turbulenceGrids(levelFt: height)) }
+        // The cruise height is asked for first. Each height loads on its own, so one slow or
+        // dropped level doesn't lose the others; a failed one keeps what was on screen and is asked
+        // for again next time. A recent load only asks again for the heights that failed.
+        let all = cruiseLevel.map { cruise in [cruise] + Self.levels.filter { $0 != cruise } } ?? Self.levels
+        let order = isRecent ? all.filter(failedLevels.contains) : all
+        var fresh: [Int: [TurbulenceGrid]] = [:]
+        var failed: Set<Int> = []
+        var failure: Error?
+        await withTaskGroup(of: (Int, Result<[TurbulenceGrid], Error>).self) { group in
+            for height in order {
+                group.addTask {
+                    do { return (height, .success(try await service.turbulenceGrids(levelFt: height))) }
+                    catch { return (height, .failure(error)) }
                 }
-                var result: [Int: [MapLayer]] = [:]
-                for try await (height, grids) in group { result[height] = grids.map(MapLayer.init) }
-                return result
             }
-            withAnimation(.smooth(duration: 0.4)) { layers = loaded }
-            loadedAt = .now
+            for await (height, result) in group {
+                switch result {
+                case .success(let grids): fresh[height] = grids
+                case .failure(let error):
+                    failed.insert(height)
+                    failure = error
+                }
+            }
+        }
+        failedLevels = failed
+        hasTried = true
+        if fresh.isEmpty {
+            if let failure { Connectivity.shared.noteFailure(failure) }
+            loadFailed = layers.isEmpty
+        } else {
+            Connectivity.shared.noteSuccess()
+            var merged = layers
+            for (height, grids) in fresh { merged[height] = grids.map(MapLayer.init) }
+            withAnimation(.smooth(duration: 0.4)) { layers = merged }
+            if !isRecent { loadedAt = .now }
+            savedLevels.subtract(fresh.keys)
             loadFailed = false
-        } catch {
-            loadFailed = true
+            saveIfChanged(merged)
         }
         // Keep the hour the user was looking at if the new run still has it.
         if openedFlightID == nil {
@@ -437,7 +543,27 @@ struct TurbulenceMapView: View {
         openOnRoute()
     }
 
+    /// Keeps a copy on the phone for next time and for offline, written only when what it holds
+    /// changes: a new model run, or a height that loaded after an earlier load missed it (about a
+    /// megabyte each time).
+    private func saveIfChanged(_ shown: [Int: [MapLayer]]) {
+        let grids = shown.mapValues { $0.map(\.grid) }
+        let key = Self.key(grids)
+        guard !key.isEmpty, key != savedKey else { return }
+        savedKey = key
+        let snapshot = MapSnapshot(grids: grids, savedAt: .now)
+        Task { await LocalStore.shared.saveMap(snapshot) }
+    }
+
+    /// Every layer's height, model run and time.
+    private static func key(_ grids: [Int: [TurbulenceGrid]]) -> Set<String> {
+        Set(grids.flatMap { height, list in
+            list.map { "\(height)|\($0.cycle.timeIntervalSince1970)|\($0.validAt.timeIntervalSince1970)" }
+        })
+    }
+
     private func loadReports() async {
+        guard Connectivity.shared.isOnline else { return }
         reports = (try? await store.service.pilotReports(since: .now.addingTimeInterval(-3 * 3600))) ?? reports
     }
 }
@@ -538,7 +664,7 @@ private struct PilotReportSheet: View {
 
     private var headline: String {
         let place = Geo.nearestCity(to: coordinate).map { " near \($0)" } ?? ""
-        return "\(report.intensity.phrase)\(place)"
+        return "\(report.intensity.phrase.sentenceCased)\(place)"
     }
 
     private var distanceText: String {

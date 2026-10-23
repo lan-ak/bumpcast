@@ -97,7 +97,7 @@ def outlook_change_worth_pushing(previous: dict | None, forecast: dict) -> bool:
     if old in changes.GRADE_ORDER and new in changes.GRADE_ORDER:
         if abs(changes.GRADE_ORDER.index(new) - changes.GRADE_ORDER.index(old)) >= OUTLOOK_PUSH_GRADE_STEPS:
             return True
-    old_warnings = previous.get("warnings") or []
+    old_warnings = changes.on_timeline(previous, forecast, "warnings")
     return any(not any(changes.overlaps(w, o) for o in old_warnings) for w in forecast.get("warnings") or [])
 
 
@@ -448,13 +448,19 @@ def _status_event(db, apns, flight, forecast, profiles, passes, devices, now) ->
     if event.kind == "delay" and forecast and forecast.get("departure_at"):
         if datetime.fromisoformat(forecast["departure_at"].replace("Z", "+00:00")) == event.departure:
             new = forecast
+    # The earlier forecast moved to the new time because it couldn't be recomputed yet: the push
+    # goes now and says nothing about the forecast (never that it was checked).
+    kept = new is not None and new.get("retimed") is True
+    if kept:
+        new = None
     old = None
     if event.kind == "delay" and current.get("notified_departure"):
         told = datetime.fromisoformat(current["notified_departure"].replace("Z", "+00:00"))
         scheduled = datetime.fromisoformat(flight["departure_at"].replace("Z", "+00:00"))
         old = db.forecast_for_departure(flight["id"], told, scheduled=told == scheduled)
     checked = datetime.fromisoformat(current["checked_at"].replace("Z", "+00:00"))
-    if event.kind == "delay" and new is None and (forecast or {}).get("status") == "ready" and now - checked < FORECAST_WAIT:
+    waiting = event.kind == "delay" and new is None and not kept and (forecast or {}).get("status") == "ready"
+    if waiting and now - checked < FORECAST_WAIT:
         return 0  # the forecast for the new time is still being computed: say both at once
     title, body = status.compose(event, flight, current, old, new)
     told = {"notified_status": current["status"]}
@@ -568,38 +574,185 @@ def _deliver_held(db, apns, now: datetime) -> None:
 
 # Apple's reference date for Date values in Live Activity content state.
 APPLE_EPOCH = datetime(2001, 1, 1, tzinfo=UTC)
+# ActivityKit drops content state over about 4 KB: a long flight's plan keeps its first stretches.
+MAX_STRETCHES = 20
+
+
+def _apple(t: datetime) -> float:
+    return (t - APPLE_EPOCH).total_seconds()
+
+
+def confidence_title(forecast: dict) -> str:
+    """The badge the app shows for this forecast (its Forecast.confidence(departure:).title)."""
+    if forecast.get("noaa_possible") is False:
+        return "Global outlook"
+    sources = forecast.get("sources") or []
+    if sources:
+        confirmed = [s for s in sources if s.get("source") == "gtg"]
+        if len(confirmed) == len(sources):
+            return "Confirmed forecast"
+        return "Partly confirmed" if confirmed else "Advance forecast"
+    # Forecasts from before per-stretch sources.
+    return {"gtg": "Confirmed forecast", "mixed": "Partly confirmed"}.get(forecast.get("source"), "Advance forecast")
+
+
+def _plan(forecast: dict | None) -> dict | None:
+    """The forecast, when it has a plan to show."""
+    if forecast and forecast.get("status") == "ready" and forecast.get("duration_min"):
+        return forecast
+    return None
+
+
+def duration_min(plan: dict, takeoff: datetime, flight_status: dict | None = None) -> int:
+    """How long the flight lasts, as the app says (InFlight.airMinutes): the airline's live arrival
+    when it's within an hour before or two after the plan's landing, earlier or later. An expected
+    arrival never ends it before the plan's last stretch does; a reported landing can."""
+    minutes = int(plan["duration_min"])
+    floor = max((int(s["end_min"]) for s in plan.get("segments") or []), default=0)
+    live = flight_status or {}
+    actual = status._time(live.get("arrival_actual"))
+    arrival = actual or status._time(live.get("arrival_expected"))
+    modelled = takeoff + timedelta(minutes=minutes)
+    if live.get("live") and arrival and modelled - timedelta(hours=1) < arrival < modelled + timedelta(hours=2):
+        minutes = int((arrival - takeoff).total_seconds() // 60)
+        if actual:
+            floor = 0
+    return max(minutes, floor, 1)
+
+
+def activity_state(forecast: dict | None, takeoff: datetime, now: datetime, flight_status: dict | None = None) -> dict:
+    """The Live Activity's whole content state: wheels-up plus the latest forecast's plan. The
+    keys match the app's ContentState; a push replaces it, so the plan always goes with it."""
+    state: dict = {"takeoff": _apple(takeoff), "updatedAt": _apple(now)}
+    if plan := _plan(forecast):
+        # On a global outlook each stretch says whether it's outlook (approximate) or confirmed, as
+        # the app's Stretch.outlook does; elsewhere the flag is left out to keep the content small.
+        global_outlook = plan.get("noaa_possible") is False
+        confirmed = [
+            (int(s["start_min"]), int(s["end_min"])) for s in plan.get("sources") or [] if s.get("source") == "gtg"
+        ]
+
+        def stretch(s: dict) -> dict:
+            out = {
+                "startMin": int(s["start_min"]),
+                "endMin": int(s["end_min"]),
+                "severity": s["severity"],
+                "phase": s.get("phase") or "cruise",
+            }
+            if global_outlook:
+                mid = (int(s["start_min"]) + int(s["end_min"])) // 2
+                out["outlook"] = not any(a <= mid <= b for a, b in confirmed)
+            return out
+
+        state |= {
+            "durationMin": duration_min(plan, takeoff, flight_status),
+            "stretches": [stretch(s) for s in (plan.get("segments") or [])[:MAX_STRETCHES]],
+            "confidenceTitle": confidence_title(plan),
+            "issuedAt": _apple(status._time(plan["issued_at"])),
+        }
+    return state
+
+
+def landing(forecast: dict | None, takeoff: datetime, flight_status: dict | None = None) -> datetime | None:
+    plan = _plan(forecast)
+    return takeoff + timedelta(minutes=duration_min(plan, takeoff, flight_status)) if plan else None
+
+
+def next_boundary(
+    forecast: dict | None, takeoff: datetime, now: datetime, flight_status: dict | None = None
+) -> datetime | None:
+    """When the activity next shows something different: takeoff, a stretch starting or ending,
+    else landing (the app's FlightActivityAttributes.nextBoundary). None without a plan."""
+    plan = _plan(forecast)
+    if plan is None:
+        return None
+    edges = [takeoff]
+    for s in (plan.get("segments") or [])[:MAX_STRETCHES]:
+        edges += [takeoff + timedelta(minutes=int(s["start_min"])), takeoff + timedelta(minutes=int(s["end_min"]) + 1)]
+    later = [t for t in edges if t > now]
+    return min(later) if later else landing(plan, takeoff, flight_status)
+
+
+def _send_activity(apns: Apns, activity: dict, payload: dict, quiet: bool):
+    """A plan-only update goes at low priority, inside the Live Activity push budget."""
+    return apns.send(
+        activity["token"], activity["environment"], payload, push_type="liveactivity", priority=5 if quiet else None
+    )
+
+
+def landed(plan: dict | None, takeoff: datetime, flight_status: dict | None, now: datetime) -> bool:
+    """Whether the flight is down: the airline says so, or the plan (as the app stretches it) has landed."""
+    arrived = status._time((flight_status or {}).get("arrival_actual"))
+    lands = landing(plan, takeoff, flight_status)
+    return (arrived is not None and arrived <= now) or (lands is not None and now >= lands)
+
+
+# Takeoffs this close together are the same trip (a revised runway time, or a replaced activity).
+SAME_TRIP = timedelta(hours=12)
+
+
+def wheels_up_alert(activity: dict, takeoff: datetime) -> bool:
+    """Whether this push says "Wheels up": once per flight, not per activity. Never when any of the
+    flight's activities already had a takeoff (a new one replaced it), nor for a flight saved after
+    it took off: the app knew it was in the air, and one saved again under a new id (a lost
+    account) had its alert under the old one."""
+    flight = activity.get("flight") or {}
+    # Only this trip's: a flight edited to a later date keeps its id and its old, ended activities.
+    def same_trip(row: dict) -> bool:
+        pushed = status._time(row.get("pushed_takeoff"))
+        return pushed is not None and abs(pushed - takeoff) <= SAME_TRIP
+    if same_trip(activity) or any(same_trip(a) for a in flight.get("activities") or []):
+        return False
+    saved = status._time(flight.get("created_at"))
+    return saved is None or saved <= takeoff
 
 
 def push_takeoffs(db, apns: Apns | None, now: datetime) -> int:
     """Send each open Live Activity the real wheels-up once the airline reports it, and wake the
-    app so its local stretch reminders move too. Each takeoff time is pushed once per activity."""
+    app so its local stretch reminders move too. Each takeoff time is pushed once per activity,
+    and the "Wheels up" alert once per flight. After that, a newer forecast goes to the activity
+    quietly (no alert) until landing, for people whose phone has no connection in the air."""
     if apns is None:
         return 0
     count = 0
     woken: set[str] = set()
     for activity in db.live_activities_to_retime(now):
         flight = activity.get("flight") or {}
-        takeoff = status._time((flight.get("status") or {}).get("takeoff_at"))
-        if takeoff is None or takeoff < now - TAKEOFF_PUSH_LIMIT:
+        live = flight.get("status") or {}
+        takeoff = status._time(live.get("takeoff_at"))
+        if takeoff is None or takeoff > now:
+            continue  # not up yet (older rows could hold an estimate)
+        forecast = (flight.get("forecasts") or [None])[0]
+        plan = _plan(forecast)
+        issued = status._time(plan["issued_at"]) if plan else None
+        pushed = status._time(activity.get("pushed_takeoff"))
+        if landed(plan, takeoff, live, now):
+            continue  # nothing left to time: a token that first reached us at the gate gets nothing
+        # A takeoff too old to move the countdown on its own still goes with the next plan (an
+        # activity registered late in the flight, or a runway time revised hours later).
+        if pushed != takeoff and takeoff >= now - TAKEOFF_PUSH_LIMIT:
+            kind = "takeoff"
+        elif issued and issued > (status._time(activity.get("pushed_forecast_at")) or datetime.min.replace(tzinfo=UTC)):
+            kind = "plan"
+        else:
             continue
-        if status._time(activity.get("pushed_takeoff")) == takeoff:
-            continue
-        reference = (takeoff - APPLE_EPOCH).total_seconds()
-        when = status.local_time(takeoff, flight.get("origin") or "")
-        payload = {
-            "aps": {
-                "timestamp": int(now.timestamp()),
-                "event": "update",
-                "content-state": {"takeoff": reference, "updatedAt": (now - APPLE_EPOCH).total_seconds()},
-                "alert": {
-                    "title": "Wheels up",
-                    "body": f"Your countdown is timed to takeoff at {when}.",
-                },
-            }
+        aps: dict = {
+            "timestamp": int(now.timestamp()),
+            "event": "update",
+            "content-state": activity_state(forecast, takeoff, now, live),
         }
-        result = apns.send(activity["token"], activity["environment"], payload, push_type="liveactivity")
+        if stale := next_boundary(forecast, takeoff, now, live):
+            aps["stale-date"] = int(stale.timestamp())
+        if kind == "takeoff" and wheels_up_alert(activity, takeoff):  # a revised runway time moves it quietly
+            when = status.local_time(takeoff, flight.get("origin") or "")
+            aps["alert"] = {"title": "Wheels up", "body": f"Your countdown is timed to takeoff at {when}."}
+        result = _send_activity(apns, activity, {"aps": aps}, quiet=kind == "plan")
         if result.ok:
-            db.mark_live_activity(activity["token"], pushed_takeoff=takeoff.isoformat())
+            # A plan push carries the takeoff too.
+            marks = {"pushed_takeoff": takeoff.isoformat()} if pushed != takeoff else {}
+            if issued:
+                marks["pushed_forecast_at"] = issued.isoformat()
+            db.mark_live_activity(activity["token"], **marks)
             count += 1
         elif result.token_dead or result.reason == "ExpiredToken":
             db.mark_live_activity(activity["token"], ended=True)
@@ -609,8 +762,8 @@ def push_takeoffs(db, apns: Apns | None, now: datetime) -> int:
                 apns.send(
                     device["token"],
                     device["environment"],
-                    {"aps": {"content-available": 1}, "flight_id": activity["flight_id"], "kind": "takeoff"},
+                    {"aps": {"content-available": 1}, "flight_id": activity["flight_id"], "kind": kind},
                     push_type="background",
                 )
-        log.info("takeoff %s at %s: %s", activity["flight_id"], takeoff, "pushed" if result.ok else result.reason)
+        log.info("%s %s at %s: %s", kind, activity["flight_id"], takeoff, "pushed" if result.ok else result.reason)
     return count

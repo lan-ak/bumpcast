@@ -14,3 +14,5 @@ ios/build/
 DerivedData/
 xcuserdata/
 ios/.asc/artifacts/
+# App Store Connect CLI's local release checkpoints
+.asc/

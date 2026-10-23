@@ -1,5 +1,6 @@
 """Combine a flight profile with turbulence data into a grade and a timeline."""
 
+import logging
 import os
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
@@ -8,7 +9,9 @@ from typing import Protocol
 from . import hazards as hazards_mod
 from . import severity
 from .airports import Airport
-from .route import RoutePoint, build_profile
+from .route import PROFILE_VERSION, RoutePoint, Wind, build_profile
+
+log = logging.getLogger(__name__)
 
 FORECAST_WINDOW = timedelta(hours=48)
 
@@ -55,6 +58,7 @@ class Forecast:
     warnings: list[dict] = field(default_factory=list)  # [{start_min, end_min, kind, hazard, severity, region, label}]
     noaa_possible: bool | None = None  # can GTG ever cover the whole route?
     extended: bool = False
+    profile: int | None = None  # route.PROFILE_VERSION the path was built with
 
     def to_row(self) -> dict:
         row = {
@@ -68,6 +72,7 @@ class Forecast:
             "segments": self.segments,
             "samples": self.samples,
             "route": self.route,
+            "profile": self.profile,
         }
         if self.extended:
             row |= {"sources": self.sources, "warnings": self.warnings, "noaa_possible": self.noaa_possible}
@@ -96,6 +101,14 @@ def _handoff_weight(source: Source, valid: datetime) -> float:
     return HANDOFF_MIN_WEIGHT + (1 - HANDOFF_MIN_WEIGHT) * max(hours_left, 0) / HANDOFF_HOURS
 
 
+def _valid_time(sources: list[Source], time: datetime, now: datetime) -> datetime:
+    """The time to read the weather at for a minute of the flight. A flight saved in the air can
+    have flown minutes from before the oldest run began: those use that run's start instead."""
+    if time >= now or not sources or any(s.covers(time) for s in sources):
+        return time
+    return max(time, min(s.cycle for s in sources))
+
+
 def compute(
     origin: Airport,
     destination: Airport,
@@ -114,28 +127,31 @@ def compute(
     if departure - now > FORECAST_WINDOW:
         return Forecast(status="too_early", extended=global_coverage)
 
-    points = build_profile(origin, destination, departure)
-    if not global_coverage and not in_coverage(points):
+    # Coverage first, in still air: winds change the timing, not the path, and a route outside it
+    # shouldn't fetch winds for every hour of the flight.
+    if not global_coverage and not in_coverage(build_profile(origin, destination, departure)):
         return Forecast(status="out_of_coverage")
+    points = _profile(origin, destination, departure, sources)
     hazards = hazards or []
 
-    samples, used, per_minute, flagged = [], set(), [], []
+    samples, used, ahead, per_minute, flagged = [], set(), set(), [], []
     for p in points:
-        if global_coverage:
-            candidates = [s for s in sources if s.covers(p.time) and _covers_point(s, p.lat, p.lon)]
-        else:
-            candidates = [s for s in sources if s.covers(p.time)]
+        usable = [s for s in sources if _covers_point(s, p.lat, p.lon)] if global_coverage else sources
+        valid = _valid_time(usable, p.time, now)
+        candidates = [s for s in usable if s.covers(valid)]
         if not candidates:
             if global_coverage:
                 return Forecast(status="out_of_coverage", extended=True)
             raise RuntimeError(f"No turbulence data covers {p.time.isoformat()}")
         source = candidates[0]
         used.add(source)
+        if p.time >= now:
+            ahead.add(source)
         per_minute.append(source.name)
-        edr = source.edr(p.lat, p.lon, p.altitude_ft, p.time)
-        weight = _handoff_weight(source, p.time)
+        edr = source.edr(p.lat, p.lon, p.altitude_ft, valid)
+        weight = _handoff_weight(source, valid)
         if weight < 1 and len(candidates) > 1:
-            edr = weight * edr + (1 - weight) * candidates[1].edr(p.lat, p.lon, p.altitude_ft, p.time)
+            edr = weight * edr + (1 - weight) * candidates[1].edr(p.lat, p.lon, p.altitude_ft, valid)
         hazard = hazards_mod.strongest(hazards, p.lat, p.lon, p.altitude_ft, p.time) if hazards else None
         if hazard and hazard.floor > edr:
             edr = hazard.floor
@@ -144,7 +160,10 @@ def compute(
 
     segments = _segments(samples)
     grade, score = _grade(samples)
-    primary = min(used, key=sources.index)
+    # In the air, how confirmed the forecast is depends on the minutes still ahead: ones already
+    # flown, from before the detailed run began, read the outlook and don't make it "mixed".
+    kinds = ahead or used
+    primary = min(kinds, key=sources.index)
     gtg = next((s for s in sources if s.name == "gtg"), None)
     if not global_coverage:
         noaa_possible = True
@@ -154,7 +173,8 @@ def compute(
         noaa_possible = in_coverage(points)
     return Forecast(
         status="ready",
-        source=primary.name if len(used) == 1 else "mixed",
+        profile=PROFILE_VERSION,
+        source=primary.name if len(kinds) == 1 else "mixed",
         model_run=primary.cycle,
         grade=grade,
         score=score,
@@ -165,7 +185,10 @@ def compute(
         route=[[round(p.lat, 3), round(p.lon, 3)] for p in points[:: max(len(points) // 40, 1)]] + [
             [round(points[-1].lat, 3), round(points[-1].lon, 3)]
         ],
-        sources=_stretches([(p.minute, name) for p, name in zip(points, per_minute)], key=lambda v: {"source": v}),
+        sources=_stretches(
+            [(p.minute, name) for p, name in zip(points, per_minute) if not ahead or p.time >= now],
+            key=lambda v: {"source": v},
+        ),
         warnings=_stretches(
             [(p.minute, h) for p, h in zip(points, flagged)],
             key=lambda h: {
@@ -175,6 +198,23 @@ def compute(
         noaa_possible=noaa_possible,
         extended=global_coverage,
     )
+
+
+def _winds(sources: list[Source]) -> Wind | None:
+    """Winds from the first source that has them (GFS), so ground speeds follow the forecast."""
+    return next((s.wind for s in sources if callable(getattr(s, "wind", None))), None)
+
+
+def _profile(origin: Airport, destination: Airport, departure: datetime, sources: list[Source]) -> list[RoutePoint]:
+    """The flight path, with winds when a source has them. Winds only refine the timing: when they
+    can't be read (a GFS download failing), the path is planned in still air."""
+    wind = _winds(sources)
+    if wind is not None:
+        try:
+            return build_profile(origin, destination, departure, wind=wind)
+        except Exception:
+            log.warning("%s->%s: no winds, planning in still air", origin.icao, destination.icao, exc_info=True)
+    return build_profile(origin, destination, departure)
 
 
 def _stretches(values: list[tuple[int, object]], key) -> list[dict]:

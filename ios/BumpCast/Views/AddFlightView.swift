@@ -6,6 +6,9 @@ import SwiftUI
 /// problems use the moderate orange plus words. Never say where flight data comes from.
 struct AddFlightView: View {
     var flight: Flight?
+    /// Set when the onboarding flow opened this (OnboardingFlight): one flight, no connections,
+    /// and the flow decides what happens next. Called with the saved flight, or nil on Cancel.
+    var onboarding: ((Flight?) -> Void)?
 
     enum Step: Int, CaseIterable { case find, route, when, check }
 
@@ -22,18 +25,29 @@ struct AddFlightView: View {
     @Environment(Router.self) private var router
     @Environment(\.dismiss) private var dismiss
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @AppStorage("haptics.enabled") private var hapticsEnabled = true
 
     @State private var step: Step = .find
+    /// Which way the last step change went: forward steps arrive from the trailing edge.
+    @State private var forward = true
     @State private var origin: Airport?
     @State private var destination: Airport?
     @State private var departure = AddFlightView.defaultDeparture
     @State private var notify = true
     @State private var allowOutsideCoverage = false
     @State private var isSaving = false
+    /// An edit is still waiting on a connection that's slow to answer: say so (Cancel works).
+    @State private var slowSave = false
+    /// The save didn't go through: said here, where they tapped it.
+    @State private var saveFailed = false
+    /// The sheet has gone (its presenter closed it, or went away) while a save was still running.
+    @State private var closed = false
+    /// Which button is saving: the spinner shows in the one they tapped.
+    @State private var savingConnection = false
     @State private var loaded = false
     // From search
     @State private var number = ""
+    /// Find's search, kept here so Back from Check still shows the flight it found.
+    @State private var search: FindStep.Search = .idle
     @State private var picked: FoundFlight?
     @State private var pendingNumber: String?
     /// Where the picked flight came from, for Back.
@@ -43,7 +57,6 @@ struct AddFlightView: View {
     // Connecting flights
     @State private var connection: Connection?
     @State private var added: [Flight] = []
-    @State private var savedHaptic = 0
 
     private var isEditing: Bool { flight != nil }
     private var sky: Sky { Sky(date: departure, timeZone: origin?.timeZone ?? .current) }
@@ -54,9 +67,10 @@ struct AddFlightView: View {
                 switch step {
                 case .find:
                     FindStep(
-                        number: $number, departure: $departure, connection: connection,
+                        number: $number, departure: $departure, search: $search, connection: connection,
                         timeZone: connection?.from.timeZone ?? origin?.timeZone ?? .current,
-                        pick: use, chooseAirports: { step = .route }, enterManually: enterManually)
+                        savedFlight: savedFlight, pick: use, open: open,
+                        chooseAirports: { go(to: .route) }, enterManually: enterManually)
                     .transition(stepTransition)
                 case .route:
                     RouteStep(
@@ -67,39 +81,66 @@ struct AddFlightView: View {
                     WhenStep(
                         origin: origin, destination: destination, departure: $departure,
                         manual: $manualTime, after: connection?.arrival,
-                        pick: use, lookUpNumber: { step = .find })
+                        pick: use, lookUpNumber: { go(to: .find) },
+                        // Another day here is another day on Find too, so its old result goes.
+                        dayPicked: { if search != .searching { search = .idle } })
                     .transition(stepTransition)
                 case .check:
                     CheckStep(
                         origin: origin, destination: destination, departure: departure, notify: $notify,
-                        isEditing: isEditing, picked: picked
-                    ) { step = .route }
+                        isEditing: isEditing, picked: picked, problem: checkProblem,
+                        alreadySaved: existingFlight != nil
+                    ) { go(to: .route) }
                     .transition(stepTransition)
                 }
             }
-            .animation(Theme.motion(reduceMotion), value: step)
             .skyBackground(sky)
-            .safeAreaInset(edge: .top) { context }
-            .safeAreaInset(edge: .bottom) { bottomButtons }
+            .safeAreaBar(edge: .top) { context }
+            // A bar, not an inset: the scroll edge effect sits behind the buttons, so cards
+            // scrolling under them don't show through.
+            .safeAreaBar(edge: .bottom) { bottomButtons }
+            // The step, its buttons and the context above it change together, in one animation.
+            .animation(Theme.motion(reduceMotion), value: step)
+            // When: the list of flights and the time wheel (and its Next button) swap the same way.
+            .animation(Theme.motion(reduceMotion), value: manualTime)
             .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    if !added.isEmpty && step == .find {
-                        Button("Done") { finish() }  // the first flight is already saved
-                    } else if step == firstStep || (isEditing && step == .check) {
-                        Button(added.isEmpty ? "Cancel" : "Done") { added.isEmpty ? dismiss() : finish() }
-                    } else {
-                        Button("Back", action: back)
+                    Group {
+                        if !added.isEmpty && step == .find {
+                            Button("Done") { finish() }  // the first flight is already saved
+                        } else if step == firstStep || (isEditing && step == .check) {
+                            Button(added.isEmpty ? "Cancel" : "Done") { added.isEmpty ? cancel() : finish() }
+                        } else {
+                            Button("Back", action: back)
+                        }
                     }
+                    // A new flight is kept on the phone within seconds, so the sheet waits and
+                    // closes itself. An edit waits on the server for as long as it takes, so it
+                    // can always be closed: the save carries on, and the list says if it fails.
+                    .disabled(isSaving && !isEditing)
                 }
             }
-            .sensoryFeedback(.success, trigger: savedHaptic) { _, _ in hapticsEnabled }
+            .interactiveDismissDisabled(isSaving && !isEditing)
+            // No haptic here: the Flights list plays the one "flight added" haptic (DESIGN_SPEC §3.8).
+            // The Flights list's error alert can't show over this sheet (or the onboarding flow).
+            .alert("That didn't go through", isPresented: .constant(saveFailed || (onboarding != nil && store.error != nil))) {
+                Button("OK") {
+                    saveFailed = false
+                    store.error = nil
+                }
+            } message: {
+                Text("Check your connection and try again.")
+            }
             .onAppear(perform: loadExisting)
             // A new route lists its flights again (unless the number's schedule isn't out yet).
             .onChange(of: origin) { if step == .route { manualTime = pendingNumber != nil } }
             .onChange(of: destination) { if step == .route { manualTime = pendingNumber != nil } }
         }
+        // On the stack itself, so pushing the airport search inside it doesn't count as closing.
+        .onAppear { closed = false }
+        .onDisappear { closed = true }
     }
 
     private var firstStep: Step { isEditing ? .route : .find }
@@ -113,28 +154,39 @@ struct AddFlightView: View {
         }
     }
 
+    /// Fade through, sliding in from the side the step comes from: forward from the trailing edge,
+    /// Back from the leading edge.
     private var stepTransition: AnyTransition {
-        reduceMotion ? .opacity : .asymmetric(
-            insertion: .opacity.combined(with: .offset(x: 24)), removal: .opacity.combined(with: .offset(x: -24)))
+        .fadeThrough(reduceMotion, offset: forward ? 24 : -24)
+    }
+
+    /// Moves to a step. Forward unless said otherwise or the step comes earlier.
+    private func go(to next: Step, forward: Bool? = nil) {
+        self.forward = forward ?? (next.rawValue > step.rawValue)
+        step = next
     }
 
     private func back() {
         switch step {
         case .check where picked != nil:
             // A searched flight came straight from Find or the route list.
-            step = pickedFrom
+            go(to: pickedFrom, forward: false)
             picked = nil
         case .route where pendingNumber != nil:
-            step = .find
+            go(to: .find)
         default:
-            step = Step(rawValue: step.rawValue - 1) ?? firstStep
+            go(to: Step(rawValue: step.rawValue - 1) ?? firstStep, forward: false)
         }
     }
 
     // MARK: Context above the steps
 
-    @ViewBuilder
     private var context: some View {
+        Group { contextCard }.transition(.fadeThrough(reduceMotion))
+    }
+
+    @ViewBuilder
+    private var contextCard: some View {
         if let connection, step != .check {
             Label {
                 Text("Connecting from \(connection.from.iata) · arrives \(connection.arrival.localTime(in: connection.from.timeZone, withDay: connection.overnight))")
@@ -164,25 +216,46 @@ struct AddFlightView: View {
 
     // MARK: Bottom buttons
 
-    @ViewBuilder
     private var bottomButtons: some View {
+        Group { bottomButtonsContent }.transition(.fadeThrough(reduceMotion))
+    }
+
+    @ViewBuilder
+    private var bottomButtonsContent: some View {
         switch step {
         case .find:
             EmptyView()  // Find has its own buttons
         case .when where !manualTime:
             EmptyView()  // pick a flight from the list, or "Enter the time myself"
-        case .check where !isEditing:
-            VStack(spacing: 10) {
-                primaryButton
-                Button {
-                    Task { await save(thenConnect: true) }
-                } label: {
-                    Text("Add a connecting flight").font(.bcHeadline).frame(maxWidth: .infinity)
+        case .check:
+            if let existing = existingFlight {
+                openButton(existing).padding()
+            } else if !isEditing && onboarding == nil {
+                VStack(spacing: 10) {
+                    primaryButton
+                    Button {
+                        Task { await save(thenConnect: true) }
+                    } label: {
+                        savingLabel("Add a connecting flight", saving: isSaving && savingConnection, tint: Theme.accent)
+                    }
+                    .buttonStyle(.bordered).tint(Theme.accent).controlSize(.large)
+                    .disabled(!canAdvance || isSaving)
                 }
-                .buttonStyle(.bordered).tint(Theme.accent).controlSize(.large)
-                .disabled(!canAdvance || isSaving)
+                .padding()
+            } else {
+                VStack(spacing: 10) {
+                    if slowSave {
+                        Text("The connection is slow to answer. You can close this: your changes keep saving, and we'll tell you if they don't go through.")
+                            .font(.bcFootnote)
+                            .foregroundStyle(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .transition(.fadeThrough(reduceMotion))
+                    }
+                    primaryButton
+                }
+                .animation(Theme.motion(reduceMotion), value: slowSave)
+                .padding()
             }
-            .padding()
         default:
             primaryButton.padding()
         }
@@ -190,12 +263,36 @@ struct AddFlightView: View {
 
     private var primaryButton: some View {
         Button(action: advance) {
-            Text(buttonTitle).font(.bcHeadline).frame(maxWidth: .infinity)
+            savingLabel(buttonTitle, saving: isSaving && !savingConnection, tint: Theme.onAccent)
         }
         .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent)
         .tint(Theme.accent)
         .controlSize(.large)
         .disabled(!canAdvance || isSaving)
+    }
+
+    /// A button title that turns into a spinner while the flight saves, so the button never just
+    /// sits there greyed out on a slow connection.
+    private func savingLabel(_ title: String, saving: Bool, tint: Color) -> some View {
+        Text(title).font(.bcHeadline).frame(maxWidth: .infinity)
+            .opacity(saving ? 0 : 1)
+            .overlay {
+                if saving {
+                    ProgressView()
+                        .tint(tint)
+                        .accessibilityLabel(isEditing ? "Saving your changes" : "Adding your flight")
+                }
+            }
+    }
+
+    /// For a flight that's already saved: open it instead of adding it twice.
+    private func openButton(_ saved: Flight) -> some View {
+        Button { open(saved) } label: {
+            Text("Open it").font(.bcHeadline).frame(maxWidth: .infinity)
+        }
+        .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent)
+        .tint(Theme.accent)
+        .controlSize(.large)
     }
 
     private var buttonTitle: String {
@@ -210,16 +307,57 @@ struct AddFlightView: View {
         case .find: false
         case .route: RouteStep.isValid(origin, destination, allowOutsideCoverage: allowOutsideCoverage)
         case .when: WhenStep.isValid(departure)
-        case .check:
-            RouteStep.isValid(origin, destination, allowOutsideCoverage: true) && WhenStep.isValid(departure)
+        case .check: RouteStep.isValid(origin, destination, allowOutsideCoverage: true) && isAddable
+        }
+    }
+
+    /// The searched flight, while the route and time on Check are still its own (Change can move them).
+    private var searched: FoundFlight? {
+        guard let picked, picked.origin == origin?.icao, picked.destination == destination?.icao,
+            picked.departureAt == departure
+        else { return nil }
+        return picked
+    }
+
+    /// Whether Check can save: a searched flight until it lands, even in the air; an edit that keeps
+    /// its time until it lands; a time entered by hand up to an hour late (for delays).
+    private var isAddable: Bool {
+        if let searched { return !searched.hasLanded() }
+        if let flight, departure == flight.departureAt {
+            return flight.estimatedLanding(store.forecasts[flight.id]) > .now
+        }
+        return WhenStep.isValid(departure)
+    }
+
+    /// Why Check can't save, said plainly rather than leaving the button greyed out.
+    private var checkProblem: String? {
+        guard !isAddable else { return nil }
+        if searched != nil { return "This flight has landed. Pick another day." }
+        if let flight, departure == flight.departureAt { return "This flight has landed." }
+        return WhenStep.pastText(online: Connectivity.shared.isOnline)
+    }
+
+    /// The flight on Check when it's already in their flights. Not the one this sheet is saving
+    /// or just saved: it lands in the list while the sheet waits on the notification prompt.
+    private var existingFlight: Flight? {
+        guard !isSaving, let existing = searched.flatMap(savedFlight) else { return nil }
+        return added.contains { $0.id == existing.id } ? nil : existing
+    }
+
+    /// The same flight already saved (same number and departure airport, leaving within a few hours
+    /// of it), so it's opened rather than added twice. The flight being edited doesn't count.
+    private func savedFlight(_ found: FoundFlight) -> Flight? {
+        store.flights.first {
+            $0.id != flight?.id && $0.flightNumber == found.flightNumber && $0.origin == found.origin
+                && abs($0.departureAt.timeIntervalSince(found.departureAt)) < 6 * 3600
         }
     }
 
     private func advance() {
         switch step {
         case .find: break
-        case .route: step = .when
-        case .when: step = .check
+        case .route: go(to: .when)
+        case .when: go(to: .check)
         case .check: Task { await save(thenConnect: false) }
         }
     }
@@ -236,7 +374,7 @@ struct AddFlightView: View {
         destination = to
         departure = found.departureAt
         allowOutsideCoverage = true
-        step = .check
+        go(to: .check)
     }
 
     /// The schedule for this number isn't out yet: enter airports and time, keep the number.
@@ -245,7 +383,7 @@ struct AddFlightView: View {
         picked = nil
         manualTime = true
         if let connection { origin = connection.from }
-        step = .route
+        go(to: .route)
     }
 
     // MARK: Saving
@@ -253,7 +391,13 @@ struct AddFlightView: View {
     private func save(thenConnect: Bool) async {
         guard let origin, let destination else { return }
         isSaving = true
+        savingConnection = thenConnect
         defer { isSaving = false }
+        // The toggle asks for notifications as they tap Add flight, while the flight saves, so the
+        // system prompt never fades in over the closing sheet (DESIGN_SPEC §3.8). The onboarding
+        // flow has already asked.
+        let asksPermission = notify && onboarding == nil && push.status == .notDetermined
+        if asksPermission { Task { await push.requestPermission() } }
         var draft = FlightDraft(origin: origin.icao, destination: destination.icao, departureAt: departure, notify: notify)
         if let picked, picked.origin == origin.icao, picked.destination == destination.icao {
             draft.flightNumber = picked.flightNumber
@@ -270,13 +414,40 @@ struct AddFlightView: View {
             draft.arrivalAt = flight.arrivalAt.map { $0.addingTimeInterval(departure.timeIntervalSince(flight.departureAt)) }
             draft.schedulePending = flight.schedulePending
         }
-        guard let saved = await store.save(draft, editing: flight?.id) else { return }
+        // A new flight (or an edit to one not on the server yet) is kept on the phone if the server
+        // is slow; an edit to a saved flight waits for its answer. After the same few seconds, say
+        // it's still going and that the sheet can be closed.
+        let waitsOnServer = flight.map { !store.isPending($0.id) } ?? false
+        let slow = Task {
+            guard waitsOnServer else { return }
+            try? await Task.sleep(for: FlightStore.addWait)
+            if !Task.isCancelled { slowSave = true }
+        }
+        let saved = await store.save(draft, editing: flight?.id)
+        slow.cancel()
+        slowSave = false
+        guard let saved else {
+            // Still open: say so here (the Flights list's alert can't show over the sheet).
+            if !closed { saveFailed = true }
+            return
+        }
+        if asksPermission { await notificationAnswer() }
         added.append(saved)
         if thenConnect {
             startConnection(after: saved)
             return
         }
         finish()
+    }
+
+    /// Waits for their answer to the notification prompt, so the sheet only moves once it's gone.
+    /// The status changes as soon as they answer, before the answer is saved to their profile (a
+    /// network call the sheet doesn't wait for). Never more than a minute.
+    private func notificationAnswer() async {
+        let deadline = ContinuousClock.now + .seconds(60)
+        while push.status == .notDetermined, ContinuousClock.now < deadline {
+            try? await Task.sleep(for: .milliseconds(100))
+        }
     }
 
     /// Reopen the sheet for the next leg, from where this one lands.
@@ -293,28 +464,52 @@ struct AddFlightView: View {
         picked = nil
         pendingNumber = nil
         number = ""
+        search = .idle
         allowOutsideCoverage = false
         // An hour after landing, on the arrival day.
         let next = arrival.addingTimeInterval(3600)
         departure = calendar.date(bySetting: .second, value: 0, of: next) ?? next
-        step = .find
+        go(to: .find, forward: true)  // a new leg counts as forward
+    }
+
+    private func cancel() {
+        if let onboarding { onboarding(nil) } else { dismiss() }
     }
 
     private func finish() {
-        guard let last = added.last else { return dismiss() }
-        dismiss()
-        savedHaptic += 1
-        Task {
-            // The toggle asks for permission at the moment it's useful.
-            if notify, push.status == .notDetermined {
-                await push.requestPermission()
-            }
+        guard let last = added.last else { return cancel() }
+        if let onboarding {
+            // The flow already asked about notifications; it moves on to the forecast.
+            onboarding(last)
+            return
         }
-        router.showToast(toastText)
-        // Leaving soon: go straight to the forecast.
-        if !isEditing, added.count == 1, last.departureAt.timeIntervalSinceNow < 18 * 3600 {
-            router.openFlight(last.id)
-        }
+        // Leaving soon (or already in the air): the forecast opens once the sheet has closed, and
+        // that's confirmation enough. Offline saves and in-air adds still get their note.
+        let opensForecast = !isEditing && added.count == 1 && last.departureAt.timeIntervalSinceNow < 18 * 3600
+        let quiet = opensForecast && !store.isPending(last.id) && !addedInAir
+        router.afterAdd = Router.AfterAdd(flightID: last.id, openForecast: opensForecast, toast: quiet ? nil : toastText)
+        closeSheet()
+    }
+
+    /// The presenter's onDismiss runs router.finishAdding(). If the sheet is already gone (its
+    /// presenter went away mid-save), that has run, so it runs now rather than on a later sheet.
+    private func closeSheet() {
+        if closed { router.finishAdding() } else { dismiss() }
+    }
+
+    /// Closes and opens a flight that's already saved (the onboarding flow moves on with it).
+    private func open(_ saved: Flight) {
+        if let onboarding { return onboarding(saved) }
+        router.afterAdd = Router.AfterAdd(flightID: saved.id, openForecast: true, toast: added.isEmpty ? nil : toastText)
+        closeSheet()
+    }
+
+    /// The one flight just added came from search and is in the air now.
+    private var addedInAir: Bool {
+        guard !isEditing, added.count == 1, let saved = added.first, let searched,
+            searched.flightNumber == saved.flightNumber
+        else { return false }
+        return searched.isInAir()
     }
 
     private var toastText: String {
@@ -329,6 +524,7 @@ struct AddFlightView: View {
             return "\(saved.routeText) saved on your phone. We'll sync it when you're back online."
         }
         if isEditing { return "Changes saved." }
+        if addedInAir { return "\(saved.titleText) added. You're in the air, so we'll match your real takeoff time." }
         let unlock = saved.forecastUnlocksAt
         if unlock <= .now { return "\(saved.titleText) added. Your forecast will be ready in a few minutes." }
         return "\(saved.titleText) added. First forecast \(unlock.approximateDayAndTime())."
@@ -340,14 +536,21 @@ struct AddFlightView: View {
 
     // MARK: Setup
 
+    /// Today at the next whole hour: Find searches today (people add flights at the gate and on
+    /// board; other days are one tap away), and the time wheel starts at a time that's still valid.
     private static var defaultDeparture: Date {
-        let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: .now)!
-        return Calendar.current.date(bySettingHour: 9, minute: 0, second: 0, of: tomorrow) ?? tomorrow
+        let calendar = Calendar.current
+        let thisHour = calendar.dateInterval(of: .hour, for: .now)?.start ?? .now
+        let nextHour = thisHour.addingTimeInterval(3600)
+        // Late in the evening the next hour is tomorrow; this hour is still today, and still valid.
+        return calendar.isDate(nextHour, inSameDayAs: .now) ? nextHour : thisHour
     }
 
     private func loadExisting() {
         guard !loaded else { return }
         loaded = true
+        // Anything another Add flight sheet left behind belongs to that sheet, not this one.
+        if onboarding == nil { router.afterAdd = nil }
         guard let flight else { return }
         origin = flight.originAirport
         destination = flight.destinationAirport
@@ -375,9 +578,14 @@ struct AddFlightView: View {
 private struct FindStep: View {
     @Binding var number: String
     @Binding var departure: Date
+    /// Lives in AddFlightView, so Back from Check comes back to the flight it found.
+    @Binding var search: Search
     let connection: AddFlightView.Connection?
     let timeZone: TimeZone
+    /// The same flight when it's already saved, so it's opened rather than added twice.
+    let savedFlight: (FoundFlight) -> Flight?
     let pick: (FoundFlight) -> Void
+    let open: (Flight) -> Void
     let chooseAirports: () -> Void
     let enterManually: (String) -> Void
 
@@ -385,10 +593,12 @@ private struct FindStep: View {
         case idle, searching
         case found([FoundFlight])
         case notFound, notPublished, unavailable
+        /// No connection: looking up a number needs one; choosing airports doesn't.
+        case offline
     }
 
     @Environment(FlightStore.self) private var store
-    @State private var search: Search = .idle
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @FocusState private var focused: Bool
 
     private var normalized: String? { FlightNumber.normalize(number) }
@@ -421,26 +631,32 @@ private struct FindStep: View {
                 }
                 VStack(alignment: .leading, spacing: 6) {
                     Text("Day").eyebrow().foregroundStyle(.secondary)
-                    DayPicker(departure: $departure, calendar: calendar)
+                    // Another day is another search.
+                    DayPicker(departure: $departure, calendar: calendar) { if search != .searching { search = .idle } }
                     if let connection, connection.overnight {
                         Text("\(departure.formatted(Date.FormatStyle(timeZone: timeZone).weekday(.wide))), because your overnight flight lands then.")
                             .font(.bcFootnote)
                             .foregroundStyle(.secondary)
                     }
                 }
-                result
+                // The buttons stay where they were tapped; what the search finds fades in below
+                // them, or in their place once they've faded out.
                 if search == .idle || search == .searching {
-                    Button(action: find) {
-                        Text("Find flight").font(.bcHeadline).frame(maxWidth: .infinity)
+                    VStack(spacing: 18) {
+                        Button(action: find) {
+                            Text("Find flight").font(.bcHeadline).frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent).tint(Theme.accent)
+                        .controlSize(.large)
+                        .disabled(normalized == nil || search == .searching)
+                        Button("Choose airports instead", action: chooseAirports)
+                            .font(.bcSubheadlineStrong)
+                            .tint(Theme.accent)
+                            .frame(maxWidth: .infinity)
                     }
-                    .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent).tint(Theme.accent)
-                    .controlSize(.large)
-                    .disabled(normalized == nil || search == .searching)
-                    Button("Choose airports instead", action: chooseAirports)
-                        .font(.bcSubheadlineStrong)
-                        .tint(Theme.accent)
-                        .frame(maxWidth: .infinity)
+                    .transition(.fadeThrough(reduceMotion))
                 }
+                Group { result }.transition(.fadeThrough(reduceMotion))
             }
             .padding()
         }
@@ -448,8 +664,9 @@ private struct FindStep: View {
         .onAppear { if number.isEmpty { focused = true } }
         .onDisappear { focused = false }
         .onChange(of: number) { if search != .searching { search = .idle } }
-        .onChange(of: departure) { if search != .searching { search = .idle } }
-        .animation(.smooth, value: search)
+        // Back online with the offline note showing: look it up now.
+        .onChange(of: Connectivity.shared.isOnline) { _, online in if online && search == .offline { find() } }
+        .animation(Theme.motion(reduceMotion), value: search)
     }
 
     @ViewBuilder
@@ -467,38 +684,41 @@ private struct FindStep: View {
             VStack(alignment: .leading, spacing: 12) {
                 Text("Found it").eyebrow().foregroundStyle(Theme.accent)
                 FoundFlightSummary(flight: flight)
-                Text("Is this your flight?").font(.bcHeadline)
-                Button {
-                    pick(flight)
-                } label: {
-                    Text("Yes, use this flight").font(.bcHeadline).frame(maxWidth: .infinity)
+                if let saved = savedFlight(flight) {
+                    Text("Already in your flights").font(.bcHeadline)
+                    Button {
+                        open(saved)
+                    } label: {
+                        Text("Open it").font(.bcHeadline).frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent).tint(Theme.accent)
+                } else if flight.hasLanded() {
+                    // The day tiles are just above.
+                    Text("This flight has landed. Pick another day.").font(.bcHeadline)
+                } else {
+                    Text("Is this your flight?").font(.bcHeadline)
+                    Button {
+                        pick(flight)
+                    } label: {
+                        Text("Yes, use this flight").font(.bcHeadline).frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent).tint(Theme.accent)
                 }
-                .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent).tint(Theme.accent)
                 Button("Not this one") { search = .idle; focused = true }
                     .font(.bcSubheadlineStrong).tint(Theme.accent).frame(maxWidth: .infinity)
             }
             .skyCard()
         case .found(let flights):
+            // Last night's flight, still in the air, can come first (see find()).
+            let days = Set(flights.map { $0.departureAt.localDay(in: $0.originAirport?.timeZone ?? .current) })
             VStack(alignment: .leading, spacing: 10) {
-                Text("\(shown) flies \(flights.count) legs that day").font(.bcCardTitle)
+                Text(days.count > 1 ? "We found \(flights.count) \(shown) flights" : "\(shown) flies \(flights.count) legs that day")
+                    .font(.bcCardTitle)
                 Text("Pick the one you're on.").font(.bcSubheadline).foregroundStyle(.secondary)
                 VStack(spacing: 0) {
                     ForEach(Array(flights.enumerated()), id: \.element.id) { index, flight in
                         if index > 0 { Divider() }
-                        Button { pick(flight) } label: {
-                            HStack {
-                                VStack(alignment: .leading, spacing: 2) {
-                                    Text("\(flight.originAirport?.iata ?? flight.origin) → \(flight.destinationAirport?.iata ?? flight.destination)")
-                                        .font(.bcHeadline)
-                                    Text(flight.timesText).font(.bcMeta).foregroundStyle(.secondary)
-                                }
-                                Spacer()
-                                Image(systemName: "chevron.right").foregroundStyle(.tertiary)
-                            }
-                            .padding(.vertical, 10)
-                            .contentShape(.rect)
-                        }
-                        .buttonStyle(.plain)
+                        leg(flight)
                     }
                 }
                 Button("Not this one") { search = .idle }
@@ -521,7 +741,41 @@ private struct FindStep: View {
                 title: "Flight search isn't available right now",
                 body: "You can still add your flight by choosing your airports. We'll forecast it the same way.",
                 primary: ("Choose airports", chooseAirports), secondary: ("Try again", find))
+        case .offline:
+            notice(
+                title: "You're offline",
+                // A time entered by hand can be up to an hour ago, so a flight that's been flying
+                // longer waits for a connection to be looked up.
+                body: "Flight lookup needs a connection. Not in the air yet? Choose your airports and departure time instead, and we'll forecast it once you're back online. Already flying? Look it up once you're connected.",
+                primary: ("Choose airports", chooseAirports), secondary: ("Try again", find))
         }
+    }
+
+    /// One leg of a multi-leg number: its route, the day and times, then whether it's already
+    /// saved or already flying. A saved leg opens rather than being added again.
+    private func leg(_ flight: FoundFlight) -> some View {
+        let saved = savedFlight(flight)
+        let note = saved != nil ? "Already in your flights" : flight.liveText
+        return Button {
+            if let saved { open(saved) } else { pick(flight) }
+        } label: {
+            HStack {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("\(flight.originAirport?.iata ?? flight.origin) → \(flight.destinationAirport?.iata ?? flight.destination)")
+                        .font(.bcHeadline)
+                    Text("\(flight.departureAt.relativeDay(in: flight.originAirport?.timeZone ?? .current)) · \(flight.timesText)")
+                        .font(.bcMeta).foregroundStyle(.secondary)
+                    if let note {
+                        Text(note).font(.bcFootnoteStrong).foregroundStyle(Theme.accent)
+                    }
+                }
+                Spacer()
+                Image(systemName: "chevron.right").foregroundStyle(.tertiary)
+            }
+            .padding(.vertical, 10)
+            .contentShape(.rect)
+        }
+        .buttonStyle(.plain)
     }
 
     private func notice(title: String, body: String, primary: (String, () -> Void), secondary: (String, () -> Void)) -> some View {
@@ -542,26 +796,67 @@ private struct FindStep: View {
     private func find() {
         guard let normalized else { return }
         focused = false
+        // "Try again" on the offline note tries whenever there's a network at all, like
+        // pull-to-refresh; otherwise a connection that just failed gets a little while first.
+        let retrying = search == .offline && Connectivity.shared.hasPath
+        guard Connectivity.shared.isOnline || retrying else {
+            search = .offline
+            return
+        }
         search = .searching
+        let day = departure.searchDay(in: timeZone)
+        // Today's search only lists flights leaving today, so just after midnight the flight
+        // they're on (it left last night) needs yesterday's too.
+        let yesterday = connection == nil && day == Date.now.searchDay(in: timeZone)
+            ? calendar.date(byAdding: .day, value: -1, to: .now)?.searchDay(in: timeZone) : nil
         Task {
-            let result = (try? await store.service.searchFlights(number: normalized, date: departure.searchDay(in: timeZone)))
-                ?? .unavailable
+            let result = await lookUp(normalized, on: day)
             // Only flights between airports we know; a connection prefers legs from where it lands.
-            var flights = result.flights.filter { $0.originAirport != nil && $0.destinationAirport != nil }
+            var flights = result.flights.filter(\.hasKnownAirports)
             if let from = connection?.from, flights.contains(where: { $0.origin == from.icao }) {
                 flights = flights.filter { $0.origin == from.icao }
             }
-            switch result.state {
+            var state = result.state
+            if let yesterday, [.found, .notFound, .noSchedule].contains(state),
+                FoundFlight.mayStillFlyFromYesterday(flights)
+            {
+                // Still flying from last night: listed first, so tonight's flight with the same
+                // number is never the only one offered.
+                let earlier = await lookUp(normalized, on: yesterday).flights.filter(\.hasKnownAirports)
+                let flying = FoundFlight.stillFlying(earlier).filter { leg in !flights.contains { $0.id == leg.id } }
+                if !flying.isEmpty {
+                    flights = flying + flights
+                    state = .found
+                }
+            }
+            // The number or day changed while it looked: this answer is for another flight.
+            guard FlightNumber.normalize(number) == normalized, departure.searchDay(in: timeZone) == day else {
+                search = .idle
+                return
+            }
+            switch state {
             case .found where !flights.isEmpty: search = .found(flights)
             case .found, .notFound, .noSchedule: search = .notFound
             case .notPublished: search = .notPublished
-            case .unavailable: search = .unavailable
+            // A lookup that failed for want of a connection says so.
+            case .unavailable: search = Connectivity.shared.isOnline ? .unavailable : .offline
             }
+        }
+    }
+
+    /// One day's search for the number. A failure reads as unavailable.
+    private func lookUp(_ number: String, on day: String) async -> FlightSearchResult {
+        do {
+            return try await store.service.searchFlights(number: number, date: day)
+        } catch {
+            Connectivity.shared.noteFailure(error)  // counts only connection failures
+            return .unavailable
         }
     }
 }
 
-/// "B6 23 · JFK → LAX · Departs 7:15 AM EDT · Arrives 10:41 AM PDT", laid out as a card body.
+/// "B6 23 · JetBlue", the route, "Today · Departs 7:15 AM EDT", "Arrives 10:41 AM PDT", and how
+/// it's doing once it has left, laid out as a card body.
 private struct FoundFlightSummary: View {
     let flight: FoundFlight
 
@@ -571,10 +866,15 @@ private struct FoundFlightSummary: View {
             Text("\(flight.originAirport?.iata ?? flight.origin) → \(flight.destinationAirport?.iata ?? flight.destination)")
                 .font(.bcTitle2)
             if let tz = flight.originAirport?.timeZone {
-                Text("Departs \(flight.departureAt.localTimeWithZone(in: tz))").font(.bcSubheadline)
+                // The day, so tomorrow's flight is never mistaken for today's.
+                Text("\(flight.departureAt.relativeDay(in: tz)) · Departs \(flight.departureAt.localTimeWithZone(in: tz))")
+                    .font(.bcSubheadline)
             }
             if let arrival = flight.arrivalAt, let tz = flight.destinationAirport?.timeZone {
-                Text("Arrives \(arrival.localTimeWithZone(in: tz))").font(.bcSubheadline)
+                Text("Arrives \(arrival.localTimeWithZone(in: tz, withDay: flight.arrivesAnotherDay))").font(.bcSubheadline)
+            }
+            if let live = flight.liveText {
+                Text(live).font(.bcSubheadlineStrong).foregroundStyle(Theme.accent)
             }
         }
         .accessibilityElement(children: .combine)
@@ -582,11 +882,42 @@ private struct FoundFlightSummary: View {
 }
 
 extension FoundFlight {
-    /// "7:00 AM → 10:32 AM", each local to its airport.
+    /// "7:00 AM → 10:32 AM", each local to its airport, with the day when it lands on another.
     var timesText: String {
         let dep = departureAt.localTime(in: originAirport?.timeZone ?? .current)
         guard let arrivalAt else { return dep }
-        return "\(dep) → \(arrivalAt.localTime(in: destinationAirport?.timeZone ?? .current))"
+        return "\(dep) → \(arrivalAt.localTime(in: destinationAirport?.timeZone ?? .current, withDay: arrivesAnotherDay))"
+    }
+
+    /// Lands on a later local day than it leaves (an overnight flight).
+    var arrivesAnotherDay: Bool {
+        guard let arrivalAt, let from = originAirport?.timeZone, let to = destinationAirport?.timeZone else { return false }
+        return arrivalAt.localDay(in: to) != departureAt.localDay(in: from)
+    }
+
+    /// "In the air · took off 2:53 PM", "Left the gate 2:33 PM" or "Landed 3:57 PM", from the
+    /// airline's live status; nil until it leaves the gate.
+    var liveText: String? {
+        if let landed { return "Landed \(landed.localTime(in: destinationAirport?.timeZone ?? .current))" }
+        // Down by the clock, without a landing time: never "In the air" beside "has landed".
+        if hasLanded() { return departed == true ? "Landed" : nil }
+        let tz = originAirport?.timeZone ?? .current
+        if let takeoffAt { return "In the air · took off \(takeoffAt.localTime(in: tz))" }
+        guard departed == true else { return nil }
+        return departureActual.map { "Left the gate \($0.localTime(in: tz))" } ?? "Left the gate"
+    }
+}
+
+/// Fade through: what leaves is nearly gone before what arrives fades in (sliding in by `offset`
+/// points), so two screens never show on top of each other. The removal never depends on the
+/// direction, because a removed view keeps the transition it had when it was last drawn.
+private extension AnyTransition {
+    @MainActor
+    static func fadeThrough(_ reduceMotion: Bool, offset: CGFloat = 0) -> AnyTransition {
+        .asymmetric(
+            insertion: .opacity.combined(with: .offset(x: reduceMotion ? 0 : offset))
+                .animation(Theme.motion(reduceMotion).delay(0.25)),
+            removal: .opacity.animation(Theme.fade))
     }
 }
 
@@ -872,6 +1203,8 @@ private struct AirportSearchView: View {
     }
 
     private func pick(_ airport: Airport) {
+        // The keyboard starts down before the pop, so the Route step's Next doesn't ride it.
+        focused = false
         selection = airport
         dismiss()
     }
@@ -896,9 +1229,22 @@ private struct WhenStep: View {
     let after: Date?
     let pick: (FoundFlight) -> Void
     let lookUpNumber: () -> Void
+    /// After they pick a day here.
+    var dayPicked: () -> Void = {}
+
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     /// Up to an hour late is allowed, for delays.
     static func isValid(_ departure: Date) -> Bool { departure > .now.addingTimeInterval(-3600) }
+
+    /// Why a time can't be used: it's more than an hour ago. That's usually the wrong day, but
+    /// it can be the real time of a flight that's been in the air a while, which is found by its
+    /// number instead (that needs a connection).
+    static func pastText(online: Bool) -> String {
+        online
+            ? "That's more than an hour ago. Check the date, or if you're already in the air, look up your flight number instead."
+            : "That's more than an hour ago. Check the date, or if you're already in the air, look up your flight number once you're connected."
+    }
 
     private var timeZone: TimeZone { origin?.timeZone ?? .current }
     private var calendar: Calendar {
@@ -918,27 +1264,37 @@ private struct WhenStep: View {
                         .eyebrow().foregroundStyle(.secondary)
                 }
                 Text(manual ? "When do you leave?" : "Which flight are you on?").font(.bcDisplay)
-                DayPicker(departure: $departure, calendar: calendar)
+                DayPicker(departure: $departure, calendar: calendar, picked: dayPicked)
+                // The list and the time wheel fade through each other (AddFlightView animates `manual`).
                 if manual {
-                    TimeWheel(date: $departure, calendar: calendar)
-                        .skyCard(padding: 8)
-                    Text("Local time in \(origin?.city ?? "your departure city"), from your booking.")
-                        .font(.bcFootnote)
-                        .foregroundStyle(.secondary)
-                    if !Self.isValid(departure) {
-                        Text("Check the date, or pick a later time.")
-                            .font(.bcSubheadline)
-                            .foregroundStyle(Theme.color(.moderate))
-                    } else {
-                        Label(previewText, systemImage: "clock")
-                            .font(.bcSubheadline)
-                            .skyCard(cornerRadius: 16, padding: 12)
+                    VStack(alignment: .leading, spacing: 18) {
+                        TimeWheel(date: $departure, calendar: calendar)
+                            .skyCard(padding: 8)
+                        Text("Local time in \(origin?.city ?? "your departure city"), from your booking.")
+                            .font(.bcFootnote)
+                            .foregroundStyle(.secondary)
+                        if !Self.isValid(departure) {
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text(Self.pastText(online: Connectivity.shared.isOnline))
+                                    .font(.bcSubheadline)
+                                    .foregroundStyle(Theme.color(.moderate))
+                                Button("Look up flight number", action: lookUpNumber)
+                                    .font(.bcSubheadlineStrong)
+                                    .tint(Theme.accent)
+                            }
+                        } else {
+                            Label(previewText, systemImage: "clock")
+                                .font(.bcSubheadline)
+                                .skyCard(cornerRadius: 16, padding: 12)
+                        }
                     }
+                    .transition(.fadeThrough(reduceMotion))
                 } else if let origin, let destination {
                     RouteFlightList(
                         origin: origin, destination: destination, day: departure.searchDay(in: timeZone),
                         dayText: departure.formatted(Date.FormatStyle(timeZone: timeZone).weekday(.abbreviated).day().month(.abbreviated)),
                         after: after, pick: pick, enterTime: { manual = true }, lookUpNumber: lookUpNumber)
+                    .transition(.fadeThrough(reduceMotion))
                 }
             }
             .padding()
@@ -965,8 +1321,16 @@ private struct RouteFlightList: View {
     let lookUpNumber: () -> Void
 
     @Environment(FlightStore.self) private var store
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var result: FlightSearchResult?
     @State private var showEarlier = false
+    /// Another day's list is on its way: the one on screen stays, dimmed, until it arrives.
+    @State private var isLoading = false
+    /// No connection, so no list: say so and offer the time wheel.
+    @State private var isOffline = false
+    /// Bumped by Try again and by the connection coming back. Part of the load's id, so a newer
+    /// day or retry cancels the older load instead of racing it.
+    @State private var attempt = 0
 
     private enum Part: String, CaseIterable {
         case morning = "Morning", afternoon = "Afternoon", evening = "Evening"
@@ -984,6 +1348,32 @@ private struct RouteFlightList: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
+            Group { content }.transition(.fadeThrough(reduceMotion))
+            if !isOffline && (result == nil || (result?.state == .found && !flights.isEmpty)) {
+                Button("Enter the time myself", action: enterTime)  // the notices carry their own
+                    .font(.bcSubheadlineStrong)
+                    .tint(Theme.accent)
+            }
+        }
+        .animation(Theme.motion(reduceMotion), value: result)
+        .animation(Theme.motion(reduceMotion), value: isLoading)
+        .animation(Theme.motion(reduceMotion), value: isOffline)
+        .task(id: "\(origin.icao)-\(destination.icao)-\(day)-\(attempt)") { await load() }
+        // Back online with the offline note showing: load the list now.
+        .onChange(of: Connectivity.shared.isOnline) { _, online in
+            if online && isOffline { attempt += 1 }
+        }
+    }
+
+    @ViewBuilder
+    private var content: some View {
+        if isOffline {
+            notice(
+                title: "You're offline",
+                // A time entered by hand can be up to an hour ago (see WhenStep.isValid).
+                body: "Enter your departure time instead. We'll save the flight and forecast it once you're back online. Already flying? Look up your flight number once you're connected.",
+                secondary: ("Try again", { attempt += 1 }))
+        } else {
             switch result?.state {
             case nil:
                 Label("Finding nonstop flights on \(dayText)…", systemImage: "airplane")
@@ -991,6 +1381,9 @@ private struct RouteFlightList: View {
                     .foregroundStyle(.secondary)
             case .found? where !flights.isEmpty:
                 list
+                    // Another day's list is loading: this one is still the old day's, so it waits.
+                    .opacity(isLoading ? 0.45 : 1)
+                    .disabled(isLoading)
             case .found?, .notFound?:
                 notice(
                     title: "No nonstop flights found that day",
@@ -1006,15 +1399,9 @@ private struct RouteFlightList: View {
                 notice(
                     title: "Can't load flights right now",
                     body: "Enter your departure time instead. We'll forecast it the same way.",
-                    secondary: ("Try again", { Task { await load() } }))
-            }
-            if result == nil || (result?.state == .found && !flights.isEmpty) {
-                Button("Enter the time myself", action: enterTime)  // the notices carry their own
-                    .font(.bcSubheadlineStrong)
-                    .tint(Theme.accent)
+                    secondary: ("Try again", { attempt += 1 }))
             }
         }
-        .task(id: "\(origin.icao)-\(destination.icao)-\(day)") { await load() }
     }
 
     private var list: some View {
@@ -1087,10 +1474,30 @@ private struct RouteFlightList: View {
         airport.timeZone.abbreviation(for: flights.first?.departureAt ?? .now) ?? ""
     }
 
+    /// Loads the day's list. The list on screen stays until the new one arrives, and a load that
+    /// was cancelled for a newer day never lands.
     private func load() async {
-        result = nil
+        // With the offline note up, "Try again" tries whenever there's a network at all.
+        guard Connectivity.shared.isOnline || (isOffline && Connectivity.shared.hasPath) else {
+            isLoading = false
+            isOffline = true
+            return
+        }
+        isLoading = true
+        let fetched: FlightSearchResult
+        do {
+            fetched = try await store.service.routeFlights(origin: origin.icao, destination: destination.icao, date: day)
+        } catch {
+            Connectivity.shared.noteFailure(error)  // counts only connection failures
+            fetched = .unavailable
+        }
+        guard !Task.isCancelled else { return }  // a newer day's list is on its way
+        isLoading = false
+        // A load that failed for want of a connection says so.
+        isOffline = fetched.state == .unavailable && !Connectivity.shared.isOnline
+        guard !isOffline else { return }
         showEarlier = false
-        result = (try? await store.service.routeFlights(origin: origin.icao, destination: destination.icao, date: day)) ?? .unavailable
+        result = fetched
     }
 }
 
@@ -1106,6 +1513,9 @@ private struct RouteFlightRow: View {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(flight.title).font(.bcHeadline)
                     Text(flight.timesText).font(.bcMeta).foregroundStyle(.secondary)
+                    if let live = flight.liveText {
+                        Text(live).font(.bcFootnoteStrong).foregroundStyle(Theme.accent)
+                    }
                 }
                 Spacer(minLength: 0)
                 if !typeSize.isAccessibilitySize {
@@ -1125,7 +1535,8 @@ private struct RouteFlightRow: View {
         let number = flight.flightNumber.split(separator: " ").last.map(String.init) ?? ""
         let departs = flight.departureAt.localTime(in: flight.originAirport?.timeZone ?? .current)
         let arrives = flight.arrivalAt.map { ", arrives \($0.localTime(in: flight.destinationAirport?.timeZone ?? .current))" } ?? ""
-        return "\(airline) \(number), departs \(departs)\(arrives)"
+        let live = flight.liveText.map { ". \($0)" } ?? ""
+        return "\(airline) \(number), departs \(departs)\(arrives)\(live)"
     }
 }
 
@@ -1133,6 +1544,8 @@ private struct RouteFlightRow: View {
 private struct DayPicker: View {
     @Binding var departure: Date
     let calendar: Calendar
+    /// After they pick a day (only then, never when the departure changes some other way).
+    var picked: () -> Void = {}
     @State private var isPickingDate = false
 
     /// Days shown as tiles; later dates come from the calendar tile.
@@ -1213,6 +1626,7 @@ private struct DayPicker: View {
     private func setDay(_ day: Date) {
         let time = calendar.dateComponents([.hour, .minute], from: departure)
         departure = calendar.date(bySettingHour: time.hour ?? 9, minute: time.minute ?? 0, second: 0, of: day) ?? day
+        picked()
     }
 }
 
@@ -1464,6 +1878,10 @@ private struct CheckStep: View {
     let isEditing: Bool
     /// The flight from search, when it came from there.
     let picked: FoundFlight?
+    /// Why it can't be saved (it has landed, or the time has passed), instead of a silent button.
+    let problem: String?
+    /// It's already in their flights: the button opens it instead.
+    let alreadySaved: Bool
     let change: () -> Void
 
     var body: some View {
@@ -1473,39 +1891,55 @@ private struct CheckStep: View {
                 if let origin, let destination {
                     routeCard(origin, destination)
                 }
-                if departure.timeIntervalSinceNow > 18 * 3600 {
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("What happens next").font(.bcSection)
-                        ForEach(timeline, id: \.title) { item in
-                            HStack(alignment: .top, spacing: 12) {
-                                Circle()
-                                    .fill(item.isNow ? Theme.accent : Theme.secondaryInk.opacity(0.4))
-                                    .frame(width: 10, height: 10)
-                                    .padding(.top, 5)
-                                VStack(alignment: .leading, spacing: 2) {
-                                    Text(item.when).eyebrow().foregroundStyle(.secondary)
-                                    Text(item.title).font(.bcHeadline)
-                                    Text(item.detail).font(.bcSubheadline).foregroundStyle(.secondary)
-                                }
-                            }
-                        }
-                    }
-                    .skyCard()
+                if alreadySaved {
+                    Label("Already in your flights", systemImage: "checkmark.circle.fill")
+                        .font(.bcHeadline)
+                        .foregroundStyle(Theme.accent)
+                } else {
+                    details
                 }
-                Toggle(isOn: $notify) {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Tell me when it's ready or changes").font(.bcHeadline)
-                        // Backed by worker quiet hours (22:00–07:00 local; early flights still get updates).
-                        Text("Only for changes you'd notice. Quiet overnight unless you fly early.")
-                            .font(.bcFootnote)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-                .tint(Theme.accent)
-                .skyCard()
             }
             .padding()
         }
+    }
+
+    @ViewBuilder
+    private var details: some View {
+        if let problem {
+            Text(problem)
+                .font(.bcSubheadline)
+                .foregroundStyle(Theme.color(.moderate))
+        }
+        if departure.timeIntervalSinceNow > 18 * 3600 {
+            VStack(alignment: .leading, spacing: 12) {
+                Text("What happens next").font(.bcSection)
+                ForEach(timeline, id: \.title) { item in
+                    HStack(alignment: .top, spacing: 12) {
+                        Circle()
+                            .fill(item.isNow ? Theme.accent : Theme.secondaryInk.opacity(0.4))
+                            .frame(width: 10, height: 10)
+                            .padding(.top, 5)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(item.when).eyebrow().foregroundStyle(.secondary)
+                            Text(item.title).font(.bcHeadline)
+                            Text(item.detail).font(.bcSubheadline).foregroundStyle(.secondary)
+                        }
+                    }
+                }
+            }
+            .skyCard()
+        }
+        Toggle(isOn: $notify) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Tell me when it's ready or changes").font(.bcHeadline)
+                // Backed by worker quiet hours (22:00–07:00 local; early flights still get updates).
+                Text("Only for changes you'd notice. Quiet overnight unless you fly early.")
+                    .font(.bcFootnote)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .tint(Theme.accent)
+        .skyCard()
     }
 
     private func routeCard(_ origin: Airport, _ destination: Airport) -> some View {
@@ -1527,6 +1961,9 @@ private struct CheckStep: View {
                 Text("Arrives \(moved.localTimeWithZone(in: destination.timeZone))").font(.bcMeta).foregroundStyle(.secondary)
             } else {
                 Text("About \(Int(flight.estimatedAirMinutes).durationText) in the air").font(.bcFootnote).foregroundStyle(.secondary)
+            }
+            if let picked, picked.departureAt == departure, let live = picked.liveText {
+                Text(live).font(.bcFootnoteStrong).foregroundStyle(Theme.accent)
             }
         }
         .skyCard()

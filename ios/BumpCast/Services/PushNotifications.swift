@@ -31,6 +31,11 @@ final class PushNotifications: NSObject {
         return granted
     }
 
+    private static let registeredKey = "push.registered"
+    private static let registeredAtKey = "push.registeredAt"
+
+    /// Called on every foreground. The worker only needs the token once per account, so it's sent
+    /// again only when the account, token or environment changes, or a day has passed.
     func didRegister(deviceToken: Data) {
         let token = deviceToken.map { String(format: "%02x", $0) }.joined()
         #if DEBUG
@@ -39,7 +44,24 @@ final class PushNotifications: NSObject {
             let environment = "production"
         #endif
         Task {
-            try? await FlightStore.shared.service.registerDevice(token: token, environment: environment)
+            let store = FlightStore.shared
+            // Registered as the account the flights belong to, never before it's known.
+            guard let userID = try? await store.account() else { return }
+            let key = "\(userID.uuidString):\(token):\(environment)"
+            let defaults = UserDefaults.standard
+            if defaults.string(forKey: Self.registeredKey) == key,
+                let registeredAt = defaults.object(forKey: Self.registeredAtKey) as? Date,
+                registeredAt.timeIntervalSinceNow > -86400
+            {
+                return
+            }
+            do {
+                try await store.service.registerDevice(token: token, environment: environment)
+                defaults.set(key, forKey: Self.registeredKey)
+                defaults.set(Date.now, forKey: Self.registeredAtKey)
+            } catch {
+                // Sent again on the next foreground.
+            }
         }
     }
 
@@ -47,7 +69,9 @@ final class PushNotifications: NSObject {
     nonisolated static let forecastKinds: Set<String> = ["ready", "update", "confirmed"]
 
     fileprivate func handleTap(_ userInfo: [AnyHashable: Any]) {
-        guard let raw = userInfo["flight_id"] as? String, let flightID = UUID(uuidString: raw) else { return }
+        guard let raw = userInfo["flight_id"] as? String, let old = UUID(uuidString: raw) else { return }
+        // Sent for a flight that was saved again since: the new id.
+        let flightID = InFlight.shared.currentID(of: old)
         let kind = userInfo["kind"] as? String ?? ""
         switch kind {
         case "stretch":

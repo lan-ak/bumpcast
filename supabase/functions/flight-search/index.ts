@@ -5,8 +5,11 @@
 //
 // Returns { state, flights }, where state is found | not_found | not_published | no_schedule
 // | unavailable, and each flight is { flight_number, airline_name, origin, destination,
-// departure_at, arrival_at } with ICAO airports and UTC times. The provider key stays here;
-// the app never sees or names the provider.
+// departure_at, arrival_at, departed, takeoff_at, landed_at, departure_actual } with ICAO
+// airports and UTC times. The live fields say where today's flight is: departed (left the gate),
+// takeoff_at and landed_at (runway times, only once they've passed: before that they're
+// estimates) and departure_actual (when it left the gate); null or false until then. The
+// provider key stays here; the app never sees or names the provider.
 //
 // Secrets: AERODATABOX_API_KEY. Optional AERODATABOX_API_URL (default: the direct API, key in
 // x-api-key) and AERODATABOX_KEY_HEADER, as in the worker. A RapidAPI URL switches to its headers.
@@ -17,6 +20,8 @@ const DIRECT_URL = "https://api.aerodatabox.com";
 const SEARCHES_PER_HOUR = 60;
 // No results this far ahead most likely means the airline hasn't published the schedule yet.
 const PUBLISHED_HORIZON_DAYS = 60;
+// Provider statuses that mean the aircraft has pushed back or taken off (as in the worker).
+const DEPARTED = new Set(["Departed", "EnRoute", "Approaching", "Arrived"]);
 
 type Flight = {
   flight_number: string;
@@ -25,6 +30,10 @@ type Flight = {
   destination: string;
   departure_at: string;
   arrival_at: string | null;
+  departed: boolean;
+  takeoff_at: string | null;
+  landed_at: string | null;
+  departure_actual: string | null;
 };
 
 const json = (body: unknown, status = 200) =>
@@ -44,12 +53,20 @@ function utc(t: { utc?: string } | undefined): string | null {
   return isNaN(date.getTime()) ? null : date.toISOString().replace(/\.\d{3}Z$/, "Z");
 }
 
+// A runway time counts once it has passed; until then it's the airline's estimate.
+function passed(t: string | null): string | null {
+  return t && Date.parse(t) <= Date.now() ? t : null;
+}
+
 // deno-lint-ignore no-explicit-any
 function toFlight(f: any): Flight | null {
   const dep = f.departure ?? {};
   const arr = f.arrival ?? {};
   const departure = utc(dep.scheduledTime);
   if (!dep.airport?.icao || !arr.airport?.icao || !departure) return null;
+  const takeoff = passed(utc(dep.runwayTime));
+  const departed = DEPARTED.has(f.status) || takeoff !== null;
+  const arrived = f.status === "Arrived";
   return {
     flight_number: normalizeNumber(f.number ?? "") ?? f.number,
     airline_name: f.airline?.name ?? null,
@@ -57,6 +74,18 @@ function toFlight(f: any): Flight | null {
     destination: arr.airport.icao,
     departure_at: departure,
     arrival_at: utc(arr.scheduledTime),
+    departed,
+    takeoff_at: departed ? takeoff : null,
+    // Only once it has left: a stale arrival estimate for a plane still at the gate isn't a landing.
+    // "Arrived" without a runway time (only gate times known) is still a landing.
+    landed_at: departed
+      ? passed(utc(arr.runwayTime)) ??
+        (arrived
+          ? passed(utc(arr.revisedTime)) ?? passed(utc(arr.scheduledTime)) ??
+            new Date().toISOString().replace(/\.\d{3}Z$/, "Z")
+          : null)
+      : null,
+    departure_actual: departed ? utc(dep.revisedTime) ?? takeoff : null,
   };
 }
 

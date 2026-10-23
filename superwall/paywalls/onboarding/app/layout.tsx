@@ -3,8 +3,11 @@ import { useHaptics, useSuperwallSnapshot, useTranslation, useUser } from "super
 import { useRouter } from "superwall/navigation";
 import "./theme.css";
 
-/** The question flow, in order, for the progress bar. The welcome and plans pages have no chrome. */
-const STEPS = ["feeling", "reassure", "how", "help", "frequency", "source", "notifications"] as const;
+/**
+ * The question flow, in order, for the progress bar. The welcome, plans, and the flying-soon pages
+ * after notifications (find, checking, flight) have no chrome: there's no going back from them.
+ */
+const STEPS = ["feeling", "reassure", "how", "help", "frequency", "when", "source", "notifications"] as const;
 
 /**
  * How the "Calm line" sunrise behind the pages behaves on each page: the full logo scene on the
@@ -17,6 +20,7 @@ const SCENE: Record<string, SceneMode> = {
   feeling: "fill",
   help: "fill",
   frequency: "fill",
+  when: "fill",
   source: "fill",
 };
 

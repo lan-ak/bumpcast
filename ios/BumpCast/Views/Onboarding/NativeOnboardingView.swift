@@ -2,16 +2,17 @@ import SwiftUI
 
 /// The onboarding flow, natively: used only when the Superwall flow can't load (offline at first
 /// launch, a configuration error, no campaign). Same pages, copy and answer values as
-/// `superwall/paywalls/onboarding`, minus the paywall, which needs Superwall to sell.
+/// `superwall/paywalls/onboarding`, minus the paywall, which needs Superwall to sell. People
+/// flying soon go straight to Add flight afterwards instead of adding it inside the flow.
 struct NativeOnboardingView: View {
     enum Step: Int, CaseIterable {
-        case welcome, feeling, reassure, how, help, frequency, source, notifications
+        case welcome, feeling, reassure, how, help, frequency, nextFlight, source, notifications
 
         /// Where the "Calm line" sunrise sits behind the page.
         var scene: SceneMode {
             switch self {
             case .welcome: .hero
-            case .feeling, .help, .frequency, .source: .fill
+            case .feeling, .help, .frequency, .nextFlight, .source: .fill
             case .reassure, .how, .notifications: .off
             }
         }
@@ -29,7 +30,11 @@ struct NativeOnboardingView: View {
         var feeling: String?
         var help: [String] = []
         var frequency: String?
+        var nextFlight: String?
         var source: String?
+
+        /// Flying in the next 3 days: the Superwall flow adds the flight and sells it here.
+        var fliesSoon: Bool { ["24h", "3d"].contains(nextFlight) }
     }
 
     var body: some View {
@@ -145,6 +150,15 @@ struct NativeOnboardingView: View {
                 options: [("Once a year or less", "yearly-or-less"), ("A few times a year", "few-a-year"), ("Monthly or more", "monthly-plus")],
                 selected: answers.frequency
             ) { answers.frequency = $0 }
+        case .nextFlight:
+            question(
+                "When is your next flight?", key: "next_flight_window",
+                options: [
+                    ("In the next 24 hours", "24h"), ("In the next 3 days", "3d"),
+                    ("In the next week", "week"), ("Further out", "later"),
+                ],
+                selected: answers.nextFlight
+            ) { answers.nextFlight = $0 }
         case .source:
             question(
                 "How did you hear about us?", key: "source", eyebrow: "Last one",
@@ -251,6 +265,13 @@ struct NativeOnboardingView: View {
         }
     }
 
+    /// Flying soon: Add flight opens as the flow lifts, unless they already added one in an
+    /// earlier attempt at the Superwall flow (finishing opens that one instead).
+    private func finish() async {
+        let hasFlight = OnboardingFlight.flightID.flatMap { FlightStore.shared.flight($0) } != nil
+        await Onboarding.shared.finishNative(addFlight: answers.fliesSoon && !hasFlight)
+    }
+
     private var notifications: some View {
         PageLayout(centered: true) {
             HStack(spacing: 12) {
@@ -278,12 +299,12 @@ struct NativeOnboardingView: View {
                 Task {
                     let granted = await PushNotifications.shared.requestPermission()
                     Paywalls.shared.setUserAttributes(["notifications_prompt": granted ? "granted" : "denied"])
-                    await Onboarding.shared.finishNative()
+                    await finish()
                 }
             }
             Button("Not now") {
                 Paywalls.shared.setUserAttributes(["notifications_prompt": "not-now"])
-                Task { await Onboarding.shared.finishNative() }
+                Task { await finish() }
             }
             .font(.bcBody)
             .foregroundStyle(Theme.ink)

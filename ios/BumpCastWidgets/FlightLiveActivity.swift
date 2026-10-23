@@ -11,8 +11,9 @@ struct BumpCastWidgets: WidgetBundle {
 }
 
 /// Lock Screen, StandBy, Dynamic Island, Watch Smart Stack and CarPlay. Everything is worked out
-/// at render time; the app sets staleDate to the next stretch boundary so the system re-renders
-/// there even with no connection.
+/// at render time from the state's plan (the attributes' when the state has none); the app sets
+/// staleDate to the next stretch boundary so the system re-renders there even with no connection.
+/// Nothing re-renders at takeoff, so what shows at the gate must still read right after it.
 struct FlightLiveActivity: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: FlightActivityAttributes.self) { context in
@@ -24,12 +25,13 @@ struct FlightLiveActivity: Widget {
             let a = context.attributes
             let s = context.state
             let current = a.current(at: .now, s)
+            let glass = a.glass(at: .now, s)
             return DynamicIsland {
                 DynamicIslandExpandedRegion(.leading) {
                     Label(a.route, systemImage: "airplane").font(.bcCaptionStrong)
                 }
                 DynamicIslandExpandedRegion(.trailing) {
-                    Text(timerInterval: countdown(to: a.landing(s)), countsDown: true)
+                    TimeLabel(attributes: a, state: s, compact: true)
                         .font(.bcCaption.monospacedDigit())
                         .multilineTextAlignment(.trailing)
                 }
@@ -52,11 +54,11 @@ struct FlightLiveActivity: Widget {
                     }
                 }
             } compactLeading: {
-                WaterGlass(severity: current.map { $0.1 ? $0.0.level : .smooth } ?? .smooth, size: 18)
+                WaterGlass(severity: glass, size: 18)
             } compactTrailing: {
                 CompactTimer(attributes: a, state: s)
             } minimal: {
-                WaterGlass(severity: current.map { $0.1 ? $0.0.level : .smooth } ?? .smooth, size: 16)
+                WaterGlass(severity: glass, size: 16)
             }
             .widgetURL(URL(string: "bumpcast://flight/\(a.flightID.uuidString)"))
         }
@@ -68,6 +70,24 @@ struct FlightLiveActivity: Widget {
 private func countdown(to end: Date) -> ClosedRange<Date> {
     let now = Date.now
     return min(now, end)...end
+}
+
+/// Top right: the takeoff time until the plane is up, then how long until landing. Before takeoff
+/// it's a clock time, which still reads right after takeoff until the next re-render.
+private struct TimeLabel: View {
+    let attributes: FlightActivityAttributes
+    let state: FlightActivityAttributes.ContentState
+    let compact: Bool
+
+    var body: some View {
+        if Date.now < state.takeoff {
+            let time = state.takeoff.formatted(date: .omitted, time: .shortened)
+            Text(compact ? time : "Takeoff ~\(time)")
+        } else {
+            let left = Text(timerInterval: countdown(to: attributes.landing(state)), countsDown: true)
+            if compact { left } else { Text("Lands in \(left)") }
+        }
+    }
 }
 
 /// Lock Screen (medium) or Watch/CarPlay (small); after landing, the "How did it feel?" buttons.
@@ -102,11 +122,11 @@ private struct LockScreenView: View {
             HStack {
                 Label(attributes.route, systemImage: "airplane").font(.bcMeta)
                 Spacer()
-                Text("Lands in \(Text(timerInterval: countdown(to: attributes.landing(state)), countsDown: true))")
+                TimeLabel(attributes: attributes, state: state, compact: false)
                     .font(.bcCaption.monospacedDigit())
             }
             HStack(alignment: .center, spacing: 10) {
-                WaterGlass(severity: currentSeverity, size: 28)
+                WaterGlass(severity: attributes.glass(at: .now, state), size: 28)
                 VStack(alignment: .leading, spacing: 2) {
                     LeadText(attributes: attributes, state: state).font(.bcSection)
                     NextText(attributes: attributes, state: state).font(.bcCaption).foregroundStyle(.secondary)
@@ -130,31 +150,43 @@ private struct LockScreenView: View {
         .padding()
     }
 
-    private var currentSeverity: Severity {
-        guard let (stretch, inProgress) = attributes.current(at: .now, state), inProgress else { return .smooth }
-        return stretch.level
-    }
-
+    /// The takeoff the countdown is timed to and how fresh the plan is: "Takeoff 2:53 PM ·
+    /// Confirmed forecast, updated 2:20 PM". Before takeoff the lead line already gives the time.
     private var footer: String {
-        guard let issued = attributes.issuedAt else { return "Saved before takeoff" }
-        return "Saved before takeoff · \(attributes.confidenceTitle) from \(issued.formatted(date: .omitted, time: .shortened))"
+        let plan = attributes.issued(state).map {
+            "\(attributes.confidence(state)), updated \($0.formatted(date: .omitted, time: .shortened))"
+        }
+        guard Date.now >= state.takeoff else { return plan ?? "Saved on this phone" }
+        let takeoff = "Takeoff \(state.takeoff.formatted(date: .omitted, time: .shortened))"
+        return "\(takeoff) · \(plan ?? "saved on this phone")"
     }
 }
 
-/// "Smooth for 42:10" / "Light chop now · 5:40 left" / "Smooth to landing".
+/// "Takeoff around 2:50 PM" / "Smooth for 42:10" / "Light chop now · 5:40 left" / "Smooth to landing".
+/// A global outlook never says "smooth", and its outlook stretches read "Bumps possible" at rough
+/// times, as in the app: "Bumps possible around 3:40 PM" / "No major bumps expected to landing".
 private struct LeadText: View {
     let attributes: FlightActivityAttributes
     let state: FlightActivityAttributes.ContentState
 
     var body: some View {
-        if let (stretch, inProgress) = attributes.current(at: .now, state) {
-            if inProgress {
-                Text("\(stretch.title) now · \(Text(timerInterval: countdown(to: attributes.end(of: stretch, state)), countsDown: true).monospacedDigit()) left")
+        if Date.now < state.takeoff {
+            // Started at the gate: nothing counts "Smooth for" through the taxi. Offline this
+            // shows until the first stretch starts, and still reads right in the climb.
+            Text("Takeoff around \(state.takeoff.formatted(date: .omitted, time: .shortened))")
+        } else if let (stretch, inProgress) = attributes.current(at: .now, state) {
+            if attributes.isOutlook(stretch, state) {
+                // A clock time, not a timer: approximate, and still right with no re-render.
+                Text(inProgress ? "Bumps possible now" : "Bumps possible around \(aboutTime(attributes.start(of: stretch, state)))")
+            } else if inProgress {
+                Text("\(stretch.level.phrase.sentenceCased) now · \(Text(timerInterval: countdown(to: attributes.end(of: stretch, state)), countsDown: true).monospacedDigit()) left")
+            } else if attributes.isGlobalOutlook(state) {
+                Text("\(stretch.level.phrase.sentenceCased) in \(Text(timerInterval: countdown(to: attributes.start(of: stretch, state)), countsDown: true).monospacedDigit())")
             } else {
                 Text("Smooth for \(Text(timerInterval: countdown(to: attributes.start(of: stretch, state)), countsDown: true).monospacedDigit())")
             }
         } else {
-            Text("Smooth to landing")
+            Text(attributes.isGlobalOutlook(state) ? "No major bumps expected to landing" : "Smooth to landing")
         }
     }
 }
@@ -165,16 +197,53 @@ private struct NextText: View {
     let state: FlightActivityAttributes.ContentState
 
     var body: some View {
-        if let (stretch, inProgress) = attributes.current(at: .now, state) {
-            if inProgress {
-                Text("Then smoother air")
+        let globalOutlook = attributes.isGlobalOutlook(state)
+        if Date.now < state.takeoff {
+            if let first = attributes.stretches(state).first {
+                if attributes.isOutlook(first, state) {
+                    Text(first.startMin < 5
+                        ? "Then bumps possible soon after takeoff"
+                        : "Then bumps possible about \(roughText(first.startMin)) in")
+                } else {
+                    Text(first.startMin < 1
+                        ? "Then \(first.level.phrase) right after takeoff"
+                        : "Then \(first.level.phrase) about \(first.startMin) min in")
+                }
             } else {
-                Text("Then \(stretch.title.lowercased()) for about \(stretch.minutes) min")
+                Text(globalOutlook ? "No major bumps expected" : "Smooth flight expected")
+            }
+        } else if let (stretch, inProgress) = attributes.current(at: .now, state) {
+            if attributes.isOutlook(stretch, state) {
+                Text(inProgress
+                    ? "Until about \(aboutTime(attributes.end(of: stretch, state)))"
+                    : "For around \(roughText(stretch.minutes))")
+            } else if inProgress {
+                Text(globalOutlook ? "Then no major bumps expected" : "Then smoother air")
+            } else if globalOutlook {
+                Text("For about \(stretch.minutes) min")
+            } else {
+                Text("Then \(stretch.level.phrase) for about \(stretch.minutes) min")
             }
         } else {
-            Text("No more bumps expected")
+            Text(globalOutlook ? "Light bumps are possible on any flight" : "No more bumps expected")
         }
     }
+}
+
+/// Outlook times are approximate: the clock to the nearest 10 minutes, "3:40 PM".
+private func aboutTime(_ date: Date) -> String {
+    let parts = Calendar.current.dateComponents([.minute, .second], from: date)
+    let past = TimeInterval((parts.minute ?? 0) % 10 * 60 + (parts.second ?? 0))
+    return date.addingTimeInterval(past >= 300 ? 600 - past : -past).formatted(date: .omitted, time: .shortened)
+}
+
+/// Outlook lengths are approximate, as in the app: the nearest 10 min under an hour, the nearest
+/// 30 min above. 95 -> "1 h 30 min".
+private func roughText(_ minutes: Int) -> String {
+    let rough = minutes < 60 ? max(10, (minutes + 5) / 10 * 10) : (minutes + 15) / 30 * 30
+    let h = rough / 60, m = rough % 60
+    if h == 0 { return "\(m) min" }
+    return m == 0 ? "\(h) h" : "\(h) h \(m) min"
 }
 
 /// Flight progress with the bumpy stretches marked: position vs bumps stays visible offline.
@@ -193,8 +262,8 @@ private struct RouteStrip: View {
                 }
                 .tint(Theme.nightInk)
                 GeometryReader { geo in
-                    let total = Double(max(attributes.durationMin, 1))
-                    ForEach(attributes.stretches, id: \.startMin) { stretch in
+                    let total = Double(max(attributes.duration(state), 1))
+                    ForEach(attributes.stretches(state), id: \.startMin) { stretch in
                         RoundedRectangle(cornerRadius: 2)
                             .fill(Theme.color(stretch.level))
                             .frame(width: max(3, geo.size.width * Double(stretch.minutes) / total), height: 6)
@@ -217,8 +286,7 @@ private struct SmallView: View {
 
     var body: some View {
         HStack(spacing: 8) {
-            let current = attributes.current(at: .now, state)
-            WaterGlass(severity: current.map { $0.1 ? $0.0.level : .smooth } ?? .smooth, size: 22)
+            WaterGlass(severity: attributes.glass(at: .now, state), size: 22)
             VStack(alignment: .leading, spacing: 0) {
                 Text(attributes.route).font(.bcCaption2Strong)
                 LeadText(attributes: attributes, state: state).font(.bcCaption)
@@ -228,8 +296,8 @@ private struct SmallView: View {
     }
 }
 
-/// Dynamic Island compact trailing: minutes of smooth air left, shorter in the iOS 27
-/// landscape Dynamic Island.
+/// Dynamic Island compact trailing: minutes of smooth air left (from the gate, counting through
+/// takeoff, which nothing re-renders at), shorter in the iOS 27 landscape Dynamic Island.
 private struct CompactTimer: View {
     let attributes: FlightActivityAttributes
     let state: FlightActivityAttributes.ContentState
@@ -267,7 +335,7 @@ private struct CompactTimerBody: View {
             )
             .font(.bcCaptionStrong.monospacedDigit())
             .frame(maxWidth: limited ? 36 : 52)
-            .foregroundStyle(inProgress ? Theme.color(stretch.level) : Theme.color(.smooth))
+            .foregroundStyle(Theme.color(attributes.glass(at: .now, state)))
         } else {
             Image(systemName: "checkmark")
         }

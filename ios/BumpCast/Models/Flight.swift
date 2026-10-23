@@ -69,9 +69,16 @@ struct Flight: Codable, Hashable, Identifiable, Sendable {
 
     var forecastUnlocksAt: Date { departureAt.addingTimeInterval(-Self.forecastWindow) }
 
-    /// Matches the worker's assumption: wheels up 15 minutes after departure. Follows delays,
-    /// like the forecast does.
-    var estimatedTakeoff: Date { status?.takeoffAt ?? expectedDeparture.addingTimeInterval(Forecast.taxiOut) }
+    /// Wheels-up the airline reported: a runway time that has passed. Rows the worker wrote before
+    /// it stored runway times only can hold a guess in the future, which doesn't count.
+    var reportedTakeoff: Date? { status?.takeoffAt.flatMap { $0 <= .now ? $0 : nil } }
+
+    /// The plane has left: the airline reported wheels-up, or that it departed.
+    var isAirborne: Bool { reportedTakeoff != nil || status?.state == .departed }
+
+    /// The reported wheels-up, else the worker's assumption: wheels up 15 minutes after departure.
+    /// Follows delays, like the forecast does.
+    var estimatedTakeoff: Date { reportedTakeoff ?? expectedDeparture.addingTimeInterval(Forecast.taxiOut) }
 
     /// Landing from the forecast's flight time, or a rough great-circle estimate before there is one.
     func estimatedLanding(_ forecast: Forecast?) -> Date {
@@ -81,7 +88,7 @@ struct Flight: Codable, Hashable, Identifiable, Sendable {
         return estimatedTakeoff.addingTimeInterval(estimatedAirMinutes * 60)
     }
 
-    /// Air time at ~460 kt cruise plus ~20 minutes for climb and descent.
+    /// Air time at ~460 kt plus ~20 minutes: the worker's still-air profile (route.py) within ~2% from 200 to 8,000 nm.
     var estimatedAirMinutes: Double {
         guard let a = originAirport, let b = destinationAirport else { return 120 }
         let rad = Double.pi / 180
@@ -123,7 +130,8 @@ struct FlightStatus: Codable, Hashable, Sendable {
     var checkedAt: Date
     var nextCheckAt: Date?
     var finished: Bool = false
-    /// Wheels-up from the airline's data (runway time, else gate time plus taxi). Nil until it left.
+    /// Wheels-up from the airline's runway time. Nil until it left. Older rows may hold a guess
+    /// (gate time plus taxi), so read it through `Flight.reportedTakeoff`.
     var takeoffAt: Date?
 
     enum CodingKeys: String, CodingKey {
@@ -153,7 +161,7 @@ struct FlightStatus: Codable, Hashable, Sendable {
 
 /// Fields the app sends when creating or editing a flight. New flights carry a client-made id,
 /// so one saved offline keeps the same id once it syncs.
-struct FlightDraft: Codable, Sendable {
+struct FlightDraft: Codable, Hashable, Sendable {
     var id: UUID?
     var origin: String
     var destination: String
@@ -191,5 +199,15 @@ struct FlightDraft: Codable, Sendable {
         Flight(
             id: id ?? UUID(), origin: origin, destination: destination, departureAt: departureAt, notify: notify,
             flightNumber: flightNumber, airlineName: airlineName, arrivalAt: arrivalAt, schedulePending: schedulePending)
+    }
+}
+
+extension FlightDraft {
+    /// The same flight, to save again (e.g. under another account).
+    init(_ flight: Flight) {
+        self.init(
+            id: flight.id, origin: flight.origin, destination: flight.destination, departureAt: flight.departureAt,
+            notify: flight.notify, flightNumber: flight.flightNumber, airlineName: flight.airlineName,
+            arrivalAt: flight.arrivalAt, schedulePending: flight.schedulePending)
     }
 }

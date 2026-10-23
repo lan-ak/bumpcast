@@ -1,5 +1,6 @@
 import SwiftUI
 import UIKit
+import Combine
 
 /// BumpCast design tokens (docs/design/DESIGN_SPEC.md §2). Used by the app, widgets and Live Activity.
 /// Turbulence never uses red, warning symbols or warning/error haptics.
@@ -94,7 +95,16 @@ private struct SkyBackground: View {
     @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
-        (colorScheme == .dark ? Sky.night : sky).gradient.ignoresSafeArea()
+        let shown = colorScheme == .dark ? Sky.night : sky
+        // Every sky stays laid out and only the shown one is opaque, so a new departure time
+        // cross-fades the sky instead of cutting it. The shown sky's middle colour sits behind,
+        // so the screen never thins out halfway through the fade.
+        ZStack {
+            shown.colors[1]
+            ForEach(Sky.allCases, id: \.self) { $0.gradient.opacity($0 == shown ? 1 : 0) }
+        }
+        .animation(Theme.fade, value: shown)
+        .ignoresSafeArea()
     }
 }
 
