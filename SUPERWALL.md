@@ -101,7 +101,9 @@ Flights outside coverage, flights saved offline, and app versions without the ca
 1. ~~Design the onboarding flow~~ Done: `superwall/paywalls/onboarding`, live at 100% on the Onboarding campaign. Edit it there and run `SUPERWALL_CHANNEL=next superwall publish`. While it loads, the app shows `LaunchLoadingView`; if it can't load in 8 s (or the campaign skips), `NativeOnboardingView` asks the same questions natively, without the paywall. Debug builds can force the native flow with `-nativeOnboarding`.
 2. ~~Design the paywalls~~ Done, as code sharing `superwall/components/pro` (one look: the onboarding Plans page, as a modal sheet). The headline follows `params.event_name`; the flight pass is only offered when the placement passes `flight_id`.
    - **Forecast moments** → `forecast-moment` (paywall 281983) at 100%. Shows the user's route, hours to departure and `grade_title` on the sky. Leads with the flight pass (they need it for this flight); "More options" opens This flight / Yearly / Monthly as one choice. Without a flight, Pro leads.
-   - **Pro features** → A/B test at 50/50: `pro-features` (281984, subscription is the button, pass is a link) vs `pro-features-pass-first` (281985, pass is the button, Pro trial is a link). Without a flight both show the subscription only.
+   - **Pro features** → two audiences, top to bottom:
+     1. **Has a flight** (193400, `params.flight_id != null`): A/B test at 50/50, `pro-features` (281984, subscription is the button, pass is a link) vs `pro-features-pass-first` (281985, pass is the button, Pro trial is a link).
+     2. **No flight** (195604, everyone else): `pro-features` at 100%. A pass needs a flight, so the test only runs where one can be sold. Today `pilot_reports_locked`, `flight_limit_reached` and `upgrade_from_settings` send no flight.
    - Edit them under `superwall/paywalls/`, then `SUPERWALL_CHANNEL=next superwall publish`.
 3. **Replace the 100% holdout audiences** that Superwall creates with real audiences, for example:
    - `user.notifications_enabled == true`;
