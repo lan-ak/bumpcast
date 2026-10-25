@@ -233,7 +233,7 @@ struct Explainer: Identifiable, Hashable {
             diagram: .calm,
             happening: "Airliners are designed and tested to handle forces well beyond anything turbulence produces in normal flight. Wings flex on purpose; that's why you may see them move.",
             crew: "In bumps, pilots slow to a speed that gives the aircraft extra margin and keep flying normally.",
-            feel: "Movement can feel big, but most drops are a change in height of only a few metres.",
+            feel: "Movement can feel big, but most drops are a change in height of only a few meters.",
             goodToKnow: "Turbulence is a comfort issue, not a structural one."),
         Explainer(
             id: "seatbelt", title: "Why the seatbelt matters", subtitle: "The one thing that keeps you safe",

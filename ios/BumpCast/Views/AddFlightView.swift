@@ -21,7 +21,6 @@ struct AddFlightView: View {
     }
 
     @Environment(FlightStore.self) private var store
-    @Environment(PushNotifications.self) private var push
     @Environment(Router.self) private var router
     @Environment(\.dismiss) private var dismiss
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -393,11 +392,9 @@ struct AddFlightView: View {
         isSaving = true
         savingConnection = thenConnect
         defer { isSaving = false }
-        // The toggle asks for notifications as they tap Add flight, while the flight saves, so the
-        // system prompt never fades in over the closing sheet (DESIGN_SPEC §3.8). The onboarding
-        // flow has already asked.
-        let asksPermission = notify && onboarding == nil && push.status == .notDetermined
-        if asksPermission { Task { await push.requestPermission() } }
+        // The toggle's notifications are asked for once the sheet has closed: the `flight_added`
+        // moment (FlightsListView), so the system prompt never fades in over the closing sheet
+        // (DESIGN_SPEC §3.8). The onboarding flow asks on its own.
         var draft = FlightDraft(origin: origin.icao, destination: destination.icao, departureAt: departure, notify: notify)
         if let picked, picked.origin == origin.icao, picked.destination == destination.icao {
             draft.flightNumber = picked.flightNumber
@@ -431,23 +428,12 @@ struct AddFlightView: View {
             if !closed { saveFailed = true }
             return
         }
-        if asksPermission { await notificationAnswer() }
         added.append(saved)
         if thenConnect {
             startConnection(after: saved)
             return
         }
         finish()
-    }
-
-    /// Waits for their answer to the notification prompt, so the sheet only moves once it's gone.
-    /// The status changes as soon as they answer, before the answer is saved to their profile (a
-    /// network call the sheet doesn't wait for). Never more than a minute.
-    private func notificationAnswer() async {
-        let deadline = ContinuousClock.now + .seconds(60)
-        while push.status == .notDetermined, ContinuousClock.now < deadline {
-            try? await Task.sleep(for: .milliseconds(100))
-        }
     }
 
     /// Reopen the sheet for the next leg, from where this one lands.

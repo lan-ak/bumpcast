@@ -916,12 +916,30 @@ final class FlightStore {
 
     func flight(_ id: UUID) -> Flight? { flights.first { $0.id == id } }
 
+    /// What's next, in the one order the Flights screen, Calm, auto-arm (and so the Live Activity)
+    /// and the free limit share: a flight in the air first, then by expected departure (the
+    /// airline's live time when there is one), so a delay re-sorts it. Cancelled flights are never
+    /// next; see `cancelledUpcoming`.
     var upcomingFlights: [Flight] {
+        let now = Date.now
+        let inFlight = InFlight.shared
         // Uses the tapped landing time when there is one.
-        flights.filter { InFlight.shared.landing(of: $0, forecast: forecasts[$0.id]) > .now }
+        let upcoming = flights.filter { !$0.isCancelled && inFlight.landing(of: $0, forecast: forecasts[$0.id]) > now }
+        return upcoming.sorted { a, b in
+            let aInAir = inFlight.effectiveTakeoff(of: a) <= now
+            let bInAir = inFlight.effectiveTakeoff(of: b) <= now
+            if aInAir != bInAir { return aInAir }
+            if a.expectedDeparture != b.expectedDeparture { return a.expectedDeparture < b.expectedDeparture }
+            return a.departureAt < b.departureAt
+        }
     }
 
     var nextFlight: Flight? { upcomingFlights.first }
+
+    /// Cancelled flights still before their scheduled departure, soonest first.
+    var cancelledUpcoming: [Flight] {
+        flights.filter { $0.isCancelled && $0.departureAt > .now }
+    }
 
     func resetLocalData() async {
         await local.clear()

@@ -29,15 +29,16 @@ final class Onboarding {
     private static let timeout: Duration = .seconds(8)
     /// Long enough for the logo to draw itself before the flow slides in.
     private static let minimumLogoTime: Duration = .seconds(1.8)
-    /// The onboarding flow's paywalls, by identifier (their directories under `superwall/paywalls`):
-    /// the hard and soft sides of the flight-paywall test. Matched by identifier, not name, so the
-    /// dashboard names can say which is which. (1.0 and 1.0.1 match the name "Onboarding".)
-    private static let paywallIdentifiers: Set<String> = ["onboarding", "onboarding-soft"]
 
     @ObservationIgnored private let defaults = UserDefaults.standard
     @ObservationIgnored private var started = false
-    @ObservationIgnored private var webviewReady = false
-    @ObservationIgnored private var webviewFailed = false
+    /// What the `onboarding` placement shows this user, asked of Superwall at launch: the flow is
+    /// whichever paywall the campaign gives the placement, whatever its name or identifier. (1.0
+    /// and 1.0.1 wait for a paywall named "Onboarding".)
+    @ObservationIgnored private var placementResult: PresentationResult?
+    /// Paywalls whose page has preloaded, or failed to, by identifier.
+    @ObservationIgnored private var loadedPaywalls: Set<String> = []
+    @ObservationIgnored private var failedPaywalls: Set<String> = []
 
     private init() {
         phase = UserDefaults.standard.bool(forKey: Self.doneKey) ? .done : .loading
@@ -66,16 +67,46 @@ final class Onboarding {
         }
 
         Task { [weak self] in
+            // Waits for the configuration, so it can't run before Superwall knows the campaigns.
+            // "Not available" can mean the subscription status took over 5 seconds to arrive, so
+            // ask again until the loading screen gives up.
+            while self?.phase == .loading {
+                let result = await Superwall.shared.getPresentationResult(forPlacement: Placement.onboarding.rawValue)
+                if result != .paywallNotAvailable {
+                    self?.placementResult = result
+                    return
+                }
+                try? await Task.sleep(for: .milliseconds(500))
+            }
+        }
+
+        Task { [weak self] in
             // Present only once the flow's page has preloaded, so Superwall never shows its
             // shimmer; and not before the logo animation has played.
             let launched = ContinuousClock.now
             let deadline = launched + Self.timeout
             while ContinuousClock.now < deadline {
                 guard let self, self.phase == .loading else { return }
-                if self.webviewFailed || Superwall.shared.configurationStatus == .failed { break }
-                if self.webviewReady, ContinuousClock.now - launched >= Self.minimumLogoTime {
-                    self.present()
-                    return
+                if Superwall.shared.configurationStatus == .failed { break }
+                let logoDrawn = ContinuousClock.now - launched >= Self.minimumLogoTime
+                switch self.placementResult {
+                case .paywall(let experiment):
+                    // The paywall this user is assigned (one side of an experiment, say).
+                    guard let paywall = experiment.variant.paywallId else {
+                        if logoDrawn { return self.present() }
+                        break
+                    }
+                    if self.loadedPaywalls.contains(paywall) {
+                        if logoDrawn { return self.present() }
+                    } else if self.failedPaywalls.contains(paywall) {
+                        return self.fallBack()
+                    }
+                case .holdout, .noAudienceMatch, .placementNotFound:
+                    // Nothing to preload: registering hands the skip to `present()`, which ends
+                    // onboarding for a holdout and asks the questions natively otherwise.
+                    if logoDrawn { return self.present() }
+                case .paywallNotAvailable, nil:
+                    break
                 }
                 // No network at all (a first launch in the air): Superwall only retries, so go
                 // native as soon as the logo has drawn instead of waiting out the timeout.
@@ -86,15 +117,15 @@ final class Onboarding {
         }
     }
 
-    /// The onboarding page preloads in the background as soon as Superwall configures (its
-    /// campaign is prioritized). `Paywalls` forwards the webview events here.
+    /// Paywall pages preload in the background as soon as Superwall configures (the onboarding
+    /// campaign is prioritized), possibly before the placement's paywall is known, so every one is
+    /// noted. `Paywalls` forwards the webview events here.
     func paywallWebviewEvent(_ event: SuperwallEvent) {
         switch event {
-        case .paywallWebviewLoadComplete(let info) where Self.paywallIdentifiers.contains(info.identifier):
-            webviewReady = true
-        case .paywallWebviewLoadFail(let info) where Self.paywallIdentifiers.contains(info.identifier),
-            .paywallWebviewLoadTimeout(let info) where Self.paywallIdentifiers.contains(info.identifier):
-            webviewFailed = true
+        case .paywallWebviewLoadComplete(let info):
+            loadedPaywalls.insert(info.identifier)
+        case .paywallWebviewLoadFail(let info), .paywallWebviewLoadTimeout(let info):
+            failedPaywalls.insert(info.identifier)
         default:
             break
         }
@@ -122,9 +153,14 @@ final class Onboarding {
         handler.onError { [weak self] _ in
             Task { @MainActor in self?.fallBack() }
         }
-        // People flying soon add their flight from inside the flow (OnboardingFlight).
+        // People flying soon add their flight from inside the flow (OnboardingFlight). Asking for a
+        // rating is part of the flow too: a page sends `request_review`.
         handler.onCustomCallback { callback in
-            await OnboardingFlight.handle(callback)
+            if callback.name == Paywalls.requestReviewCallback {
+                await ReviewPrompt.requestNow()
+                return .success()
+            }
+            return await OnboardingFlight.handle(callback)
         }
         Superwall.shared.register(placement: Placement.onboarding.rawValue, handler: handler)
 

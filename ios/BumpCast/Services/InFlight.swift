@@ -198,7 +198,7 @@ final class InFlight {
     func armUpcoming(now: Date = .now) {
         adoptRecentTrips(now: now)
         let store = FlightStore.shared
-        for flight in store.flights
+        for flight in store.upcomingFlights
         where armed[flight.id] == nil && takeoffs[flight.id] == nil && landings[flight.id] == nil && !flight.isCancelled {
             guard Paywalls.shared.hasFullAccess(to: flight),
                 let forecast = store.forecasts[flight.id], forecast.isShown,

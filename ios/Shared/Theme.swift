@@ -263,8 +263,8 @@ extension BrandFont {
     /// Dynamic Type. Only the text changes; the components stay native Liquid Glass.
     @MainActor
     static func applyToSystemControls() {
-        func scaled(_ name: String, _ size: CGFloat, _ style: UIFont.TextStyle) -> UIFont? {
-            UIFont(name: name, size: size).map { UIFontMetrics(forTextStyle: style).scaledFont(for: $0) }
+        func scaled(_ name: String, _ size: CGFloat, _ style: UIFont.TextStyle, max: CGFloat = .greatestFiniteMagnitude) -> UIFont? {
+            UIFont(name: name, size: size).map { UIFontMetrics(forTextStyle: style).scaledFont(for: $0, maximumPointSize: max) }
         }
         let navigation = UINavigationBar.appearance()
         let ink = UIColor(light: Theme.Hex.ink, dark: Theme.Hex.nightInk)
@@ -283,7 +283,8 @@ extension BrandFont {
             UITabBarItem.appearance().setTitleTextAttributes([.font: tab], for: .normal)
             UITabBarItem.appearance().setTitleTextAttributes([.font: tabSelected], for: .selected)
         }
-        if let segment = scaled(body, 13, .footnote), let segmentSelected = scaled(bodyBold, 13, .footnote) {
+        // Capped, so a two-segment control ("Upcoming", "Flown") never cuts a word at the largest sizes.
+        if let segment = scaled(body, 13, .footnote, max: 24), let segmentSelected = scaled(bodyBold, 13, .footnote, max: 24) {
             UISegmentedControl.appearance().setTitleTextAttributes([.font: segment], for: .normal)
             UISegmentedControl.appearance().setTitleTextAttributes([.font: segmentSelected], for: .selected)
         }

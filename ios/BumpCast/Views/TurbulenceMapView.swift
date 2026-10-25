@@ -462,13 +462,15 @@ struct TurbulenceMapView: View {
     }
 
     /// The copy saved on the phone, so the map opens at once and works offline. Layers more
-    /// than 3 hours past are left out: they no longer describe the sky.
+    /// than 3 hours past are left out: they no longer describe the sky. So are heights the ladder
+    /// doesn't have (1.0.1 saved every layer under height 0; see `HeightLoad`).
     private func showSavedMap() async {
         // Decoding about a megabyte of grids stays off the main thread.
         guard let saved = await Task.detached(priority: .userInitiated, operation: { LocalStore.shared.loadMap() }).value
         else { return }
         let cutoff = Date.now.addingTimeInterval(-3 * 3600)
-        let grids = saved.grids.mapValues { $0.filter { $0.validAt >= cutoff } }.filter { !$0.value.isEmpty }
+        let grids = saved.grids.mapValues { $0.filter { $0.validAt >= cutoff } }
+            .filter { Self.levels.contains($0.key) && !$0.value.isEmpty }
         savedKey = Self.key(saved.grids)
         guard layers.isEmpty, !grids.isEmpty else { return }
         layers = grids.mapValues { $0.map(MapLayer.init) }
@@ -503,18 +505,18 @@ struct TurbulenceMapView: View {
         var fresh: [Int: [TurbulenceGrid]] = [:]
         var failed: Set<Int> = []
         var failure: Error?
-        await withTaskGroup(of: (Int, Result<[TurbulenceGrid], Error>).self) { group in
+        await withTaskGroup(of: HeightLoad.self) { group in
             for height in order {
                 group.addTask {
-                    do { return (height, .success(try await service.turbulenceGrids(levelFt: height))) }
-                    catch { return (height, .failure(error)) }
+                    do { return HeightLoad(height: height, result: .success(try await service.turbulenceGrids(levelFt: height))) }
+                    catch { return HeightLoad(height: height, result: .failure(error)) }
                 }
             }
-            for await (height, result) in group {
-                switch result {
-                case .success(let grids): fresh[height] = grids
+            for await load in group {
+                switch load.result {
+                case .success(let grids): fresh[load.height] = grids
                 case .failure(let error):
-                    failed.insert(height)
+                    failed.insert(load.height)
                     failure = error
                 }
             }
@@ -541,6 +543,14 @@ struct TurbulenceMapView: View {
             timeIndex = max(nowIndex, times.firstIndex { $0.grid.validAt == selectedTime } ?? nowIndex)
         }
         openOnRoute()
+    }
+
+    /// One height's answer from the task group. A struct on purpose: with optimisation on, Swift 6.4
+    /// hands an `(Int, Result<…, Error>)` tuple back from a task group with the Int lost (always 0),
+    /// so release builds filed every height under 0 and the map sat on "updating" for good.
+    private struct HeightLoad: Sendable {
+        let height: Int
+        let result: Result<[TurbulenceGrid], Error>
     }
 
     /// Keeps a copy on the phone for next time and for offline, written only when what it holds

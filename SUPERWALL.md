@@ -13,8 +13,13 @@ Superwall is the only purchase provider. It runs all purchases, the onboarding f
 | `bumpcast_flight_pass` | Consumable | $3.99 | Unlocks Pro for **one flight** (recorded in Supabase `flight_passes`) |
 | `bumpcast_pro_monthly` | Auto-renewing | $6.99 / month | `pro` |
 | `bumpcast_pro_annual` | Auto-renewing | $39.99 / year, 7-day free trial | `pro` |
+| `bumpcast_pro_annual_3999_3d` | Auto-renewing | $39.99 / year, 3-day free trial | `pro` |
+| `bumpcast_pro_annual_4999_3d` | Auto-renewing | $49.99 / year, 3-day free trial | `pro` |
+| `bumpcast_pro_annual_5999_3d` | Auto-renewing | $59.99 / year, 3-day free trial | `pro` |
 
-For local testing, `ios/BumpCast/Products.storekit` mirrors these and is attached to the Run scheme. The products still need creating in App Store Connect with the same IDs.
+The three 3-day-trial plans were created on 2026-10-25 in the BumpCast Pro group. The app needs no change for another Pro plan: Superwall grants `pro`, and the app's expiry check reads any auto-renewing transaction.
+
+For local testing, `ios/BumpCast/Products.storekit` mirrors the first three and is attached to the Run scheme.
 
 **Flight passes:** when a `bumpcast_flight_pass` purchase completes on a paywall opened from a flight, the app records the transaction against that flight. Every flight placement passes `flight_id`, so a paywall can sell the pass in context.
 
@@ -32,6 +37,8 @@ For local testing, `ios/BumpCast/Products.storekit` mirrors these and is attache
 | `pilot_reports_locked` | Pro features | Turns on pilot reports on the map | Yes |
 | `flight_limit_reached` | Pro features | Adds a 3rd upcoming flight (free limit is 2) | Yes |
 | `upgrade_from_settings` | Pro features | "Get BumpCast Pro" in Settings | Yes |
+| `flight_added` | none yet | A flight added in Add flight, once the sheet has closed (1.0.2+). See [Moments](#moments-notifications-and-ratings). | No |
+| `turn_on_notifications` | none yet | "Turn on notifications" on a flight's screen, while notifications haven't been answered (1.0.2+) | No |
 
 **Gated placements never unlock Pro by themselves.** The app only opens Pro content when the user has the `pro` entitlement or a flight pass for that flight.
 
@@ -68,6 +75,20 @@ Soft placements (`first_grade_viewed`, `forecast_ready_opened`, `update_opened`)
 | `confidence` | `early`, `partly_confirmed`, `confirmed` |
 | `bumpy_minutes` | `12` |
 
+### Moments: notifications and ratings
+
+From 1.0.2, `flight_added` and `turn_on_notifications` let a Superwall surface decide how the app asks for notifications and App Store ratings, so it can change without a release (`Paywalls.take`):
+
+- **A campaign shows a surface:** it asks for notifications with the **Request Permission** tap behavior (Notification), and for a rating with a **Custom Callback** named `request_review`, which the app answers with Apple's own rating prompt (the system decides whether it shows). When the surface closes, the app re-reads the notification permission and tells the worker and Superwall.
+- **No campaign, or no audience match:** the app does what it did before. After `flight_added`: the system notification prompt if Add flight's "Tell me when it's ready" was on and notifications haven't been answered, then the rating prompt (at most once per app version, only for a flight we forecast, never over a paywall). After `turn_on_notifications`: the system prompt.
+- **Holdout:** nothing.
+
+Besides the flight's params, both send `notifications` (`enabled`, `denied`, `not_determined`), `notify` (the flight's "Tell me when it's ready") and `forecast_state` (`early`, `partly_confirmed`, `confirmed` or `global_outlook` once there's a forecast; otherwise `too_early`, `building`, `beta_available` or `not_covered`).
+
+Apple only allows its own rating prompt (guideline 5.6.1): a surface can lead up to `request_review`, but mustn't ask for stars itself or send only happy users to it.
+
+The onboarding flow doesn't use these placements: it asks in its own pages, with Request Permission and the same `request_review` callback (see below).
+
 ## User attributes
 
 These are kept current after every sync, for audiences and paywall text.
@@ -93,6 +114,7 @@ People who answer `24h` or `3d` add their flight inside the flow and end on a ha
 |---|---|---|
 | `add_flight` | Opens Add flight over the flow | `flight_id`, `route`, `origin`, `destination`, `departure_at`, `origin_utc_offset_minutes`, `hours_to_departure`, `forecast_unlocks_at`, `flight_number`; or failure with `reason` `cancelled` / `unavailable` |
 | `flight_forecast` (`flight_id`) | Waits up to 20 s for the first forecast | `state` (`ready`, `pending`, `too_early`, `out_of_coverage`), plus `grade`, `grade_title`, `confidence` when ready. Never when or how long. |
+| `request_review` (1.0.2+) | Shows Apple's rating prompt | Success. Earlier builds answer failure: carry on as if it showed. |
 
 Flights outside coverage, flights saved offline, and app versions without the callbacks go to the closable Plans page instead. **App builds before this change have no handlers**, so point the Onboarding campaign at the new app version before publishing the flow.
 
@@ -124,7 +146,7 @@ Flights outside coverage, flights saved offline, and app versions without the ca
 - `onboarding` (281980) is **hard**: the flight paywall and the pass offer have no close button.
 - `onboarding-soft` (284375) is **soft**: both have one.
 
-`onboarding-soft` re-exports every page of `onboarding` and only sets `variant.soft` in its layout, so edit `onboarding` and publish both. Its name must stay "Onboarding": the app waits for that paywall name before it presents the flow.
+`onboarding-soft` re-exports every page of `onboarding` and only sets `variant.soft` in its layout, so edit `onboarding` and publish both. Its name must stay "Onboarding" while people are still on 1.0 or 1.0.1: they wait for a paywall with that name before they present the flow. From 1.0.2 the app asks the `onboarding` placement which paywall it shows, so names and identifiers can be anything.
 
 Only people flying in the next 3 days who add their flight (app 1.0.1+) reach the flight paywall; everyone else sees the closable Plans page in both. Each flow sets `onboarding_paywall_variant` (`hard` / `soft`) when it opens. Superwall's experiment view on the campaign shows onboarding conversion per variant; `docs/superwall/onboarding-hard-vs-soft.sql` also counts flight passes bought later in the app, split by that attribute.
 

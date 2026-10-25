@@ -116,7 +116,7 @@ struct NextStretch {
 
     @MainActor
     static func current(store: FlightStore, inFlight: InFlight, now: Date = .now) -> NextStretch? {
-        for flight in store.flights {
+        for flight in store.upcomingFlights {
             guard let forecast = store.forecasts[flight.id], forecast.isShown,
                 InFlightMode.isFlying(flight, forecast: forecast, inFlight: inFlight, now: now)
             else { continue }

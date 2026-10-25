@@ -120,7 +120,7 @@ struct ForecastView: View {
             Button {
                 router.showBreathing = true
             } label: {
-                Label("Practise breathing", systemImage: "wind")
+                Label("Practice breathing", systemImage: "wind")
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.bordered)

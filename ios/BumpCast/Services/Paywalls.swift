@@ -27,12 +27,16 @@ enum Placement: String, CaseIterable {
     case flightLimitReached = "flight_limit_reached"
     /// "Get BumpCast Pro" in Settings.
     case upgradeFromSettings = "upgrade_from_settings"
+    /// A flight just added in Add flight (the onboarding flow asks in its own pages). A surface
+    /// here can ask for notifications (Request Permission) or a rating (`request_review`). With no
+    /// campaign, the app asks for notifications itself (Add flight's toggle), then for a rating.
+    case flightAdded = "flight_added"
+    /// "Turn on notifications" on a flight's screen. With no campaign, the system prompt.
+    case turnOnNotifications = "turn_on_notifications"
 }
 
 enum Products {
     static let flightPass = "bumpcast_flight_pass"
-    static let proMonthly = "bumpcast_pro_monthly"
-    static let proAnnual = "bumpcast_pro_annual"
 }
 
 @Observable @MainActor
@@ -94,9 +98,11 @@ final class Paywalls {
     func verifyEntitlements() async {
         refreshPro()
         guard isConfigured, isPro, !Self.debugForcePro else { return }
+        // Any Pro plan, including ones added in App Store Connect after this build: Pro is the
+        // app's only subscription, so its latest transaction is the latest auto-renewable one.
         var latest: Transaction?
-        for id in [Products.proMonthly, Products.proAnnual] {
-            if case .verified(let transaction)? = await Transaction.latest(for: id),
+        for await result in Transaction.all {
+            if case .verified(let transaction) = result, transaction.productType == .autoRenewable,
                 transaction.purchaseDate > latest?.purchaseDate ?? .distantPast
             {
                 latest = transaction
@@ -289,6 +295,44 @@ final class Paywalls {
         Superwall.shared.register(placement: placement.rawValue, params: params(for: flight))
     }
 
+    /// A moment a Superwall surface can take over, so how the app asks can change without a
+    /// release: for notifications with the Request Permission action, for a rating with the
+    /// `request_review` callback. With no campaign for the moment (none set up, or not for this
+    /// user) the app does `otherwise`, as it always has; a holdout shows nothing. Offline, too,
+    /// it does `otherwise`.
+    func take(_ placement: Placement, flight: Flight? = nil, otherwise: @escaping @MainActor () async -> Void) {
+        guard isConfigured, isOnline else {
+            Task { await otherwise() }
+            return
+        }
+        let handler = PaywallPresentationHandler()
+        handler.onCustomCallback { callback in
+            guard callback.name == Self.requestReviewCallback else { return .failure() }
+            await ReviewPrompt.requestNow()
+            return .success()
+        }
+        // The surface may have asked for notifications: register for pushes and tell the worker
+        // and Superwall.
+        handler.onDismiss { _, _ in
+            Task { @MainActor in
+                await PushNotifications.shared.refreshStatus()
+                await AppSync.saveProfile()
+                Paywalls.shared.updateAttributes()
+            }
+        }
+        handler.onSkip { reason in
+            if case .holdout = reason { return }
+            Task { @MainActor in await otherwise() }
+        }
+        handler.onError { _ in
+            Task { @MainActor in await otherwise() }
+        }
+        Superwall.shared.register(placement: placement.rawValue, params: momentParams(for: flight), handler: handler)
+    }
+
+    /// The custom callback a moment's surface sends to ask for an App Store rating.
+    static let requestReviewCallback = "request_review"
+
     /// A paywall already on screen now sells a pass for this flight (the onboarding flow's
     /// paywall, once the user has added their flight).
     func sellPass(for flightID: UUID) {
@@ -373,6 +417,29 @@ final class Paywalls {
         if let forecast, forecast.status == .ready {
             params["confidence"] = forecast.confidence(departure: flight.departureAt).attributeValue
             params["bumpy_minutes"] = forecast.samples.filter { $0.severity > .smooth }.count
+        }
+        return params
+    }
+
+    /// A flight's params plus what a moment's surface decides on: whether notifications are on
+    /// ("enabled", "denied", "not_determined"), whether the flight asked to be told ("notify"),
+    /// and where its forecast stands ("forecast_state": a confidence once it's ready, otherwise
+    /// "too_early", "building", "beta_available" or "not_covered").
+    private func momentParams(for flight: Flight?) -> [String: Any] {
+        var params = self.params(for: flight) ?? [:]
+        let push = PushNotifications.shared
+        params["notifications"] = push.isEnabled ? "enabled" : push.status == .denied ? "denied" : "not_determined"
+        if let flight {
+            params["notify"] = flight.notify
+            let forecast = FlightStore.shared.forecasts[flight.id]
+            params["forecast_state"] =
+                switch ForecastState(flight: flight, forecast: forecast, betaOn: GlobalBeta.shared.isOn) {
+                case .ready(let forecast): forecast.confidence(departure: flight.departureAt).attributeValue
+                case .unlocksAt: "too_early"
+                case .building: "building"
+                case .betaAvailable: "beta_available"
+                case .outOfCoverage: "not_covered"
+                }
         }
         return params
     }

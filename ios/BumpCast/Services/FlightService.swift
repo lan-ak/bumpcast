@@ -348,6 +348,39 @@ actor DemoFlightService: FlightService {
         if ProcessInfo.processInfo.arguments.contains("-demoGlobal") {
             stored.append(Flight(id: UUID(), origin: "SBGR", destination: "LPPT", departureAt: soon.addingTimeInterval(2 * 3600)))
         }
+        // `-demoFlown`: flights already flown, for the Flown list: one just landed and one older,
+        // both not rated yet, two rated across two months, and one cancelled. Upcoming gets a
+        // flight in the air, a cancelled one leaving first, and one that overtakes the delayed B6 23.
+        if ProcessInfo.processInfo.arguments.contains("-demoFlown") {
+            func numbered(_ number: String, _ origin: String, _ destination: String, departing: Date, minutes: Double) -> Flight {
+                var flight = Flight(id: UUID(), origin: origin, destination: destination, departureAt: departing)
+                flight.flightNumber = number
+                flight.arrivalAt = departing.addingTimeInterval(minutes * 60)
+                return flight
+            }
+            func daysAgo(_ days: Double) -> Date { .now.addingTimeInterval(-days * 86400) }
+            // The sample forecast is a 6-hour plan, which a flight never lands before.
+            let justLanded = numbered("AC 1507", "KEWR", "CYYZ", departing: daysAgo(0.35), minutes: 95)
+            let toRate = numbered("WN 1203", "KDEN", "KPHX", departing: daysAgo(10), minutes: 110)
+            let rightOn = numbered("UA 512", "KORD", "KSFO", departing: daysAgo(6), minutes: 270)
+            let smoother = numbered("DL 88", "KATL", "KBOS", departing: daysAgo(32), minutes: 150)
+            reports[rightOn.id] = LandingReport(
+                flightId: rightOn.id, felt: nil, feltRelative: .aboutRight, forecastWorst: .light, matched: true)
+            reports[smoother.id] = LandingReport(
+                flightId: smoother.id, felt: nil, feltRelative: .smoother, forecastWorst: .moderate, matched: false)
+            var inAir = numbered("AA 1180", "KLGA", "KORD", departing: .now.addingTimeInterval(-70 * 60), minutes: 150)
+            inAir.status = FlightStatus(
+                state: .departed, live: true, departureScheduled: inAir.departureAt, checkedAt: .now,
+                takeoffAt: inAir.departureAt.addingTimeInterval(15 * 60))
+            var cancelled = numbered("DL 402", "KBOS", "KDCA", departing: .now.addingTimeInterval(2 * 3600), minutes: 90)
+            cancelled.status = FlightStatus(state: .cancelled, live: true, departureScheduled: cancelled.departureAt, checkedAt: .now)
+            var wasCancelled = numbered("B6 1101", "KJFK", "KMCO", departing: daysAgo(3), minutes: 160)
+            wasCancelled.status = FlightStatus(
+                state: .cancelled, live: true, departureScheduled: wasCancelled.departureAt, checkedAt: daysAgo(3))
+            // Scheduled 20 minutes after B6 23, but leaves before B6 23's 40-minute delay.
+            let overtakes = numbered("UA 300", "KEWR", "KORD", departing: soon.addingTimeInterval(20 * 60), minutes: 150)
+            stored += [justLanded, toRate, rightOn, smoother, inAir, cancelled, wasCancelled, overtakes]
+        }
     }
 
     static let sampleForecast: Forecast = load("sample_forecast")

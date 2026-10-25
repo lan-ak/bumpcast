@@ -298,9 +298,7 @@ struct LandingCheckCard: View {
     let flight: Flight
 
     @Environment(FlightStore.self) private var store
-    @Environment(\.requestReview) private var requestReview
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @State private var isSending = false
     @State private var dismissed = false
 
     /// Beta flights always ask, compared with the outlook, until answered or dismissed.
@@ -309,11 +307,12 @@ struct LandingCheckCard: View {
     var body: some View {
         if !dismissed {
             card
-                .onAppear { dismissed = UserDefaults.standard.bool(forKey: dismissKey) }
+                .onAppear { dismissed = UserDefaults.standard.bool(forKey: Self.dismissKey(flight.id)) }
         }
     }
 
-    private var dismissKey: String { "landingCheck.dismissed.\(flight.id)" }
+    /// Set once a beta flight's check is dismissed; the Flights list's Just landed card honours it too.
+    static func dismissKey(_ flightID: UUID) -> String { "landingCheck.dismissed.\(flightID)" }
 
     private var card: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -326,32 +325,14 @@ struct LandingCheckCard: View {
                     Spacer()
                     if isBeta {
                         Button("Dismiss", systemImage: "xmark") {
-                            UserDefaults.standard.set(true, forKey: dismissKey)
+                            UserDefaults.standard.set(true, forKey: Self.dismissKey(flight.id))
                             dismissed = true
                         }
                         .labelStyle(.iconOnly)
                         .foregroundStyle(.secondary)
                     }
                 }
-                if let forecast = store.forecasts[flight.id], let grade = forecast.grade {
-                    Text(isBeta ? "Our outlook: \(grade.outlookHeadline.lowercased())" : "We forecast: \(grade.headline.lowercased())")
-                        .font(.bcSubheadline)
-                        .foregroundStyle(.secondary)
-                }
-                // Three long answers stack on beta flights; the short ones share a row.
-                let layout = isBeta ? AnyLayout(VStackLayout(spacing: 8)) : AnyLayout(HStackLayout(spacing: 10))
-                layout {
-                    ForEach(FeltRating.allCases, id: \.self) { rating in
-                        Button {
-                            submit(rating)
-                        } label: {
-                            Text(isBeta ? rating.outlookTitle : rating.title).frame(maxWidth: .infinity)
-                        }
-                        .buttonStyle(.bordered)
-                        .tint(Theme.accent)
-                        .disabled(isSending)
-                    }
-                }
+                LandingRatingChoices(flight: flight)
                 Text(isBeta ? GlobalOutlookCopy.compareFooter : "Your answer helps make every forecast more accurate.")
                     .font(.bcFootnote)
                     .foregroundStyle(.secondary)
@@ -378,21 +359,52 @@ struct LandingCheckCard: View {
                 .foregroundStyle(.secondary)
         }
     }
+}
+
+/// What the forecast said, and the three answers to "how did it feel?" compared with it. Shared by
+/// the flight screen's landing check and the Flights list's Just landed card.
+struct LandingRatingChoices: View {
+    let flight: Flight
+
+    @Environment(FlightStore.self) private var store
+    @Environment(\.dynamicTypeSize) private var typeSize
+    @State private var isSending = false
+
+    private var isBeta: Bool { store.forecasts[flight.id]?.isGlobalOutlook == true }
+
+    var body: some View {
+        if let forecast = store.forecasts[flight.id], let grade = forecast.grade {
+            Text(isBeta ? "Our outlook: \(grade.outlookHeadline.lowercased())" : "We forecast: \(grade.headline.lowercased())")
+                .font(.bcSubheadline)
+                .foregroundStyle(.secondary)
+        }
+        // Three long answers stack on beta flights, as do any at accessibility sizes; the short
+        // ones share a row.
+        let layout = isBeta || typeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(spacing: 8)) : AnyLayout(HStackLayout(spacing: 10))
+        layout {
+            ForEach(FeltRating.allCases, id: \.self) { rating in
+                Button {
+                    submit(rating)
+                } label: {
+                    Text(isBeta ? rating.outlookTitle : rating.title).frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.bordered)
+                .tint(Theme.accent)
+                .disabled(isSending)
+            }
+        }
+    }
 
     private func submit(_ rating: FeltRating) {
         isSending = true
         Task {
             let report = await store.submitLandingReport(flightID: flight.id, rating: rating)
             isSending = false
-            // Only ask for an App Store rating after a flight where the forecast was right, once per
-            // version, and not while the answer is still waiting on the phone for a connection.
+            // Only ask for an App Store rating after a flight where the forecast was right, and not
+            // while the answer is still waiting on the phone for a connection.
             if report?.matched == true, !store.isReportPending(flight.id) {
-                let key = "review.requested.\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] ?? "")"
-                if !UserDefaults.standard.bool(forKey: key) {
-                    UserDefaults.standard.set(true, forKey: key)
-                    try? await Task.sleep(for: .seconds(1.5))
-                    requestReview()
-                }
+                ReviewPrompt.request(.forecastMatched)
             }
         }
     }

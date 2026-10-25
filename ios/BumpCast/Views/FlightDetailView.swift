@@ -125,7 +125,7 @@ struct FlightDetailView: View {
                 }
             }
             if !landed, flight.departureAt > now, !push.isEnabled, state != .outOfCoverage, state != .betaAvailable {
-                NotificationsCard(forecastReady: { if case .ready = state { true } else { false } }())
+                NotificationsCard(flight: flight, forecastReady: { if case .ready = state { true } else { false } }())
             }
             if flight.status?.state == .cancelled {
                 CancelledCard(flight: flight, addFlight: { isAdding = true }) {
@@ -279,9 +279,11 @@ private struct WaitlistCard: View {
 }
 
 private struct NotificationsCard: View {
+    let flight: Flight
     let forecastReady: Bool
 
     @Environment(PushNotifications.self) private var push
+    @Environment(Paywalls.self) private var paywalls
     @Environment(\.openURL) private var openURL
 
     var body: some View {
@@ -299,7 +301,8 @@ private struct NotificationsCard: View {
                     if push.status == .denied {
                         openURL(URL(string: UIApplication.openNotificationSettingsURLString)!)
                     } else {
-                        Task { await push.requestPermission() }
+                        // A Superwall surface if a campaign takes it, otherwise the system prompt.
+                        paywalls.take(.turnOnNotifications, flight: flight) { await push.requestPermission() }
                     }
                 }
                 .buttonStyle(.bordered)

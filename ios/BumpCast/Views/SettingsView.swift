@@ -93,7 +93,7 @@ struct SettingsView: View {
                 Section {
                     LabeledContent("Version", value: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")
                     // One row covers the fonts' SIL Open Font License notices.
-                    NavigationLink("Licences") { LicensesView() }
+                    NavigationLink("Licenses") { LicensesView() }
                 } footer: {
                     Text("Forecasts are guidance, not guarantees. Always follow crew instructions.")
                 }
@@ -151,7 +151,7 @@ private struct LicensesView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
         }
         .skyBackground(Sky(date: .now))
-        .navigationTitle("Licences")
+        .navigationTitle("Licenses")
         .navigationBarTitleDisplayMode(.inline)
     }
 
