@@ -41,7 +41,10 @@ struct MapSnapshot: Codable, Sendable {
 }
 
 actor LocalStore {
-    static let shared = LocalStore()
+    /// Demo mode saves apart: its sample flights belong to no account, so saved where the live app
+    /// looks, the next live launch would save them again under the phone's account.
+    static let shared = LocalStore(
+        directory: Services.isDemo ? URL.applicationSupportDirectory.appending(path: "Demo") : .applicationSupportDirectory)
 
     private let url: URL
     private let mapURL: URL
