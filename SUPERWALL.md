@@ -108,7 +108,7 @@ Onboarding answers (fear level, how often they fly, and so on) are set as attrib
 
 ### Onboarding callbacks (flying in the next 3 days)
 
-People who answer `24h` or `3d` add their flight inside the flow and end on a hard paywall for it (no close button; the flight pass leads). The flow asks the app through two custom callbacks, handled in `ios/BumpCast/Services/OnboardingFlight.swift`:
+People who answer `24h` or `3d` add their flight inside the flow and end on a hard paywall for it (no close button) that sells Pro: Yearly with the trial, Monthly as the fallback. The flight pass is offered only after they close the App Store sheet without buying (`pass-offer`), once per flow. The flow asks the app through two custom callbacks, handled in `ios/BumpCast/Services/OnboardingFlight.swift`:
 
 | Callback | App does | Returns |
 |---|---|---|
@@ -120,7 +120,7 @@ Flights outside coverage, flights saved offline, and app versions without the ca
 
 ## Left to do in the dashboard
 
-1. ~~Design the onboarding flow~~ Done: `superwall/paywalls/onboarding`, live at 100% on the Onboarding campaign. Edit it there and run `SUPERWALL_CHANNEL=next superwall publish`. While it loads, the app shows `LaunchLoadingView`; if it can't load in 8 s (or the campaign skips), `NativeOnboardingView` asks the same questions natively, without the paywall. Debug builds can force the native flow with `-nativeOnboarding`.
+1. ~~Design the onboarding flow~~ Done: `superwall/paywalls/onboarding`, live at 100% on the Onboarding campaign. Edit it there and run `SUPERWALL_CHANNEL=next superwall publish`. While it loads, the app shows `LaunchLoadingView`; if it can't load in 20 s (right after the logo with no network path), or the campaign skips, `NativeOnboardingView` asks the same questions natively, without the paywall. From 1.0.2 (build 9) the app asks the `onboarding` placement which paywall it shows only after Superwall's first preload has finished: asking builds the paywall's screen without loading its page, and build 8 asked first, so the preload reused the unloaded screen and the flow timed out to native. If the placement's paywall isn't loading by then (another campaign preloaded first, say), the app presents it anyway and Superwall shows its loading screen until the page is in. Debug builds can force the native flow with `-nativeOnboarding`.
 2. ~~Design the paywalls~~ Done, as code sharing `superwall/components/pro` (one look: the onboarding Plans page, as a modal sheet). The headline follows `params.event_name`; the flight pass is only offered when the placement passes `flight_id`.
    - **Forecast moments** → `forecast-moment` (paywall 281983) at 100%. Shows the user's route, hours to departure and `grade_title` on the sky. Leads with the flight pass (they need it for this flight); "More options" opens This flight / Yearly / Monthly as one choice. Without a flight, Pro leads.
    - **Pro features** → two audiences, top to bottom:

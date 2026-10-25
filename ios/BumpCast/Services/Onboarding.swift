@@ -26,9 +26,16 @@ final class Onboarding {
     /// Kept for installs that finished onboarding before this coordinator existed.
     private static let doneKey = "onboarding.done"
     /// How long the loading screen waits for the Superwall flow before switching to the native one.
-    private static let timeout: Duration = .seconds(8)
+    /// A first launch can take a while to get Superwall's configuration (6 to 16 seconds on App
+    /// Review's network, against under 3 for most people). Without a network path the native flow
+    /// comes up as soon as the logo has drawn instead.
+    private static let timeout: Duration = .seconds(20)
     /// Long enough for the logo to draw itself before the flow slides in.
     private static let minimumLogoTime: Duration = .seconds(1.8)
+    /// How long after Superwall configures to ask about the placement if no preload reports.
+    private static let preloadWait: Duration = .seconds(3)
+    /// How long after the placement's answer a preloaded page has to show it's loading.
+    private static let pageStartGrace: Duration = .seconds(1)
 
     @ObservationIgnored private let defaults = UserDefaults.standard
     @ObservationIgnored private var started = false
@@ -36,7 +43,12 @@ final class Onboarding {
     /// whichever paywall the campaign gives the placement, whatever its name or identifier. (1.0
     /// and 1.0.1 wait for a paywall named "Onboarding".)
     @ObservationIgnored private var placementResult: PresentationResult?
-    /// Paywalls whose page has preloaded, or failed to, by identifier.
+    /// When `placementResult` arrived.
+    @ObservationIgnored private var placementResultAt: ContinuousClock.Instant?
+    /// Superwall's first preload has finished.
+    @ObservationIgnored private var preloadFinished = false
+    /// Paywalls whose page has started loading, preloaded, or failed to, by identifier.
+    @ObservationIgnored private var loadingPaywalls: Set<String> = []
     @ObservationIgnored private var loadedPaywalls: Set<String> = []
     @ObservationIgnored private var failedPaywalls: Set<String> = []
 
@@ -67,6 +79,7 @@ final class Onboarding {
         }
 
         Task { [weak self] in
+            await self?.waitForPreload()
             // Waits for the configuration, so it can't run before Superwall knows the campaigns.
             // "Not available" can mean the subscription status took over 5 seconds to arrive, so
             // ask again until the loading screen gives up.
@@ -74,6 +87,7 @@ final class Onboarding {
                 let result = await Superwall.shared.getPresentationResult(forPlacement: Placement.onboarding.rawValue)
                 if result != .paywallNotAvailable {
                     self?.placementResult = result
+                    self?.placementResultAt = .now
                     return
                 }
                 try? await Task.sleep(for: .milliseconds(500))
@@ -100,6 +114,13 @@ final class Onboarding {
                         if logoDrawn { return self.present() }
                     } else if self.failedPaywalls.contains(paywall) {
                         return self.fallBack()
+                    } else if !self.loadingPaywalls.contains(paywall), logoDrawn,
+                        let answered = self.placementResultAt, ContinuousClock.now - answered >= Self.pageStartGrace
+                    {
+                        // Nothing is loading its page (it wasn't in the first preload, say), and
+                        // nothing will until it's presented: present it, and Superwall shows its
+                        // loading screen until the page is in.
+                        return self.present()
                     }
                 case .holdout, .noAudienceMatch, .placementNotFound:
                     // Nothing to preload: registering hands the skip to `present()`, which ends
@@ -117,11 +138,32 @@ final class Onboarding {
         }
     }
 
+    /// Asking Superwall about the placement builds its paywall's screen without loading the page,
+    /// and Superwall's preload then reuses that screen as it is, so the page would only load once
+    /// presented (1.0.2 build 8 waited for it, timed out and went native). So ask once the first
+    /// preload has finished: by then it has built the screens it preloads and started their pages.
+    /// If no preload reports (preloading off), ask a few seconds after Superwall configures.
+    private func waitForPreload() async {
+        var configuredAt: ContinuousClock.Instant?
+        while phase == .loading, !preloadFinished {
+            if Superwall.shared.configurationStatus == .configured {
+                let configured = configuredAt ?? .now
+                configuredAt = configured
+                if ContinuousClock.now - configured >= Self.preloadWait { return }
+            }
+            try? await Task.sleep(for: .milliseconds(100))
+        }
+    }
+
     /// Paywall pages preload in the background as soon as Superwall configures (the onboarding
     /// campaign is prioritized), possibly before the placement's paywall is known, so every one is
-    /// noted. `Paywalls` forwards the webview events here.
-    func paywallWebviewEvent(_ event: SuperwallEvent) {
+    /// noted. `Paywalls` forwards Superwall's events here.
+    func superwallEvent(_ event: SuperwallEvent) {
         switch event {
+        case .paywallPreloadComplete:
+            preloadFinished = true
+        case .paywallWebviewLoadStart(let info):
+            loadingPaywalls.insert(info.identifier)
         case .paywallWebviewLoadComplete(let info):
             loadedPaywalls.insert(info.identifier)
         case .paywallWebviewLoadFail(let info), .paywallWebviewLoadTimeout(let info):

@@ -451,7 +451,7 @@ final class Paywalls {
     }
 
     fileprivate func handle(_ event: SuperwallEvent) {
-        Onboarding.shared.paywallWebviewEvent(event)
+        Onboarding.shared.superwallEvent(event)
         guard case .transactionComplete(let transaction, let product, _, _) = event,
             product.productIdentifier == Products.flightPass, let flightID = passFlightID
         else { return }
