@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>BumpCast App Store frames</title>
+<!--
+  App Store screenshots, 6.9" iPhone (1320 x 2868). Frames 1 and 2 are one 2640-wide panorama
+  that render_screenshots.py cuts in half, so the first two screenshots read as one scene.
+  Open with #<frame id> to show a single frame; render_screenshots.py does this for each.
+  Raw captures: docs/release/screenshot-captures (the app's -screenshotMode). Never name data sources.
+-->
+<style>
+  @font-face { font-family: "Familjen"; src: url("../../../ios/Shared/Fonts/FamiljenGrotesk-Bold.ttf"); font-weight: 700; }
+  @font-face { font-family: "Familjen"; src: url("../../../ios/Shared/Fonts/FamiljenGrotesk-SemiBold.ttf"); font-weight: 600; }
+  @font-face { font-family: "Atkinson"; src: url("../../../ios/Shared/Fonts/AtkinsonHyperlegible-Regular.ttf"); font-weight: 400; }
+  @font-face { font-family: "Atkinson"; src: url("../../../ios/Shared/Fonts/AtkinsonHyperlegible-Bold.ttf"); font-weight: 700; }
+
+  :root {
+    --night-top: #1B2A45; --night-mid: #121D31; --night-bottom: #0B1322;
+    --accent: #6FBCCC; --dawn: #F6D9C4; --muted: #B9C6D6; --ink-light: #EEF3F8;
+    --gold: #E0B54E; --teal-deep: #2A7385;
+  }
+  html, body { margin: 0; background: var(--night-bottom); }
+  .frame { position: relative; overflow: hidden; width: 1320px; height: 2868px; display: none;
+           font-family: "Atkinson", sans-serif; color: var(--ink-light); }
+  .frame.pano { width: 2640px; }
+  .frame.on { display: block; }
+
+  /* Sky: night gradient, a teal glow behind the device and an optional dawn warmth along the bottom. */
+  .sky { position: absolute; inset: 0;
+         background:
+           radial-gradient(ellipse var(--dawn-w, 1500px) 760px at var(--dawn-x, 50%) 104%, rgba(246, 217, 196, var(--dawn-a, .16)), transparent 70%),
+           radial-gradient(circle var(--glow-r, 1000px) at var(--glow-x, 50%) var(--glow-y, 64%), rgba(42, 115, 133, var(--glow-a, .5)), transparent 72%),
+           linear-gradient(180deg, var(--night-top) 0%, var(--night-mid) 55%, var(--night-bottom) 100%); }
+
+  .copy { position: absolute; left: 110px; right: 110px; top: 200px; }
+  .headline { font-family: "Familjen"; font-weight: 700; font-size: 150px; line-height: 1.0;
+              letter-spacing: -0.025em; margin: 0; color: #fff; }
+  .headline em { font-style: normal; color: var(--accent); }
+  .sub { font-size: 56px; line-height: 1.3; color: var(--muted); margin: 44px 0 0; max-width: 1060px; }
+
+  /* Dusk: a light frame mid-set, so the screenshots don't all read as the same navy. */
+  .light .sky { background: radial-gradient(circle 1000px at 50% 66%, rgba(255, 255, 255, .4), transparent 70%),
+                            linear-gradient(180deg, #E7C3C9 0%, #C9BFD9 48%, #9FB0D0 100%); }
+  .light .headline { color: #15253A; }
+  .light .headline em { color: #2A7385; }
+  .light .sub { color: #45576C; }
+
+  /* Reassurance rows (frame 1) */
+  .rows { list-style: none; padding: 0; margin: 70px 0 0; }
+  .rows li { display: flex; align-items: center; gap: 40px; margin-bottom: 40px;
+             font-weight: 700; font-size: 58px; line-height: 1.12; color: var(--ink-light); white-space: nowrap; }
+  .rows .chip { flex: none; width: 124px; height: 124px; border-radius: 50%;
+                display: grid; place-items: center;
+                background: rgba(111, 188, 204, .14); box-shadow: inset 0 0 0 3px rgba(111, 188, 204, .38); }
+  .rows .chip img { width: 66px; height: 66px; object-fit: contain; }
+
+  /* Device: black glass, thin titanium edge, Dynamic Island. Width of the screen in --w. */
+  .phone { position: absolute; --s: calc(var(--w) / 1320px); width: var(--w); padding: calc(var(--w) * 0.03);
+           border-radius: calc(var(--w) * 0.165); background: #0A0A0C;
+           box-shadow: inset 0 0 0 5px #8A929C, inset 0 0 0 9px #1E2126,
+                       0 70px 140px rgba(0, 0, 0, .55), 0 24px 48px rgba(0, 0, 0, .35);
+           transform: rotate(var(--rot, 0deg)); transform-origin: 50% 0; }
+  .phone > img { display: block; width: 100%; border-radius: calc(var(--w) * 0.135); }
+  .phone .island { position: absolute; left: 50%; transform: translateX(-50%);
+                   top: calc(var(--w) * 0.03 + var(--w) * 40 / 1320); width: calc(var(--w) * 372 / 1320);
+                   height: calc(var(--w) * 110 / 1320); border-radius: 999px; background: #000; }
+
+  /* Pop-out: a piece of a capture, lifted off the device at a larger size. */
+  .pop { position: absolute; background-repeat: no-repeat; border-radius: 64px;
+         transform: rotate(var(--rot, 0deg));
+         box-shadow: 0 0 0 2px rgba(255, 255, 255, .55), 0 60px 120px rgba(4, 10, 20, .6), 0 18px 40px rgba(4, 10, 20, .35); }
+
+  /* Flight path across the panorama, drawn like the Live Activity's progress bar. */
+  svg.route { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+
+  /* Feature grid (last frame) */
+  .grid { position: absolute; left: 80px; right: 80px; top: 760px; display: grid;
+          grid-template-columns: 1fr 1fr; gap: 36px; }
+  .tile { height: 330px; border-radius: 48px; background: rgba(255, 255, 255, .07);
+          box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .16);
+          display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 34px;
+          font-weight: 700; font-size: 48px; color: #fff; text-align: center; }
+  .tile img { height: 120px; width: 150px; object-fit: contain; }
+</style>
+</head>
+<body>
+
+<!-- 1 + 2: one scene. Left: who it's for. Right: the countdown, popped out of the Lock Screen. -->
+<section class="frame pano" id="opening" data-out="01-built-for-nervous-flyers,02-countdown-to-every-bump"
+         style="--glow-x: 50%; --glow-y: 58%; --glow-r: 1250px; --glow-a: .55; --dawn-x: 50%; --dawn-w: 2400px; --dawn-a: .2">
+  <div class="sky"></div>
+  <svg class="route" data-route="M 110 1290 C 560 1160, 1000 1080, 1420 1080 S 2300 1190, 2720 1420"
+       data-bumps="0.17-0.22,0.57-0.62" data-plane="0.4" data-ends="takeoff:0"></svg>
+
+  <div class="copy" style="right: auto; width: 1100px">
+    <h1 class="headline">Built for <em>nervous flyers.</em></h1>
+    <ul class="rows">
+      <li><span class="chip"><img src="../screenshot-captures/icons/teal/mappin.and.ellipse.png" alt=""></span>Know where the bumps are</li>
+      <li><span class="chip"><img src="../screenshot-captures/icons/teal/clock.png" alt=""></span>Know when it'll be bumpy</li>
+      <li><span class="chip"><img src="../screenshot-captures/icons/teal/wind.png" alt=""></span>Guided breathing for each one</li>
+    </ul>
+  </div>
+  <div class="phone" data-src="01-forecast" style="--w: 800px; left: 300px; top: 1400px; --rot: 6deg"></div>
+  <div class="pop" data-src="01-forecast" data-box="48,1620,1224,700" style="--k: .94; left: 85px; top: 2150px; --rot: -2deg"></div>
+
+  <div class="copy" style="left: 1430px; right: 110px">
+    <h1 class="headline">A <em>countdown</em> to every bump.</h1>
+    <p class="sub">On your Lock Screen and Dynamic Island, even in airplane mode.</p>
+  </div>
+  <div class="phone" data-src="lockscreen" data-island="0" style="--w: 800px; left: 1700px; top: 1120px; --rot: -4deg"></div>
+  <div class="pop" data-src="lockscreen" data-box="44,1980,1232,476" style="--k: 1; left: 1366px; top: 2200px; --rot: -2deg"></div>
+</section>
+
+<!-- 3 -->
+<section class="frame" id="timeline" data-out="03-see-when-its-bumpy" style="--glow-x: 62%; --glow-y: 66%">
+  <div class="sky"></div>
+  <div class="copy">
+    <h1 class="headline">See exactly <em>when</em> it gets bumpy.</h1>
+    <p class="sub">Minute by minute, from takeoff to landing.</p>
+  </div>
+  <div class="phone" data-src="02-timeline" style="--w: 900px; left: 300px; top: 880px; --rot: 4deg"></div>
+  <div class="pop" data-src="02-timeline" data-box="48,1720,1224,366" style="--k: 1.04; left: 24px; top: 2066px; --rot: -1.5deg"></div>
+</section>
+
+<!-- 4 -->
+<section class="frame" id="map" data-out="04-bumps-on-your-route" style="--glow-x: 38%; --glow-y: 62%">
+  <div class="sky"></div>
+  <div class="copy">
+    <h1 class="headline">See the bumps on your <em>route.</em></h1>
+    <p class="sub">Live pilot reports show what planes are feeling right now.</p>
+  </div>
+  <div class="phone" data-src="07-map" style="--w: 900px; left: 130px; top: 880px; --rot: -4deg"></div>
+  <div class="pop" data-src="07-map" data-box="48,2116,1224,460" style="--k: 1; left: 50px; top: 2280px; --rot: 2deg"></div>
+</section>
+
+<!-- 5 -->
+<section class="frame light" id="breathe" data-out="05-breathe-through-it">
+  <div class="sky"></div>
+  <div class="copy">
+    <h1 class="headline"><em>Breathe</em> through it, right on time.</h1>
+    <p class="sub">Guided breathing, paced to your next bumpy stretch.</p>
+  </div>
+  <div class="phone" data-src="06-breathe" style="--w: 900px; left: 210px; top: 880px"></div>
+</section>
+
+<!-- 6 -->
+<section class="frame" id="explainer" data-out="06-plain-words" style="--glow-x: 60%; --glow-y: 66%; --dawn-a: .2">
+  <div class="sky"></div>
+  <div class="copy">
+    <h1 class="headline"><em>Plain</em> words. No scary charts.</h1>
+    <p class="sub">Why it's bumpy, what the crew is doing and what you'll feel.</p>
+  </div>
+  <div class="phone" data-src="05-explainer" style="--w: 900px; left: 300px; top: 880px; --rot: 4deg"></div>
+  <div class="pop" data-src="05-explainer" data-box="48,1982,1224,312" style="--k: 1; left: 40px; top: 2205px; --rot: -2deg"></div>
+</section>
+
+<!-- 7 -->
+<section class="frame" id="updates" data-out="07-gets-sharper" style="--glow-x: 40%; --glow-y: 64%; --dawn-a: .24">
+  <div class="sky"></div>
+  <div class="copy">
+    <h1 class="headline">From 48 hours out to <em>confirmed.</em></h1>
+    <p class="sub">Every update says what changed and why.</p>
+  </div>
+  <div class="phone" data-src="04-updates" style="--w: 900px; left: 130px; top: 880px; --rot: -4deg"></div>
+  <div class="pop" data-src="04-updates" data-box="48,632,1224,366" style="--k: 1; left: 48px; top: 1208px; --rot: 1.5deg"></div>
+</section>
+
+<!-- 8 -->
+<section class="frame" id="landed" data-out="08-see-how-right" style="--glow-x: 60%; --glow-y: 66%; --dawn-a: .28">
+  <div class="sky"></div>
+  <div class="copy">
+    <h1 class="headline">See how <em>right</em> we were.</h1>
+    <p class="sub">Rate the ride after you land. We publish our accuracy in the app.</p>
+  </div>
+  <div class="phone" data-src="08-landed" style="--w: 900px; left: 300px; top: 880px; --rot: 4deg"></div>
+  <div class="pop" data-src="08-landed" data-box="48,790,1224,450" style="--k: 1; left: 50px; top: 1385px; --rot: -2deg"></div>
+</section>
+
+<!-- 9 -->
+<section class="frame" id="search" data-out="09-find-your-flight" style="--glow-x: 40%; --glow-y: 66%; --dawn-a: .32">
+  <div class="sky"></div>
+  <div class="copy">
+    <h1 class="headline">Type a flight <em>number.</em> Done.</h1>
+    <p class="sub">Live status, gates and delay alerts, free.</p>
+  </div>
+  <div class="phone" data-src="09-search" style="--w: 900px; left: 130px; top: 880px; --rot: -4deg"></div>
+</section>
+
+<!-- 10 -->
+<section class="frame" id="grid" data-out="10-everything-for-a-calmer-flight" style="--glow-y: 55%; --glow-a: .4; --dawn-a: .34">
+  <div class="sky"></div>
+  <div class="copy">
+    <h1 class="headline">Everything for a <em>calmer</em> flight.</h1>
+  </div>
+  <div class="grid">
+    <div class="tile"><img src="../screenshot-captures/icons/airplane.departure.png" alt="">Live flight status</div>
+    <div class="tile"><img src="../screenshot-captures/icons/platter.filled.top.iphone.png" alt="">Live Activity</div>
+    <div class="tile"><img src="../screenshot-captures/icons/wifi.slash.png" alt="">Works offline</div>
+    <div class="tile"><img src="../screenshot-captures/icons/wind.png" alt="">Guided breathing</div>
+    <div class="tile"><img src="../screenshot-captures/icons/book.pages.png" alt="">Plain-word explainers</div>
+    <div class="tile"><img src="../screenshot-captures/icons/map.png" alt="">Turbulence map</div>
+    <div class="tile"><img src="../screenshot-captures/icons/antenna.radiowaves.left.and.right.png" alt="">Pilot reports</div>
+    <div class="tile"><img src="../screenshot-captures/icons/ticket.png" alt="">Flight Pass</div>
+    <div class="tile"><img src="../screenshot-captures/icons/nosign.png" alt="">No ads</div>
+    <div class="tile"><img src="../screenshot-captures/icons/person.crop.circle.badge.xmark.png" alt="">No account</div>
+  </div>
+</section>
+
+<script>
+const CAP = "../screenshot-captures/";
+const load = src => new Promise((ok, fail) => { const i = new Image(); i.onload = () => ok(i); i.onerror = fail; i.src = src; });
+
+// The simulator always says "Carrier" on the Lock Screen; paint the wallpaper back over it.
+async function cleanLockScreen() {
+  const img = await load(CAP + "03-lockscreen.png");
+  const c = Object.assign(document.createElement("canvas"), { width: img.width, height: img.height });
+  const g = c.getContext("2d");
+  g.drawImage(img, 0, 0);
+  const [x0, x1, y0, y1] = [130, 380, 56, 140];
+  const d = g.getImageData(x0, y0 - 1, x1 - x0, y1 - y0 + 2);
+  const w = x1 - x0, h = y1 - y0 + 2;
+  for (let x = 0; x < w; x++) {
+    const a = 4 * x, b = 4 * ((h - 1) * w + x);
+    for (let y = 1; y < h - 1; y++) {
+      const t = y / (h - 1), p = 4 * (y * w + x);
+      for (let k = 0; k < 3; k++) d.data[p + k] = d.data[a + k] + (d.data[b + k] - d.data[a + k]) * t;
+    }
+  }
+  g.putImageData(d, x0, y0 - 1);
+  return c.toDataURL("image/png");
+}
+
+function srcFor(name, lock) { return name === "lockscreen" ? lock : CAP + name + ".png"; }
+
+function drawRoute(svg) {
+  const NS = "http://www.w3.org/2000/svg";
+  const el = (tag, attrs) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); svg.appendChild(e); return e; };
+  const d = svg.dataset.route;
+  const probe = el("path", { d, fill: "none", stroke: "none" });
+  const len = probe.getTotalLength();
+  const plane = parseFloat(svg.dataset.plane);
+  const slice = (a, b) => {
+    let pts = [];
+    for (let i = 0; i <= 60; i++) { const p = probe.getPointAtLength(len * (a + (b - a) * i / 60)); pts.push(`${p.x.toFixed(1)},${p.y.toFixed(1)}`); }
+    return "M " + pts.join(" L ");
+  };
+  // Ahead of the plane: faint. Behind it: solid. Bumpy stretches: gold, like the Live Activity.
+  el("path", { d: slice(plane, 1), fill: "none", stroke: "rgba(255,255,255,.22)", "stroke-width": 12, "stroke-linecap": "round" });
+  el("path", { d: slice(0, plane), fill: "none", stroke: "rgba(255,255,255,.85)", "stroke-width": 12, "stroke-linecap": "round" });
+  for (const r of svg.dataset.bumps.split(",")) {
+    const [a, b] = r.split("-").map(Number);
+    el("path", { d: slice(a, b), fill: "none", stroke: "#E0B54E", "stroke-width": 26, "stroke-linecap": "round" });
+  }
+  const at = t => { const p = probe.getPointAtLength(len * t), q = probe.getPointAtLength(Math.min(len, len * t + 2)); return [p, Math.atan2(q.y - p.y, q.x - p.x) * 180 / Math.PI]; };
+  const [p, ang] = at(plane);
+  el("circle", { cx: p.x, cy: p.y, r: 92, fill: "rgba(111,188,204,.18)" });
+  el("circle", { cx: p.x, cy: p.y, r: 62, fill: "#fff" });
+  const icon = el("image", { href: CAP + "icons/teal/airplane.png", width: 74, height: 74, x: p.x - 37, y: p.y - 37 });
+  icon.setAttribute("transform", `rotate(${ang} ${p.x} ${p.y})`);
+  if (svg.dataset.ends) {
+    const [, t] = svg.dataset.ends.split(":");
+    const [q] = at(parseFloat(t));
+    el("image", { href: CAP + "icons/white/airplane.departure.png", width: 96, height: 68, x: q.x - 48, y: q.y - 110 });
+  }
+}
+
+async function build() {
+  const lock = await cleanLockScreen();
+  for (const ph of document.querySelectorAll(".phone")) {
+    const img = new Image();
+    img.src = srcFor(ph.dataset.src, lock);
+    ph.appendChild(img);
+    if (ph.dataset.island !== "0") ph.appendChild(Object.assign(document.createElement("div"), { className: "island" }));
+  }
+  for (const pop of document.querySelectorAll(".pop")) {
+    const [x, y, w, h] = pop.dataset.box.split(",").map(Number);
+    const k = parseFloat(getComputedStyle(pop).getPropertyValue("--k")) || 1;
+    Object.assign(pop.style, {
+      width: w * k + "px", height: h * k + "px",
+      backgroundImage: `url(${srcFor(pop.dataset.src, lock)})`,
+      backgroundSize: `${1320 * k}px ${2868 * k}px`,
+      backgroundPosition: `${-x * k}px ${-y * k}px`,
+    });
+  }
+  document.querySelectorAll("svg.route").forEach(drawRoute);
+  await Promise.all([...document.images].map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; })));
+  await document.fonts.ready;
+  document.body.dataset.ready = "1";
+}
+
+// #id shows one frame; #id:1320 shifts it left, so each half of the panorama renders on its own.
+function show() {
+  const [id, offset = 0] = location.hash.slice(1).split(":");
+  document.querySelectorAll(".frame").forEach(f => {
+    f.classList.toggle("on", !id || f.id === id);
+    f.style.marginLeft = f.id === id ? -offset + "px" : "";
+  });
+}
+addEventListener("hashchange", show);
+show();
+build();
+</script>
+</body>
+</html>
