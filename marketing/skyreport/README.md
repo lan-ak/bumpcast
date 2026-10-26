@@ -46,11 +46,64 @@ This writes `build/site/`, a complete static site: `site/` pages, `/routes/`, on
 - **Accuracy:** the after-landing accuracy line appears once 50 or more flights are rated.
 - **Old pages:** each page flags itself in the browser if it's more than 6 hours old, so a host that keeps serving it after rebuilds stop doesn't present it as current.
 
-**Not set up yet:** a domain and a host. Any static host works (Cloudflare Pages, Netlify, GitHub Pages). Run `build_site.py` hourly after the worker's report (cron or a scheduled CI job), deploy `build/site/`, and submit `/sitemap.xml` to Google Search Console.
+## Hosting: Google Cloud Run
+
+The live site is `serve.py` on Cloud Run, not the static build. It renders the same pages from the latest report in Supabase and reloads every 5 minutes, so there's no build to schedule.
+
+- **If Supabase can't be reached,** it keeps serving the last report.
+- **A report older than 3 hours** is still served, with the page's "hasn't been updated" note shown.
+- **The sample report** is refused unless `ALLOW_SAMPLE=1`.
+- **Cost:** it scales to zero, so a small site stays inside Cloud Run's free tier. Pages are sent with `Cache-Control: max-age=300`.
+
+### Deploy
+
+First, one-time setup:
+
+1. Install the gcloud CLI and run `gcloud auth login`.
+2. Have a project with billing on. Cloud Run needs billing even inside the free tier.
+
+Then deploy:
+
+```bash
+GCP_PROJECT=<project id> BASE_URL=https://<domain> \
+SUPABASE_URL=https://<ref>.supabase.co SUPABASE_ANON_KEY=<public anon key> \
+DOMAIN=<domain> marketing/skyreport/deploy_gcp.sh
+```
+
+The script:
+- turns on Cloud Run, Cloud Build and Artifact Registry;
+- uploads only `site/`, the fonts and the three server files;
+- deploys the `bumpcast-site` service in `us-central1`;
+- prints the service URL.
+
+With `DOMAIN` set, it also maps the domain and prints the DNS records to add at your registrar.
+- **Verify the domain first:** run `gcloud domains verify <domain>` once before mapping.
+- **HTTPS:** the certificate is issued within about an hour of the DNS records going in.
+
+Re-run the same command to ship changes.
+
+**Leave `DOMAIN` off at first** and check `<service url>/routes/` against the live report before pointing a domain at it. `BASE_URL` should already be the final domain, because it's written into canonical links and the sitemap.
+
+### After the domain is live
+
+1. In Google Search Console, add the domain, then submit `https://<domain>/sitemap.xml`.
+2. Use URL Inspection on `/routes/` and two or three route pages to ask for a first crawl.
+3. Add `utm_source` to links from ads and social posts. Redirects keep the query string.
+
+### Local preview
+
+```bash
+REPORT_FILE=marketing/skyreport/fixtures/sample-report.json ALLOW_SAMPLE=1 BASE_URL=http://localhost:8080 \
+  python3 marketing/skyreport/serve.py
+```
+
+To test the image itself, build `Dockerfile` from the context `deploy_gcp.sh` assembles.
+
+`build_site.py` still writes the same site as static files, for previews or a static host.
 
 ## Safety checks
 
-Both scripts refuse to run:
+`build_site.py` and `render_cards.py` refuse to run:
 - on a report older than 3 hours (`--allow-stale` overrides);
 - on the sample report (`--allow-sample` overrides).
 

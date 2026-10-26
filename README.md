@@ -37,7 +37,7 @@ marketing/  The Sky Report: route pages and daily social cards (marketing/skyrep
 - **Outside coverage:** says so, and offers "Notify me when you cover {country}", which feeds a per-country waitlist.
 - **Sky Report:**
   - grades for 50 popular routes, today and tomorrow, rebuilt hourly by the worker;
-  - feeds a page per route and the daily social cards (`marketing/skyreport/README.md`).
+  - feeds a page per route (served from Google Cloud Run) and the daily social cards (`marketing/skyreport/README.md`).
 - **Superwall:** paywalls and onboarding, gating, a single-flight pass, and subscriptions. See SUPERWALL.md.
 
 ## How a forecast is made

@@ -68,3 +68,21 @@ def test_cards_and_caption(report):
     assert count == len(report["routes"]) and len(calm) <= render_cards.ROWS
     assert all(s["grade"] in ("smooth", "mostly_smooth") for s in calm)
     assert "#turbulence" in render_cards.caption(report, on)
+
+
+def test_server_renders_the_same_pages(report):
+    import serve
+
+    site = serve.Site("https://example.test", str(SAMPLE), allow_sample=True)
+    site.refresh()
+    assert set(site.pages) == set(build_site.paths(report)[1:]) | {"/sitemap.xml", "/robots.txt"}
+    assert b'class="stale on"' in site.pages["/routes/jfk-lax/"]  # the sample is old
+    assert "/" in site.assets and "/fonts/IBMPlexMono-Medium.ttf" in site.assets
+
+
+def test_server_refuses_the_sample_in_production():
+    import serve
+
+    site = serve.Site("https://example.test", str(SAMPLE), allow_sample=False)
+    site.refresh()
+    assert site.pages == {}

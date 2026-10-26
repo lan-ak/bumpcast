@@ -308,6 +308,20 @@ def index_page(report: dict, base: str) -> str:
 """
 
 
+def paths(report: dict) -> list[str]:
+    return ["/", "/routes/", *(f"/routes/{r['slug']}/" for r in report["routes"])]
+
+
+def sitemap(report: dict, base: str) -> str:
+    lastmod = rpt.parse_time(report["generated_at"]).strftime("%Y-%m-%dT%H:%M:%SZ")
+    urls = "".join(f"<url><loc>{escape(base + p)}</loc><lastmod>{lastmod}</lastmod></url>" for p in paths(report))
+    return f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{urls}</urlset>\n'
+
+
+def robots(base: str) -> str:
+    return f"User-agent: *\nAllow: /\nSitemap: {base}/sitemap.xml\n"
+
+
 def build(report: dict, out: Path, base: str, stats: dict | None = None) -> list[str]:
     if out.exists():
         shutil.rmtree(out)
@@ -316,7 +330,6 @@ def build(report: dict, out: Path, base: str, stats: dict | None = None) -> list
     for name in FONT_FILES:
         shutil.copy(rpt.FONTS / name, out / "fonts" / name)
     (out / "sky.css").write_text(CSS.lstrip())
-    pages = ["/", "/routes/"]
     (out / "routes").mkdir()
     (out / "routes" / "index.html").write_text(index_page(report, base))
     for route in report["routes"]:
@@ -324,14 +337,9 @@ def build(report: dict, out: Path, base: str, stats: dict | None = None) -> list
         path = out / "routes" / route["slug"]
         path.mkdir()
         (path / "index.html").write_text(route_page(route, report, others, stats, base))
-        pages.append(f"/routes/{route['slug']}/")
-    lastmod = rpt.parse_time(report["generated_at"]).strftime("%Y-%m-%dT%H:%M:%SZ")
-    urls = "".join(f"<url><loc>{escape(base + p)}</loc><lastmod>{lastmod}</lastmod></url>" for p in pages)
-    (out / "sitemap.xml").write_text(
-        f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{urls}</urlset>\n'
-    )
-    (out / "robots.txt").write_text(f"User-agent: *\nAllow: /\nSitemap: {base}/sitemap.xml\n")
-    return pages
+    (out / "sitemap.xml").write_text(sitemap(report, base))
+    (out / "robots.txt").write_text(robots(base))
+    return paths(report)
 
 
 def main():
