@@ -16,3 +16,5 @@ xcuserdata/
 ios/.asc/artifacts/
 # App Store Connect CLI's local release checkpoints
 .asc/
+# Built site and Sky Report cards
+build/

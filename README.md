@@ -9,6 +9,7 @@ Turbulence forecasts for anxious and curious flyers. An iOS app plus a Python fo
 ios/        SwiftUI app + Live Activity widget (XcodeGen: ios/project.yml)
 worker/     Python forecast engine, notifications, map data (Fly.io app "smooth-worker")
 supabase/   Database schema (migrations) and config (project "smooth")
+marketing/  The Sky Report: route pages and daily social cards (marketing/skyreport/README.md)
 ```
 
 ## What's built
@@ -34,6 +35,9 @@ supabase/   Database schema (migrations) and config (project "smooth")
   - public accuracy stats appear in Settings;
   - the review prompt appears only after a flight where the forecast matched.
 - **Outside coverage:** says so, and offers "Notify me when you cover {country}", which feeds a per-country waitlist.
+- **Sky Report:**
+  - grades for 50 popular routes, today and tomorrow, rebuilt hourly by the worker;
+  - feeds a page per route and the daily social cards (`marketing/skyreport/README.md`).
 - **Superwall:** paywalls and onboarding, gating, a single-flight pass, and subscriptions. See SUPERWALL.md.
 
 ## How a forecast is made

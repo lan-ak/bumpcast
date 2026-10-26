@@ -310,3 +310,18 @@ class Database:
             )
             r.raise_for_status()
         self.http.delete("/turbulence_grids", params={"cycle": f"lt.{cycle.isoformat()}"}).raise_for_status()
+
+    # Sky Report
+
+    def sky_report_generated_at(self) -> str | None:
+        rows = self._get("/sky_reports", {"select": "generated_at", "id": "eq.latest"})
+        return rows[0]["generated_at"] if rows else None
+
+    def store_sky_report(self, report: dict) -> None:
+        r = self.http.post(
+            "/sky_reports",
+            params={"on_conflict": "id"},
+            json={"id": "latest", "generated_at": report["generated_at"], "report": report},
+            headers={"Prefer": "return=minimal,resolution=merge-duplicates"},
+        )
+        r.raise_for_status()

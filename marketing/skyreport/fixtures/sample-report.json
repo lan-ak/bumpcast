@@ -1,0 +1,4152 @@
+{
+  "version": 1,
+  "generated_at": "2026-10-26T14:00:00+00:00",
+  "slots": [
+    {
+      "slot": "morning",
+      "local_time": "08:00"
+    },
+    {
+      "slot": "afternoon",
+      "local_time": "13:00"
+    },
+    {
+      "slot": "evening",
+      "local_time": "18:00"
+    }
+  ],
+  "routes": [
+    {
+      "slug": "jfk-lax",
+      "origin": {
+        "iata": "JFK",
+        "city": "New York",
+        "name": "John F. Kennedy International Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "destination": {
+        "iata": "LAX",
+        "city": "Los Angeles",
+        "name": "Los Angeles International Airport",
+        "country": "US",
+        "tz": "America/Los_Angeles"
+      },
+      "duration_min": 305,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T17:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-26T22:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T12:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T17:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 84,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T22:00:00+00:00",
+              "status": "ready",
+              "grade": "bumpy",
+              "grade_title": "Bumpy in places",
+              "score": 55,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "lax-jfk",
+      "origin": {
+        "iata": "LAX",
+        "city": "Los Angeles",
+        "name": "Los Angeles International Airport",
+        "country": "US",
+        "tz": "America/Los_Angeles"
+      },
+      "destination": {
+        "iata": "JFK",
+        "city": "New York",
+        "name": "John F. Kennedy International Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "duration_min": 305,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-26T15:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T20:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T01:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T15:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 88,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T20:00:00+00:00",
+              "status": "ready",
+              "grade": "bumpy",
+              "grade_title": "Bumpy in places",
+              "score": 68,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-28T01:00:00+00:00",
+              "status": "ready",
+              "grade": "bumpy",
+              "grade_title": "Bumpy in places",
+              "score": 77,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "jfk-sfo",
+      "origin": {
+        "iata": "JFK",
+        "city": "New York",
+        "name": "John F. Kennedy International Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "destination": {
+        "iata": "SFO",
+        "city": "San Francisco",
+        "name": "San Francisco International Airport",
+        "country": "US",
+        "tz": "America/Los_Angeles"
+      },
+      "duration_min": 318,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T17:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 86,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-26T22:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T12:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 81,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T17:00:00+00:00",
+              "status": "ready",
+              "grade": "bumpy",
+              "grade_title": "Bumpy in places",
+              "score": 50,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T22:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 91,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "sfo-jfk",
+      "origin": {
+        "iata": "SFO",
+        "city": "San Francisco",
+        "name": "San Francisco International Airport",
+        "country": "US",
+        "tz": "America/Los_Angeles"
+      },
+      "destination": {
+        "iata": "JFK",
+        "city": "New York",
+        "name": "John F. Kennedy International Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "duration_min": 318,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-26T15:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 82,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T20:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T01:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T15:00:00+00:00",
+              "status": "ready",
+              "grade": "bumpy",
+              "grade_title": "Bumpy in places",
+              "score": 47,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T20:00:00+00:00",
+              "status": "ready",
+              "grade": "bumpy",
+              "grade_title": "Bumpy in places",
+              "score": 80,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-28T01:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 94,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "ewr-sfo",
+      "origin": {
+        "iata": "EWR",
+        "city": "Newark",
+        "name": "Newark Liberty International Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "destination": {
+        "iata": "SFO",
+        "city": "San Francisco",
+        "name": "San Francisco International Airport",
+        "country": "US",
+        "tz": "America/Los_Angeles"
+      },
+      "duration_min": 316,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T17:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 85,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-26T22:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T12:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 81,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T17:00:00+00:00",
+              "status": "ready",
+              "grade": "bumpy",
+              "grade_title": "Bumpy in places",
+              "score": 50,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T22:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 92,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "sfo-ewr",
+      "origin": {
+        "iata": "SFO",
+        "city": "San Francisco",
+        "name": "San Francisco International Airport",
+        "country": "US",
+        "tz": "America/Los_Angeles"
+      },
+      "destination": {
+        "iata": "EWR",
+        "city": "Newark",
+        "name": "Newark Liberty International Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "duration_min": 316,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-26T15:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 81,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T20:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T01:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T15:00:00+00:00",
+              "status": "ready",
+              "grade": "bumpy",
+              "grade_title": "Bumpy in places",
+              "score": 47,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T20:00:00+00:00",
+              "status": "ready",
+              "grade": "bumpy",
+              "grade_title": "Bumpy in places",
+              "score": 80,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-28T01:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 93,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "bos-lax",
+      "origin": {
+        "iata": "BOS",
+        "city": "Boston",
+        "name": "Boston Logan International Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "destination": {
+        "iata": "LAX",
+        "city": "Los Angeles",
+        "name": "Los Angeles International Airport",
+        "country": "US",
+        "tz": "America/Los_Angeles"
+      },
+      "duration_min": 321,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T17:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 90,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-26T22:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T12:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 87,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T17:00:00+00:00",
+              "status": "ready",
+              "grade": "bumpy",
+              "grade_title": "Bumpy in places",
+              "score": 57,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T22:00:00+00:00",
+              "status": "ready",
+              "grade": "bumpy",
+              "grade_title": "Bumpy in places",
+              "score": 80,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "lax-bos",
+      "origin": {
+        "iata": "LAX",
+        "city": "Los Angeles",
+        "name": "Los Angeles International Airport",
+        "country": "US",
+        "tz": "America/Los_Angeles"
+      },
+      "destination": {
+        "iata": "BOS",
+        "city": "Boston",
+        "name": "Boston Logan International Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "duration_min": 321,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-26T15:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 88,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T20:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T01:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T15:00:00+00:00",
+              "status": "ready",
+              "grade": "bumpy",
+              "grade_title": "Bumpy in places",
+              "score": 72,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T20:00:00+00:00",
+              "status": "ready",
+              "grade": "bumpy",
+              "grade_title": "Bumpy in places",
+              "score": 82,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-28T01:00:00+00:00",
+              "status": "ready",
+              "grade": "bumpy",
+              "grade_title": "Bumpy in places",
+              "score": 85,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "ord-lax",
+      "origin": {
+        "iata": "ORD",
+        "city": "Chicago",
+        "name": "Chicago O'Hare International Airport",
+        "country": "US",
+        "tz": "America/Chicago"
+      },
+      "destination": {
+        "iata": "LAX",
+        "city": "Los Angeles",
+        "name": "Los Angeles International Airport",
+        "country": "US",
+        "tz": "America/Los_Angeles"
+      },
+      "duration_min": 221,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T18:00:00+00:00",
+              "status": "ready",
+              "grade": "mostly_smooth",
+              "grade_title": "Mostly smooth",
+              "score": 97,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-26T23:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T13:00:00+00:00",
+              "status": "ready",
+              "grade": "mostly_smooth",
+              "grade_title": "Mostly smooth",
+              "score": 95,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T18:00:00+00:00",
+              "status": "ready",
+              "grade": "bumpy",
+              "grade_title": "Bumpy in places",
+              "score": 60,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T23:00:00+00:00",
+              "status": "ready",
+              "grade": "bumpy",
+              "grade_title": "Bumpy in places",
+              "score": 71,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "lax-ord",
+      "origin": {
+        "iata": "LAX",
+        "city": "Los Angeles",
+        "name": "Los Angeles International Airport",
+        "country": "US",
+        "tz": "America/Los_Angeles"
+      },
+      "destination": {
+        "iata": "ORD",
+        "city": "Chicago",
+        "name": "Chicago O'Hare International Airport",
+        "country": "US",
+        "tz": "America/Chicago"
+      },
+      "duration_min": 220,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-26T15:00:00+00:00",
+              "status": "ready",
+              "grade": "mostly_smooth",
+              "grade_title": "Mostly smooth",
+              "score": 95,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T20:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T01:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T15:00:00+00:00",
+              "status": "ready",
+              "grade": "bumpy",
+              "grade_title": "Bumpy in places",
+              "score": 74,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T20:00:00+00:00",
+              "status": "ready",
+              "grade": "bumpy",
+              "grade_title": "Bumpy in places",
+              "score": 75,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-28T01:00:00+00:00",
+              "status": "ready",
+              "grade": "bumpy",
+              "grade_title": "Bumpy in places",
+              "score": 78,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "atl-lax",
+      "origin": {
+        "iata": "ATL",
+        "city": "Atlanta",
+        "name": "Hartsfield Jackson Atlanta International Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "destination": {
+        "iata": "LAX",
+        "city": "Los Angeles",
+        "name": "Los Angeles International Airport",
+        "country": "US",
+        "tz": "America/Los_Angeles"
+      },
+      "duration_min": 244,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T17:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-26T22:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T12:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T17:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T22:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "lax-atl",
+      "origin": {
+        "iata": "LAX",
+        "city": "Los Angeles",
+        "name": "Los Angeles International Airport",
+        "country": "US",
+        "tz": "America/Los_Angeles"
+      },
+      "destination": {
+        "iata": "ATL",
+        "city": "Atlanta",
+        "name": "Hartsfield Jackson Atlanta International Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "duration_min": 244,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-26T15:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T20:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T01:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T15:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T20:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-28T01:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "dfw-lax",
+      "origin": {
+        "iata": "DFW",
+        "city": "Dallas-Fort Worth",
+        "name": "Dallas Fort Worth International Airport",
+        "country": "US",
+        "tz": "America/Chicago"
+      },
+      "destination": {
+        "iata": "LAX",
+        "city": "Los Angeles",
+        "name": "Los Angeles International Airport",
+        "country": "US",
+        "tz": "America/Los_Angeles"
+      },
+      "duration_min": 161,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T18:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-26T23:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T13:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T18:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T23:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "den-lax",
+      "origin": {
+        "iata": "DEN",
+        "city": "Denver",
+        "name": "Denver International Airport",
+        "country": "US",
+        "tz": "America/Denver"
+      },
+      "destination": {
+        "iata": "LAX",
+        "city": "Los Angeles",
+        "name": "Los Angeles International Airport",
+        "country": "US",
+        "tz": "America/Los_Angeles"
+      },
+      "duration_min": 119,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T19:00:00+00:00",
+              "status": "ready",
+              "grade": "mostly_smooth",
+              "grade_title": "Mostly smooth",
+              "score": 97,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T00:00:00+00:00",
+              "status": "ready",
+              "grade": "mostly_smooth",
+              "grade_title": "Mostly smooth",
+              "score": 97,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T14:00:00+00:00",
+              "status": "ready",
+              "grade": "mostly_smooth",
+              "grade_title": "Mostly smooth",
+              "score": 97,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T19:00:00+00:00",
+              "status": "ready",
+              "grade": "bumpy",
+              "grade_title": "Bumpy in places",
+              "score": 82,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-28T00:00:00+00:00",
+              "status": "ready",
+              "grade": "rough",
+              "grade_title": "Some rough patches",
+              "score": 52,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "lax-sea",
+      "origin": {
+        "iata": "LAX",
+        "city": "Los Angeles",
+        "name": "Los Angeles International Airport",
+        "country": "US",
+        "tz": "America/Los_Angeles"
+      },
+      "destination": {
+        "iata": "SEA",
+        "city": "Seattle",
+        "name": "Seattle\u2013Tacoma International Airport",
+        "country": "US",
+        "tz": "America/Los_Angeles"
+      },
+      "duration_min": 129,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-26T15:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 88,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T20:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 87,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T01:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 87,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T15:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 88,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T20:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 88,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-28T01:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 88,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "sea-lax",
+      "origin": {
+        "iata": "SEA",
+        "city": "Seattle",
+        "name": "Seattle\u2013Tacoma International Airport",
+        "country": "US",
+        "tz": "America/Los_Angeles"
+      },
+      "destination": {
+        "iata": "LAX",
+        "city": "Los Angeles",
+        "name": "Los Angeles International Airport",
+        "country": "US",
+        "tz": "America/Los_Angeles"
+      },
+      "duration_min": 129,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-26T15:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 88,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T20:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 88,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T01:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 88,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T15:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 88,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T20:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 88,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-28T01:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 87,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "lax-sfo",
+      "origin": {
+        "iata": "LAX",
+        "city": "Los Angeles",
+        "name": "Los Angeles International Airport",
+        "country": "US",
+        "tz": "America/Los_Angeles"
+      },
+      "destination": {
+        "iata": "SFO",
+        "city": "San Francisco",
+        "name": "San Francisco International Airport",
+        "country": "US",
+        "tz": "America/Los_Angeles"
+      },
+      "duration_min": 58,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-26T15:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T20:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T01:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T15:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T20:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-28T01:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "las-lax",
+      "origin": {
+        "iata": "LAS",
+        "city": "Las Vegas",
+        "name": "Harry Reid International Airport",
+        "country": "US",
+        "tz": "America/Los_Angeles"
+      },
+      "destination": {
+        "iata": "LAX",
+        "city": "Los Angeles",
+        "name": "Los Angeles International Airport",
+        "country": "US",
+        "tz": "America/Los_Angeles"
+      },
+      "duration_min": 45,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-26T15:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T20:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T01:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T15:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T20:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-28T01:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "den-ord",
+      "origin": {
+        "iata": "DEN",
+        "city": "Denver",
+        "name": "Denver International Airport",
+        "country": "US",
+        "tz": "America/Denver"
+      },
+      "destination": {
+        "iata": "ORD",
+        "city": "Chicago",
+        "name": "Chicago O'Hare International Airport",
+        "country": "US",
+        "tz": "America/Chicago"
+      },
+      "duration_min": 121,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T19:00:00+00:00",
+              "status": "ready",
+              "grade": "mostly_smooth",
+              "grade_title": "Mostly smooth",
+              "score": 98,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T00:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T14:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 82,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T19:00:00+00:00",
+              "status": "ready",
+              "grade": "bumpy",
+              "grade_title": "Bumpy in places",
+              "score": 54,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-28T00:00:00+00:00",
+              "status": "ready",
+              "grade": "mostly_smooth",
+              "grade_title": "Mostly smooth",
+              "score": 96,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "ord-den",
+      "origin": {
+        "iata": "ORD",
+        "city": "Chicago",
+        "name": "Chicago O'Hare International Airport",
+        "country": "US",
+        "tz": "America/Chicago"
+      },
+      "destination": {
+        "iata": "DEN",
+        "city": "Denver",
+        "name": "Denver International Airport",
+        "country": "US",
+        "tz": "America/Denver"
+      },
+      "duration_min": 120,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T18:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 89,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-26T23:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T13:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 81,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T18:00:00+00:00",
+              "status": "ready",
+              "grade": "bumpy",
+              "grade_title": "Bumpy in places",
+              "score": 40,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T23:00:00+00:00",
+              "status": "ready",
+              "grade": "mostly_smooth",
+              "grade_title": "Mostly smooth",
+              "score": 95,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "dfw-ord",
+      "origin": {
+        "iata": "DFW",
+        "city": "Dallas-Fort Worth",
+        "name": "Dallas Fort Worth International Airport",
+        "country": "US",
+        "tz": "America/Chicago"
+      },
+      "destination": {
+        "iata": "ORD",
+        "city": "Chicago",
+        "name": "Chicago O'Hare International Airport",
+        "country": "US",
+        "tz": "America/Chicago"
+      },
+      "duration_min": 111,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T18:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-26T23:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T13:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T18:00:00+00:00",
+              "status": "ready",
+              "grade": "mostly_smooth",
+              "grade_title": "Mostly smooth",
+              "score": 97,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T23:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 83,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "atl-ord",
+      "origin": {
+        "iata": "ATL",
+        "city": "Atlanta",
+        "name": "Hartsfield Jackson Atlanta International Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "destination": {
+        "iata": "ORD",
+        "city": "Chicago",
+        "name": "Chicago O'Hare International Airport",
+        "country": "US",
+        "tz": "America/Chicago"
+      },
+      "duration_min": 89,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T17:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-26T22:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T12:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T17:00:00+00:00",
+              "status": "ready",
+              "grade": "mostly_smooth",
+              "grade_title": "Mostly smooth",
+              "score": 99,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T22:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 86,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "lga-ord",
+      "origin": {
+        "iata": "LGA",
+        "city": "New York",
+        "name": "LaGuardia Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "destination": {
+        "iata": "ORD",
+        "city": "Chicago",
+        "name": "Chicago O'Hare International Airport",
+        "country": "US",
+        "tz": "America/Chicago"
+      },
+      "duration_min": 103,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T17:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 89,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-26T22:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T12:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 94,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T17:00:00+00:00",
+              "status": "ready",
+              "grade": "bumpy",
+              "grade_title": "Bumpy in places",
+              "score": 45,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T22:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 87,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "ord-lga",
+      "origin": {
+        "iata": "ORD",
+        "city": "Chicago",
+        "name": "Chicago O'Hare International Airport",
+        "country": "US",
+        "tz": "America/Chicago"
+      },
+      "destination": {
+        "iata": "LGA",
+        "city": "New York",
+        "name": "LaGuardia Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "duration_min": 103,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T18:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 92,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-26T23:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T13:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 89,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T18:00:00+00:00",
+              "status": "ready",
+              "grade": "bumpy",
+              "grade_title": "Bumpy in places",
+              "score": 24,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T23:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 91,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "lga-atl",
+      "origin": {
+        "iata": "LGA",
+        "city": "New York",
+        "name": "LaGuardia Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "destination": {
+        "iata": "ATL",
+        "city": "Atlanta",
+        "name": "Hartsfield Jackson Atlanta International Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "duration_min": 107,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T17:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-26T22:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T12:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T17:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T22:00:00+00:00",
+              "status": "ready",
+              "grade": "mostly_smooth",
+              "grade_title": "Mostly smooth",
+              "score": 96,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "atl-lga",
+      "origin": {
+        "iata": "ATL",
+        "city": "Atlanta",
+        "name": "Hartsfield Jackson Atlanta International Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "destination": {
+        "iata": "LGA",
+        "city": "New York",
+        "name": "LaGuardia Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "duration_min": 107,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T17:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-26T22:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T12:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T17:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T22:00:00+00:00",
+              "status": "ready",
+              "grade": "mostly_smooth",
+              "grade_title": "Mostly smooth",
+              "score": 96,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "bos-dca",
+      "origin": {
+        "iata": "BOS",
+        "city": "Boston",
+        "name": "Boston Logan International Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "destination": {
+        "iata": "DCA",
+        "city": "Washington",
+        "name": "Ronald Reagan Washington National Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "duration_min": 65,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T17:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-26T22:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T12:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T17:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T22:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "jfk-mia",
+      "origin": {
+        "iata": "JFK",
+        "city": "New York",
+        "name": "John F. Kennedy International Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "destination": {
+        "iata": "MIA",
+        "city": "Miami",
+        "name": "Miami International Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "duration_min": 145,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T17:00:00+00:00",
+              "status": "ready",
+              "grade": "mostly_smooth",
+              "grade_title": "Mostly smooth",
+              "score": 95,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-26T22:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T12:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T17:00:00+00:00",
+              "status": "ready",
+              "grade": "mostly_smooth",
+              "grade_title": "Mostly smooth",
+              "score": 95,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T22:00:00+00:00",
+              "status": "ready",
+              "grade": "mostly_smooth",
+              "grade_title": "Mostly smooth",
+              "score": 95,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "mia-jfk",
+      "origin": {
+        "iata": "MIA",
+        "city": "Miami",
+        "name": "Miami International Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "destination": {
+        "iata": "JFK",
+        "city": "New York",
+        "name": "John F. Kennedy International Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "duration_min": 145,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T17:00:00+00:00",
+              "status": "ready",
+              "grade": "mostly_smooth",
+              "grade_title": "Mostly smooth",
+              "score": 95,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-26T22:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T12:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T17:00:00+00:00",
+              "status": "ready",
+              "grade": "mostly_smooth",
+              "grade_title": "Mostly smooth",
+              "score": 96,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T22:00:00+00:00",
+              "status": "ready",
+              "grade": "mostly_smooth",
+              "grade_title": "Mostly smooth",
+              "score": 94,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "ewr-fll",
+      "origin": {
+        "iata": "EWR",
+        "city": "Newark",
+        "name": "Newark Liberty International Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "destination": {
+        "iata": "FLL",
+        "city": "Fort Lauderdale",
+        "name": "Fort Lauderdale Hollywood International Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "duration_min": 142,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T17:00:00+00:00",
+              "status": "ready",
+              "grade": "mostly_smooth",
+              "grade_title": "Mostly smooth",
+              "score": 95,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-26T22:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T12:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T17:00:00+00:00",
+              "status": "ready",
+              "grade": "mostly_smooth",
+              "grade_title": "Mostly smooth",
+              "score": 95,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T22:00:00+00:00",
+              "status": "ready",
+              "grade": "mostly_smooth",
+              "grade_title": "Mostly smooth",
+              "score": 94,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "jfk-mco",
+      "origin": {
+        "iata": "JFK",
+        "city": "New York",
+        "name": "John F. Kennedy International Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "destination": {
+        "iata": "MCO",
+        "city": "Orlando",
+        "name": "Orlando International Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "duration_min": 128,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T17:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 93,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-26T22:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T12:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T17:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 94,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T22:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 93,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "ewr-mco",
+      "origin": {
+        "iata": "EWR",
+        "city": "Newark",
+        "name": "Newark Liberty International Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "destination": {
+        "iata": "MCO",
+        "city": "Orlando",
+        "name": "Orlando International Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "duration_min": 127,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T17:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 93,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-26T22:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T12:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T17:00:00+00:00",
+              "status": "ready",
+              "grade": "mostly_smooth",
+              "grade_title": "Mostly smooth",
+              "score": 94,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T22:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 92,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "bos-mco",
+      "origin": {
+        "iata": "BOS",
+        "city": "Boston",
+        "name": "Boston Logan International Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "destination": {
+        "iata": "MCO",
+        "city": "Orlando",
+        "name": "Orlando International Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "duration_min": 149,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T17:00:00+00:00",
+              "status": "ready",
+              "grade": "mostly_smooth",
+              "grade_title": "Mostly smooth",
+              "score": 94,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-26T22:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T12:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T17:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 94,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T22:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 84,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "ord-mco",
+      "origin": {
+        "iata": "ORD",
+        "city": "Chicago",
+        "name": "Chicago O'Hare International Airport",
+        "country": "US",
+        "tz": "America/Chicago"
+      },
+      "destination": {
+        "iata": "MCO",
+        "city": "Orlando",
+        "name": "Orlando International Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "duration_min": 135,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T18:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 94,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-26T23:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T13:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T18:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 93,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T23:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 83,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "atl-mco",
+      "origin": {
+        "iata": "ATL",
+        "city": "Atlanta",
+        "name": "Hartsfield Jackson Atlanta International Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "destination": {
+        "iata": "MCO",
+        "city": "Orlando",
+        "name": "Orlando International Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "duration_min": 65,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T17:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 86,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-26T22:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 88,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T12:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T17:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 92,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T22:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 87,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "phl-mco",
+      "origin": {
+        "iata": "PHL",
+        "city": "Philadelphia",
+        "name": "Philadelphia International Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "destination": {
+        "iata": "MCO",
+        "city": "Orlando",
+        "name": "Orlando International Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "duration_min": 119,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T17:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 93,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-26T22:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T12:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T17:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 94,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T22:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 92,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "dfw-atl",
+      "origin": {
+        "iata": "DFW",
+        "city": "Dallas-Fort Worth",
+        "name": "Dallas Fort Worth International Airport",
+        "country": "US",
+        "tz": "America/Chicago"
+      },
+      "destination": {
+        "iata": "ATL",
+        "city": "Atlanta",
+        "name": "Hartsfield Jackson Atlanta International Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "duration_min": 103,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T18:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-26T23:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T13:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T18:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T23:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "iah-den",
+      "origin": {
+        "iata": "IAH",
+        "city": "Houston",
+        "name": "George Bush Intercontinental Airport",
+        "country": "US",
+        "tz": "America/Chicago"
+      },
+      "destination": {
+        "iata": "DEN",
+        "city": "Denver",
+        "name": "Denver International Airport",
+        "country": "US",
+        "tz": "America/Denver"
+      },
+      "duration_min": 117,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T18:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-26T23:00:00+00:00",
+              "status": "ready",
+              "grade": "mostly_smooth",
+              "grade_title": "Mostly smooth",
+              "score": 98,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T13:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T18:00:00+00:00",
+              "status": "ready",
+              "grade": "mostly_smooth",
+              "grade_title": "Mostly smooth",
+              "score": 99,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T23:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 92,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "den-phx",
+      "origin": {
+        "iata": "DEN",
+        "city": "Denver",
+        "name": "Denver International Airport",
+        "country": "US",
+        "tz": "America/Denver"
+      },
+      "destination": {
+        "iata": "PHX",
+        "city": "Phoenix",
+        "name": "Phoenix Sky Harbor International Airport",
+        "country": "US",
+        "tz": "America/Phoenix"
+      },
+      "duration_min": 88,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T19:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 92,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T00:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 92,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T14:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 92,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T19:00:00+00:00",
+              "status": "ready",
+              "grade": "bumpy",
+              "grade_title": "Bumpy in places",
+              "score": 76,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-28T00:00:00+00:00",
+              "status": "ready",
+              "grade": "rough",
+              "grade_title": "Some rough patches",
+              "score": 58,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "sea-den",
+      "origin": {
+        "iata": "SEA",
+        "city": "Seattle",
+        "name": "Seattle\u2013Tacoma International Airport",
+        "country": "US",
+        "tz": "America/Los_Angeles"
+      },
+      "destination": {
+        "iata": "DEN",
+        "city": "Denver",
+        "name": "Denver International Airport",
+        "country": "US",
+        "tz": "America/Denver"
+      },
+      "duration_min": 136,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-26T15:00:00+00:00",
+              "status": "ready",
+              "grade": "bumpy",
+              "grade_title": "Bumpy in places",
+              "score": 77,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T20:00:00+00:00",
+              "status": "ready",
+              "grade": "bumpy",
+              "grade_title": "Bumpy in places",
+              "score": 79,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T01:00:00+00:00",
+              "status": "ready",
+              "grade": "bumpy",
+              "grade_title": "Bumpy in places",
+              "score": 78,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T15:00:00+00:00",
+              "status": "ready",
+              "grade": "bumpy",
+              "grade_title": "Bumpy in places",
+              "score": 68,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T20:00:00+00:00",
+              "status": "ready",
+              "grade": "bumpy",
+              "grade_title": "Bumpy in places",
+              "score": 84,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-28T01:00:00+00:00",
+              "status": "ready",
+              "grade": "mostly_smooth",
+              "grade_title": "Mostly smooth",
+              "score": 97,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "msp-phx",
+      "origin": {
+        "iata": "MSP",
+        "city": "Minneapolis",
+        "name": "Minneapolis\u2013Saint Paul International Airport / Wold\u2013Chamberlain Field",
+        "country": "US",
+        "tz": "America/Chicago"
+      },
+      "destination": {
+        "iata": "PHX",
+        "city": "Phoenix",
+        "name": "Phoenix Sky Harbor International Airport",
+        "country": "US",
+        "tz": "America/Phoenix"
+      },
+      "duration_min": 166,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T18:00:00+00:00",
+              "status": "ready",
+              "grade": "bumpy",
+              "grade_title": "Bumpy in places",
+              "score": 82,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-26T23:00:00+00:00",
+              "status": "ready",
+              "grade": "bumpy",
+              "grade_title": "Bumpy in places",
+              "score": 85,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T13:00:00+00:00",
+              "status": "ready",
+              "grade": "bumpy",
+              "grade_title": "Bumpy in places",
+              "score": 80,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T18:00:00+00:00",
+              "status": "ready",
+              "grade": "bumpy",
+              "grade_title": "Bumpy in places",
+              "score": 80,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T23:00:00+00:00",
+              "status": "ready",
+              "grade": "bumpy",
+              "grade_title": "Bumpy in places",
+              "score": 81,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "slc-lax",
+      "origin": {
+        "iata": "SLC",
+        "city": "Salt Lake City",
+        "name": "Salt Lake City International Airport",
+        "country": "US",
+        "tz": "America/Denver"
+      },
+      "destination": {
+        "iata": "LAX",
+        "city": "Los Angeles",
+        "name": "Los Angeles International Airport",
+        "country": "US",
+        "tz": "America/Los_Angeles"
+      },
+      "duration_min": 87,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T19:00:00+00:00",
+              "status": "ready",
+              "grade": "mostly_smooth",
+              "grade_title": "Mostly smooth",
+              "score": 96,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T00:00:00+00:00",
+              "status": "ready",
+              "grade": "mostly_smooth",
+              "grade_title": "Mostly smooth",
+              "score": 96,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T14:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 90,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T19:00:00+00:00",
+              "status": "ready",
+              "grade": "bumpy",
+              "grade_title": "Bumpy in places",
+              "score": 72,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-28T00:00:00+00:00",
+              "status": "ready",
+              "grade": "bumpy",
+              "grade_title": "Bumpy in places",
+              "score": 70,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "yyz-yul",
+      "origin": {
+        "iata": "YYZ",
+        "city": "Toronto",
+        "name": "Toronto Pearson International Airport",
+        "country": "CA",
+        "tz": "America/Toronto"
+      },
+      "destination": {
+        "iata": "YUL",
+        "city": "Montr\u00e9al",
+        "name": "Montreal / Pierre Elliott Trudeau International Airport",
+        "country": "CA",
+        "tz": "America/Toronto"
+      },
+      "duration_min": 55,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T17:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-26T22:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T12:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T17:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T22:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "yul-yyz",
+      "origin": {
+        "iata": "YUL",
+        "city": "Montr\u00e9al",
+        "name": "Montreal / Pierre Elliott Trudeau International Airport",
+        "country": "CA",
+        "tz": "America/Toronto"
+      },
+      "destination": {
+        "iata": "YYZ",
+        "city": "Toronto",
+        "name": "Toronto Pearson International Airport",
+        "country": "CA",
+        "tz": "America/Toronto"
+      },
+      "duration_min": 55,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T17:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-26T22:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T12:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T17:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T22:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "yyz-lga",
+      "origin": {
+        "iata": "YYZ",
+        "city": "Toronto",
+        "name": "Toronto Pearson International Airport",
+        "country": "CA",
+        "tz": "America/Toronto"
+      },
+      "destination": {
+        "iata": "LGA",
+        "city": "New York",
+        "name": "LaGuardia Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "duration_min": 60,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T17:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-26T22:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T12:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T17:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T22:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "yyz-mco",
+      "origin": {
+        "iata": "YYZ",
+        "city": "Toronto",
+        "name": "Toronto Pearson International Airport",
+        "country": "CA",
+        "tz": "America/Toronto"
+      },
+      "destination": {
+        "iata": "MCO",
+        "city": "Orlando",
+        "name": "Orlando International Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "duration_min": 141,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T17:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 93,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-26T22:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T12:00:00+00:00",
+              "status": "ready",
+              "grade": "mostly_smooth",
+              "grade_title": "Mostly smooth",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T17:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 88,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T22:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 82,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "yyz-fll",
+      "origin": {
+        "iata": "YYZ",
+        "city": "Toronto",
+        "name": "Toronto Pearson International Airport",
+        "country": "CA",
+        "tz": "America/Toronto"
+      },
+      "destination": {
+        "iata": "FLL",
+        "city": "Fort Lauderdale",
+        "name": "Fort Lauderdale Hollywood International Airport",
+        "country": "US",
+        "tz": "America/New_York"
+      },
+      "duration_min": 160,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T17:00:00+00:00",
+              "status": "ready",
+              "grade": "mostly_smooth",
+              "grade_title": "Mostly smooth",
+              "score": 94,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-26T22:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T12:00:00+00:00",
+              "status": "ready",
+              "grade": "mostly_smooth",
+              "grade_title": "Mostly smooth",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T17:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 90,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T22:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 86,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "yvr-yyc",
+      "origin": {
+        "iata": "YVR",
+        "city": "Vancouver",
+        "name": "Vancouver International Airport",
+        "country": "CA",
+        "tz": "America/Vancouver"
+      },
+      "destination": {
+        "iata": "YYC",
+        "city": "Calgary",
+        "name": "Calgary International Airport",
+        "country": "CA",
+        "tz": "America/Edmonton"
+      },
+      "duration_min": 67,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-26T15:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T20:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T01:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T15:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T20:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-28T01:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "yyc-yvr",
+      "origin": {
+        "iata": "YYC",
+        "city": "Calgary",
+        "name": "Calgary International Airport",
+        "country": "CA",
+        "tz": "America/Edmonton"
+      },
+      "destination": {
+        "iata": "YVR",
+        "city": "Vancouver",
+        "name": "Vancouver International Airport",
+        "country": "CA",
+        "tz": "America/Vancouver"
+      },
+      "duration_min": 68,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T19:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T00:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T14:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T19:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-28T00:00:00+00:00",
+              "status": "ready",
+              "grade": "smooth",
+              "grade_title": "Smooth flight",
+              "score": 100,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "yvr-lax",
+      "origin": {
+        "iata": "YVR",
+        "city": "Vancouver",
+        "name": "Vancouver International Airport",
+        "country": "CA",
+        "tz": "America/Vancouver"
+      },
+      "destination": {
+        "iata": "LAX",
+        "city": "Los Angeles",
+        "name": "Los Angeles International Airport",
+        "country": "US",
+        "tz": "America/Los_Angeles"
+      },
+      "duration_min": 144,
+      "days": [
+        {
+          "date": "2026-10-26",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-26T15:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 89,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-26T20:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 90,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-27T01:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 89,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-27",
+          "departures": [
+            {
+              "slot": "morning",
+              "departure_at": "2026-10-27T15:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 88,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "afternoon",
+              "departure_at": "2026-10-27T20:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 88,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            },
+            {
+              "slot": "evening",
+              "departure_at": "2026-10-28T01:00:00+00:00",
+              "status": "ready",
+              "grade": "some_bumps",
+              "grade_title": "A few bumps",
+              "score": 89,
+              "confidence": "early",
+              "confidence_title": "Early outlook"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "failed": [],
+  "sample": true
+}

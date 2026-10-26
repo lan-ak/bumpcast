@@ -2,6 +2,7 @@
 
   smooth-worker forecast JFK LAX 2026-10-19T14:00Z   # one-off forecast, prints a summary
   smooth-worker run                                  # keep forecasts, notifications and map data fresh
+  smooth-worker sky-report --out report.json         # the Sky Report for the route pages and cards
 """
 
 import argparse
@@ -14,7 +15,7 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-from . import airports, flightdata, forecast, hazards, mapdata, notify, status
+from . import airports, flightdata, forecast, hazards, mapdata, notify, skyreport, status
 from .apns import Apns
 from .flightdata import FlightData
 from .sources import GfsSource, GtgEnsemble, GtgSource, gfs, gtg
@@ -516,6 +517,51 @@ def refresh_map(db) -> int:
     return mapdata.refresh_grids(db, source)
 
 
+def sky_report_forecast(origin, destination, departure: datetime) -> forecast.Forecast:
+    """One Sky Report departure, locked like a flight's forecast so a new flight waits for one
+    departure at most, never the whole report."""
+    with work_lock:
+        now = datetime.now(UTC)
+        inputs = shared_inputs(now)
+        return forecast.compute(origin, destination, departure, now, inputs.sources(), inputs.hazards())
+
+
+def refresh_sky_report(db) -> str:
+    now = datetime.now(UTC)
+    if not skyreport.is_due(db.sky_report_generated_at(), now):
+        return "current"
+    report = skyreport.build(now, sky_report_forecast)
+    if not report["routes"]:
+        raise RuntimeError(f"no route could be forecast ({len(report['failed'])} failed); keeping the last report")
+    db.store_sky_report(report)
+    return f"{len(report['routes'])} route(s), {len(report['failed'])} failed"
+
+
+def watch_sky_report(db) -> None:
+    """Runs beside the poll loop: up to ~300 forecasts an hour would hold up notifications if they
+    ran in the poll. A failed pass is retried at the next check."""
+    while True:
+        try:
+            log.info("sky report: %s", refresh_sky_report(db))
+        except Exception:
+            log.exception("sky report failed")
+        time.sleep(POLL_SECONDS)
+
+
+def cmd_sky_report(args: argparse.Namespace) -> None:
+    report = skyreport.build(datetime.now(UTC), sky_report_forecast)
+    text = json.dumps(report, indent=2)
+    if args.out:
+        Path(args.out).write_text(text)
+        log.info("sky report: %d route(s) -> %s", len(report["routes"]), args.out)
+    else:
+        print(text)
+    if args.store:
+        from .db import Database
+
+        Database().store_sky_report(report)
+
+
 def cmd_run(args: argparse.Namespace) -> None:
     from .db import Database
 
@@ -532,6 +578,7 @@ def cmd_run(args: argparse.Namespace) -> None:
             target=watch_new_flights, args=(Database(), FlightData.create()), name="new-flights", daemon=True
         ).start()
         threading.Thread(target=watch_gtg, name="gtg", daemon=True).start()
+        threading.Thread(target=watch_sky_report, args=(Database(),), name="sky-report", daemon=True).start()
     while True:
         poll(db, apns, data)
         if args.once:
@@ -558,6 +605,11 @@ def main() -> None:
     p = sub.add_parser("run", help="Keep forecasts in Supabase fresh")
     p.add_argument("--once", action="store_true")
     p.set_defaults(func=cmd_run)
+
+    p = sub.add_parser("sky-report", help="Build the Sky Report (popular routes, today and tomorrow)")
+    p.add_argument("--out", help="Write the JSON here instead of printing it")
+    p.add_argument("--store", action="store_true", help="Also store it in Supabase as the latest report")
+    p.set_defaults(func=cmd_sky_report)
 
     args = parser.parse_args()
     args.func(args)
