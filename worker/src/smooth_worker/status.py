@@ -50,6 +50,11 @@ SLACK = timedelta(minutes=2)
 
 # Unpublished schedules are checked once a day until the airline publishes them.
 SCHEDULE_CHECK = timedelta(days=1)
+# The flight data's terms allow no permanent copies (7 days of caching), so stored status is
+# deleted this long after its last check. Not only finished rows: some never get marked finished.
+# Nothing still needs a row by then: flights in play are checked at least every 6 hours, and
+# unpublished schedules daily.
+KEEP = timedelta(days=6)
 
 
 def _time(value) -> datetime | None:

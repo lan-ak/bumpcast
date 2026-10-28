@@ -5,6 +5,7 @@ from datetime import UTC, datetime, timedelta
 
 import httpx
 
+from smooth_worker import status
 from smooth_worker.db import Database
 
 NOW = datetime(2026, 10, 23, 17, tzinfo=UTC)
@@ -40,6 +41,23 @@ def test_flights_stay_in_play_until_the_longest_flights_land():
     assert "duration_min" in asked[0]["select"]
     # "Wheels up" once per flight: when it was saved, and what its other activities were sent.
     assert "created_at" in asked[3]["select"] and "activities:live_activities(pushed_takeoff)" in asked[3]["select"]
+
+
+def test_old_status_is_purged_by_age_finished_or_not():
+    """The flight data allows no permanent copies: status goes 6 days after its last check, including
+    rows that were never marked finished."""
+    asked = []
+
+    def handler(request):
+        asked.append(request)
+        return httpx.Response(200, json=[{"flight_id": "a"}, {"flight_id": "b"}])
+
+    deleted = database(handler).prune_flight_status(NOW - status.KEEP)
+    [request] = asked
+    assert request.method == "DELETE" and request.url.path.endswith("/flight_status")
+    assert request.url.params["checked_at"] == f"lt.{(NOW - timedelta(days=6)).isoformat()}"
+    assert "finished" not in request.url.params
+    assert deleted == 2
 
 
 def test_a_kept_forecast_copied_to_a_delay_is_marked_retimed():

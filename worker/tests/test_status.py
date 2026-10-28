@@ -198,6 +198,16 @@ def test_status_refresh_rhythm():
     assert not status.is_due(checked, SCHEDULED, SCHEDULED - timedelta(hours=4, minutes=30))
     assert not status.is_due({**checked, "finished": True}, SCHEDULED, SCHEDULED)
     assert not status.is_due({**checked, "status": "cancelled"}, SCHEDULED, SCHEDULED)
+
+
+def test_purged_status_is_never_fetched_again():
+    """Status is deleted KEEP after its last check. Checks stop earliest for a flight cancelled at
+    its first check, 48 h out; even that one is long over by then, so the poll leaves it alone."""
+    first_check = SCHEDULED - status.WINDOW
+    assert status.is_due(None, SCHEDULED, first_check, watching=True, flight=FLIGHT)
+    purged = first_check + status.KEEP
+    assert not status.is_due(None, SCHEDULED, purged, watching=True, flight=FLIGHT)
+    assert not status.is_due(None, SCHEDULED, purged, watching=True, flight={**FLIGHT, "arrival_at": None})
     # Saved in the air: the first status is due until the flight should have landed.
     assert status.is_due(None, SCHEDULED, SCHEDULED + timedelta(hours=2))
     with_arrival = {**FLIGHT, "arrival_at": "2026-10-22T17:41:00+00:00"}

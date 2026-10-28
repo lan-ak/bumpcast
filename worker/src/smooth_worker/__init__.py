@@ -487,6 +487,7 @@ def poll(db, apns: Apns | None, data: FlightData | None = None) -> None:
         ("notifications", lambda: f"{notify.run(db, apns, datetime.now(UTC))} notification(s)"),
         ("takeoffs", lambda: f"{notify.push_takeoffs(db, apns, datetime.now(UTC))} takeoff(s) pushed"),
         ("schedules", lambda: f"{notify.check_schedules(db, data, apns, datetime.now(UTC))} schedule(s) published"),
+        ("status purge", lambda: f"{db.prune_flight_status(datetime.now(UTC) - status.KEEP)} old status row(s) deleted"),
         ("pireps", lambda: f"{mapdata.refresh_pireps(db, datetime.now(UTC))} pilot report(s)"),
         ("map", lambda: f"{refresh_map(db)} map layer(s)"),
     ]

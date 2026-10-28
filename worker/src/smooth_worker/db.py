@@ -266,6 +266,16 @@ class Database:
     def delete_flight_status(self, flight_id: str) -> None:
         self.http.delete("/flight_status", params={"flight_id": f"eq.{flight_id}"}).raise_for_status()
 
+    def prune_flight_status(self, before: datetime) -> int:
+        """Delete status last checked before `before`, finished or not. Returns rows deleted."""
+        r = self.http.delete(
+            "/flight_status",
+            params={"checked_at": f"lt.{before.isoformat()}", "select": "flight_id"},
+            headers={"Prefer": "return=representation"},
+        )
+        r.raise_for_status()
+        return len(r.json())
+
     def held_notifications(self, error: str, since: datetime) -> list[dict]:
         return self._get(
             "/notifications",
