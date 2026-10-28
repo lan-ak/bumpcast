@@ -91,11 +91,19 @@ th { font: 500 0.72rem/1.2 var(--mono); letter-spacing: .1em; text-transform: up
 tr:last-child td { border-bottom: 0; }
 td:first-child { font-weight: 700; width: 34%; }
 footer { color: var(--fg2); font-size: 0.88rem; border-top: 1px solid var(--rule); padding-top: 18px; }
+.chart { border-radius: 16px; background: var(--card); border: 1px solid var(--edge); padding: 10px 12px; display: grid; gap: 6px; }
+.chart b { font: 600 14px var(--display); }
+.chart svg { width: 100%; height: auto; display: block; }
+.axis { display: flex; justify-content: space-between; font: 500 10px var(--mono); color: var(--ink2); }
+.gst { display: flex; gap: 6px; align-items: flex-start; color: var(--ink2); }
+.gst svg { width: 22px; height: 14px; color: var(--acc); flex: none; margin-top: 3px; }
+code { font-family: var(--mono); font-size: .85em; }
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="gl" viewBox="0 0 28 34"><path d="M5 3h18l-2.4 27H7.4z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M6.2 14c2.4 0 2.8-1.8 4.3-1.8s2 1.8 3.6 1.8h7.7l-1.4 15.4H7.6z" fill="currentColor" opacity=".55"/></symbol>
   <symbol id="bk" viewBox="0 0 16 16"><path d="M2 3.5c2-.8 4-.8 6 .6 2-1.4 4-1.4 6-.6v9c-2-.8-4-.8-6 .6-2-1.4-4-1.4-6-.6z M8 4.1v9" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></symbol>
+  <symbol id="gust" viewBox="0 0 22 14"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M1 4 C5 1.5 8 6.5 13 4"/><path d="M3 9 C7 6.5 10 11.5 16 9"/><path d="M1 13 L21 13" opacity=".5"/></g></symbol>
   <symbol id="calm" viewBox="0 0 30 30"><path d="M5 17c4 0 5-4 10-4s6 4 10 4" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></symbol>
 </svg>
 
@@ -103,22 +111,30 @@ footer { color: var(--fg2); font-size: 0.88rem; border-top: 1px solid var(--rule
 
 <header class="head">
   <span class="eb">BumpCast · forecast · for review · designs only</span>
-  <h1>Gusty at the airport: one line that says why</h1>
-  <p class="prose">When the airport's own forecast expects gusts within an hour of takeoff or landing, a light climb or descent stretch that peaks near the ground gets one plain line saying why. The grade, the stretch count and every push stay the same. It happens on about 1 in 5 flights between windy hubs, and more often in winter, so it's designed as a normal state rather than an alert. The line is for Pro or a flight pass. The new Learn page is free.</p>
-  <div class="rules"><span>Never name a data source</span><span>No icon, colour or chip on the line</span><span>No knots, no crosswind, no clock times</span><span>"in {city}", never the airport's name or code</span><span>No wind push, banner or badge</span><span>Never paywall bait</span></div>
+  <h1>Gusty at the airport: shown on the timeline, named on the row</h1>
+  <p class="prose">When the airport's own forecast expects gusts within an hour of takeoff or landing, a light climb or descent stretch that peaks near the ground gets a teal band on the timeline and a short label saying why. The grade, the stretch count and every push stay the same. It happens on about 1 in 5 flights between windy hubs, and more often in winter, so it's designed as a normal state rather than an alert. The band and label are for Pro or a flight pass. The new Learn page is free.</p>
+  <div class="rules"><span>Never name a data source</span><span>Teal gust mark only: no severity colour, no chip</span><span>No knots, no crosswind, no clock times</span><span>"in {city}", never the airport's name or code</span><span>No wind push, banner or badge</span><span>Never paywall bait</span></div>
 </header>
 
 <section>
   <div class="box">
     <b>Copy changes</b>
-    <p class="prose">None. Every line on this board is the brief's wording.</p>
+    <p class="prose">Updated Oct 27 after Lanre chose the visual indicator.</p>
+    <ol>
+      <li><strong>Climb row:</strong> "Gusty in Toronto around your takeoff", with the gust mark. It replaces "Gusty wind expected in Toronto around your takeoff. The bumps ease as you climb."</li>
+      <li><strong>Descent row:</strong> "Gusty in Newark around your landing", with the gust mark. It replaces "…Normal on a windy day, and the crew plans for it."</li>
+      <li><strong>Moderate row:</strong> "May also be gusty in Denver around your landing", with the gust mark.</li>
+      <li><strong>Timeline axis:</strong> "Gusty · {city}" replaces "Takeoff" or "Landing" at a gusty end.</li>
+      <li><strong>VoiceOver:</strong> it still reads the brief's full sentence for each row, for example "Gusty wind expected in Newark around your landing. Normal on a windy day, and the crew plans for it." For the timeline it reads "Gusty wind expected in {city} around your takeoff/landing."</li>
+      <li><strong>Unchanged:</strong> the in-flight reminders and the Learn page.</li>
+    </ol>
   </div>
 </section>
 
 <!-- ============ 1. STRETCH ROWS ============ -->
 <section>
-  <div class="head"><span class="eb">1 · Forecast › What to expect</span><h2>The cause line on a stretch row</h2>
-  <p class="prose">One secondary line under the existing "feels like" line, in the same style. On the main stretch, "Why it's bumpy here" opens "Gusty at the airport" instead of "Near the ground". The dashed outline marks what's new and isn't part of the design.</p></div>
+  <div class="head"><span class="eb">1 · Forecast › What to expect</span><h2>A band on the timeline, a short label on the row</h2>
+  <p class="prose">Lanre chose this on Oct 27 (option A from the visual exploration). "Bumps along the way" gets a pale teal band with soft curls over the gusty end, and the city under the axis ("Gusty · Toronto"). The stretch row gets a short secondary label with the gust mark, in place of the sentence. The mark is a new symbol: two easy curves over a ground line, in teal. It isn't the SF Symbol <code>wind</code>, which "Practice breathing" uses. On the main stretch, "Why it's bumpy here" opens "Gusty at the airport", which carries the reassurance. VoiceOver still reads the full sentence. The dashed outlines mark what's new and aren't part of the design.</p></div>
   <div class="row">
 
     <figure><div class="ph"><div class="sc">
@@ -128,12 +144,13 @@ footer { color: var(--fg2); font-size: 0.88rem; border-top: 1px solid var(--rule
         <span class="e" style="color:var(--acc)">Confirmed forecast</span>
         <div class="glassrow"><svg class="big"><use href="#gl"/></svg><span class="grade">A few bumps, mostly calm.</span></div>
       </div>
+      <div class="chart hl"><b>Bumps along the way</b><svg viewBox="0 0 260 60" aria-hidden="true"><rect x="0" y="6" width="36" height="46" rx="8" fill="var(--acc)" opacity=".1"/><g fill="none" stroke="var(--acc)" stroke-width="1.6" stroke-linecap="round" opacity=".8"><path d="M4 20 C12 16 18 24 30 19"/><path d="M6 28 C14 24 20 32 32 27"/></g><path d="M0 52 L260 52" stroke="var(--line)" stroke-width="1"/><path d="M0 46 C8 46 10 36 18 36 S28 46 36 46 L220 46 C228 46 232 36 238 36 S248 46 256 46 L260 46" fill="none" stroke="var(--light)" stroke-width="2.5" stroke-linecap="round"/></svg><div class="axis"><span>Gusty · Toronto</span><span>Landing</span></div></div>
       <span class="sect">What to expect</span>
       <div class="seg"><svg class="glass"><use href="#gl"/></svg><div class="body">
         <span class="when">Right after takeoff</span>
         <span>Light chop for about 3 min while climbing</span>
         <span class="s2">Your drink ripples. The seatbelt sign may come on.</span>
-        <span class="cause hl">Gusty wind expected in Toronto around your takeoff. The bumps ease as you climb.</span>
+        <span class="gst hl"><svg viewBox="0 0 22 14" aria-hidden="true"><use href="#gust"/></svg><span>Gusty in Toronto around your takeoff</span></span>
         <span class="lnk"><svg><use href="#bk"/></svg>Why it's bumpy here</span>
       </div></div>
       <div class="seg"><svg class="glass"><use href="#gl"/></svg><div class="body">
@@ -141,24 +158,25 @@ footer { color: var(--fg2); font-size: 0.88rem; border-top: 1px solid var(--rule
         <span>Light chop for about 3 min while descending</span>
         <span class="s2">Your drink ripples. The seatbelt sign may come on.</span>
       </div></div>
-    </div></div><figcaption><b>Gusty at departure, main stretch (light)</b>The climb is the main stretch, so its link opens "Gusty at the airport". Newark is calm, so the descent row is unchanged.</figcaption></figure>
+    </div></div><figcaption><b>Gusty at departure, main stretch (light)</b>The band sits over the climb bump only. The climb is the main stretch, so its link opens "Gusty at the airport". Newark is calm, so the landing end and the descent row are unchanged.</figcaption></figure>
 
     <figure><div class="ph dk"><div class="sc">
       <div class="nav"><span class="l">‹</span><span class="t">Forecast</span><span></span></div>
       <span class="e">AC 1508 · Air Canada · Thu, Oct 29</span>
+      <div class="chart hl"><b>Bumps along the way</b><svg viewBox="0 0 260 60" aria-hidden="true"><rect x="0" y="6" width="36" height="46" rx="8" fill="var(--acc)" opacity=".1"/><g fill="none" stroke="var(--acc)" stroke-width="1.6" stroke-linecap="round" opacity=".8"><path d="M4 20 C12 16 18 24 30 19"/><path d="M6 28 C14 24 20 32 32 27"/></g><rect x="222" y="6" width="38" height="46" rx="8" fill="var(--acc)" opacity=".1"/><g fill="none" stroke="var(--acc)" stroke-width="1.6" stroke-linecap="round" opacity=".8"><path d="M228 20 C236 16 242 24 254 19"/><path d="M226 28 C234 24 242 32 252 27"/></g><path d="M0 52 L260 52" stroke="var(--line)" stroke-width="1"/><path d="M0 46 C8 46 10 36 18 36 S28 46 36 46 L220 46 C228 46 232 36 238 36 S248 46 256 46 L260 46" fill="none" stroke="var(--light)" stroke-width="2.5" stroke-linecap="round"/></svg><div class="axis"><span>Gusty · Toronto</span><span>Gusty · Newark</span></div></div>
       <span class="sect">What to expect</span>
       <div class="seg"><svg class="glass"><use href="#gl"/></svg><div class="body">
         <span class="when">Right after takeoff</span>
         <span>Light chop for about 3 min while climbing</span>
         <span class="s2">Your drink ripples. The seatbelt sign may come on.</span>
-        <span class="cause hl">Gusty wind expected in Toronto around your takeoff. The bumps ease as you climb.</span>
+        <span class="gst hl"><svg viewBox="0 0 22 14" aria-hidden="true"><use href="#gust"/></svg><span>Gusty in Toronto around your takeoff</span></span>
         <span class="lnk"><svg><use href="#bk"/></svg>Why it's bumpy here</span>
       </div></div>
       <div class="seg"><svg class="glass"><use href="#gl"/></svg><div class="body">
         <span class="when">52 min into the flight</span>
         <span>Light chop for about 3 min while descending</span>
         <span class="s2">Your drink ripples. The seatbelt sign may come on.</span>
-        <span class="cause hl">Gusty wind expected in Newark around your landing. Normal on a windy day, and the crew plans for it.</span>
+        <span class="gst hl"><svg viewBox="0 0 22 14" aria-hidden="true"><use href="#gust"/></svg><span>Gusty in Newark around your landing</span></span>
       </div></div>
       <span class="foot">Grade and stretch count unchanged: still "A few bumps, mostly calm." with 2 stretches.</span>
     </div></div><figcaption><b>Gusty at both ends (dark)</b>Each row gets its own line, and the grade doesn't change. If only Newark is gusty, the descent row looks like this one, and the climb row has no cause line.</figcaption></figure>
@@ -166,16 +184,17 @@ footer { color: var(--fg2); font-size: 0.88rem; border-top: 1px solid var(--rule
     <figure><div class="ph"><div class="sc">
       <div class="nav"><span class="l">‹</span><span class="t">Forecast</span><span></span></div>
       <span class="e">UA 455 · United · Fri, Oct 30</span>
+      <div class="chart hl"><b>Bumps along the way</b><svg viewBox="0 0 260 60" aria-hidden="true"><rect x="222" y="6" width="38" height="46" rx="8" fill="var(--acc)" opacity=".1"/><g fill="none" stroke="var(--acc)" stroke-width="1.6" stroke-linecap="round" opacity=".8"><path d="M228 20 C236 16 242 24 254 19"/><path d="M226 28 C234 24 242 32 252 27"/></g><path d="M0 52 L260 52" stroke="var(--line)" stroke-width="1"/><path d="M0 46 C8 46 10 36 18 36 S28 46 36 46 L220 46 C228 46 232 36 238 36 S248 46 256 46 L260 46" fill="none" stroke="var(--light)" stroke-width="2.5" stroke-linecap="round"/></svg><div class="axis"><span>Takeoff</span><span>Gusty · Denver</span></div></div>
       <span class="sect">What to expect</span>
       <div class="seg mod"><svg class="glass"><use href="#gl"/></svg><div class="body">
         <span class="when">2 h 6 min into the flight</span>
         <span>Moderate for about 4 min while descending</span>
         <span class="s2">Walking is tricky and drinks can spill. Stay seated, belt on.</span>
-        <span class="cause hl">It may also be gusty in Denver around your landing, which the crew plans for.</span>
+        <span class="gst hl"><svg viewBox="0 0 22 14" aria-hidden="true"><use href="#gust"/></svg><span>May also be gusty in Denver around your landing</span></span>
         <span class="lnk"><svg><use href="#bk"/></svg>Why it's bumpy here</span>
       </div></div>
       <span class="foot">The link still opens "Near the ground". The severity and the "feels like" line are unchanged.</span>
-    </div></div><figcaption><b>Moderate near the ground, and gusty (light)</b>The shorter "may also be" line doesn't claim the wind is the whole cause when the stretch is already moderate.</figcaption></figure>
+    </div></div><figcaption><b>Moderate near the ground, and gusty (light)</b>"May also be" doesn't claim the wind is the whole cause when the stretch is already moderate. The band uses the same teal, so it never reads as part of the severity.</figcaption></figure>
   </div>
 </section>
 
@@ -234,22 +253,23 @@ footer { color: var(--fg2); font-size: 0.88rem; border-top: 1px solid var(--rule
     <tr><th>State</th><th>What shows</th></tr>
     <tr><td>Calm at both ends (most flights)</td><td>Nothing new</td></tr>
     <tr><td>Advance forecast (18–48 h out), or the airport forecast doesn't reach takeoff yet</td><td>Nothing new</td></tr>
-    <tr><td>Gusty at departure, light climb stretch near the ground</td><td>The climb row gets the cause line. If it's the main stretch, the link opens "Gusty at the airport"</td></tr>
-    <tr><td>Gusty at arrival, light descent stretch near the ground</td><td>The descent row gets the cause line</td></tr>
-    <tr><td>Gusty at both ends</td><td>Two rows, each with its own line. The grade is unchanged</td></tr>
-    <tr><td>Moderate or stronger near the ground, and gusty</td><td>Severity and "feels like" unchanged, plus the short line. The link stays "Near the ground"</td></tr>
+    <tr><td>Gusty at departure, light climb stretch near the ground</td><td>A band at the takeoff end of the timeline, and the short label on the climb row. If it's the main stretch, the link opens "Gusty at the airport"</td></tr>
+    <tr><td>Gusty at arrival, light descent stretch near the ground</td><td>A band at the landing end, and the short label on the descent row</td></tr>
+    <tr><td>Gusty at both ends</td><td>A band at each end, and a label on each row. The grade is unchanged</td></tr>
+    <tr><td>Moderate or stronger near the ground, and gusty</td><td>Severity and "feels like" unchanged, plus a band and "May also be gusty…". The link stays "Near the ground"</td></tr>
     <tr><td>Gusty, but the stretch peaks above about 4,000 ft, or no stretch near the ground</td><td>Nothing new</td></tr>
-    <tr><td>Wind eases on an update</td><td>The line disappears in place. No push</td></tr>
+    <tr><td>Wind eases on an update</td><td>The band and label fade out in place (a cross-fade, or none with Reduce Motion). No push</td></tr>
     <tr><td>In the air or offline</td><td>The line is part of the saved forecast, and the reminder uses forecast tense. Freshness comes from the existing footer</td></tr>
-    <tr><td>Free user</td><td>No change, apart from the free Learn page. No blurred line, no teaser</td></tr>
+    <tr><td>Free user</td><td>No band and no label, apart from the free Learn page. No blurred band, no teaser</td></tr>
   </table></div>
-  <p class="prose">VoiceOver reads the descent row in order: the time, the severity, the "feels like" line, then the whole cause line, including "Normal on a windy day, and the crew plans for it."</p>
+  <p class="prose">VoiceOver reads the descent row in order: the time, the severity, the "feels like" line, then the full sentence ("Gusty wind expected in Newark around your landing. Normal on a windy day, and the crew plans for it."), not just the short label. The gust mark itself is hidden from VoiceOver.</p>
 </section>
 
 <section>
   <div class="box">
     <b>Lanre's decisions (Oct 27)</b>
     <ol>
+      <li><strong>Visual indicator:</strong> a band on the timeline, plus the short row label with the gust mark.</li>
       <li><strong>Threshold: gusts of 25 kt</strong> or more within an hour of takeoff or landing.</li>
       <li><strong>Go-arounds: not mentioned.</strong> The explainer doesn't pre-brief them.</li>
     </ol>

@@ -5,7 +5,7 @@
 | Idea | Outcome | Mockups |
 |---|---|---|
 | Gate changes | Build a reduced version: in the app only, no push | Yes, §1 |
-| Takeoff and landing winds | Build a reduced version: a cause line on existing stretches | Yes, §2 |
+| Takeoff and landing winds | Build a reduced version: mark existing stretches near the ground as gusty | Yes, §2 |
 | Aircraft type | Backend only: record the aircraft model now; give turboprops their own climb profile later if the data supports it. Nothing on screen | No |
 | Route history beyond 48 h | Dropped. Every real user who saved a flight early is flying outside coverage, so the gap is coverage, not history | No |
 
@@ -72,7 +72,7 @@ Rules for both (from DESIGN_SPEC.md):
 
 ## 2. Airport wind
 
-**What it does.** When the airport's own forecast expects gusts of 25 kt or more within an hour of takeoff or landing, a light climb or descent stretch that the forecast already shows, and that peaks near the ground, gets one plain-words line saying why.
+**What it does.** When the airport's own forecast expects gusts of 25 kt or more within an hour of takeoff or landing, a light climb or descent stretch that the forecast already shows, and that peaks near the ground, is marked as gusty: a pale teal band on the timeline and a short label on the stretch row. (Changed Oct 27 from a sentence on the row to this visual indicator: option A of the visual exploration, with option B's short label.)
 
 **What doesn't change:**
 - calm days;
@@ -84,25 +84,30 @@ Rules for both (from DESIGN_SPEC.md):
 
 ### Tiers
 
-- **Pro or a flight pass:** the cause line on stretch rows, the link to the new explainer, and the cause sentence in the in-flight reminder.
+- **Pro or a flight pass:** the timeline band, the stretch-row label, the link to the new explainer, and the cause sentence in the in-flight reminder.
 - **Free:** the "Gusty at the airport" explainer in Learn, like the other cause pages.
 - **Never:** wind as paywall bait, a blurred wind line, or a teaser.
 
 ### Surfaces
 
-1. **Forecast › What to expect, stretch row.**
-   - One secondary line under the existing "feels like" line.
-   - No clock time, icon, colour or chip.
+1. **Forecast › "Bumps along the way" timeline.**
+   - A pale teal band (accent at about 10% opacity) with two soft teal curls over the gusty end, takeoff or landing.
+   - The axis label at that end reads "Gusty · {city}" in place of "Takeoff" or "Landing".
+   - Teal only, never a severity colour. Nothing changes on calm days.
+   - Build note: smooth bars are also a teal (`#3A9A8F`), so check the band can't read as "smooth" over a light-chop bar.
+2. **Forecast › What to expect, stretch row.**
+   - A short secondary label under the existing "feels like" line, led by a new gust mark: two easy curves over a ground line, in teal, decorative.
    - Don't use the `wind` SF Symbol; "Practice breathing" already uses it.
-2. **The "Why it's bumpy here" link on the main stretch.** A light stretch with the cause links to "Gusty at the airport". Every other stretch keeps today's link.
-3. **Learn › Why it gets bumpy: a new "Gusty at the airport" page,** in the existing template:
+   - No clock time and no chip.
+3. **The "Why it's bumpy here" link on the main stretch.** A light stretch with the cause links to "Gusty at the airport". Every other stretch keeps today's link.
+4. **Learn › Why it gets bumpy: a new "Gusty at the airport" page,** in the existing template:
    - diagram;
    - What's happening, What the crew is doing, What you'll feel;
    - a Good to know card;
    - related chips.
 
    **Diagram:** simple teal lines over muted ground, a small level plane, soft curved wind lines, no jagged lines. **No** "What will light chop feel like?" haptic on this page.
-4. **The in-flight 2-minute reminder** (a local notification). The title is unchanged and sets the level; the body carries the cause.
+5. **The in-flight 2-minute reminder** (a local notification). The title is unchanged and sets the level; the body carries the cause.
 
 **Not surfaces:** a banner, warning card or badge; a map layer; an airport weather card; a wind push; crosswind; knots; clock times.
 
@@ -112,33 +117,35 @@ Rules for both (from DESIGN_SPEC.md):
 |---|---|
 | Calm at both ends (most flights) | Nothing new |
 | Advance forecast (18–48 h out), or the airport forecast doesn't reach takeoff yet | Nothing new |
-| Gusty at departure, light climb stretch near the ground | The climb row gets the cause line. If it's the main stretch, the link opens "Gusty at the airport" |
-| Gusty at arrival, light descent stretch near the ground | The descent row gets the cause line |
-| Gusty at both ends | Two rows, each with its own line. The grade is unchanged |
-| Moderate or stronger near the ground, and gusty | The severity and "feels like" lines are unchanged, plus the short line below. The link stays "Near the ground" |
+| Gusty at departure, light climb stretch near the ground | Band and "Gusty · {city}" at the takeoff end, and the label on the climb row. If it's the main stretch, the link opens "Gusty at the airport" |
+| Gusty at arrival, light descent stretch near the ground | Band and "Gusty · {city}" at the landing end, and the label on the descent row |
+| Gusty at both ends | A band at each end and two labelled rows. The grade is unchanged |
+| Moderate or stronger near the ground, and gusty | The severity and "feels like" lines are unchanged, plus the "May also be gusty" label. The link stays "Near the ground" |
 | Gusty, but the stretch peaks above about 4,000 ft, or there's no stretch near the ground | Nothing new |
-| Wind eases on an update | The line disappears in place. No push |
-| In the air or offline | The line is part of the saved forecast and the reminder uses forecast tense. Freshness comes from the existing footer |
-| Free user | No change, apart from the free Learn page |
+| Wind eases on an update | The band and label cross-fade out in place (no animation with Reduce Motion). No push |
+| In the air or offline | The band and label are part of the saved forecast, and the reminder uses forecast tense. Freshness comes from the existing footer |
+| Free user | No band and no label, and no blurred version or teaser. Only the free Learn page |
 
 ### Copy
+
+**Timeline axis, gusty end:** Gusty · Toronto
 
 **Descent row (light):**
 - 52 min into the flight
 - Light chop for about 3 min while descending
 - {existing feels-like line}
-- Gusty wind expected in Newark around your landing. Normal on a windy day, and the crew plans for it.
+- {gust mark} Gusty in Newark around your landing
 
 **Climb row (light):**
 - Right after takeoff
 - Light chop for about 3 min while climbing
 - {existing feels-like line}
-- Gusty wind expected in Toronto around your takeoff. The bumps ease as you climb.
+- {gust mark} Gusty in Toronto around your takeoff
 
 **Moderate row:**
 - Moderate for about 4 min while descending
 - {existing feels-like line}
-- It may also be gusty in Denver around your landing, which the crew plans for.
+- {gust mark} May also be gusty in Denver around your landing
 
 **In-flight reminder, descent:**
 - Title: Light chop in about 2 minutes
@@ -156,7 +163,10 @@ Rules for both (from DESIGN_SPEC.md):
 - **What you'll feel:** Bumps and some side-to-side sway, now and then a firmer one, that ease as you climb or once you touch down.
 - **Good to know:** Gusty takeoffs and landings happen every day at busy airports. Some airports don't have a wind forecast, or not until a few hours before. Your forecast still covers the climb and descent either way.
 
-**VoiceOver, descent row:** reads the whole row in order: time, severity, the "feels like" line, then the full cause line including "Normal on a windy day, and the crew plans for it."
+**VoiceOver:**
+- Each row reads in order: time, severity, the "feels like" line, then the full sentence in place of the label: "Gusty wind expected in Newark around your landing. Normal on a windy day, and the crew plans for it." (Climb: "Gusty wind expected in Toronto around your takeoff. The bumps ease as you climb.")
+- The gust mark is hidden from VoiceOver.
+- The timeline band reads "Gusty wind expected in {city} around your takeoff" (or "landing").
 
 **Place names:** always "in {city}", from the airport's city. Never the airport's full name, its code or a clock time.
 
