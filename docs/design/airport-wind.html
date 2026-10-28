@@ -1,0 +1,260 @@
+<meta charset="utf-8">
+<title>BumpCast Airport Wind</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Familjen+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a review board in the flight-status-1.1 format. Each section names a surface, states the rule, then shows phones (light and dark) in a wrapping row. Phones carry fixed palettes; the board follows the viewer's theme. */
+:root {
+  --bg: #e9eff3; --panel: #ffffff; --fg: #15253a; --fg2: #4b5d72; --rule: #cdd9e2; --accent: #2a7385;
+  --display: "Familjen Grotesk", "Avenir Next", system-ui, sans-serif;
+  --body: "Atkinson Hyperlegible", "Helvetica Neue", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #0e1724; --panel: #152233; --fg: #e3ecf4; --fg2: #a3b4c6; --rule: #2a3c51; --accent: #6fbccc; color-scheme: dark } }
+:root[data-theme="dark"] { --bg: #0e1724; --panel: #152233; --fg: #e3ecf4; --fg2: #a3b4c6; --rule: #2a3c51; --accent: #6fbccc; color-scheme: dark }
+
+body { background: var(--bg); color: var(--fg); font: 16px/1.55 var(--body); }
+.wrap { max-width: 1320px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 44px 72px; display: grid; gap: 56px; }
+h1, h2 { font-family: var(--display); margin: 0; line-height: 1.15; text-wrap: balance; }
+h1 { font-size: clamp(2rem, 4.5vw, 3rem); letter-spacing: -0.02em; }
+h2 { font-size: 1.7rem; }
+p { margin: 0; }
+.eb { font: 500 0.75rem/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+.prose { max-width: 72ch; color: var(--fg2); }
+section { display: grid; gap: 20px; }
+.head { display: grid; gap: 8px; }
+.rules { display: flex; flex-wrap: wrap; gap: 8px; }
+.rules span { font-size: 0.85rem; border: 1px solid var(--rule); background: var(--panel); border-radius: 999px; padding: 6px 12px; }
+.row { display: flex; flex-wrap: wrap; gap: 28px; align-items: flex-start; }
+figure { margin: 0; display: grid; gap: 10px; width: 300px; max-width: 100%; }
+figcaption { font-size: 0.86rem; color: var(--fg2); }
+figcaption b { color: var(--fg); font-family: var(--display); font-size: 0.95rem; display: block; }
+.box { background: var(--panel); border: 1px solid var(--rule); border-radius: 14px; padding: 16px 18px; display: grid; gap: 8px; max-width: 1000px; }
+.box b { font-family: var(--display); }
+.box ol { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; color: var(--fg2); }
+.box strong { color: var(--fg); }
+
+/* phone */
+.ph { width: 300px; max-width: 100%; border-radius: 42px; background: #0a1018; padding: 9px; box-sizing: border-box; box-shadow: 0 20px 40px -26px rgba(10,25,45,.55); }
+.sc {
+  --ink: #15253a; --ink2: #45576c; --card: rgba(255,255,255,.68); --edge: rgba(255,255,255,.92); --acc: #2a7385; --line: #d6e0e8; --light: #c99a2e; --mod: #c9733a; --ground: #cbd3da;
+  --sky: linear-gradient(180deg, #f6d9c4 0%, #e3e6ee 28%, #dbe7f1 100%);
+  border-radius: 33px; padding: 46px 16px 22px; min-height: 560px; box-sizing: border-box;
+  background: var(--sky); color: var(--ink); font: 14px/1.4 var(--body);
+  display: flex; flex-direction: column; gap: 10px; overflow: hidden;
+}
+.dk .sc { --ink: #f2f5f8; --ink2: #b7c3d0; --card: rgba(255,255,255,.08); --edge: rgba(255,255,255,.15); --acc: #6fbccc; --line: rgba(255,255,255,.14); --light: #e0b54e; --mod: #e08a52; --ground: rgba(255,255,255,.16); --sky: linear-gradient(180deg, #1b2a45 0%, #121d31 50%, #0b1322 100%); }
+.nav { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; min-height: 30px; }
+.nav .l { justify-self: start; color: var(--acc); font-size: 15px; }
+.nav .t { font: 600 15px var(--display); }
+.e { font: 500 10.5px/1.2 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink2); }
+.s2 { color: var(--ink2); }
+.sect { font: 600 18px/1.15 var(--display); margin-top: 2px; }
+.card { background: var(--card); border: 1px solid var(--edge); border-radius: 16px; padding: 12px 14px; display: grid; gap: 6px; }
+/* SegmentRow */
+.seg { display: grid; grid-template-columns: 26px 1fr; gap: 12px; background: var(--card); border: 1px solid var(--edge); border-radius: 16px; padding: 12px 13px; }
+.seg .glass { width: 24px; height: 30px; color: var(--light); }
+.seg.mod .glass { color: var(--mod); }
+.seg .body { display: grid; gap: 3px; font-size: 13px; }
+.seg .when { font: 700 14.5px var(--display); font-variant-numeric: tabular-nums; }
+.seg .cause { color: var(--ink2); }
+.seg .lnk { color: var(--acc); font-weight: 700; display: flex; gap: 6px; align-items: center; margin-top: 2px; }
+.seg .lnk svg { width: 14px; height: 14px; }
+.hl { outline: 2px dashed var(--acc); outline-offset: 2px; border-radius: 4px; }
+.note { font: 500 9.5px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--acc); }
+.glassrow { display: flex; gap: 10px; align-items: center; }
+.big { width: 30px; height: 38px; color: var(--light); flex: none; }
+.grade { font: 700 19px/1.1 var(--display); }
+.foot { font-size: 11.5px; color: var(--ink2); }
+/* Learn page */
+.lh { font: 700 26px/1.05 var(--display); letter-spacing: -.02em; }
+.diag { border-radius: 16px; background: var(--card); border: 1px solid var(--edge); }
+.lsec { display: grid; gap: 2px; font-size: 13px; }
+.lsec b { font: 600 15px var(--display); }
+.good { background: var(--card); border: 1px solid var(--edge); border-radius: 16px; padding: 10px 12px; display: grid; gap: 4px; font-size: 12.5px; }
+.good b { color: var(--acc); font: 600 14px var(--display); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chips span { font: 700 12px var(--body); border-radius: 999px; padding: 6px 11px; border: 1px solid var(--line); background: var(--card); }
+/* lock screen */
+.lock .sc { background: linear-gradient(180deg, #2b3f63 0%, #3c5a7c 45%, #8fa3b8 100%); color: #fff; }
+.clock { font: 600 58px/1 var(--display); text-align: center; letter-spacing: -0.03em; }
+.date { text-align: center; font-weight: 700; opacity: .9; }
+.notif { background: rgba(240,244,248,.86); color: #15253a; border-radius: 22px; padding: 11px 13px; display: grid; grid-template-columns: 30px 1fr; gap: 2px 10px; font-size: 12.5px; line-height: 1.3; }
+.notif .ic { grid-row: span 3; width: 30px; height: 30px; border-radius: 8px; background: linear-gradient(180deg,#2a7385,#1f4f63); display: grid; place-items: center; }
+.notif .ap { display: flex; justify-content: space-between; font-size: 11px; color: #4b5d72; }
+.notif b { font-size: 13px; }
+
+.tablebox { overflow-x: auto; background: var(--panel); border: 1px solid var(--rule); border-radius: 14px; }
+table { width: 100%; border-collapse: collapse; min-width: 640px; font-size: 0.9rem; }
+th, td { text-align: left; vertical-align: top; padding: 10px 14px; border-bottom: 1px solid var(--rule); }
+th { font: 500 0.72rem/1.2 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--fg2); }
+tr:last-child td { border-bottom: 0; }
+td:first-child { font-weight: 700; width: 34%; }
+footer { color: var(--fg2); font-size: 0.88rem; border-top: 1px solid var(--rule); padding-top: 18px; }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="gl" viewBox="0 0 28 34"><path d="M5 3h18l-2.4 27H7.4z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M6.2 14c2.4 0 2.8-1.8 4.3-1.8s2 1.8 3.6 1.8h7.7l-1.4 15.4H7.6z" fill="currentColor" opacity=".55"/></symbol>
+  <symbol id="bk" viewBox="0 0 16 16"><path d="M2 3.5c2-.8 4-.8 6 .6 2-1.4 4-1.4 6-.6v9c-2-.8-4-.8-6 .6-2-1.4-4-1.4-6-.6z M8 4.1v9" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></symbol>
+  <symbol id="calm" viewBox="0 0 30 30"><path d="M5 17c4 0 5-4 10-4s6 4 10 4" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></symbol>
+</svg>
+
+<div class="wrap">
+
+<header class="head">
+  <span class="eb">BumpCast · forecast · for review · designs only</span>
+  <h1>Gusty at the airport: one line that says why</h1>
+  <p class="prose">When the airport's own forecast expects gusts within an hour of takeoff or landing, a light climb or descent stretch that peaks near the ground gets one plain line saying why. The grade, the stretch count and every push stay the same. It happens on about 1 in 5 flights between windy hubs, and more often in winter, so it's designed as a normal state rather than an alert. The line is for Pro or a flight pass. The new Learn page is free.</p>
+  <div class="rules"><span>Never name a data source</span><span>No icon, colour or chip on the line</span><span>No knots, no crosswind, no clock times</span><span>"in {city}", never the airport's name or code</span><span>No wind push, banner or badge</span><span>Never paywall bait</span></div>
+</header>
+
+<section>
+  <div class="box">
+    <b>Copy changes</b>
+    <p class="prose">None. Every line on this board is the brief's wording.</p>
+  </div>
+</section>
+
+<!-- ============ 1. STRETCH ROWS ============ -->
+<section>
+  <div class="head"><span class="eb">1 · Forecast › What to expect</span><h2>The cause line on a stretch row</h2>
+  <p class="prose">One secondary line under the existing "feels like" line, in the same style. On the main stretch, "Why it's bumpy here" opens "Gusty at the airport" instead of "Near the ground". The dashed outline marks what's new and isn't part of the design.</p></div>
+  <div class="row">
+
+    <figure><div class="ph"><div class="sc">
+      <div class="nav"><span class="l">‹</span><span class="t">Forecast</span><span></span></div>
+      <span class="e">AC 1508 · Air Canada · Thu, Oct 29</span>
+      <div class="card">
+        <span class="e" style="color:var(--acc)">Confirmed forecast</span>
+        <div class="glassrow"><svg class="big"><use href="#gl"/></svg><span class="grade">A few bumps, mostly calm.</span></div>
+      </div>
+      <span class="sect">What to expect</span>
+      <div class="seg"><svg class="glass"><use href="#gl"/></svg><div class="body">
+        <span class="when">Right after takeoff</span>
+        <span>Light chop for about 3 min while climbing</span>
+        <span class="s2">Your drink ripples. The seatbelt sign may come on.</span>
+        <span class="cause hl">Gusty wind expected in Toronto around your takeoff. The bumps ease as you climb.</span>
+        <span class="lnk"><svg><use href="#bk"/></svg>Why it's bumpy here</span>
+      </div></div>
+      <div class="seg"><svg class="glass"><use href="#gl"/></svg><div class="body">
+        <span class="when">52 min into the flight</span>
+        <span>Light chop for about 3 min while descending</span>
+        <span class="s2">Your drink ripples. The seatbelt sign may come on.</span>
+      </div></div>
+    </div></div><figcaption><b>Gusty at departure, main stretch (light)</b>The climb is the main stretch, so its link opens "Gusty at the airport". Newark is calm, so the descent row is unchanged.</figcaption></figure>
+
+    <figure><div class="ph dk"><div class="sc">
+      <div class="nav"><span class="l">‹</span><span class="t">Forecast</span><span></span></div>
+      <span class="e">AC 1508 · Air Canada · Thu, Oct 29</span>
+      <span class="sect">What to expect</span>
+      <div class="seg"><svg class="glass"><use href="#gl"/></svg><div class="body">
+        <span class="when">Right after takeoff</span>
+        <span>Light chop for about 3 min while climbing</span>
+        <span class="s2">Your drink ripples. The seatbelt sign may come on.</span>
+        <span class="cause hl">Gusty wind expected in Toronto around your takeoff. The bumps ease as you climb.</span>
+        <span class="lnk"><svg><use href="#bk"/></svg>Why it's bumpy here</span>
+      </div></div>
+      <div class="seg"><svg class="glass"><use href="#gl"/></svg><div class="body">
+        <span class="when">52 min into the flight</span>
+        <span>Light chop for about 3 min while descending</span>
+        <span class="s2">Your drink ripples. The seatbelt sign may come on.</span>
+        <span class="cause hl">Gusty wind expected in Newark around your landing. Normal on a windy day, and the crew plans for it.</span>
+      </div></div>
+      <span class="foot">Grade and stretch count unchanged: still "A few bumps, mostly calm." with 2 stretches.</span>
+    </div></div><figcaption><b>Gusty at both ends (dark)</b>Each row gets its own line, and the grade doesn't change. If only Newark is gusty, the descent row looks like this one, and the climb row has no cause line.</figcaption></figure>
+
+    <figure><div class="ph"><div class="sc">
+      <div class="nav"><span class="l">‹</span><span class="t">Forecast</span><span></span></div>
+      <span class="e">UA 455 · United · Fri, Oct 30</span>
+      <span class="sect">What to expect</span>
+      <div class="seg mod"><svg class="glass"><use href="#gl"/></svg><div class="body">
+        <span class="when">2 h 6 min into the flight</span>
+        <span>Moderate for about 4 min while descending</span>
+        <span class="s2">Walking is tricky and drinks can spill. Stay seated, belt on.</span>
+        <span class="cause hl">It may also be gusty in Denver around your landing, which the crew plans for.</span>
+        <span class="lnk"><svg><use href="#bk"/></svg>Why it's bumpy here</span>
+      </div></div>
+      <span class="foot">The link still opens "Near the ground". The severity and the "feels like" line are unchanged.</span>
+    </div></div><figcaption><b>Moderate near the ground, and gusty (light)</b>The shorter "may also be" line doesn't claim the wind is the whole cause when the stretch is already moderate.</figcaption></figure>
+  </div>
+</section>
+
+<!-- ============ 2. LEARN ============ -->
+<section>
+  <div class="head"><span class="eb">2 · Learn › Why it gets bumpy</span><h2>New page: Gusty at the airport</h2>
+  <p class="prose">This uses the existing explainer template, and it's free for everyone. The diagram has simple teal lines over muted ground, a small level plane, and soft curved wind lines with no jagged lines. This page has no "What will light chop feel like?" haptic button.</p></div>
+  <div class="row">
+
+    <figure><div class="ph"><div class="sc">
+      <div class="nav"><span class="l">‹</span><span class="t"></span><span></span></div>
+      <span class="lh">Gusty at the airport</span>
+      <span class="s2" style="margin-top:-6px">Windy days near the ground</span>
+      <svg class="diag" viewBox="0 0 264 120" aria-hidden="true">
+        <path d="M0 98 L60 98 L60 84 L74 84 L74 98 L190 98 L190 78 L206 78 L206 98 L264 98 L264 120 L0 120 Z" fill="var(--ground)"/>
+        <path d="M14 98 L132 98" stroke="var(--ink2)" stroke-width="1.4" stroke-dasharray="6 5" opacity=".6"/>
+        <g fill="none" stroke="var(--acc)" stroke-width="2" stroke-linecap="round">
+          <path d="M8 70 C40 64 54 80 84 72 S130 62 160 70 S220 80 256 70" opacity=".9"/>
+          <path d="M8 52 C46 48 70 58 104 52 S170 46 206 52 S240 56 256 52" opacity=".6"/>
+          <path d="M8 34 C60 32 110 36 160 33 S230 31 256 33" opacity=".35"/>
+        </g>
+        <g transform="translate(150 34)" fill="var(--ink)"><path d="M18 6 L11 5 L7 0 L5.5 0 L7.5 5 L3 5 L1.5 2.6 L0 2.6 L.8 6 L0 9.4 L1.5 9.4 L3 7 L7.5 7 L5.5 12 L7 12 L11 7 L18 6 Z"/></g>
+      </svg>
+      <div class="lsec"><b>What's happening</b><span>On a windy day, the wind near the ground speeds up and slows down as it flows over buildings and land, a bit like a river over stones. You feel it for a few minutes as you climb out and on the way down.</span></div>
+      <div class="lsec"><b>What the crew is doing</b><span>Pilots plan every takeoff and landing around the wind. In gusty air they fly the approach a little faster for extra control, and keep the seatbelt sign on until the air settles.</span></div>
+    </div></div><figcaption><b>Top of the page (light)</b>The title and subtitle, the diagram, then the first two sections.</figcaption></figure>
+
+    <figure><div class="ph dk"><div class="sc">
+      <div class="lsec"><b>What you'll feel</b><span>Bumps and some side-to-side sway, now and then a firmer one, that ease as you climb or once you touch down.</span></div>
+      <div class="good"><b>Good to know</b><span>Gusty takeoffs and landings happen every day at busy airports. Some airports don't have a wind forecast, or not until a few hours before. Your forecast still covers the climb and descent either way.</span></div>
+      <span class="e" style="padding-top:4px">Related</span>
+      <div class="chips"><span>Near the ground</span><span>Clear-air turbulence</span><span>Planes are built for it</span></div>
+    </div></div><figcaption><b>Rest of the page (dark)</b>Related chips point to "Near the ground" first. There's no haptic demo button here.</figcaption></figure>
+  </div>
+</section>
+
+<!-- ============ 3. REMINDER ============ -->
+<section>
+  <div class="head"><span class="eb">3 · In-flight 2-minute reminder</span><h2>Same title, with the cause in the body</h2>
+  <p class="prose">This is a local notification, so it works offline in the air. The title is unchanged and gives the level. The body uses forecast tense ("was expected"), because the line comes from the saved forecast.</p></div>
+  <div class="row">
+    <figure><div class="ph lock"><div class="sc">
+      <span class="date">Thursday, October 29</span>
+      <span class="clock">5:47</span>
+      <span style="flex:1"></span>
+      <div class="notif"><span class="ic"><svg width="22" height="22"><use href="#calm"/></svg></span><span class="ap"><span>BUMPCAST</span><span>now</span></span><b>Light chop in about 2 minutes</b><span>Gusty wind was expected in Newark for your landing, so the descent may be bumpy for about 3 min. Routine for the crew. Tap for a slow breathing exercise.</span></div>
+      <div class="notif"><span class="ic"><svg width="22" height="22"><use href="#calm"/></svg></span><span class="ap"><span>BUMPCAST</span><span>52m ago</span></span><b>Light chop in about 2 minutes</b><span>Gusty wind was expected in Toronto for your takeoff, so the climb may be bumpy for about 3 min. It eases as you climb higher. Tap for a slow breathing exercise.</span></div>
+    </div></div><figcaption><b>Descent and climb reminders</b>The newer descent reminder is on top. Without the wind cause, the body stays as it is today.</figcaption></figure>
+  </div>
+</section>
+
+<!-- ============ 4. STATES ============ -->
+<section>
+  <div class="head"><span class="eb">4 · Every state</span><h2>When the line shows, and when nothing changes</h2></div>
+  <div class="tablebox"><table>
+    <tr><th>State</th><th>What shows</th></tr>
+    <tr><td>Calm at both ends (most flights)</td><td>Nothing new</td></tr>
+    <tr><td>Advance forecast (18–48 h out), or the airport forecast doesn't reach takeoff yet</td><td>Nothing new</td></tr>
+    <tr><td>Gusty at departure, light climb stretch near the ground</td><td>The climb row gets the cause line. If it's the main stretch, the link opens "Gusty at the airport"</td></tr>
+    <tr><td>Gusty at arrival, light descent stretch near the ground</td><td>The descent row gets the cause line</td></tr>
+    <tr><td>Gusty at both ends</td><td>Two rows, each with its own line. The grade is unchanged</td></tr>
+    <tr><td>Moderate or stronger near the ground, and gusty</td><td>Severity and "feels like" unchanged, plus the short line. The link stays "Near the ground"</td></tr>
+    <tr><td>Gusty, but the stretch peaks above about 4,000 ft, or no stretch near the ground</td><td>Nothing new</td></tr>
+    <tr><td>Wind eases on an update</td><td>The line disappears in place. No push</td></tr>
+    <tr><td>In the air or offline</td><td>The line is part of the saved forecast, and the reminder uses forecast tense. Freshness comes from the existing footer</td></tr>
+    <tr><td>Free user</td><td>No change, apart from the free Learn page. No blurred line, no teaser</td></tr>
+  </table></div>
+  <p class="prose">VoiceOver reads the descent row in order: the time, the severity, the "feels like" line, then the whole cause line, including "Normal on a windy day, and the crew plans for it."</p>
+</section>
+
+<section>
+  <div class="box">
+    <b>Lanre's decisions (Oct 27)</b>
+    <ol>
+      <li><strong>Threshold: gusts of 25 kt</strong> or more within an hour of takeoff or landing.</li>
+      <li><strong>Go-arounds: not mentioned.</strong> The explainer doesn't pre-brief them.</li>
+    </ol>
+  </div>
+</section>
+
+<footer>Flights, cities and times are examples. This is a design board for review. No app code was changed.</footer>
+</div>

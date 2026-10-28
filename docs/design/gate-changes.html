@@ -1,0 +1,316 @@
+<meta charset="utf-8">
+<title>BumpCast Gate Changes</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Familjen+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a review board in the flight-status-1.1 format. Each section names a surface, states the rule, then shows phones (light and dark) in a wrapping row. Phones carry fixed palettes; the board follows the viewer's theme. */
+:root {
+  --bg: #e9eff3; --panel: #ffffff; --fg: #15253a; --fg2: #4b5d72; --rule: #cdd9e2; --accent: #2a7385;
+  --display: "Familjen Grotesk", "Avenir Next", system-ui, sans-serif;
+  --body: "Atkinson Hyperlegible", "Helvetica Neue", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #0e1724; --panel: #152233; --fg: #e3ecf4; --fg2: #a3b4c6; --rule: #2a3c51; --accent: #6fbccc; color-scheme: dark } }
+:root[data-theme="dark"] { --bg: #0e1724; --panel: #152233; --fg: #e3ecf4; --fg2: #a3b4c6; --rule: #2a3c51; --accent: #6fbccc; color-scheme: dark }
+
+body { background: var(--bg); color: var(--fg); font: 16px/1.55 var(--body); }
+.wrap { max-width: 1320px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 44px 72px; display: grid; gap: 56px; }
+h1, h2 { font-family: var(--display); margin: 0; line-height: 1.15; text-wrap: balance; }
+h1 { font-size: clamp(2rem, 4.5vw, 3rem); letter-spacing: -0.02em; }
+h2 { font-size: 1.7rem; }
+p { margin: 0; }
+.eb { font: 500 0.75rem/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+.prose { max-width: 72ch; color: var(--fg2); }
+section { display: grid; gap: 20px; }
+.head { display: grid; gap: 8px; }
+.rules { display: flex; flex-wrap: wrap; gap: 8px; }
+.rules span { font-size: 0.85rem; border: 1px solid var(--rule); background: var(--panel); border-radius: 999px; padding: 6px 12px; }
+.row { display: flex; flex-wrap: wrap; gap: 28px; align-items: flex-start; }
+figure { margin: 0; display: grid; gap: 10px; width: 300px; max-width: 100%; }
+figcaption { font-size: 0.86rem; color: var(--fg2); }
+figcaption b { color: var(--fg); font-family: var(--display); font-size: 0.95rem; display: block; }
+code { font-family: var(--mono); font-size: 0.85em; background: var(--panel); border: 1px solid var(--rule); border-radius: 5px; padding: 0 4px; }
+.box { background: var(--panel); border: 1px solid var(--rule); border-radius: 14px; padding: 16px 18px; display: grid; gap: 8px; max-width: 1000px; }
+.box b { font-family: var(--display); }
+.box ol, .box ul { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; color: var(--fg2); }
+.box strong { color: var(--fg); }
+
+/* phone */
+.ph { width: 300px; max-width: 100%; border-radius: 42px; background: #0a1018; padding: 9px; box-sizing: border-box; box-shadow: 0 20px 40px -26px rgba(10,25,45,.55); }
+.sc {
+  --ink: #15253a; --ink2: #45576c; --card: rgba(255,255,255,.68); --edge: rgba(255,255,255,.92); --acc: #2a7385; --line: #d6e0e8; --light: #c99a2e;
+  --sky: linear-gradient(180deg, #f6d9c4 0%, #e3e6ee 28%, #dbe7f1 100%);
+  border-radius: 33px; padding: 46px 16px 22px; min-height: 560px; box-sizing: border-box;
+  background: var(--sky); color: var(--ink); font: 14px/1.4 var(--body);
+  display: flex; flex-direction: column; gap: 12px; overflow: hidden;
+}
+.dk .sc { --ink: #f2f5f8; --ink2: #b7c3d0; --card: rgba(255,255,255,.08); --edge: rgba(255,255,255,.15); --acc: #6fbccc; --line: rgba(255,255,255,.14); --light: #e0b54e; --sky: linear-gradient(180deg, #1b2a45 0%, #121d31 50%, #0b1322 100%); }
+.nav { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; min-height: 30px; }
+.nav .l { justify-self: start; color: var(--acc); font-size: 15px; }
+.nav .t { font: 600 15px var(--display); }
+.e { font: 500 10.5px/1.2 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink2); }
+.m { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.s2 { color: var(--ink2); }
+.ttl { font: 700 26px/1 var(--display); letter-spacing: -0.02em; }
+.card { background: var(--card); border: 1px solid var(--edge); border-radius: 18px; padding: 12px 14px; display: grid; gap: 6px; }
+.route { font: 700 24px/1 var(--display); letter-spacing: -0.02em; }
+.glassrow { display: flex; gap: 10px; align-items: center; }
+.glass { width: 26px; height: 32px; flex: none; color: var(--light); }
+.grade { font: 700 18px/1.1 var(--display); }
+.ico { width: 14px; height: 14px; flex: none; margin-top: 2px; }
+/* LiveStatusRow: caption strong, secondary ink, teal when delayed */
+.st { display: flex; gap: 6px; align-items: flex-start; font-size: 12.5px; font-weight: 700; color: var(--ink2); }
+.st.delay { color: var(--acc); }
+.st .old { font-weight: 400; text-decoration: line-through; }
+.lbl { font: 500 9.5px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink2); margin-bottom: -6px; }
+.urow { display: grid; gap: 3px; padding: 10px 0; border-top: 1px solid var(--line); }
+.urow:first-of-type { border-top: 0; }
+.urow .n { font-weight: 700; }
+
+/* route header */
+.hdr { display: grid; grid-template-columns: auto 1fr auto; gap: 2px 8px; align-items: end; }
+.hdr .side { display: grid; gap: 1px; }
+.hdr .side.r { text-align: right; justify-items: end; }
+.hdr .code { font: 700 32px/1 var(--display); letter-spacing: -0.02em; }
+.hdr .city { font-size: 12px; color: var(--ink2); }
+.hdr .t { font: 500 15px/1.2 var(--mono); font-variant-numeric: tabular-nums; }
+.hdr .t.new { font-weight: 700; }
+.hdr .was { font: 400 11.5px var(--mono); color: var(--ink2); text-decoration: line-through; }
+.hdr .gate { font: 400 11.5px var(--body); color: var(--ink2); white-space: nowrap; }
+.hdr .t, .hdr .was { white-space: nowrap; }
+.hdr .gate.new { color: var(--acc); font-weight: 700; }
+.hdr .gate.old { text-decoration: line-through; }
+.hdr .mid { align-self: center; display: grid; justify-items: center; gap: 2px; padding-bottom: 14px; color: var(--ink2); }
+.hdr .mid svg { width: 20px; height: 20px; }
+.hdr .lab { font: 700 12px/1.2 var(--body); color: var(--ink2); text-align: center; max-width: 92px; }
+.hdr .lab.delay { color: var(--acc); }
+.hdr .lab small { display: block; font-weight: 400; font-size: 10.5px; }
+/* details */
+.details { display: grid; gap: 6px; padding: 10px 12px; border-radius: 12px; background: var(--card); border: 1px solid var(--edge); font-size: 13px; }
+.drow { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; align-items: baseline; }
+.drow .k { font-weight: 700; font-size: 12.5px; }
+.drow .v { text-align: right; }
+.old { color: var(--ink2); text-decoration: line-through; }
+.fn { font-size: 11.5px; color: var(--ink2); }
+.mini { display: grid; gap: 8px; padding: 12px 0; border-top: 1px dashed var(--line); }
+.mini:first-of-type { border-top: 0; padding-top: 0; }
+.mini .tag { font: 500 9.5px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink2); }
+
+.tablebox { overflow-x: auto; background: var(--panel); border: 1px solid var(--rule); border-radius: 14px; }
+table { width: 100%; border-collapse: collapse; min-width: 760px; font-size: 0.9rem; }
+th, td { text-align: left; vertical-align: top; padding: 10px 14px; border-bottom: 1px solid var(--rule); }
+th { font: 500 0.72rem/1.2 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--fg2); }
+tr:last-child td { border-bottom: 0; }
+td:first-child { font-weight: 700; width: 20%; }
+td s { color: var(--fg2); }
+footer { color: var(--fg2); font-size: 0.88rem; border-top: 1px solid var(--rule); padding-top: 18px; }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="pl" viewBox="0 0 16 16"><path d="M14 8 L9 7 L6 2.5 L5 2.5 L6.5 7 L3 7 L2 5 L1 5 L1.6 8 L1 11 L2 11 L3 9 L6.5 9 L5 13.5 L6 13.5 L9 9 Z" fill="currentColor"/></symbol>
+  <symbol id="clk" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 4.5V8l2.4 1.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="gl" viewBox="0 0 28 34"><path d="M5 3h18l-2.4 27H7.4z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M6.2 14c2.4 0 2.8-1.8 4.3-1.8s2 1.8 3.6 1.8h7.7l-1.4 15.4H7.6z" fill="currentColor" opacity=".55"/></symbol>
+</svg>
+
+<div class="wrap">
+
+<header class="head">
+  <span class="eb">BumpCast · live status · for review · designs only</span>
+  <h1>Gate changes, shown honestly</h1>
+  <p class="prose">A changed gate shows as "Gate B22, was B18", the same way a moved time does: the new gate in teal, the old one struck through. "Was" only appears when this phone showed the old gate. From 3 hours before departure until takeoff, the app re-reads status every 5 minutes while it's open and online, with no spinner and no banner. Gate changes stay in the app, with no push, and are free like the rest of live status. Flights with only the published schedule stop saying "On time".</p>
+  <div class="rules"><span>Never name a data source</span><span>Status uses ink and teal, never severity colours</span><span>Airport-local times</span><span>Every status shows its freshness</span><span>No red, no warnings, no push</span><span>Never on a paywall</span></div>
+</header>
+
+<section>
+  <div class="box">
+    <b>Copy changes</b>
+    <p class="prose">None. Every line on this board is the brief's wording.</p>
+  </div>
+</section>
+
+<!-- ============ 1. CARD ROW ============ -->
+<section>
+  <div class="head"><span class="eb">1 · Flight card status row</span><h2>Next flight card and Upcoming rows</h2>
+  <p class="prose">One line, in the existing caption style. A known gate comes before its terminal. The card always uses the full form ("Terminal 4", never "T4"). Only the struck part is lighter; the rest of the row is unchanged.</p></div>
+  <div class="row">
+
+    <figure><div class="ph"><div class="sc">
+      <span class="ttl">Flights</span>
+      <div class="card">
+        <span class="e">Next flight · B6 23</span>
+        <span class="route">JFK → LAX</span>
+        <div class="glassrow"><svg class="glass"><use href="#gl"/></svg><span class="grade">A few bumps, mostly calm.</span></div>
+        <span class="st"><svg class="ico"><use href="#pl"/></svg><span>On time · Gate B22, was <span class="old">B18</span></span></span>
+      </div>
+      <span class="e" style="padding-top:4px">Coming up</span>
+      <div class="card" style="gap:0;padding-block:4px">
+        <div class="urow"><span class="n">AC 739 · YYZ → SFO</span><span class="m s2" style="font-size:12px">Thu, Oct 29 · 8:10 AM</span><span class="st"><svg class="ico"><use href="#pl"/></svg><span>On time · Gate B22 · Terminal 5</span></span></div>
+        <div class="urow"><span class="n">UA 1104 · SFO → EWR</span><span class="m s2" style="font-size:12px">Thu, Oct 29 · 2:05 PM</span><span class="st"><svg class="ico"><use href="#pl"/></svg><span>Scheduled times only</span></span></div>
+      </div>
+    </div></div><figcaption><b>Gate changed, light</b>This phone showed B18 earlier, so the row says "Gate B22, was B18". VoiceOver reads it as "On time, gate B22, changed from B18". Below it, an unchanged gate and a schedule-only flight.</figcaption></figure>
+
+    <figure><div class="ph dk"><div class="sc">
+      <span class="lbl">Every card row, top to bottom</span>
+      <div class="card" style="gap:0;padding-block:4px">
+        <div class="urow"><span class="fn">Gate known, unchanged</span><span class="st"><svg class="ico"><use href="#pl"/></svg><span>On time · Gate B22 · Terminal 5</span></span></div>
+        <div class="urow"><span class="fn">Gate changed (this phone showed B18)</span><span class="st"><svg class="ico"><use href="#pl"/></svg><span>On time · Gate B22, was <span class="old">B18</span></span></span></div>
+        <div class="urow"><span class="fn">Changed before this phone saw it</span><span class="st"><svg class="ico"><use href="#pl"/></svg><span>On time · Gate B22 · Terminal 5</span></span></div>
+        <div class="urow"><span class="fn">Terminal changed</span><span class="st"><svg class="ico"><use href="#pl"/></svg><span>On time · Gate B22 · Terminal 5, was <span class="old">Terminal 4</span></span></span></div>
+        <div class="urow"><span class="fn">Terminal changed, no gate known</span><span class="st"><svg class="ico"><use href="#pl"/></svg><span>On time · Terminal 5, was <span class="old">Terminal 4</span></span></span></div>
+        <div class="urow"><span class="fn">Delayed and gate changed</span><span class="st delay"><svg class="ico"><use href="#clk"/></svg><span>Delayed 40 min · now 7:55 AM · Gate B22</span></span></div>
+        <div class="urow"><span class="fn">Gate gone, more than 90 min out</span><span class="st"><svg class="ico"><use href="#pl"/></svg><span>On time · Terminal 5</span></span></div>
+        <div class="urow"><span class="fn">No gate (or gate gone), 90 min or less out</span><span class="st"><svg class="ico"><use href="#pl"/></svg><span>On time · Gate on airport screens</span></span></div>
+        <div class="urow"><span class="fn">Schedule-only</span><span class="st"><svg class="ico"><use href="#pl"/></svg><span>Scheduled times only · Terminal 5 · Gate on airport screens</span></span></div>
+      </div>
+    </div></div><figcaption><b>All row states, dark</b>Delayed rows are already teal, so the old gate isn't added there: it's in the header or details. A gate that disappears is never announced; under 90 minutes it becomes "Gate on airport screens".</figcaption></figure>
+  </div>
+</section>
+
+<!-- ============ 2. HEADER ============ -->
+<section>
+  <div class="head"><span class="eb">2 · Route header, departure side</span><h2>The gate line under the departure time</h2>
+  <p class="prose">The new gate line is in teal, with the previous one struck through beneath it, in the same full or short form so the two line up. Times never get a struck pair just because the gate moved. The details open by themselves once, the first time the flight is seen after a change, as they do today.</p></div>
+  <div class="row">
+
+    <figure><div class="ph"><div class="sc">
+      <div class="nav"><span class="l">‹</span><span class="t">Forecast</span><span></span></div>
+      <div class="mini"><span class="tag">Unchanged</span>
+        <span class="e">B6 23 · JetBlue · Thu, Oct 29</span>
+        <div class="hdr"><div class="side"><span class="code">JFK</span><span class="city">New York</span><span class="t">7:15 AM</span><span class="gate">Gate B22 · Terminal 5</span></div><div class="mid"><svg><use href="#pl"/></svg><span class="lab">On time ›</span></div><div class="side r"><span class="code">LAX</span><span class="city">Los Angeles</span><span class="t">10:41 AM</span></div></div>
+      </div>
+      <div class="mini"><span class="tag">Gate changed</span>
+        <div class="hdr"><div class="side"><span class="code">JFK</span><span class="city">New York</span><span class="t">7:15 AM</span><span class="gate new">Gate B22 · Terminal 5</span><span class="gate old">Gate B18 · Terminal 5</span></div><div class="mid"><svg><use href="#pl"/></svg><span class="lab">On time ›</span></div><div class="side r"><span class="code">LAX</span><span class="city">Los Angeles</span><span class="t">10:41 AM</span></div></div>
+      </div>
+      <div class="mini"><span class="tag">Short form, when space is tight</span>
+        <div class="hdr"><div class="side"><span class="code">JFK</span><span class="city">New York</span><span class="t">7:15 AM</span><span class="gate new">Gate B22 · T5</span><span class="gate old">Gate B18 · T5</span></div><div class="mid"><svg><use href="#pl"/></svg><span class="lab">On time ›</span></div><div class="side r"><span class="code">LAX</span><span class="city">Los Angeles</span><span class="t">10:41 AM</span></div></div>
+      </div>
+    </div></div><figcaption><b>Unchanged and changed, light</b>The struck line adds one small line to the header, and only on the departure side.</figcaption></figure>
+
+    <figure><div class="ph dk"><div class="sc">
+      <div class="nav"><span class="l">‹</span><span class="t">Forecast</span><span></span></div>
+      <div class="mini"><span class="tag">Terminal changed</span>
+        <div class="hdr"><div class="side"><span class="code">JFK</span><span class="city">New York</span><span class="t">7:15 AM</span><span class="gate new">Gate B22 · Terminal 5</span><span class="gate old">Gate A3 · Terminal 4</span></div><div class="mid"><svg><use href="#pl"/></svg><span class="lab">On time ⌄</span></div><div class="side r"><span class="code">LAX</span><span class="city">Los Angeles</span><span class="t">10:41 AM</span></div></div>
+        <div class="details">
+          <div class="drow"><span class="k">Departs JFK</span><span class="v m">7:15 AM</span></div>
+          <div class="drow"><span class="k">Arrives LAX</span><span class="v m">10:41 AM</span></div>
+          <div class="drow"><span class="k">Gate</span><span class="v">B22 · Terminal 5</span></div>
+          <span class="fn">Changed from A3 · Terminal 4.</span>
+          <span class="fn">Updated 5:52 AM · next update around 5:57 AM</span>
+        </div>
+      </div>
+      <div class="mini"><span class="tag">Terminal changed, no gate known</span>
+        <div class="hdr"><div class="side"><span class="code">JFK</span><span class="city">New York</span><span class="t">7:15 AM</span><span class="gate new">Terminal 5</span><span class="gate old">Terminal 4</span></div><div class="mid"><svg><use href="#pl"/></svg><span class="lab">On time ›</span></div><div class="side r"><span class="code">LAX</span><span class="city">Los Angeles</span><span class="t">10:41 AM</span></div></div>
+      </div>
+    </div></div><figcaption><b>Terminal changes, dark</b>The first view after the change opens the details by themselves: "Changed from A3 · Terminal 4." With no gate known, the line is only the terminal.</figcaption></figure>
+  </div>
+</section>
+
+<!-- ============ 3. DELAYED + GATE ============ -->
+<section>
+  <div class="head"><span class="eb">3 · Delayed and gate changed</span><h2>Version B chosen</h2>
+  <p class="prose">When the time and the gate both move, the departure side could carry two struck lines. Version A stacks them. Version B keeps the header as it is today and puts the old gate only in the details.</p></div>
+  <div class="row">
+
+    <figure><div class="ph"><div class="sc">
+      <div class="nav"><span class="l">‹</span><span class="t">Forecast</span><span></span></div>
+      <span class="e">B6 23 · JetBlue · Thu, Oct 29</span>
+      <div class="hdr"><div class="side"><span class="code">JFK</span><span class="city">New York</span><span class="t new">7:55 AM</span><span class="was">7:15 AM</span><span class="gate new">Gate B22 · T5</span><span class="gate old">Gate B18 · T5</span></div><div class="mid"><svg><use href="#pl"/></svg><span class="lab delay">40 min late ⌄</span></div><div class="side r"><span class="code">LAX</span><span class="city">Los Angeles</span><span class="t new">11:19 AM</span><span class="was">10:41 AM</span></div></div>
+      <div class="details">
+        <div class="drow"><span class="k">Departs JFK</span><span class="v m">7:55 AM expected · <span class="old">7:15 AM</span></span></div>
+        <div class="drow"><span class="k">Arrives LAX</span><span class="v m">11:19 AM expected · <span class="old">10:41 AM</span></span></div>
+        <div class="drow"><span class="k">Gate</span><span class="v">B22 · Terminal 5</span></div>
+        <span class="fn">Changed from B18.</span>
+        <span class="fn">Updated 6:12 AM · next update around 6:17 AM</span>
+      </div>
+    </div></div><figcaption><b>A · Stacked (light), not chosen</b>Everything that moved is visible without opening anything. The departure side is four lines tall, so the short form is used.</figcaption></figure>
+
+    <figure><div class="ph dk"><div class="sc">
+      <div class="nav"><span class="l">‹</span><span class="t">Forecast</span><span></span></div>
+      <span class="e">B6 23 · JetBlue · Thu, Oct 29</span>
+      <div class="hdr"><div class="side"><span class="code">JFK</span><span class="city">New York</span><span class="t new">7:55 AM</span><span class="was">7:15 AM</span><span class="gate new">Gate B22 · T5</span></div><div class="mid"><svg><use href="#pl"/></svg><span class="lab delay">40 min late ⌄</span></div><div class="side r"><span class="code">LAX</span><span class="city">Los Angeles</span><span class="t new">11:19 AM</span><span class="was">10:41 AM</span></div></div>
+      <div class="details">
+        <div class="drow"><span class="k">Departs JFK</span><span class="v m">7:55 AM expected · <span class="old">7:15 AM</span></span></div>
+        <div class="drow"><span class="k">Arrives LAX</span><span class="v m">11:19 AM expected · <span class="old">10:41 AM</span></span></div>
+        <div class="drow"><span class="k">Gate</span><span class="v">B22 · Terminal 5</span></div>
+        <span class="fn">Changed from B18.</span>
+        <span class="fn">Updated 6:12 AM · next update around 6:17 AM</span>
+      </div>
+    </div></div><figcaption><b>B · Old gate in the details only (dark), chosen</b>The header keeps one struck line. The details open by themselves on the first view after the change, so the old gate is still seen once. The new gate is teal in both versions.</figcaption></figure>
+  </div>
+</section>
+
+<!-- ============ 4. GONE / STALE / SCHEDULE ============ -->
+<section>
+  <div class="head"><span class="eb">4 · Details, schedule-only and freshness</span><h2>When there's less to show</h2>
+  <p class="prose">A gate that disappears isn't announced. The details remember what this phone last showed. Flights with only the published schedule say so plainly. This is a common state (110 of 230 departures at JFK in the sample), not an edge case. The age shows under the label only before takeoff, and only when status is still more than 30 minutes old after the in-app refresh.</p></div>
+  <div class="row">
+
+    <figure><div class="ph"><div class="sc">
+      <div class="nav"><span class="l">‹</span><span class="t">Forecast</span><span></span></div>
+      <span class="e">B6 23 · JetBlue · Thu, Oct 29</span>
+      <div class="hdr"><div class="side"><span class="code">JFK</span><span class="city">New York</span><span class="t">7:15 AM</span></div><div class="mid"><svg><use href="#pl"/></svg><span class="lab">On time ⌄</span></div><div class="side r"><span class="code">LAX</span><span class="city">Los Angeles</span><span class="t">10:41 AM</span></div></div>
+      <div class="details">
+        <div class="drow"><span class="k">Departs JFK</span><span class="v m">7:15 AM</span></div>
+        <div class="drow"><span class="k">Arrives LAX</span><span class="v m">10:41 AM</span></div>
+        <span class="fn">Last shown in the app as B22. Some flights only show their gate on the airport screens.</span>
+        <span class="fn">Updated 6:05 AM · next update around 6:10 AM</span>
+      </div>
+      <div class="card"><span class="lbl" style="margin:0">Same flight, more than 90 min out</span><span class="fn">The header has no gate line. Details: "Last shown in the app as B22."</span></div>
+    </div></div><figcaption><b>Gate gone, 90 min or less out (light)</b>The card row says "On time · Gate on airport screens". Nothing says the gate was removed. With no gate ever known, the details keep only the second sentence.</figcaption></figure>
+
+    <figure><div class="ph dk"><div class="sc">
+      <div class="nav"><span class="l">‹</span><span class="t">Forecast</span><span></span></div>
+      <span class="e">UA 1104 · United · Thu, Oct 29</span>
+      <div class="hdr"><div class="side"><span class="code">SFO</span><span class="city">San Francisco</span><span class="t">2:05 PM</span><span class="gate">Terminal 3</span></div><div class="mid"><svg><use href="#pl"/></svg><span class="lab">Scheduled times ⌄</span></div><div class="side r"><span class="code">EWR</span><span class="city">Newark</span><span class="t">10:32 PM</span></div></div>
+      <div class="details">
+        <div class="drow"><span class="k">Departs SFO</span><span class="v m">2:05 PM</span></div>
+        <div class="drow"><span class="k">Arrives EWR</span><span class="v m">10:32 PM</span></div>
+        <span class="fn">We only have the published schedule for this flight so far. Delays and the gate may only show on the airport screens.</span>
+        <span class="fn">Updated 12:40 PM · next update around 12:45 PM</span>
+      </div>
+      <div class="card"><span class="e">Coming up</span><span class="st"><svg class="ico"><use href="#pl"/></svg><span>Scheduled times only · Terminal 3</span></span></div>
+    </div></div><figcaption><b>Schedule-only (dark)</b>"Scheduled times" replaces "On time" only when neither side has live times. VoiceOver: "Scheduled times only, no live updates for this flight so far". The wording doesn't promise that updates will come.</figcaption></figure>
+
+    <figure><div class="ph"><div class="sc">
+      <div class="nav"><span class="l">‹</span><span class="t">Forecast</span><span></span></div>
+      <span class="e">AC 739 · Air Canada · Thu, Oct 29</span>
+      <div class="hdr"><div class="side"><span class="code">YYZ</span><span class="city">Toronto</span><span class="t">8:10 AM</span><span class="gate">Gate D41 · Terminal 1</span></div><div class="mid"><svg><use href="#pl"/></svg><span class="lab">On time ›<small>updated 40 min ago</small></span></div><div class="side r"><span class="code">SFO</span><span class="city">San Francisco</span><span class="t">10:52 AM</span></div></div>
+      <div class="card"><span class="fn">The card row and details don't change. The details keep their usual "Updated …" line.</span></div>
+    </div></div><figcaption><b>Still old after the refresh (light)</b>Before takeoff only, and only when status is still more than 30 minutes old after the app has tried again. No spinner, no banner.</figcaption></figure>
+  </div>
+</section>
+
+<!-- ============ 5. TABLE ============ -->
+<section>
+  <div class="head"><span class="eb">5 · Every state</span><h2>What each surface says</h2></div>
+  <div class="tablebox"><table>
+    <tr><th>State</th><th>Card row</th><th>Header</th><th>Details</th></tr>
+    <tr><td>Gate known, unchanged</td><td>On time · Gate B22 · Terminal 5</td><td>Gate B22 · Terminal 5 (short: Gate B22 · T5)</td><td>B22 · Terminal 5</td></tr>
+    <tr><td>Gate changed (this phone showed B18)</td><td>On time · Gate B22, was <s>B18</s></td><td>Gate B22 · Terminal 5 over <s>Gate B18 · Terminal 5</s></td><td>B22 · Terminal 5. Changed from B18.</td></tr>
+    <tr><td>Changed before this phone saw it</td><td>As unchanged</td><td>As unchanged</td><td>As unchanged (still opens once)</td></tr>
+    <tr><td>Terminal changed</td><td>On time · Gate B22 · Terminal 5, was <s>Terminal 4</s></td><td><s>Gate A3 · Terminal 4</s> under the new line</td><td>Changed from A3 · Terminal 4.</td></tr>
+    <tr><td>Terminal changed, no gate</td><td>On time · Terminal 5, was <s>Terminal 4</s></td><td><s>Terminal 4</s> under the new line</td><td>Changed from Terminal 4.</td></tr>
+    <tr><td>Delayed and gate changed</td><td>Delayed 40 min · now 7:55 AM · Gate B22</td><td>Struck time only (version B)</td><td>Changed from B18.</td></tr>
+    <tr><td>Gate gone, more than 90 min out</td><td>On time (or On time · Terminal 5)</td><td>No gate line</td><td>Last shown in the app as B22.</td></tr>
+    <tr><td>Gate gone, 90 min or less out</td><td>On time · Gate on airport screens</td><td>—</td><td>Last shown in the app as B22. Some flights only show their gate on the airport screens.</td></tr>
+    <tr><td>No gate or terminal, 90 min or less</td><td>On time · Gate on airport screens</td><td>—</td><td>Some flights only show their gate on the airport screens.</td></tr>
+    <tr><td>Schedule-only</td><td>Scheduled times only (· Terminal 5, · Gate on airport screens as they apply)</td><td>Scheduled times ›</td><td>We only have the published schedule for this flight so far. Delays and the gate may only show on the airport screens. Then the freshness line.</td></tr>
+    <tr><td>Still old after the refresh</td><td>Unchanged</td><td>On time › with "updated 40 min ago"</td><td>Freshness line unchanged</td></tr>
+    <tr><td>More than 48 h out, departed, cancelled, diverted, added by airports</td><td>Unchanged from today</td><td>Unchanged</td><td>Unchanged</td></tr>
+  </table></div>
+  <p class="prose">Not touched: pushes, the Updates feed, Settings, the Live Activity, the Dynamic Island, widgets, the "Boarding soon" reminder, paywalls and onboarding.</p>
+</section>
+
+<section>
+  <div class="box">
+    <b>Lanre's decisions (Oct 27)</b>
+    <ol>
+      <li><strong>Delayed and gate changed: B.</strong> The old gate appears in the details only. The header keeps one struck line (the time).</li>
+      <li><strong>"Last shown in the app as B22."</strong> as shown.</li>
+      <li><strong>"Scheduled times only" and "Scheduled times ›"</strong> kept as shown.</li>
+    </ol>
+  </div>
+</section>
+
+<footer>Flights, gates and times are examples. This is a design board for review. No app code was changed.</footer>
+</div>
