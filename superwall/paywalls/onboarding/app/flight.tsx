@@ -3,6 +3,7 @@ import { useActions, useHaptics, useIntroductoryOffer, useProducts, usePurchase,
 import { useRouter } from "superwall/navigation";
 import { flight, unlockText } from "../components/flight";
 import { Ticket } from "../components/ticket";
+import { MoreTimeSheet, useMoreTime } from "../components/more-time";
 import { variant } from "../components/variant";
 
 const TERMS_URL = "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/";
@@ -42,6 +43,7 @@ export default function FlightPaywall() {
   const router = useRouter();
   const [choice, setChoice] = useState<"annual" | "monthly">("annual");
   const [restoreFailed, setRestoreFailed] = useState(false);
+  const moreTime = useMoreTime();
   const { added, forecast } = flight;
   const state = forecast?.state ?? "pending";
 
@@ -83,11 +85,16 @@ export default function FlightPaywall() {
   const buy = async () => {
     haptics.light();
     const result = await purchase(choice);
-    // Closed the App Store sheet: offer just this flight, once.
-    if (result.status === "abandoned" && flight.added && !flight.passOffered) {
-      flight.passOffered = true;
-      router.push("pass-offer");
-    }
+    if (result.status !== "abandoned") return;
+    // Closed the App Store sheet on the yearly plan: the 7-day trial first, then the pass.
+    if (choice === "annual" && moreTime.show()) return;
+    offerPass();
+  };
+  // Just this flight, once.
+  const offerPass = () => {
+    if (!flight.added || flight.passOffered) return;
+    flight.passOffered = true;
+    router.push("pass-offer");
   };
   const pick = (p: "annual" | "monthly") => {
     haptics.selection();
@@ -176,6 +183,7 @@ export default function FlightPaywall() {
           <button type="button" className="link" onClick={() => openUrl(PRIVACY_URL)}>{t("plans.privacy")}</button>
         </div>
       </div>
+      <MoreTimeSheet open={moreTime.open} onDecline={() => { moreTime.hide(); offerPass(); }} />
     </main>
   );
 }

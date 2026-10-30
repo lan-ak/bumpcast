@@ -414,6 +414,29 @@ html, body, [data-sw-route] { overscroll-behavior: none; }
   .plan-price { font-size: 22px; }
 }
 
+/* "Need more time?": a sheet that slides up over the page after a closed App Store sheet. */
+main:has(> .mt) { position: relative; }
+.mt { position: absolute; inset: var(--sw-page-bleed, 0); z-index: 20; display: flex; flex-direction: column; justify-content: flex-end; }
+.mt-scrim { position: absolute; inset: 0; border: 0; padding: 0; background: rgba(11, 19, 34, 0.45); opacity: 0; transition: opacity 0.3s ease; cursor: pointer; }
+.mt-sheet {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 20px calc(16px + var(--sw-safe-area-inset-bottom, 0px));
+  border-radius: 28px 28px 0 0;
+  background: var(--sheet);
+  color: var(--ink);
+  text-align: center;
+  transform: translateY(100%);
+  transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.mt--shown .mt-scrim { opacity: 1; }
+.mt--shown .mt-sheet { transform: translateY(0); }
+.mt-grabber { width: 36px; height: 5px; margin: 0 auto 18px; border-radius: 3px; background: var(--track); }
+.mt-title { margin: 0 0 8px; font: 700 26px/1.15 var(--display); letter-spacing: -0.015em; }
+.mt-body { margin: 0 0 18px; font-size: 16px; }
+.mt .legal { margin-top: 6px; }
+
 @media (prefers-reduced-motion: reduce) {
   .scene, .scene-sun, .scene-line, .wave-path, .bar, .progress-fill { transition: opacity 0.35s ease !important; }
   .scene-line, .wave-path { stroke-dashoffset: 0; }

@@ -9,6 +9,7 @@ import {
   type ProductReference,
 } from "superwall/hooks";
 import { answers, type Help } from "../components/answers";
+import { MoreTimeSheet, useMoreTime } from "../components/more-time";
 
 const TERMS_URL = "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/";
 const PRIVACY_URL = "https://docs.google.com/document/d/1wgxMmBIa1OiTJesX83nBVIJl1c2EAz-TxvpMndDK7T0/preview";
@@ -37,6 +38,7 @@ export default function Plans() {
   const { eligible } = useIntroductoryOffer();
   const [plan, setPlan] = useState<ProductReference>("annual");
   const [restoreFailed, setRestoreFailed] = useState(false);
+  const moreTime = useMoreTime();
 
   const annual = getProduct("annual");
   const monthly = getProduct("monthly");
@@ -124,9 +126,11 @@ export default function Plans() {
         <button
           type="button"
           className="cta"
-          onClick={() => {
+          onClick={async () => {
             haptics.light();
-            void purchase(plan);
+            const result = await purchase(plan);
+            // Closed the App Store sheet on the yearly plan: offer the 7-day trial instead.
+            if (result.status === "abandoned" && plan === "annual") moreTime.show();
           }}
         >
           {cta}
@@ -137,6 +141,7 @@ export default function Plans() {
           <button type="button" className="link" onClick={() => openUrl(PRIVACY_URL)}>{t("plans.privacy")}</button>
         </div>
       </div>
+      <MoreTimeSheet open={moreTime.open} onDecline={moreTime.hide} />
     </main>
   );
 }

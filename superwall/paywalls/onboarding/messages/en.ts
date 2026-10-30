@@ -118,6 +118,12 @@ export default {
     back: "Back to plans",
     legal: "One-time purchase for this flight. It doesn't renew.",
   },
+  moreTime: {
+    title: "Need more time?",
+    body: "Have {days} days instead. Try Pro free, then {price}/year.",
+    bodyBare: "Have {days} days instead. Try Pro free.",
+    noThanks: "No thanks",
+  },
   plans: {
     close: "Close",
     restore: "Restore",
