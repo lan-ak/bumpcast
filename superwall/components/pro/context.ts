@@ -8,6 +8,7 @@ export const PLACEMENTS = [
   "pilot_reports_locked",
   "flight_limit_reached",
   "upgrade_from_settings",
+  "email_import_locked",
 ] as const;
 export type ProPlacement = (typeof PLACEMENTS)[number];
 

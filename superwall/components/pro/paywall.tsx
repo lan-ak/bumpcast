@@ -33,6 +33,8 @@ const FEATURES: { key: string; icon: ReactNode; placement: ProPlacement }[] = [
   { key: "featureLive", icon: icon("M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zM11 18h2"), placement: "live_activity_locked" },
   { key: "featurePilots", icon: icon("M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21zM12 12a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"), placement: "pilot_reports_locked" },
   { key: "featureFlights", icon: icon("M10.5 13.5 3 11l1.5-1.5 7.5 1 4-4.5a1.8 1.8 0 0 1 2.5 2.5L14 13l1 7.5-1.5 1.5-2.5-7.5-3 3V20l-1.5 1-1-3.5L2 16l1-1.5h2.5z"), placement: "flight_limit_reached" },
+  // Last, so only the email placement brings it into the two shown.
+  { key: "featureEmail", icon: icon("M3 6h18v12H3zM3 7l9 6 9-6"), placement: "email_import_locked" },
 ];
 
 // What Pro covers, always shown together so the outlook never reads as US quality.

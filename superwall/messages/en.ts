@@ -15,6 +15,7 @@ export default {
       pilot_reports_locked: "See what pilots are feeling now.",
       flight_limit_reached: "Keep every flight covered.",
       upgrade_from_settings: "Fly knowing what's coming.",
+      email_import_locked: "Your booked flights, added for you.",
       fallback: "Fly knowing what's coming.",
     },
 
@@ -23,6 +24,8 @@ export default {
     featureLive: "A countdown to each bump on your Lock Screen, offline",
     featurePilots: "Live pilot reports on the map",
     featureFlights: "As many upcoming flights as you like",
+    // Last in the list, so it only shows when email import opened the paywall.
+    featureEmail: "Flights from your booking emails, added and kept up to date",
     // Coverage, side by side. Never "forecasts worldwide" without the beta qualifier.
     coverageUS: "Detailed, hourly forecasts for US flights",
     coverageGlobal: "Global outlook (beta) for international flights: approximate, updated every 6 hours",

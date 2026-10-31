@@ -37,6 +37,7 @@ For local testing, `ios/BumpCast/Products.storekit` mirrors the first three and 
 | `pilot_reports_locked` | Pro features | Turns on pilot reports on the map | Yes |
 | `flight_limit_reached` | Pro features | Adds a 3rd upcoming flight (free limit is 2) | Yes |
 | `upgrade_from_settings` | Pro features | "Get BumpCast Pro" in Settings | Yes |
+| `email_import_locked` | Pro features | Taps "Add from your email" or Connect Gmail (Settings), or resumes it after Pro lapsed. A subscription feature: a flight pass never unlocks it, and no flight is sent, so the "No flight" audience shows `pro-features` with the email headline and benefit (1.1+) | Yes |
 | `flight_added` | none yet | A flight added in Add flight, once the sheet has closed (1.0.2+). See [Moments](#moments-notifications-and-ratings). | No |
 | `turn_on_notifications` | none yet | "Turn on notifications" on a flight's screen, while notifications haven't been answered (1.0.2+) | No |
 
@@ -80,7 +81,7 @@ Soft placements (`first_grade_viewed`, `forecast_ready_opened`, `update_opened`)
 From 1.0.2, `flight_added` and `turn_on_notifications` let a Superwall surface decide how the app asks for notifications and App Store ratings, so it can change without a release (`Paywalls.take`):
 
 - **A campaign shows a surface:** it asks for notifications with the **Request Permission** tap behavior (Notification), and for a rating with a **Custom Callback** named `request_review`, which the app answers with Apple's own rating prompt (the system decides whether it shows). When the surface closes, the app re-reads the notification permission and tells the worker and Superwall.
-- **No campaign, or no audience match:** the app does what it did before. After `flight_added`: the system notification prompt if Add flight's "Tell me when it's ready" was on and notifications haven't been answered, then the rating prompt (at most once per app version, only for a flight we forecast, never over a paywall). After `turn_on_notifications`: the system prompt.
+- **No campaign, or no audience match:** the app does what it did before. After `flight_added`: the system notification prompt if Add flight's "Tell me when it's ready" was on and notifications haven't been answered. From 1.0.3 the app's own rating prompt comes on the first forecast someone opens instead (advance or confirmed, free or Pro, once; after any paywall on screen closes). After `turn_on_notifications`: the system prompt.
 - **Holdout:** nothing.
 
 Besides the flight's params, both send `notifications` (`enabled`, `denied`, `not_determined`), `notify` (the flight's "Tell me when it's ready") and `forecast_state` (`early`, `partly_confirmed`, `confirmed` or `global_outlook` once there's a forecast; otherwise `too_early`, `building`, `beta_available` or `not_covered`).
@@ -125,7 +126,7 @@ Flights outside coverage, flights saved offline, and app versions without the ca
    - **Forecast moments** → `forecast-moment` (paywall 281983) at 100%. Shows the user's route, hours to departure and `grade_title` on the sky. Leads with the flight pass (they need it for this flight); "More options" opens This flight / Yearly / Monthly as one choice. Without a flight, Pro leads.
    - **Pro features** → two audiences, top to bottom:
      1. **Has a flight** (193400, `params.flight_id != null`): A/B test at 50/50, `pro-features` (281984, subscription is the button, pass is a link) vs `pro-features-pass-first` (281985, pass is the button, Pro trial is a link).
-     2. **No flight** (195604, everyone else): `pro-features` at 100%. A pass needs a flight, so the test only runs where one can be sold. Today `pilot_reports_locked`, `flight_limit_reached` and `upgrade_from_settings` send no flight.
+     2. **No flight** (195604, everyone else): `pro-features` at 100%. A pass needs a flight, so the test only runs where one can be sold. Today `pilot_reports_locked`, `flight_limit_reached`, `upgrade_from_settings` and `email_import_locked` send no flight.
    - Edit them under `superwall/paywalls/`, then `SUPERWALL_CHANNEL=next superwall publish`.
 3. **Replace the 100% holdout audiences** that Superwall creates with real audiences, for example:
    - `user.notifications_enabled == true`;
