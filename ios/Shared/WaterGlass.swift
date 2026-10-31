@@ -2,15 +2,17 @@ import SwiftUI
 
 /// The severity indicator (never a brand mark): a tumbler whose water surface gains more of
 /// the logo's gentle bumps as severity rises. Flat when smooth; an empty dashed outline when
-/// it's too early to tell.
+/// it's too early to tell. The glass stays the same; only the water changes.
 struct WaterGlass: View {
     let severity: Severity?
     var size: CGFloat = 24
 
     var body: some View {
-        // Severity colours only, never the brand teal (DESIGN_SPEC §2): the glass is an
+        // Severity colours on the water only; the outline is neutral ink, so the whole glass
+        // never reads as the grade. Never the brand teal (DESIGN_SPEC §2): the glass is an
         // indicator, not a logo.
         let color = Theme.color(severity)
+        let outline = Theme.secondaryInk
         let line = max(1.2, size / 16)
         ZStack {
             if let severity {
@@ -20,10 +22,10 @@ struct WaterGlass: View {
                 WaterSurface(severity: severity)
                     .stroke(color, style: StrokeStyle(lineWidth: line * 1.3, lineCap: .round, lineJoin: .round))
                 GlassShape()
-                    .stroke(color, style: StrokeStyle(lineWidth: line, lineCap: .round, lineJoin: .round))
+                    .stroke(outline, style: StrokeStyle(lineWidth: line, lineCap: .round, lineJoin: .round))
             } else {
                 GlassShape()
-                    .stroke(color, style: StrokeStyle(lineWidth: line, lineCap: .round, lineJoin: .round, dash: [size / 8, size / 10]))
+                    .stroke(outline, style: StrokeStyle(lineWidth: line, lineCap: .round, lineJoin: .round, dash: [size / 8, size / 10]))
             }
         }
         .frame(width: size * 0.8, height: size)

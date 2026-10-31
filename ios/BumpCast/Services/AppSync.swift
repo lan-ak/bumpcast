@@ -48,6 +48,8 @@ enum AppSync {
         }
         store.onSync?()
         scheduleBackgroundRefresh()
+        // After the sync, so flights already saved aren't found again.
+        await EmailImport.shared.scanIfDue()
     }
 
     /// An account new to this run (launch, or one that replaced a lost session): the worker needs
@@ -121,6 +123,8 @@ enum AppSync {
                     if Connectivity.shared.hasPath {
                         await FlightStore.shared.reload()
                         failed = FlightStore.shared.isOffline
+                        // New bookings in a connected mailbox; fewer messages, to fit the time iOS gives.
+                        if !failed { await EmailImport.shared.scanIfDue(messages: 15) }
                     }
                     // Waits for the Live Activity pass (after the one a good sync started), so the
                     // app isn't suspended halfway through it.

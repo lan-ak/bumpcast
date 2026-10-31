@@ -26,6 +26,12 @@
 	<string>$(SUPABASE_ANON_KEY)</string>
 	<key>SuperwallAPIKey</key>
 	<string>$(SUPERWALL_API_KEY)</string>
+	<key>GoogleClientID</key>
+	<string>$(GOOGLE_IOS_CLIENT_ID)</string>
+	<key>GoogleRedirectScheme</key>
+	<string>$(GOOGLE_REDIRECT_SCHEME)</string>
+	<key>MicrosoftClientID</key>
+	<string>$(MS_CLIENT_ID)</string>
 	<key>NSSupportsLiveActivities</key>
 	<true/>
 	<key>UIBackgroundModes</key>
@@ -45,6 +51,22 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>bumpcast</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>ca.akinyemi.bumpcast.google</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>$(GOOGLE_REDIRECT_SCHEME)</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>ca.akinyemi.bumpcast.microsoft</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>msauth.ca.akinyemi.bumpcast</string>
 			</array>
 		</dict>
 	</array>

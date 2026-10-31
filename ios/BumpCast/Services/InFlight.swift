@@ -857,7 +857,9 @@ final class InFlight {
                     content.body = "\(range), for around \(segment.minutes.roughMinutes.durationText). Tap for a slow breathing exercise."
                 } else {
                     content.title = "\(segment.severity.phrase.sentenceCased) in about 2 minutes"
-                    content.body = "\(segment.severity.feelsLike) Lasts about \(segment.minutes) min. Tap for a slow breathing exercise."
+                    // A gusty takeoff or landing says why, from the forecast saved before takeoff.
+                    content.body = segment.gustyEnd.flatMap(flight.gustyCity).flatMap(segment.gustyReminder)
+                        ?? "\(segment.severity.feelsLike) Lasts about \(segment.minutes) min. Tap for a slow breathing exercise."
                 }
                 content.sound = .default
                 content.interruptionLevel = .timeSensitive

@@ -14,7 +14,7 @@ packages:
     from: 2.55.0
   SuperwallKit:
     url: https://github.com/superwall/Superwall-iOS
-    from: 4.18.0
+    from: 4.18.3
 configFiles:
   Debug: Config/App.xcconfig
   Release: Config/App.xcconfig
@@ -38,8 +38,8 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: ca.akinyemi.bumpcast
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
-        MARKETING_VERSION: "1.0.2"
-        CURRENT_PROJECT_VERSION: 9
+        MARKETING_VERSION: "1.0.3"
+        CURRENT_PROJECT_VERSION: 10
         SWIFT_VERSION: 6.0
         TARGETED_DEVICE_FAMILY: 1
         GENERATE_INFOPLIST_FILE: YES
@@ -63,8 +63,8 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: ca.akinyemi.bumpcast.widgets
-        MARKETING_VERSION: "1.0.2"
-        CURRENT_PROJECT_VERSION: 9
+        MARKETING_VERSION: "1.0.3"
+        CURRENT_PROJECT_VERSION: 10
         SWIFT_VERSION: 6.0
         TARGETED_DEVICE_FAMILY: 1
         GENERATE_INFOPLIST_FILE: YES

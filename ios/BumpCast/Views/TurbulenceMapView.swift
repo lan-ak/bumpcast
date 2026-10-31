@@ -68,6 +68,7 @@ struct TurbulenceMapView: View {
                     layer: layer,
                     faded: isLoading && layer != nil,
                     route: visibleRoute,
+                    routeOverUS: route?.overUS ?? [],
                     reports: showReports ? visibleReports : [],
                     framing: framing,
                     insets: mapInsets,
@@ -270,17 +271,29 @@ struct TurbulenceMapView: View {
     @ViewBuilder private var summaryBlock: some View {
         if scope == .route, let route {
             let profile = layer.map { RouteProfile(route: route, layer: $0) }
-            HStack(alignment: .top, spacing: 12) {
-                WaterGlass(severity: profile?.overall, size: 34)
+            if route.usCoverage == .none {
+                // Nothing on the map for this route: say so plainly and point to the forecast.
                 VStack(alignment: .leading, spacing: 4) {
                     Text("\(route.routeText) at \(Self.label(level))").font(.bcCardTitle)
-                    Text(profile?.summary(route: route) ?? (loadFailed ? "No map for your route yet." : "Loading the map for your route…"))
-                        .font(.bcSubheadline)
-                        .foregroundStyle(.secondary)
-                        .fixedSize(horizontal: false, vertical: true)
+                    outsideMapLine(route)
+                }
+            } else {
+                HStack(alignment: .top, spacing: 12) {
+                    WaterGlass(severity: profile?.overall, size: 34)
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("\(route.routeText) at \(Self.label(level))").font(.bcCardTitle)
+                        Text(profile?.summary(route: route) ?? (loadFailed ? "No map for your route yet." : "Loading the map for your route…"))
+                            .font(.bcSubheadline)
+                            .foregroundStyle(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
+                .accessibilityElement(children: .combine)
+                if route.usCoverage == .part {
+                    Divider()
+                    outsideMapLine(route)
                 }
             }
-            .accessibilityElement(children: .combine)
         } else {
             VStack(alignment: .leading, spacing: 4) {
                 Text("All US at \(Self.label(level))").font(.bcCardTitle)
@@ -290,6 +303,19 @@ struct TurbulenceMapView: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
             .accessibilityElement(children: .combine)
+        }
+    }
+
+    /// "The map covers the US. Your forecast has the outlook for the rest. Open forecast ›"
+    private func outsideMapLine(_ route: MapRoute) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(GlobalOutlookCopy.mapCoversUS)
+                .font(.bcSubheadline)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+            Button(GlobalOutlookCopy.mapOpenForecast) { router.openFlight(route.flightID) }
+                .font(.bcSubheadlineStrong)
+                .tint(Theme.accent)
         }
     }
 

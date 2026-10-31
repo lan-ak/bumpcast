@@ -9,6 +9,8 @@ struct AddFlightView: View {
     /// Set when the onboarding flow opened this (OnboardingFlight): one flight, no connections,
     /// and the flow decides what happens next. Called with the saved flight, or nil on Cancel.
     var onboarding: ((Flight?) -> Void)?
+    /// A booking from email that needs picking by hand: its number and day, already filled in.
+    var prefill: EmailImport.NeedsYouItem? = nil
 
     enum Step: Int, CaseIterable { case find, route, when, check }
 
@@ -56,6 +58,7 @@ struct AddFlightView: View {
     // Connecting flights
     @State private var connection: Connection?
     @State private var added: [Flight] = []
+    @State private var findingInEmail = false
 
     private var isEditing: Bool { flight != nil }
     private var sky: Sky { Sky(date: departure, timeZone: origin?.timeZone ?? .current) }
@@ -69,7 +72,8 @@ struct AddFlightView: View {
                         number: $number, departure: $departure, search: $search, connection: connection,
                         timeZone: connection?.from.timeZone ?? origin?.timeZone ?? .current,
                         savedFlight: savedFlight, pick: use, open: open,
-                        chooseAirports: { go(to: .route) }, enterManually: enterManually)
+                        chooseAirports: { go(to: .route) }, enterManually: enterManually,
+                        findInEmail: showsEmail ? { Paywalls.shared.unlock(.emailImportLocked) { findingInEmail = true } } : nil)
                     .transition(stepTransition)
                 case .route:
                     RouteStep(
@@ -133,6 +137,11 @@ struct AddFlightView: View {
                 Text("Check your connection and try again.")
             }
             .onAppear(perform: loadExisting)
+            // Once email is connected, its flights are on the Flights screen: closing the email
+            // sheet closes Add flight too, rather than landing back on Find your flight.
+            .sheet(isPresented: $findingInEmail, onDismiss: { if EmailImport.shared.isConnected { closeSheet() } }) {
+                EmailImportSheet(sky: sky)
+            }
             // A new route lists its flights again (unless the number's schedule isn't out yet).
             .onChange(of: origin) { if step == .route { manualTime = pendingNumber != nil } }
             .onChange(of: destination) { if step == .route { manualTime = pendingNumber != nil } }
@@ -143,6 +152,12 @@ struct AddFlightView: View {
     }
 
     private var firstStep: Step { isEditing ? .route : .find }
+
+    /// "Find flights in your email" on a first flight, outside onboarding, once a provider is set up
+    /// (or "Coming soon" until `EmailImport.isReady`).
+    private var showsEmail: Bool {
+        onboarding == nil && connection == nil && (!EmailImport.isReady || !EmailImport.shared.providers.isEmpty)
+    }
 
     private var title: String {
         if isEditing { return "Edit flight" }
@@ -537,6 +552,10 @@ struct AddFlightView: View {
         loaded = true
         // Anything another Add flight sheet left behind belongs to that sheet, not this one.
         if onboarding == nil { router.afterAdd = nil }
+        if let prefill {
+            number = prefill.number
+            if let day = prefill.date { departure = day }
+        }
         guard let flight else { return }
         origin = flight.originAirport
         destination = flight.destinationAirport
@@ -574,6 +593,8 @@ private struct FindStep: View {
     let open: (Flight) -> Void
     let chooseAirports: () -> Void
     let enterManually: (String) -> Void
+    /// Opens Find flights in your email; nil hides the row.
+    var findInEmail: (() -> Void)? = nil
 
     enum Search: Equatable {
         case idle, searching
@@ -584,6 +605,7 @@ private struct FindStep: View {
     }
 
     @Environment(FlightStore.self) private var store
+    @Environment(EmailImport.self) private var emailImport
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @FocusState private var focused: Bool
 
@@ -635,10 +657,7 @@ private struct FindStep: View {
                         .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent).tint(Theme.accent)
                         .controlSize(.large)
                         .disabled(normalized == nil || search == .searching)
-                        Button("Choose airports instead", action: chooseAirports)
-                            .font(.bcSubheadlineStrong)
-                            .tint(Theme.accent)
-                            .frame(maxWidth: .infinity)
+                        otherWays
                     }
                     .transition(.fadeThrough(reduceMotion))
                 }
@@ -653,6 +672,34 @@ private struct FindStep: View {
         // Back online with the offline note showing: look it up now.
         .onChange(of: Connectivity.shared.isOnline) { _, online in if online && search == .offline { find() } }
         .animation(Theme.motion(reduceMotion), value: search)
+    }
+
+    /// Two matching rows: email (once a provider is set up) and airports.
+    private var otherWays: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Other ways to add").eyebrow().foregroundStyle(Theme.secondaryInk)
+            VStack(spacing: 0) {
+                if let findInEmail {
+                    if !EmailImport.isReady {
+                        OtherWayRow(symbol: "envelope", title: "Add from your email", subtitle: "Coming soon")
+                    } else if emailImport.isConnected {
+                        OtherWayRow(
+                            symbol: "envelope", title: "From your email",
+                            subtitle: emailImport.lastChecked.map {
+                                "Updated \($0.formatted(.relative(presentation: .numeric, unitsStyle: .abbreviated)))"
+                            } ?? "Looking for your bookings", action: findInEmail)
+                    } else {
+                        OtherWayRow(
+                            symbol: "envelope", title: "Add from your email", subtitle: "Adds every booked flight at once",
+                            action: findInEmail)
+                    }
+                    Divider().padding(.leading, 56)
+                }
+                OtherWayRow(
+                    symbol: "map", title: "Choose airports", subtitle: "Pick from that day's flights", action: chooseAirports)
+            }
+            .skyCard(cornerRadius: 18, padding: 6)
+        }
     }
 
     @ViewBuilder
@@ -841,6 +888,43 @@ private struct FindStep: View {
     }
 }
 
+/// One of Find's other ways to add: an icon tile, a title and a line under it, and a chevron.
+private struct OtherWayRow: View {
+    let symbol: String
+    let title: String
+    let subtitle: String
+    /// None: shown but not tappable, with no chevron ("Coming soon").
+    var action: (() -> Void)? = nil
+
+    var body: some View {
+        if let action {
+            Button(action: action) { row }.buttonStyle(.plain)
+        } else {
+            row.accessibilityElement(children: .combine)
+        }
+    }
+
+    private var row: some View {
+        HStack(spacing: 12) {
+            Image(systemName: symbol)
+                .font(.bcSymbolControl)
+                .foregroundStyle(Theme.accent)
+                .frame(width: 36, height: 36)
+                .background(Theme.accent.opacity(0.12), in: .rect(cornerRadius: 10))
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title).font(.bcHeadline).foregroundStyle(Theme.ink)
+                Text(subtitle).font(.bcFootnote).foregroundStyle(Theme.secondaryInk)
+            }
+            Spacer(minLength: 8)
+            if action != nil {
+                Image(systemName: "chevron.right").font(.bcFootnoteStrong).foregroundStyle(Theme.tertiaryInk)
+            }
+        }
+        .padding(10)
+        .contentShape(.rect)
+    }
+}
+
 /// "B6 23 · JetBlue", the route, "Today · Departs 7:15 AM EDT", "Arrives 10:41 AM PDT", and how
 /// it's doing once it has left, laid out as a card body.
 private struct FoundFlightSummary: View {
@@ -924,12 +1008,14 @@ private struct RouteStep: View {
     private var sameAirport: Bool { origin != nil && origin == destination }
     private var beta: GlobalBeta { GlobalBeta.shared }
 
-    /// "The first part, over the US, is confirmed." only when the flight starts in the US.
+    /// "The first part, over the US, is confirmed." when the flight leaves the US, "The last part…"
+    /// when it lands there.
     private var betaExplanation: String {
-        guard let origin, Coverage.latitude.contains(origin.lat), Coverage.longitude.contains(origin.lon) else {
+        guard let origin, let destination, let part = Coverage.usPart(from: origin, to: destination) else {
             return GlobalOutlookCopy.addExplanationAll
         }
-        return GlobalOutlookCopy.addFirstPartConfirmed + GlobalOutlookCopy.addExplanation
+        return (part.isLanding ? GlobalOutlookCopy.addLastPartConfirmed : GlobalOutlookCopy.addFirstPartConfirmed)
+            + GlobalOutlookCopy.addExplanation
     }
     private var outsideCoverage: Bool {
         guard let origin, let destination, origin != destination else { return false }
@@ -1907,7 +1993,10 @@ private struct CheckStep: View {
                             .padding(.top, 5)
                         VStack(alignment: .leading, spacing: 2) {
                             Text(item.when).eyebrow().foregroundStyle(.secondary)
-                            Text(item.title).font(.bcHeadline)
+                            HStack(spacing: 6) {
+                                Text(item.title).font(.bcHeadline).foregroundStyle(item.isConfirmed ? Theme.accent : .primary)
+                                if item.isBeta { BetaTag().foregroundStyle(.secondary) }
+                            }
                             Text(item.detail).font(.bcSubheadline).foregroundStyle(.secondary)
                         }
                     }
@@ -1960,6 +2049,8 @@ private struct CheckStep: View {
         let title: String
         let detail: String
         var isNow = false
+        var isBeta = false
+        var isConfirmed = false
     }
 
     private var timeline: [Item] {
@@ -1971,10 +2062,25 @@ private struct CheckStep: View {
                 detail: advance > .now ? "Too early to tell yet." : "Your forecast will be ready in a few minutes.",
                 isNow: true)
         ]
-        if advance > .now {
-            items.append(Item(when: advance.approximateDayAndTime(), title: "Advance forecast", detail: "An early look. It can still change."))
+        if let origin, let destination, !Coverage.covers(from: origin, to: destination) {
+            // A global outlook is never fully confirmed: only a part over the US, from its own time.
+            items.append(Item(
+                when: advance > .now ? advance.approximateDayAndTime() : GlobalOutlookCopy.timelineUntilYouFly,
+                title: GlobalOutlookCopy.timelineTitle, detail: GlobalOutlookCopy.timelineDetail, isBeta: true))
+            let flight = Flight(id: UUID(), origin: origin.icao, destination: destination.icao, departureAt: departure)
+            if let part = Forecast.usPart(from: origin, to: destination, airMinutes: flight.estimatedAirMinutes, departure: departure) {
+                items.append(Item(
+                    when: part.confirmsAt.approximateDayAndTime(),
+                    title: part.isLanding ? GlobalOutlookCopy.timelineLanding : GlobalOutlookCopy.timelineFirstPart,
+                    detail: part.isLanding ? GlobalOutlookCopy.timelineLandingDetail : GlobalOutlookCopy.timelineFirstPartDetail,
+                    isConfirmed: true))
+            }
+        } else {
+            if advance > .now {
+                items.append(Item(when: advance.approximateDayAndTime(), title: "Advance forecast", detail: "An early look. It can still change."))
+            }
+            items.append(Item(when: confirmed.approximateDayAndTime(), title: "Confirmed forecast", detail: "Updated every hour until you fly."))
         }
-        items.append(Item(when: confirmed.approximateDayAndTime(), title: "Confirmed forecast", detail: "Updated every hour until you fly."))
         items.append(Item(when: "You fly", title: "Ready for the flight", detail: "Saved on your phone for the flight, even offline."))
         return items
     }

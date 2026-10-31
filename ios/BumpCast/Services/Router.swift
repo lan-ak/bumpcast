@@ -18,6 +18,8 @@ final class Router {
     private(set) var toast: String?
     /// The toast's symbol, so a note ("You're offline…") doesn't show a checkmark.
     private(set) var toastSymbol = "checkmark.circle.fill"
+    /// Undo for what the toast reports (something done by itself, like an email import).
+    private(set) var toastUndo: (@MainActor () -> Void)?
     @ObservationIgnored private var toastTask: Task<Void, Never>?
 
     /// What Add flight wants once it has finished closing: open the forecast and/or show the toast.
@@ -30,14 +32,33 @@ final class Router {
 
     var afterAdd: AfterAdd?
 
-    func showToast(_ text: String, systemImage: String = "checkmark.circle.fill") {
+    /// With `undo`, the toast carries an Undo button and stays long enough to reach it.
+    func showToast(_ text: String, systemImage: String = "checkmark.circle.fill", undo: (@MainActor () -> Void)? = nil) {
         toast = text
         toastSymbol = systemImage
+        toastUndo = undo
         toastTask?.cancel()
         toastTask = Task {
-            try? await Task.sleep(for: .seconds(4))
-            if !Task.isCancelled { toast = nil }
+            try? await Task.sleep(for: .seconds(undo == nil ? 4 : 8))
+            if !Task.isCancelled {
+                toast = nil
+                toastUndo = nil
+            }
         }
+    }
+
+    /// The toast's Undo button, when it has one: runs the undo and clears the toast.
+    var toastUndoAction: (@MainActor () -> Void)? {
+        guard toastUndo != nil else { return nil }
+        return { [weak self] in self?.undoToast() }
+    }
+
+    func undoToast() {
+        let undo = toastUndo
+        toastTask?.cancel()
+        toast = nil
+        toastUndo = nil
+        undo?()
     }
 
     /// Run by the Add flight presenter's sheet onDismiss.

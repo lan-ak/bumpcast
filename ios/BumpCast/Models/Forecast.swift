@@ -22,9 +22,12 @@ struct Forecast: Codable, Hashable, Sendable {
         let peakEdr: Double
         let phase: String
         let altitudeFt: Int
+        /// Why it's bumpy, when the worker knows: "wind_origin" or "wind_destination" for a gusty
+        /// takeoff or landing. Anything else reads as no cause.
+        var cause: String? = nil
 
         enum CodingKeys: String, CodingKey {
-            case severity, phase
+            case severity, phase, cause
             case startMin = "start_min"
             case endMin = "end_min"
             case peakEdr = "peak_edr"
@@ -32,6 +35,17 @@ struct Forecast: Codable, Hashable, Sendable {
         }
 
         var minutes: Int { endMin - startMin + 1 }
+
+        enum GustyEnd { case takeoff, landing }
+
+        /// The end of the flight where gusty wind near the ground explains this stretch.
+        var gustyEnd: GustyEnd? {
+            switch cause {
+            case "wind_origin": .takeoff
+            case "wind_destination": .landing
+            default: nil
+            }
+        }
     }
 
     struct Sample: Codable, Hashable, Sendable {
@@ -134,6 +148,28 @@ struct Forecast: Codable, Hashable, Sendable {
     static let taxiOut: TimeInterval = 15 * 60
 
     var isGlobalOutlook: Bool { noaaPossible == false }
+
+    /// When the detailed forecast first covers this minute of the flight: 18 hours before it's
+    /// flown, an hour after the run.
+    static func confirmsAt(minute: Int, departure: Date) -> Date {
+        departure.addingTimeInterval(taxiOut + Double(minute) * 60 - noaaHorizon + noaaPublishLag)
+    }
+
+    /// The part of a global outlook route over the US, confirmed once the detailed forecast reaches it.
+    struct USPart: Equatable {
+        let isLanding: Bool
+        let confirmsAt: Date
+    }
+
+    /// From the stretch's own time, not takeoff: a landing over the US is confirmed hours later
+    /// than a flight leaving it. Rounded up to the half hour, so it's never promised sooner.
+    static func usPart(from origin: Airport, to destination: Airport, airMinutes: Double, departure: Date) -> USPart? {
+        guard let part = Coverage.usPart(from: origin, to: destination) else { return nil }
+        let minute = Int(part.fractions.lowerBound * airMinutes)
+        let halfHour: TimeInterval = 30 * 60
+        let exact = confirmsAt(minute: minute, departure: departure).timeIntervalSinceReferenceDate
+        return USPart(isLanding: part.isLanding, confirmsAt: Date(timeIntervalSinceReferenceDate: (exact / halfHour).rounded(.up) * halfHour))
+    }
 
     /// Confirmed stretches from the worker's per-stretch sources, merged where they touch.
     var confirmedStretches: [ClosedRange<Int>] {

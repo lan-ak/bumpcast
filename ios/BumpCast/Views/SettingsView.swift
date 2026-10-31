@@ -59,6 +59,7 @@ struct SettingsView: View {
                 } footer: {
                     Text("Forecast ready 48 hours before departure, then updates at 24, 6 and 2 hours. Quiet overnight unless you fly early.")
                 }
+                EmailSettingsSection()
                 Section {
                     Toggle(isOn: Binding(get: { GlobalBeta.shared.isOn }, set: { GlobalBeta.shared.set($0) })) {
                         HStack(spacing: 6) {
@@ -92,7 +93,7 @@ struct SettingsView: View {
                 }
                 Section {
                     LabeledContent("Version", value: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")
-                    // One row covers the fonts' SIL Open Font License notices.
+                    // One row covers the weather data credits and the fonts' SIL Open Font License notices.
                     NavigationLink("Licenses") { LicensesView() }
                 } footer: {
                     Text("Forecasts are guidance, not guarantees. Always follow crew instructions.")
@@ -117,7 +118,9 @@ struct SettingsView: View {
             }
         }
         // Settings is a sheet, so notes from "Get BumpCast Pro" show here, not under it.
-        .overlay(alignment: .top) { ToastView(text: router.toast, systemImage: router.toastSymbol) }
+        .overlay(alignment: .top) {
+            ToastView(text: router.toast, systemImage: router.toastSymbol, undo: router.toastUndoAction)
+        }
     }
 }
 
@@ -135,11 +138,17 @@ struct FontCredit: Identifiable {
     ]
 }
 
-/// Every bundled font's licence on one page.
+/// The weather data credits, then every bundled font's licence, on one page.
 private struct LicensesView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(DataCreditsCopy.title).font(.bcSection)
+                    Text(LocalizedStringKey(DataCreditsCopy.ecmwf)).font(.bcSubheadline).tint(Theme.accent)
+                    Text(DataCreditsCopy.noaa).font(.bcSubheadline)
+                }
+                Text(DataCreditsCopy.fontsTitle).font(.bcSection)
                 ForEach(FontCredit.all) { credit in
                     VStack(alignment: .leading, spacing: 8) {
                         Text("\(credit.name) · \(credit.author)").font(.bcCardTitle)

@@ -31,14 +31,22 @@ struct ForecastView: View {
             .presentationDetents([.medium, .large])
         }
         .sheet(isPresented: $showOutlookSheet) {
-            GlobalOutlookSheet().presentationDetents([.medium, .large])
+            GlobalOutlookSheet(neverConfirmed: usPart == nil).presentationDetents([.medium, .large])
         }
         .sensoryFeedback(.impact(flexibility: .soft, intensity: 0.5), trigger: justConfirmed) { _, new in new && hapticsEnabled }
         .onAppear {
             paywalls.firstGradeViewed(flight)
+            ReviewPrompt.forecastShown(forecast)
             justConfirmed = ConfidenceMemory.didFirmUp(flight: flight.id, now: confidence)
             rowsVisible = true
         }
+    }
+
+    /// On a mixed global outlook route, the part over the US and when it's confirmed.
+    private var usPart: Forecast.USPart? {
+        guard forecast.isGlobalOutlook, let origin = flight.originAirport, let destination = flight.destinationAirport else { return nil }
+        let airMinutes = forecast.durationMin.map(Double.init) ?? flight.estimatedAirMinutes
+        return Forecast.usPart(from: origin, to: destination, airMinutes: airMinutes, departure: flight.departureAt)
     }
 
     @ViewBuilder
@@ -61,16 +69,19 @@ struct ForecastView: View {
                     grade: grade, forecast: forecast, confidence: confidence,
                     departureNote: flight.status?.forecastNote(for: flight, forecast: forecast),
                     inAirLine: underWay ? confidence.savedLine(issuedAt: forecast.issuedAt, inAir: inAir) : nil,
-                    now: now
+                    usPart: usPart, now: now
                 ) { showOutlookSheet = true }
             }
-            // Only full access counts the chop still ahead: a total that falls minute by minute
-            // would tell a free user when they're in a stretch and how long it lasts.
+            // Free users see the grade only: the time in the air and the minutes of chop are Pro
+            // (a subscription or a pass for this flight). Unlocking needs a connection, as the timeline's does.
             StatTiles(
-                forecast: forecast, flight: flight, fromMinute: fullAccess ? minute : nil,
+                forecast: forecast, flight: flight, fromMinute: minute,
                 leftToFly: minute.map { _ in
                     InFlightCopy.minutesLeft(to: inFlight.landing(of: flight, forecast: forecast), now: now)
-                })
+                },
+                unlock: fullAccess
+                    ? nil
+                    : { if !(minute != nil && connection.isConnectionProblem) { paywalls.unlock(.timelineLocked, flight: flight) {} } })
             if fullAccess {
                 TimelineCard(
                     forecast: forecast, flight: flight, confidence: confidence,
@@ -100,7 +111,9 @@ struct ForecastView: View {
                                         showsBetaTag: !forecast.confirmedStretches.isEmpty
                                     ) { openWarning = $0 }
                                 } else {
-                                    SegmentRow(segment: segment, isMain: segment.startMin == mainStretch?.startMin, nowMinute: minute)
+                                    SegmentRow(
+                                        segment: segment, isMain: segment.startMin == mainStretch?.startMin, nowMinute: minute,
+                                        gustyCity: segment.gustyEnd.flatMap(flight.gustyCity))
                                 }
                             }
                                 .opacity(rowsVisible ? 1 : 0)
@@ -156,6 +169,7 @@ private struct GradeCard: View {
     var departureNote: String?
     /// Once the flight is under way: what's saved and how old it is, instead of when it firms up.
     var inAirLine: String?
+    var usPart: Forecast.USPart?
     var now: Date = .now
     let openOutlook: () -> Void
 
@@ -185,7 +199,7 @@ private struct GradeCard: View {
             Text(
                 !forecast.officialWarnings.isEmpty
                     ? GlobalOutlookCopy.statusWarning
-                    : inAirLine ?? confidence.statusLine(now: now, durationMin: forecast.durationMin))
+                    : inAirLine ?? confidence.statusLine(now: now, durationMin: forecast.durationMin, usPart: usPart))
                 .font(.bcSubheadlineStrong)
                 .foregroundStyle(.secondary)
         }
@@ -216,18 +230,37 @@ struct ConfidenceBadge: View {
     }
 }
 
-/// Time in the air, minutes of light chop, minutes of moderate or stronger. In the air, time to
-/// landing; with full access, also only the minutes still ahead.
+/// Minutes of smooth air, light chop, and moderate or stronger, adding up to the whole flight;
+/// in the air, only the minutes still ahead. Outlook routes keep the flight's length and an
+/// approximate total. Without full access the numbers stay hidden.
 private struct StatTiles: View {
     let forecast: Forecast
     let flight: Flight
-    /// Minutes since takeoff while flying, with full access: the chop tiles count only what's ahead.
+    /// Minutes since takeoff while flying: the chop tiles count only what's ahead.
     var fromMinute: Int?
     /// Minutes to landing while flying, the same count as the in-flight card's landing line.
     var leftToFly: Int?
+    /// Set when the numbers are locked: tapping a tile opens the paywall.
+    var unlock: (() -> Void)?
     @Environment(\.dynamicTypeSize) private var typeSize
 
+    private var locked: Bool { unlock != nil }
+
     var body: some View {
+        if let unlock {
+            Button(action: unlock) { tiles }
+                .buttonStyle(.plain)
+                .accessibilityHint(
+                    forecast.isGlobalOutlook
+                        ? "Unlock to see the time in the air and minutes of turbulence"
+                        : "Unlock to see minutes of smooth air and turbulence")
+        } else {
+            tiles
+        }
+    }
+
+    @ViewBuilder
+    private var tiles: some View {
         if forecast.isGlobalOutlook {
             outlookTiles
         } else {
@@ -239,13 +272,14 @@ private struct StatTiles: View {
     /// Counting from the plane's minute rather than over the whole flight.
     private var countsAhead: Bool { fromMinute != nil }
 
-    /// The whole flight on the ground; what's left of it in the air.
+    /// Outlook routes only. The whole flight on the ground; what's left of it in the air.
     @ViewBuilder
     private var timeTile: some View {
         if let leftToFly {
-            tile("Left to fly", leftToFly.durationText)
+            tile("Left to fly", leftToFly.durationText, spoken: leftToFly.spokenDurationText)
         } else {
-            tile("In the air", (forecast.durationMin ?? 0).durationText)
+            let minutes = forecast.durationMin ?? 0
+            tile("In the air", minutes.durationText, spoken: minutes.spokenDurationText)
         }
     }
 
@@ -254,38 +288,72 @@ private struct StatTiles: View {
         let bumpy = forecast.segments.map { max($0.endMin - max($0.startMin, from) + 1, 0) }.reduce(0, +)
         return HStack(alignment: .top, spacing: 10) {
             timeTile
-            tile(countsAhead ? "Bumps possible ahead" : "Bumps possible", bumpy == 0 ? "None major" : "About \(bumpy.roughMinutes.durationText)")
+            tile(
+                countsAhead ? "Bumps possible ahead" : "Bumps possible",
+                bumpy == 0 ? "None major" : "About \(bumpy.roughMinutes.durationText)",
+                spoken: bumpy == 0 ? nil : "About \(bumpy.roughMinutes.spokenDurationText)")
         }
         .fixedSize(horizontal: false, vertical: true)
     }
 
     private var exactTiles: some View {
-        let ahead = forecast.samples.filter { $0.min >= from }
+        // The samples run from takeoff to landing inclusive, one more than the flight's minutes:
+        // the landing minute isn't counted, so the three tiles add up to the flight.
+        let end = forecast.durationMin ?? Int.max
+        let ahead = forecast.samples.filter { $0.min >= from && $0.min < end }
+        let smooth = ahead.filter { $0.severity == .smooth }.count
         let light = ahead.filter { $0.severity == .light }.count
         let moderate = ahead.filter { $0.severity >= .moderate }.count
+        let strong = ahead.filter { $0.severity == .severe }.count
+        // Locked, the title is the same either way, so it doesn't give away whether there's strong air.
+        let strongTitle = locked || strong > 0
+        let third = strongTitle ? "Moderate or strong" : "Moderate"
         // Three across, all the same height; one per row at accessibility sizes.
         let layout = typeSize.isAccessibilitySize
             ? AnyLayout(VStackLayout(spacing: 10))
             : AnyLayout(HStackLayout(alignment: .top, spacing: 10))
         return layout {
-            timeTile
-            tile(countsAhead ? "Light chop ahead" : "Light chop", "\(light) min")
-            tile(countsAhead ? "Moderate ahead" : "Moderate", "\(moderate) min")
+            tile(countsAhead ? "Smooth ahead" : "Smooth", smooth.durationText, spoken: smooth.spokenDurationText)
+            tile(countsAhead ? "Light chop ahead" : "Light chop", "\(light) min", spoken: light.spokenDurationText)
+            // The plum line is the only colour on a tile: it means strong, as everywhere else.
+            tile(
+                countsAhead ? "\(third) ahead" : third, "\(moderate) min", spoken: moderate.spokenDurationText,
+                note: strong > 0 ? "\(strong) min strong" : nil,
+                spokenNote: "\(strong.spokenDurationText) strong")
         }
         .fixedSize(horizontal: false, vertical: true)
     }
 
-    private func tile(_ title: String, _ value: String) -> some View {
+    /// `spoken` and `spokenNote` are what VoiceOver says for the value and the note ("3 hours 32
+    /// minutes" for "3 h 32 min").
+    private func tile(
+        _ title: String, _ value: String, spoken: String? = nil, note: String? = nil, spokenNote: String? = nil
+    ) -> some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(value)
-                .font(.bcFigure)
-                // "4 h 54 min" stays on one line in a third of a small phone.
-                .lineLimit(1)
-                .minimumScaleFactor(0.7)
-                .contentTransition(.numericText())
+            Group {
+                if locked {
+                    // A stand-in, never the real number, so nothing reads through the blur or VoiceOver.
+                    HStack(spacing: 6) {
+                        Image(systemName: "lock.fill").font(.bcSubheadline).foregroundStyle(Theme.accent)
+                        Text("00 min").blur(radius: 6).accessibilityHidden(true)
+                    }
+                    .accessibilityLabel("Locked")
+                } else {
+                    Text(value).contentTransition(.numericText())
+                        .accessibilityLabel(spoken ?? value)
+                }
+            }
+            .font(.bcFigure)
+            // "4 h 54 min" stays on one line in a third of a small phone.
+            .lineLimit(1)
+            .minimumScaleFactor(0.7)
             Text(title).font(.bcCaption).foregroundStyle(.secondary)
+            if let note, !locked {
+                Text(note).font(.bcCaption).foregroundStyle(Theme.color(.severe))
+                    .accessibilityLabel(spokenNote ?? note)
+            }
         }
-        .frame(maxHeight: .infinity, alignment: .topLeading)
+        .frame(maxWidth: locked ? .infinity : nil, maxHeight: .infinity, alignment: .topLeading)
         .skyCard(cornerRadius: 16, padding: 12)
         .accessibilityElement(children: .combine)
     }
@@ -358,7 +426,10 @@ private struct TimelineCard: View {
             .values
             .compactMap { group in
                 guard let first = group.map(\.min).min(), let last = group.map(\.min).max() else { return nil }
-                return OutlookBlock(start: first, end: last + 1, edr: group.map(\.edr).max() ?? 0)
+                // On its own the outlook shows light at most, like its rows; near a warning or pilot report it keeps its level.
+                let peak = group.map(\.edr).max() ?? 0
+                let nearWarning = (forecast.warnings ?? []).contains { $0.startMin <= last && first <= $0.endMin }
+                return OutlookBlock(start: first, end: last + 1, edr: nearWarning ? peak : min(peak, OutlookBlock.lightCap))
             }
             .sorted { $0.start < $1.start }
     }
@@ -382,7 +453,8 @@ private struct TimelineCard: View {
                     yStart: .value("Bumpiness", 0),
                     yEnd: .value("Bumpiness", max(block.edr, 0.02))
                 )
-                .foregroundStyle(Theme.color(Severity(edr: block.edr)))
+                // Never smooth: below light, an outlook block is neutral ink, not the smooth colour.
+                .foregroundStyle(Severity(edr: block.edr) < .light ? Theme.secondaryInk : Theme.color(Severity(edr: block.edr)))
                 .opacity(OutlookBlock.opacity)
             }
             if forecast.isGlobalOutlook {
@@ -547,6 +619,8 @@ private struct TimelineAudioGraph: AXChartDescriptorRepresentable {
 private struct OutlookBlock {
     static let minutes = 30
     static let opacity = 0.42
+    /// The top of light chop on the EDR scale (moderate starts at 0.22).
+    static let lightCap = 0.21
     let start: Int
     let end: Int
     let edr: Double
@@ -648,6 +722,8 @@ private struct SegmentRow: View {
     let isMain: Bool
     /// Minutes since takeoff while flying, to count down to the stretch (only those still ahead are listed).
     var nowMinute: Int?
+    /// Where it's gusty, when gusty wind at takeoff or landing explains the stretch.
+    var gustyCity: String?
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
@@ -657,6 +733,11 @@ private struct SegmentRow: View {
                 Text("\(segment.severity.title) for about \(segment.minutes) min while \(FlightPhase.title(segment.phase))")
                     .font(.bcSubheadline)
                 Text(segment.severity.feelsLike).font(.bcSubheadline).foregroundStyle(.secondary)
+                if let gustyCity, let label = segment.gustyLabel(city: gustyCity),
+                    let sentence = segment.gustySentence(city: gustyCity)
+                {
+                    GustyRowLabel(label: label, sentence: sentence)
+                }
                 if isMain {
                     NavigationLink {
                         ExplainerView(explainer: Explainer.forStretch(segment))

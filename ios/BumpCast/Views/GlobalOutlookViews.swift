@@ -95,6 +95,9 @@ struct PilotReportNoteSheet: View {
 
 /// Tap the Global outlook badge: what the beta is, what it's based on, how to read it.
 struct GlobalOutlookSheet: View {
+    /// No part over the US, so it never becomes a confirmed forecast.
+    var neverConfirmed = false
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
@@ -106,7 +109,7 @@ struct GlobalOutlookSheet: View {
                 .font(.bcCardTitle)
                 .foregroundStyle(Theme.secondaryInk)
                 Text(GlobalOutlookCopy.title).font(.bcTitle)
-                Text(GlobalOutlookCopy.body)
+                Text(neverConfirmed ? GlobalOutlookCopy.body + " " + GlobalOutlookCopy.neverConfirmed : GlobalOutlookCopy.body)
                 section("Based on", GlobalOutlookCopy.basedOn)
                 section("How to read it", GlobalOutlookCopy.howToRead)
                 section("Help us improve it", GlobalOutlookCopy.helpImprove)
@@ -134,7 +137,7 @@ struct OutlookSegmentRow: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
-            WaterGlass(severity: warning == nil ? min(segment.severity, .moderate) : segment.severity, size: 26)
+            WaterGlass(severity: warning == nil ? min(segment.severity, .light) : segment.severity, size: 26)
                 .opacity(0.7)
             VStack(alignment: .leading, spacing: 4) {
                 if showsBetaTag {

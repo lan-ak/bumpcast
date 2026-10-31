@@ -155,6 +155,15 @@ struct ExplainerDiagram: View {
             case .lowLevel:
                 context.fill(Path(CGRect(x: 0, y: h * 0.85, width: w, height: h * 0.15)), with: .color(Theme.secondaryInk.opacity(0.3)))
                 context.stroke(wave(y: h * 0.6, amplitude: h * 0.05, waves: 4), with: .color(line), lineWidth: 2)
+            case .gusty:
+                // Muted ground, a low building, and soft wind lines flowing over them.
+                context.fill(Path(CGRect(x: 0, y: h * 0.85, width: w, height: h * 0.15)), with: .color(Theme.secondaryInk.opacity(0.3)))
+                context.fill(Path(CGRect(x: w * 0.72, y: h * 0.7, width: w * 0.08, height: h * 0.15)), with: .color(Theme.secondaryInk.opacity(0.25)))
+                for (i, y) in [0.62, 0.74].enumerated() {
+                    context.stroke(
+                        wave(y: h * y, amplitude: h * 0.03, waves: 1.5 + Double(i) * 0.5),
+                        with: .color(line.opacity(0.5 + 0.25 * Double(i))), lineWidth: 2)
+                }
             case .calm:
                 context.stroke(wave(y: h * 0.55, amplitude: 0, waves: 1), with: .color(line), lineWidth: 2)
             }
@@ -170,7 +179,7 @@ struct ExplainerDiagram: View {
 
 /// Short, factual explainers. Calm and accurate, no false reassurance, no data-source names.
 struct Explainer: Identifiable, Hashable {
-    enum Diagram: Hashable { case jetStream, mountain, clouds, lowLevel, calm }
+    enum Diagram: Hashable { case jetStream, mountain, clouds, lowLevel, gusty, calm }
 
     let id: String
     let title: String
@@ -187,9 +196,11 @@ struct Explainer: Identifiable, Hashable {
 
     static func byID(_ id: String) -> Explainer? { (causes + basics).first { $0.id == id } }
 
-    /// Generic explainer for a stretch, by phase of flight (the worker doesn't output causes yet).
+    /// The explainer for a stretch: "Gusty at the airport" for a light one gusty wind explains,
+    /// otherwise by phase of flight.
     static func forStretch(_ segment: Forecast.Segment) -> Explainer {
-        segment.phase == "cruise" ? byID("clear-air")! : byID("low-level")!
+        if segment.gustyEnd != nil, segment.severity == .light { return byID("gusty-airport")! }
+        return segment.phase == "cruise" ? byID("clear-air")! : byID("low-level")!
     }
 
     static let causes: [Explainer] = [
@@ -224,7 +235,16 @@ struct Explainer: Identifiable, Hashable {
             crew: "Takeoff and landing are planned with wind in mind. Pilots keep the seatbelt sign on until the air settles.",
             feel: "Small bumps during the climb or the final descent, which ease as you go higher or touch down.",
             goodToKnow: "This is normal on many flights and usually lasts only a few minutes.",
-            relatedIDs: ["clear-air", "clouds"]),
+            relatedIDs: ["gusty-airport", "clear-air", "clouds"]),
+        // No "What will light chop feel like?" here: on a gusty day there's now and then a firmer one.
+        Explainer(
+            id: "gusty-airport", title: "Gusty at the airport", subtitle: "Windy days near the ground",
+            diagram: .gusty,
+            happening: "On a windy day, the wind near the ground speeds up and slows down as it flows over buildings and land, a bit like a river over stones. You feel it for a few minutes as you climb out and on the way down.",
+            crew: "Pilots plan every takeoff and landing around the wind. In gusty air they fly the approach a little faster for extra control, and keep the seatbelt sign on until the air settles.",
+            feel: "Bumps and some side-to-side sway, now and then a firmer one, that ease as you climb or once you touch down.",
+            goodToKnow: "Gusty takeoffs and landings happen every day at busy airports. Some airports don't have a wind forecast, or not until a few hours before. Your forecast still covers the climb and descent either way.",
+            relatedIDs: ["low-level", "clear-air", "built"]),
     ]
 
     static let basics: [Explainer] = [

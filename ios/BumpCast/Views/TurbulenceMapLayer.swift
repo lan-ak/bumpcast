@@ -15,6 +15,8 @@ struct TurbulenceMapLayer: UIViewRepresentable {
     /// Last layer kept on screen, faded, while a new one loads.
     let faded: Bool
     let route: [CLLocationCoordinate2D]
+    /// Per route point: over the US, where the map has data. The rest is drawn faded and dashed.
+    var routeOverUS: [Bool] = []
     let reports: [PilotReport]
     let framing: MapFraming?
     let insets: UIEdgeInsets
@@ -43,7 +45,7 @@ struct TurbulenceMapLayer: UIViewRepresentable {
         let coordinator = context.coordinator
         coordinator.onSelectReport = onSelectReport
         coordinator.show(layer, faded: faded, on: map)
-        coordinator.showRoute(route, on: map)
+        coordinator.showRoute(route, overUS: routeOverUS, on: map)
         coordinator.showReports(reports, on: map)
         if let framing, coordinator.framingID != framing.id {
             coordinator.framingID = framing.id
@@ -107,17 +109,35 @@ struct TurbulenceMapLayer: UIViewRepresentable {
 
         // MARK: Route
 
-        func showRoute(_ points: [CLLocationCoordinate2D], on map: MKMapView) {
+        func showRoute(_ points: [CLLocationCoordinate2D], overUS: [Bool], on map: MKMapView) {
             guard points.count != routeCount || (points.isEmpty && !routeOverlays.isEmpty) else { return }
             map.removeOverlays(routeOverlays)
             routeOverlays = []
             routeCount = points.count
             guard points.count >= 2 else { return }
-            let casing = MKPolyline(coordinates: points, count: points.count)
-            casing.title = "casing"
-            let line = MKPolyline(coordinates: points, count: points.count)
-            line.title = "route"
-            routeOverlays = [casing, line]
+            // Runs on and off the map's data, sharing their end points so the line stays joined.
+            var runs: [(onMap: Bool, points: [CLLocationCoordinate2D])] = []
+            for (i, point) in points.enumerated() {
+                let onMap = overUS.indices.contains(i) ? overUS[i] : true
+                if let last = runs.last, last.onMap == onMap {
+                    runs[runs.count - 1].points.append(point)
+                } else {
+                    runs.append((onMap, (runs.last?.points.last).map { [$0, point] } ?? [point]))
+                }
+            }
+            for run in runs where run.points.count >= 2 {
+                if run.onMap {
+                    let casing = MKPolyline(coordinates: run.points, count: run.points.count)
+                    casing.title = "casing"
+                    let line = MKPolyline(coordinates: run.points, count: run.points.count)
+                    line.title = "route"
+                    routeOverlays += [casing, line]
+                } else {
+                    let line = MKPolyline(coordinates: run.points, count: run.points.count)
+                    line.title = "offMap"
+                    routeOverlays.append(line)
+                }
+            }
             map.addOverlays(routeOverlays, level: .aboveLabels)
         }
 
@@ -146,6 +166,11 @@ struct TurbulenceMapLayer: UIViewRepresentable {
                 if line.title == "casing" {
                     renderer.strokeColor = UIColor(Theme.mapHalo)
                     renderer.lineWidth = 8
+                } else if line.title == "offMap" {
+                    // Past the map's data: faded and dashed, so it doesn't look forecast.
+                    renderer.strokeColor = UIColor(Theme.routeInk).withAlphaComponent(0.45)
+                    renderer.lineWidth = 3
+                    renderer.lineDashPattern = [2, 8]
                 } else {
                     renderer.strokeColor = UIColor(Theme.routeInk)
                     renderer.lineWidth = 4

@@ -7,6 +7,7 @@ struct FlightDetailView: View {
     @Environment(InFlight.self) private var inFlight
     @Environment(PushNotifications.self) private var push
     @Environment(Router.self) private var router
+    @Environment(EmailImport.self) private var emailImport
     @Environment(\.dismiss) private var dismiss
     @State private var isEditing = false
     @State private var isAdding = false
@@ -108,6 +109,7 @@ struct FlightDetailView: View {
         return VStack(alignment: .leading, spacing: 20) {
             FlightRouteHeader(flight: flight)
             ScheduleNote(flight: flight)
+            EmailFlightNotes(flight: flight) { dismiss() }
             if !cardShowsConnection,
                 let text = OfflineCopy.detail(
                     note, checkedAt: OfflineCopy.lastChecked(syncedAt: store.syncedAt, issued: [forecast?.issuedAt]))
@@ -125,17 +127,19 @@ struct FlightDetailView: View {
                 }
             }
             if !landed, flight.departureAt > now, !push.isEnabled, state != .outOfCoverage, state != .betaAvailable {
-                NotificationsCard(flight: flight, forecastReady: { if case .ready = state { true } else { false } }())
+                NotificationsCard(
+                    flight: flight, forecastReady: { if case .ready = state { true } else { false } }(),
+                    globalOutlook: !Coverage.covers(flight))
             }
-            if flight.status?.state == .cancelled {
-                CancelledCard(flight: flight, addFlight: { isAdding = true }) {
+            if flight.isCancelled {
+                CancelledCard(flight: flight, fromEmail: emailImport.isCancelledFromEmail(flight.id), addFlight: { isAdding = true }) {
                     Task { await delete(flight) }
                 }
             } else if flight.status?.state == .diverted {
                 DivertedCard(flight: flight)
             }
             switch state {
-            case _ where flight.status?.state == .cancelled:
+            case _ where flight.isCancelled:
                 EmptyView()  // the forecast describes a flight that isn't happening
             case .ready(let forecast) where flight.status?.state == .diverted:
                 VStack(alignment: .leading, spacing: 8) {
@@ -281,6 +285,8 @@ private struct WaitlistCard: View {
 private struct NotificationsCard: View {
     let flight: Flight
     let forecastReady: Bool
+    /// The worker only pushes a global outlook for a real change, and never "confirmed".
+    var globalOutlook = false
 
     @Environment(PushNotifications.self) private var push
     @Environment(Paywalls.self) private var paywalls
@@ -293,7 +299,9 @@ private struct NotificationsCard: View {
                 Text(forecastReady ? "Get told if your forecast changes" : "Get told when your forecast is ready")
                     .font(.bcCardTitle)
                 Text(forecastReady
-                    ? "We'll notify you at 24, 6 and 2 hours before departure, and when your forecast is confirmed."
+                    ? globalOutlook
+                        ? GlobalOutlookCopy.notifyBody
+                        : "We'll notify you at 24, 6 and 2 hours before departure, and when your forecast is confirmed."
                     : "We'll notify you 48 hours before departure, then when anything changes.")
                     .font(.bcSubheadline)
                     .foregroundStyle(.secondary)

@@ -12,8 +12,9 @@ extension Flight {
     var originTimeZone: TimeZone { originAirport?.timeZone ?? .current }
     var destinationTimeZone: TimeZone { destinationAirport?.timeZone ?? .current }
 
-    /// Cancelled: no countdown, reminders or in-flight progress for it.
-    var isCancelled: Bool { status?.state == .cancelled }
+    /// Cancelled: no countdown, reminders or in-flight progress for it. By its live status, or by
+    /// a booking email (kept on the phone, see EmailCancellations).
+    var isCancelled: Bool { status?.state == .cancelled || EmailCancellations.shared.contains(id) }
 
     /// Cancelled or diverted: the countdown and in-flight progress follow the planned flight, so
     /// the screens never show them.
@@ -22,6 +23,19 @@ extension Flight {
 
 extension FlightStatus {
     var isDelayed: Bool { state == .delayed && (delayMin ?? 0) >= 5 }
+
+    /// Only the published schedule, with no live times behind it: never "On time" then, since
+    /// nothing says so.
+    var isScheduleOnly: Bool { state == .scheduled && !live }
+
+    /// Neither delayed nor moved on: the line says "On time" (or "Scheduled times only") and the gate.
+    var isOnTimeState: Bool {
+        switch state {
+        case .delayed?: !isDelayed
+        case .departed?, .cancelled?, .diverted?: false
+        case .scheduled?, nil: true
+        }
+    }
 
     /// "Delayed 40 min", "On time", "Departed", "Cancelled", "Diverted".
     var headline: String {
@@ -65,6 +79,9 @@ extension FlightStatus {
 struct LiveStatusRow: View {
     let flight: Flight
 
+    @Environment(\.scenePhase) private var scenePhase
+    @State private var seen: GateMemory.Record?
+
     var body: some View {
         if flight.flightNumber == nil || flight.expectedDeparture < .now.addingTimeInterval(-3 * 3600) {
             EmptyView()
@@ -73,11 +90,101 @@ struct LiveStatusRow: View {
                 .font(.bcCaptionStrong)
                 .foregroundStyle(.secondary)
         } else {
-            Label(text, systemImage: symbol)
-                .font(.bcCaptionStrong)
-                .foregroundStyle(flight.status?.isDelayed == true ? Theme.accent : Theme.secondaryInk)
-                .fixedSize(horizontal: false, vertical: true)
+            Label {
+                line
+            } icon: {
+                Image(systemName: symbol)
+            }
+            .font(.bcCaptionStrong)
+            .foregroundStyle(flight.status?.isDelayed == true ? Theme.accent : Theme.secondaryInk)
+            .fixedSize(horizontal: false, vertical: true)
+            .accessibilityLabel(spoken ?? text)
+            .onAppear(perform: noteGate)
+            .onChange(of: gateKey) { noteGate() }
+            .onChange(of: scenePhase) { noteGate() }
         }
+    }
+
+    private var gateKey: String { "\(flight.status?.departureGate ?? "")|\(flight.status?.departureTerminal ?? "")" }
+
+    /// Records the gate on screen (only while the app is in use), then reads back what was shown before.
+    private func noteGate() {
+        if scenePhase == .active { GateMemory.note(flight.status, for: flight.id) }
+        seen = GateMemory.record(for: flight.id)
+    }
+
+    private var onTimeStatus: FlightStatus? {
+        guard let status = flight.status, status.hasStatus, status.isOnTimeState else { return nil }
+        return status
+    }
+
+    /// The row: a changed gate in teal with the old one struck through ("Gate B22, was B18").
+    private var line: Text {
+        guard let status = onTimeStatus else { return Text(text) }
+        let parts = onTimeParts(status)
+        var line = Text(parts.lead)
+        if let gate = parts.gate { line = Text("\(line) · \(Text(gate).foregroundStyle(parts.was == nil ? Theme.secondaryInk : Theme.accent))") }
+        if let rest = parts.rest { line = Text("\(line)\(rest)") }
+        if let was = parts.was { line = Text("\(line), was \(Text(was).strikethrough())") }
+        if let after = parts.after { line = Text("\(line) · \(after)") }
+        return line
+    }
+
+    /// What VoiceOver reads for an on-time row: "On time, gate B22, changed from B18".
+    private var spoken: String? {
+        guard let status = onTimeStatus else { return nil }
+        let parts = onTimeParts(status)
+        let lead = status.isScheduleOnly ? "Scheduled times only, no live updates for this flight so far" : parts.lead
+        // Lowercase the words, never the codes ("gate B22").
+        func words(_ text: String) -> String {
+            text.replacingOccurrences(of: " · ", with: "").replacingOccurrences(of: "Gate ", with: "gate ")
+                .replacingOccurrences(of: "Terminal ", with: "terminal ")
+        }
+        var spoken = ([lead] + [parts.gate, parts.rest].compactMap { $0.map(words) }).joined(separator: ", ")
+        if let was = parts.was { spoken += ", changed from \(words(was))" }
+        if let after = parts.after { spoken += ", \(words(after))" }
+        return spoken
+    }
+
+    /// "On time" · "Gate B22" ", was B18", or "On time" · "Gate B22" " · Terminal 5" ", was Terminal 4".
+    private struct OnTimeParts {
+        var lead: String
+        var gate: String?
+        var rest: String?
+        var was: String?
+        var after: String?
+    }
+
+    private func onTimeParts(_ status: FlightStatus) -> OnTimeParts {
+        var parts = OnTimeParts(lead: status.isScheduleOnly ? "Scheduled times only" : "On time")
+        guard status.showsGate else { return parts }
+        let change = GateMemory.change(status, seen: seen)
+        let soon = flight.expectedDeparture.timeIntervalSinceNow <= FlightStatus.gateScreensWindow
+        if let gate = status.departureGate {
+            parts.gate = "Gate \(gate)"
+            if let was = change.wasTerminal, let terminal = status.departureTerminal {
+                // Always the full form here, never "T4".
+                parts.rest = " · Terminal \(terminal)"
+                parts.was = "Terminal \(was)"
+            } else if let was = change.wasGate {
+                // The unchanged terminal stays in the header, so "was B18" can't read as a pair.
+                parts.was = was
+            } else if let terminal = status.departureTerminal {
+                parts.rest = " · Terminal \(terminal)"
+            }
+            return parts
+        }
+        // No gate now: the terminal if known, and near departure, where to look.
+        if let terminal = status.departureTerminal {
+            parts.gate = "Terminal \(terminal)"
+            parts.was = change.wasTerminal.map { "Terminal \($0)" }
+        }
+        if soon {
+            parts.after = "Gate on airport screens"
+        } else if status.departureTerminal != nil, change.lastShownGate == nil, change.wasTerminal == nil, !status.isScheduleOnly {
+            parts.after = "Gate not announced yet"
+        }
+        return parts
     }
 
     private var text: String {
@@ -124,7 +231,9 @@ struct FlightRouteHeader: View {
     let flight: Flight
 
     @Environment(\.dynamicTypeSize) private var typeSize
+    @Environment(\.scenePhase) private var scenePhase
     @State private var expanded = false
+    @State private var seen: GateMemory.Record?
 
     var body: some View {
         let status = flight.status.flatMap { $0.hasStatus ? $0 : nil }
@@ -141,7 +250,7 @@ struct FlightRouteHeader: View {
             .disabled(!hasDetails)
             .accessibilityHint(hasDetails ? (expanded ? "Hides flight details" : "Shows flight details") : "")
             if expanded, let status, hasDetails {
-                FlightStatusDetails(flight: flight, status: status)
+                FlightStatusDetails(flight: flight, status: status, seen: seen)
                     .transition(.opacity.combined(with: .move(edge: .top)))
             }
             if flight.schedulePending {
@@ -150,7 +259,18 @@ struct FlightRouteHeader: View {
                     .foregroundStyle(.secondary)
             }
         }
-        .onAppear { if opensOnAppear(status) { expanded = true } }
+        .onAppear {
+            noteGate()
+            if opensOnAppear(status) { expanded = true }
+        }
+        .onChange(of: "\(flight.status?.departureGate ?? "")|\(flight.status?.departureTerminal ?? "")") { noteGate() }
+        .onChange(of: scenePhase) { noteGate() }
+    }
+
+    /// Records the gate on screen (only while the app is in use), then reads back what was shown before.
+    private func noteGate() {
+        if scenePhase == .active { GateMemory.note(flight.status, for: flight.id) }
+        seen = GateMemory.record(for: flight.id)
     }
 
     @ViewBuilder private func header(_ status: FlightStatus?, chevron: Bool) -> some View {
@@ -188,6 +308,13 @@ struct FlightRouteHeader: View {
     private func departureSide(_ status: FlightStatus?) -> some View {
         let scheduled = status?.departureScheduled ?? flight.departureAt
         let current = status.flatMap { $0.state == .cancelled ? nil : ($0.departureActual ?? $0.departureExpected) }
+        // A moved time already stacks a struck line here: the old gate then shows in the details only.
+        let timeMoved = current.map { abs($0.timeIntervalSince(scheduled)) >= 60 } ?? false
+        let change = status.map { GateMemory.change($0, seen: seen) } ?? GateMemory.Change()
+        let previous: (gate: String, terminal: String?)? =
+            if let was = change.wasGate { (was, status?.departureTerminal) }
+            else if let was = change.wasTerminal, let gate = change.wasTerminalGate { (gate, was) }
+            else { nil }
         return VStack(alignment: .leading, spacing: 2) {
             Text(flight.originAirport?.iata ?? flight.origin).font(.bcDisplay)
             Text(flight.originAirport?.city ?? "").font(.bcFootnote).foregroundStyle(.secondary)
@@ -198,7 +325,17 @@ struct FlightRouteHeader: View {
                     Text(Self.gateLine(gate, status?.departureTerminal, short: true))
                 }
                 .font(.bcCaption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(previous != nil && !timeMoved ? Theme.accent : Theme.secondaryInk)
+                if let previous, !timeMoved {
+                    ViewThatFits(in: .horizontal) {
+                        Text(Self.gateLine(previous.gate, previous.terminal, short: false))
+                        Text(Self.gateLine(previous.gate, previous.terminal, short: true))
+                    }
+                    .font(.bcCaption2)
+                    .strikethrough()
+                    .foregroundStyle(.secondary)
+                    .accessibilityLabel("was \(Self.gateLine(previous.gate, previous.terminal, short: false))")
+                }
             }
         }
     }
@@ -325,7 +462,7 @@ private struct StatusLabel: View {
             case .diverted?: return "Diverted"
             case .departed?: return "Departed"
             case .delayed? where status.isDelayed: return "\((status.delayMin ?? 0).durationText) late"
-            default: return "On time"
+            default: return status.isScheduleOnly ? "Scheduled times" : "On time"
             }
         }
         if Date.now < flight.liveStatusStartsAt {
@@ -342,10 +479,19 @@ private struct StatusLabel: View {
         return emphasis ? Theme.ink : Theme.secondaryInk
     }
 
-    /// "updated 3 h ago" once the status is more than 2 hours old and still meant to update.
+    /// How old the status is, only when that matters. In the 3 hours before takeoff, where the app
+    /// refreshes it every 5 minutes, "updated 40 min ago" once it's still over 30 minutes old;
+    /// in the air "updated 3 h ago" after 2 hours; never once the flight should have landed.
     private var stale: String? {
-        guard let status, !status.finished, Date.now.timeIntervalSince(status.checkedAt) > 2 * 3600 else { return nil }
-        return "updated \(Int(Date.now.timeIntervalSince(status.checkedAt) / 3600)) h ago"
+        guard let status, !status.finished else { return nil }
+        let age = Date.now.timeIntervalSince(status.checkedAt)
+        let toDeparture = flight.expectedDeparture.timeIntervalSinceNow
+        if !flight.isAirborne, toDeparture <= 3 * 3600, toDeparture > -3600 {
+            return age > 30 * 60 ? "updated \(Int(age / 60).durationText) ago" : nil
+        }
+        let landing = status.arrivalActual ?? status.arrivalExpected ?? status.arrivalScheduled ?? flight.arrivalAt
+        if let landing, Date.now > landing.addingTimeInterval(30 * 60) { return nil }
+        return age > 2 * 3600 ? "updated \(Int(age / 3600)) h ago" : nil
     }
 }
 
@@ -353,6 +499,8 @@ private struct StatusLabel: View {
 private struct FlightStatusDetails: View {
     let flight: Flight
     let status: FlightStatus
+    /// What this phone showed for the gate before, for "Changed from B18."
+    var seen: GateMemory.Record?
 
     @Environment(FlightStore.self) private var store
 
@@ -366,15 +514,26 @@ private struct FlightStatusDetails: View {
                 row("Arrives \(to)", actual: status.arrivalActual, expected: status.arrivalExpected,
                     scheduled: scheduled, tz: flight.destinationTimeZone)
             }
-            if status.showsGate, let gate = gateText {
-                detail("Gate") { Text(gate) }
-                if status.departureGate == nil,
-                    flight.expectedDeparture.timeIntervalSinceNow <= FlightStatus.gateScreensWindow
-                {
-                    Text("Some flights only show their gate on the airport screens.")
-                        .font(.bcFootnote)
-                        .foregroundStyle(.secondary)
+            if status.showsGate {
+                let change = GateMemory.change(status, seen: seen)
+                if let gate = gateText(change) {
+                    detail("Gate") { Text(gate) }
                 }
+                if let was = change.wasGate {
+                    note("Changed from \(was).")
+                } else if let was = change.wasTerminal {
+                    note("Changed from \(change.wasTerminalGate.map { "\($0) · " } ?? "")Terminal \(was).")
+                }
+                let screens = status.departureGate == nil
+                    && flight.expectedDeparture.timeIntervalSinceNow <= FlightStatus.gateScreensWindow
+                let notes = [
+                    change.lastShownGate.map { "Last shown in the app as \($0)." },
+                    screens ? "Some flights only show their gate on the airport screens." : nil,
+                ].compactMap { $0 }
+                if !notes.isEmpty { note(notes.joined(separator: " ")) }
+            }
+            if status.isScheduleOnly {
+                note("We only have the published schedule for this flight so far. Delays and the gate may only show on the airport screens.")
             }
             Text(freshness).font(.bcFootnote).foregroundStyle(.secondary)
         }
@@ -416,12 +575,17 @@ private struct FlightStatusDetails: View {
         .accessibilityElement(children: .combine)
     }
 
-    /// "B22 · Terminal 5", "Not announced yet · Terminal A", or nothing.
-    private var gateText: String? {
+    private func note(_ text: String) -> some View {
+        Text(text).font(.bcFootnote).foregroundStyle(.secondary)
+    }
+
+    /// "B22 · Terminal 5", "Not announced yet · Terminal A", or nothing. A gate this phone showed
+    /// that has since gone is never "not announced": just the terminal, and "Last shown…" below.
+    private func gateText(_ change: GateMemory.Change) -> String? {
         switch (status.departureGate, status.departureTerminal) {
         case let (gate?, terminal?): "\(gate) · Terminal \(terminal)"
         case let (gate?, nil): gate
-        case let (nil, terminal?): "Not announced yet · Terminal \(terminal)"
+        case let (nil, terminal?): change.lastShownGate == nil ? "Not announced yet · Terminal \(terminal)" : "Terminal \(terminal)"
         case (nil, nil): nil
         }
     }
@@ -455,19 +619,25 @@ extension FlightStatus {
 /// A cancelled flight: replaces the forecast.
 struct CancelledCard: View {
     let flight: Flight
+    /// Cancelled by a booking email rather than the airline's live status: says so.
+    var fromEmail = false
     let addFlight: () -> Void
     let remove: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             Image(systemName: "xmark.circle").font(.bcTitle).foregroundStyle(.tint)
-            Text("This flight is cancelled").font(.bcSection)
-            Text("Your airline will be in touch about other options. When you have a new flight, add it and we'll forecast it.")
-                .foregroundStyle(.secondary)
+            Text(fromEmail ? "Your booking email says this flight was cancelled" : "This flight is cancelled").font(.bcSection)
+            Text(
+                fromEmail
+                    ? "Booked on another flight? Add it and we'll forecast that one instead."
+                    : "Your airline will be in touch about other options. When you have a new flight, add it and we'll forecast it."
+            )
+            .foregroundStyle(.secondary)
             HStack {
-                Button("Add a new flight", action: addFlight)
+                Button(fromEmail ? "Add your new flight" : "Add a new flight", action: addFlight)
                     .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent).tint(Theme.accent)
-                Button("Remove this flight", action: remove)
+                Button(fromEmail ? "Remove" : "Remove this flight", action: remove)
                     .buttonStyle(.bordered).tint(Theme.accent)
             }
             .font(.bcSubheadlineStrong)

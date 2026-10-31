@@ -524,6 +524,32 @@ final class FlightStore {
         }
     }
 
+    /// While the app is open, flights from 3 hours before departure until takeoff are read again
+    /// every 5 minutes, so a gate change the server already has reaches the screen. Silent: no
+    /// spinner or banner. Stops when the app goes to the background.
+    func watchDepartures(_ on: Bool) {
+        departureWatch?.cancel()
+        departureWatch = nil
+        guard on else { return }
+        departureWatch = Task { [weak self] in
+            while !Task.isCancelled {
+                try? await Task.sleep(for: .seconds(5 * 60))
+                guard let self, !Task.isCancelled else { return }
+                for flight in flights where Self.watchesDeparture(flight) {
+                    await refreshFlight(flight.id)
+                }
+            }
+        }
+    }
+
+    @ObservationIgnored private var departureWatch: Task<Void, Never>?
+
+    private static func watchesDeparture(_ flight: Flight) -> Bool {
+        let toDeparture = flight.expectedDeparture.timeIntervalSinceNow
+        return flight.flightNumber != nil && !flight.isDisrupted && !flight.isAirborne && flight.status?.finished != true
+            && toDeparture <= 3 * 3600 && toDeparture > -3600
+    }
+
     /// Fetches one flight again for its live status, e.g. right after adding one that's already
     /// left. Runs the after-sync work when the status changed, so an in-air flight can start.
     func refreshFlight(_ id: UUID) async {
@@ -914,13 +940,26 @@ final class FlightStore {
 
     // MARK: Helpers
 
-    func flight(_ id: UUID) -> Flight? { flights.first { $0.id == id } }
+    func flight(_ id: UUID) -> Flight? {
+        _ = localRevision
+        return flights.first { $0.id == id }
+    }
+
+    /// Bumped when something kept only on the phone changes how a flight reads (cancelled from a
+    /// booking email): the lists, the flight screen, reminders and the free limit follow.
+    private(set) var localRevision = 0
+
+    func noteLocalChange() {
+        localRevision += 1
+        onSync?()
+    }
 
     /// What's next, in the one order the Flights screen, Calm, auto-arm (and so the Live Activity)
     /// and the free limit share: a flight in the air first, then by expected departure (the
     /// airline's live time when there is one), so a delay re-sorts it. Cancelled flights are never
     /// next; see `cancelledUpcoming`.
     var upcomingFlights: [Flight] {
+        _ = localRevision
         let now = Date.now
         let inFlight = InFlight.shared
         // Uses the tapped landing time when there is one.
@@ -938,7 +977,8 @@ final class FlightStore {
 
     /// Cancelled flights still before their scheduled departure, soonest first.
     var cancelledUpcoming: [Flight] {
-        flights.filter { $0.isCancelled && $0.departureAt > .now }
+        _ = localRevision
+        return flights.filter { $0.isCancelled && $0.departureAt > .now }
     }
 
     func resetLocalData() async {

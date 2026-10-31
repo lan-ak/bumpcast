@@ -100,6 +100,7 @@ enum OnboardingFlight {
             .environment(Paywalls.shared)
             .environment(PushNotifications.shared)
             .environment(InFlight.shared)
+            .environment(EmailImport.shared)
             .bumpCastTheme()
             .nightAppearanceAfterDark()
             .onDisappear { finish(.cancelled) }
@@ -147,6 +148,11 @@ enum OnboardingFlight {
     private static func forecast(for id: UUID?) async -> CustomCallbackResult {
         let store = FlightStore.shared
         guard let id, let flight = store.flight(id) else { return .failure() }
+        // A first flight outside the US turns the global outlook (beta) on, unless they've
+        // answered already: no extra question in the flow, and Settings shows it on to turn off.
+        if !Coverage.covers(flight) && !GlobalBeta.shared.hasAnswered {
+            GlobalBeta.shared.set(true)
+        }
         // A flight we can't forecast is never sold on the hard paywall, so this is checked first
         // (as the worker will decide), rather than waiting or calling it "too early".
         guard Coverage.covers(flight) || GlobalBeta.shared.isOn else {

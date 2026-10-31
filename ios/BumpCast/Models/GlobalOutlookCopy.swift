@@ -10,7 +10,11 @@ enum GlobalOutlookCopy {
     static let body = "Your route leaves the area we can forecast in full detail, so this is our worldwide outlook. "
         + "It's newer and less detailed than our forecasts for US routes, and it updates every 6 hours until you fly."
     static let basedOn = "Worldwide weather forecasts, checked against official warnings and recent pilot reports."
-    static let howToRead = "Times are approximate and levels are ranges. It can miss bumps, so treat it as a guide and keep your seatbelt fastened."
+    /// Only on routes that are never confirmed (no part over the US).
+    static let neverConfirmed = "It won't become a confirmed forecast, so check back before you fly."
+    static let howToRead = "Times are approximate and levels are ranges. "
+        + "On its own it shows light bumps at most. Moderate or strong only appear near an official warning or a pilot report. "
+        + "It can miss bumps, so treat it as a guide and keep your seatbelt fastened."
     static let helpImprove = "After you land, tell us how it felt. Every rating makes the outlook better."
     static let anyFlight = "Light bumps are possible on any flight."
     static let statusWarning = "Official warning on your route"
@@ -28,10 +32,36 @@ enum GlobalOutlookCopy {
     static let settingsFooter = "Forecasts for flights outside the US. Less detailed than US forecasts, and updated every 6 hours. After each one, we'll ask how it felt."
     static let addQuestion = "Get the global outlook (beta) for this flight?"
     static let addFirstPartConfirmed = "The first part, over the US, is confirmed. "
+    static let addLastPartConfirmed = "The last part, over the US, is confirmed. "
     static let addExplanation = "The rest is our newer worldwide outlook."
     static let addExplanationAll = "It's our newer worldwide outlook: less detailed than US forecasts, with approximate times."
     static let notForecastYet = "Not forecast yet"
     static let notForecastYetBody = "This route can use our global outlook (beta). Turn it on to get a forecast for this flight."
+    /// Flight screen's notifications card once the outlook is ready: the worker pushes outlook
+    /// updates only for a real change (grade two steps, or a new warning or pilot report), and
+    /// never a "confirmed" push.
+    static let notifyBody = "We'll notify you if the outlook changes noticeably before you fly, or if a warning or pilot report appears on your route."
+
+    // Add flight, "What happens next"
+    static let timelineTitle = "Global outlook"
+    static let timelineDetail = "Updated every 6 hours. Times are approximate."
+    static let timelineUntilYouFly = "Until you fly"
+    static let timelineFirstPart = "First part confirmed"
+    static let timelineFirstPartDetail = "The first part, over the US, becomes exact."
+    static let timelineLanding = "Landing confirmed"
+    static let timelineLandingDetail = "The last part, over the US, becomes exact."
+
+    /// Status line on a mixed route before anything is confirmed.
+    static func usPartConfirms(landing: Bool, when: String) -> String {
+        "\(landing ? "The landing over the US" : "The part over the US") is confirmed from \(when). "
+            + "The rest stays a beta outlook, updated every 6 hours."
+    }
+
+    // Map route card: the map only covers the US.
+    static let mapUSPart = "Over the US part of your route:"
+    static let mapCoversUS = "The map covers the US. Your forecast has the outlook for the rest."
+    static let mapOpenForecast = "Open forecast ›"
+
     static let unsupportedTitle = "We can't forecast this route yet"
     static let unsupportedBody = "We're adding more of the world. We'll tell you when we can forecast it."
     static let unsupportedAction = "Notify me when we can"

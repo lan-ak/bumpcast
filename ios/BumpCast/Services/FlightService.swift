@@ -348,6 +348,12 @@ actor DemoFlightService: FlightService {
         if ProcessInfo.processInfo.arguments.contains("-demoGlobal") {
             stored.append(Flight(id: UUID(), origin: "SBGR", destination: "LPPT", departureAt: soon.addingTimeInterval(2 * 3600)))
         }
+        // `-demoEurope`: a flight into the US (its landing confirmed later) and one within Europe
+        // (never confirmed, with a pilot report, leaving first so the map opens on it), for the Europe routes screens.
+        if ProcessInfo.processInfo.arguments.contains("-demoEurope") {
+            stored.append(Flight(id: UUID(), origin: "EGLL", destination: "KJFK", departureAt: soon.addingTimeInterval(20 * 3600)))
+            stored.append(Flight(id: UUID(), origin: "EGLL", destination: "LIRF", departureAt: soon.addingTimeInterval(-3 * 3600)))
+        }
         // `-demoFlown`: flights already flown, for the Flown list: one just landed and one older,
         // both not rated yet, two rated across two months, and one cancelled. Upcoming gets a
         // flight in the air, a cancelled one leaving first, and one that overtakes the delayed B6 23.
@@ -381,9 +387,68 @@ actor DemoFlightService: FlightService {
             let overtakes = numbered("UA 300", "KEWR", "KORD", departing: soon.addingTimeInterval(20 * 60), minutes: 150)
             stored += [justLanded, toRate, rightOn, smoother, inAir, cancelled, wasCancelled, overtakes]
         }
+        // `-demoGateWind`: gate changes and gusty takeoffs and landings (docs/design/gate-changes.html,
+        // airport-wind.html). Each launch, this phone "showed" the old gates; forecasts are gusty
+        // at both ends. B6 23 moved from B18 while delayed, so its old gate shows in the details only.
+        if ProcessInfo.processInfo.arguments.contains("-demoGateWind") {
+            GateMemory.save(.init(gate: "B18", terminal: "5"), for: stored[0].id)
+            func onTime(
+                _ id: String, _ number: String, _ origin: String, _ destination: String, in minutes: Double,
+                gate: String?, terminal: String?, live: Bool = true, checkedAgo: Double = 6
+            ) -> Flight {
+                var flight = Flight(
+                    id: UUID(uuidString: "00000000-0000-4000-8000-0000000000\(id)")!, origin: origin,
+                    destination: destination, departureAt: .now.addingTimeInterval(minutes * 60))
+                flight.flightNumber = number
+                flight.arrivalAt = flight.departureAt.addingTimeInterval(150 * 60)
+                flight.status = FlightStatus(
+                    state: .scheduled, live: live, departureScheduled: flight.departureAt,
+                    arrivalScheduled: flight.arrivalAt, departureGate: gate, departureTerminal: terminal,
+                    checkedAt: .now.addingTimeInterval(-checkedAgo * 60), nextCheckAt: .now.addingTimeInterval(9 * 60))
+                return flight
+            }
+            // Gate changed: "On time · Gate B22, was B18".
+            let gateChanged = onTime("a1", "DL 2210", "KATL", "KBOS", in: 120, gate: "B22", terminal: "S")
+            GateMemory.save(.init(gate: "B18", terminal: "S"), for: gateChanged.id)
+            // Terminal changed, and still 45 min old after the refresh: "updated 45 min ago".
+            let terminalChanged = onTime("a2", "B6 615", "KJFK", "KMCO", in: 150, gate: "B22", terminal: "5", checkedAgo: 45)
+            GateMemory.save(.init(gate: "A3", terminal: "4"), for: terminalChanged.id)
+            // The gate this phone showed has gone, 75 min out: "Gate on airport screens".
+            let gateGone = onTime("a3", "AA 2405", "KORD", "KDFW", in: 75, gate: nil, terminal: "3")
+            GateMemory.save(.init(gate: "H12", terminal: "3"), for: gateGone.id)
+            // Only the published schedule: "Scheduled times only".
+            let scheduleOnly = onTime("a4", "UA 1194", "KSFO", "KEWR", in: 165, gate: nil, terminal: "3", live: false)
+            GateMemory.save(.init(), for: scheduleOnly.id)
+            stored += [gateChanged, terminalChanged, gateGone, scheduleOnly]
+        }
     }
 
     static let sampleForecast: Forecast = load("sample_forecast")
+
+    /// The sample forecast with its takeoff and landing stretches gusty (`-demoGateWind`).
+    static let gustySample: Forecast = {
+        let url = Bundle.main.url(forResource: "sample_forecast", withExtension: "json")!
+        var json = try! JSONSerialization.jsonObject(with: Data(contentsOf: url)) as! [String: Any]
+        var segments = json["segments"] as! [[String: Any]]
+        if let first = segments.firstIndex(where: { $0["phase"] as? String == "climb" }) { segments[first]["cause"] = "wind_origin" }
+        if let last = segments.lastIndex(where: { $0["phase"] as? String == "descent" }) { segments[last]["cause"] = "wind_destination" }
+        json["segments"] = segments
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        var forecast = try! decoder.decode(Forecast.self, from: JSONSerialization.data(withJSONObject: json))
+        forecast.issuedAt = forecast.issuedAt ?? .now
+        return forecast
+    }()
+
+    /// Like the worker, a stretch over the US isn't confirmed until the detailed forecast reaches it.
+    static func notYetConfirmed(_ forecast: Forecast, departure: Date) -> Forecast {
+        var forecast = forecast
+        forecast.sources = forecast.sources?.map { stretch in
+            guard stretch.isConfirmed, Forecast.confirmsAt(minute: stretch.startMin, departure: departure) > .now else { return stretch }
+            return Forecast.SourceStretch(startMin: stretch.startMin, endMin: stretch.endMin, source: "gfs")
+        }
+        return forecast
+    }
 
     static func load(_ name: String) -> Forecast {
         let url = Bundle.main.url(forResource: name, withExtension: "json")!
@@ -453,9 +518,13 @@ actor DemoFlightService: FlightService {
             let startsInUS = flight.originAirport.map {
                 Coverage.latitude.contains($0.lat) && Coverage.longitude.contains($0.lon)
             } ?? false
-            return Self.load(startsInUS ? "sample_partly_outlook" : "sample_global_outlook")
+            switch (flight.origin, flight.destination) {
+            case ("EGLL", "KJFK"): return Self.notYetConfirmed(Self.load("sample_global_lhr_jfk"), departure: flight.departureAt)
+            case ("EGLL", "LIRF"): return Self.load("sample_global_lhr_fco")
+            default: return Self.load(startsInUS ? "sample_partly_outlook" : "sample_global_outlook")
+            }
         }
-        return Self.sampleForecast
+        return ProcessInfo.processInfo.arguments.contains("-demoGateWind") ? Self.gustySample : Self.sampleForecast
     }
 
     func updates(for flightID: UUID) async throws -> [FlightUpdate] { [] }

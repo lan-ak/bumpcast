@@ -24,6 +24,24 @@ enum Coverage {
         return ends.first { !latitude.contains($0.lat) || !longitude.contains($0.lon) } ?? ends.first
     }
 
+    /// The stretch of a route that leaves or lands in the box, as fractions of the way along it:
+    /// the part a global outlook gets confirmed. Nil when the route stays inside, or never starts
+    /// or ends inside.
+    static func usPart(from a: Airport, to b: Airport, samples: Int = 80) -> (fractions: ClosedRange<Double>, isLanding: Bool)? {
+        let inside = (0...samples).map { i in
+            let (lat, lon) = intermediate(a, b, Double(i) / Double(samples))
+            return latitude.contains(lat) && longitude.contains(lon)
+        }
+        if inside.allSatisfy({ $0 }) { return nil }
+        if inside[0], let exit = inside.firstIndex(of: false) {
+            return (0...Double(exit - 1) / Double(samples), false)
+        }
+        if inside[samples], let entry = inside.lastIndex(of: false) {
+            return (Double(entry + 1) / Double(samples)...1, true)
+        }
+        return nil
+    }
+
     static func intermediate(_ a: Airport, _ b: Airport, _ fraction: Double) -> (Double, Double) {
         let rad = Double.pi / 180
         let (lat1, lon1, lat2, lon2) = (a.lat * rad, a.lon * rad, b.lat * rad, b.lon * rad)

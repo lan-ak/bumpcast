@@ -62,9 +62,11 @@ struct BumpCastApp: App {
                 .environment(PushNotifications.shared)
                 .environment(InFlight.shared)
                 .environment(Connectivity.shared)
+                .environment(EmailImport.shared)
                 .task {
                     // First launch: present the onboarding flow while the rest of the app syncs.
                     Onboarding.shared.start()
+                    FlightStore.shared.watchDepartures(true)
                     await AppSync.start()
                 }
                 .onOpenURL { Router.shared.handle(url: $0) }
@@ -76,7 +78,11 @@ struct BumpCastApp: App {
                         Task { await FlightStore.shared.refreshIfStale() }
                         Task { await PushNotifications.shared.refreshStatus() }
                         Task { await Paywalls.shared.verifyEntitlements() }
+                        // New bookings in a connected mailbox, at most every 30 minutes.
+                        Task { await EmailImport.shared.scanIfDue() }
+                        FlightStore.shared.watchDepartures(true)
                     case .background:
+                        FlightStore.shared.watchDepartures(false)
                         AppSync.scheduleBackgroundRefresh()
                     default:
                         break
@@ -110,7 +116,9 @@ struct RootView: View {
                 CalmView()
             }
         }
-        .overlay(alignment: .top) { ToastView(text: router.toast, systemImage: router.toastSymbol) }
+        .overlay(alignment: .top) {
+            ToastView(text: router.toast, systemImage: router.toastSymbol, undo: router.toastUndoAction)
+        }
         .fullScreenCover(isPresented: $router.showBreathing) { BreathingView() }
         .overlay { OnboardingCover() }
         // The one root for type, ink and tint; sheets and covers inherit it.
@@ -145,21 +153,32 @@ private struct OnboardingCover: View {
 struct ToastView: View {
     let text: String?
     var systemImage = "checkmark.circle.fill"
+    /// An Undo button at the end (the toast then takes taps).
+    var undo: (@MainActor () -> Void)? = nil
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         ZStack {
             if let text {
-                Label(text, systemImage: systemImage)
-                    .font(.bcSubheadlineStrong)
-                    .foregroundStyle(Theme.ink)
+                HStack(spacing: 14) {
+                    Label(text, systemImage: systemImage)
+                        .font(.bcSubheadlineStrong)
+                        .foregroundStyle(Theme.ink)
+                    if let undo {
+                        Button("Undo", action: undo)
+                            .font(.bcSubheadlineStrong)
+                            .foregroundStyle(Theme.accent)
+                            .buttonStyle(.borderless)
+                    }
+                }
                     .padding(.horizontal, 16)
                     .padding(.vertical, 12)
                     .background(.regularMaterial, in: .capsule)
                     .padding(.horizontal)
                     .padding(.top, 8)
                     .transition(reduceMotion ? .opacity : .move(edge: .top).combined(with: .opacity))
-                    .allowsHitTesting(false)
+                    .allowsHitTesting(undo != nil)
+                    .accessibilityAction(named: "Undo") { undo?() }
                     .onAppear { AccessibilityNotification.Announcement(text).post() }
             }
         }

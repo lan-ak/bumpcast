@@ -5,6 +5,7 @@ struct FlightsListView: View {
     @Environment(Router.self) private var router
     @Environment(Paywalls.self) private var paywalls
     @Environment(InFlight.self) private var inFlight
+    @Environment(EmailImport.self) private var emailImport
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.scenePhase) private var scenePhase
     @AppStorage("haptics.enabled") private var hapticsEnabled = true
@@ -23,6 +24,7 @@ struct FlightsListView: View {
     @State private var segmentTaps = 0
     /// The flight whose "Rate it" was tapped.
     @State private var rating: Flight?
+    @State private var showingReady = false
 
     enum Segment { case upcoming, flown }
 
@@ -168,13 +170,10 @@ struct FlightsListView: View {
         defer {
             // Asked once the sheet has gone, so nothing fades in over it closing. A new flight is
             // the `flight_added` moment: a Superwall surface if a campaign takes it, otherwise the
-            // notifications they switched on, then a rating. An edit only asks for notifications.
+            // notifications they switched on. An edit only asks for notifications.
             if let saved {
                 if isNew {
-                    paywalls.take(.flightAdded, flight: saved) {
-                        await askForNotifications(saved)
-                        ReviewPrompt.flightAdded(saved)
-                    }
+                    paywalls.take(.flightAdded, flight: saved) { await askForNotifications(saved) }
                 } else {
                     Task { await askForNotifications(saved) }
                 }
@@ -251,6 +250,8 @@ struct FlightsListView: View {
                 if upcoming.count > 1 {
                     section("Coming up", flights: Array(upcoming.dropFirst()))
                 }
+                // Under Coming up, never above the next flight; only once the free limit is reached.
+                if !paywalls.canAddFlight, !emailImport.readyToAdd.isEmpty { readyRow }
                 noticeRows(justLanded)
                 if !paywalls.canAddFlight { limitNote }
             } else if shownIDs.isEmpty {
@@ -360,6 +361,25 @@ struct FlightsListView: View {
                 }
             }
         }
+    }
+
+    /// Flights found in email past the free limit: one row that opens the list.
+    private var readyRow: some View {
+        let count = emailImport.readyToAdd.count
+        return Button { showingReady = true } label: {
+            HStack(spacing: 12) {
+                Image(systemName: "envelope").font(.bcSymbolControl).foregroundStyle(Theme.accent)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(count == 1 ? "1 flight from your email" : "\(count) flights from your email").font(.bcHeadline)
+                    Text("Ready to add · free limit reached ›").font(.bcFootnote).foregroundStyle(Theme.secondaryInk)
+                }
+                Spacer(minLength: 0)
+            }
+            .contentShape(.rect)
+        }
+        .buttonStyle(.plain)
+        .skyCard(cornerRadius: 18, padding: 14)
+        .sheet(isPresented: $showingReady) { ReadyToAddSheet() }
     }
 
     /// At the free limit: said calmly under the flights, so the paywall behind + isn't a surprise.

@@ -102,7 +102,7 @@ extension Forecast.Confidence {
     }
 
     /// One line under the grade, for everyone: when the forecast firms up (the badge says which kind).
-    func statusLine(now: Date = .now, durationMin: Int? = nil) -> String {
+    func statusLine(now: Date = .now, durationMin: Int? = nil, usPart: Forecast.USPart? = nil) -> String {
         switch self {
         case .early(let expected):
             guard expected > now else { return "Being confirmed now" }
@@ -113,6 +113,11 @@ extension Forecast.Confidence {
             return "Updated hourly until you fly"
         case .globalOutlook(let confirmed):
             guard let text = Self.confirmedText(confirmed, durationMin: durationMin) else {
+                // Mixed routes say when the part over the US is confirmed, while that's still ahead.
+                if let usPart, usPart.confirmsAt > now {
+                    return GlobalOutlookCopy.usPartConfirms(
+                        landing: usPart.isLanding, when: usPart.confirmsAt.approximateDayAndTime(now: now))
+                }
                 return "Updated every 6 hours until you fly"
             }
             return "\(text) The rest is a beta outlook, updated every 6 hours."
@@ -467,6 +472,15 @@ extension Int {
         return m == 0 ? "\(h) h" : "\(h) h \(m) min"
     }
 
+    /// `durationText` as VoiceOver should say it: 95 -> "1 hour 35 minutes", 1 -> "1 minute".
+    var spokenDurationText: String {
+        let h = self / 60, m = self % 60
+        let hours = h == 1 ? "1 hour" : "\(h) hours"
+        let minutes = m == 1 ? "1 minute" : "\(m) minutes"
+        if h == 0 { return minutes }
+        return m == 0 ? hours : "\(hours) \(minutes)"
+    }
+
     /// A point in the flight, minutes zero-padded once there are hours: 125 -> "2 h 05 min", 70 -> "1 h 10 min".
     var clockText: String {
         let h = self / 60, m = self % 60
@@ -477,4 +491,13 @@ extension Int {
     var roughMinutes: Int {
         self < 60 ? Swift.max(10, (self + 5) / 10 * 10) : (self + 15) / 30 * 30
     }
+}
+
+/// Settings › Licenses, Weather data: the one place a data source is named (ECMWF's CC BY 4.0
+/// licence asks for visible attribution and a note that the data was changed).
+enum DataCreditsCopy {
+    static let title = "Weather data"
+    static let ecmwf = "Contains modified ECMWF open data, licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)."
+    static let noaa = "Uses forecasts, warnings and pilot reports from the US National Weather Service (NOAA)."
+    static let fontsTitle = "Fonts"
 }

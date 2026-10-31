@@ -10,6 +10,15 @@ struct MapRoute: Equatable {
     let routeText: String
     let points: [CLLocationCoordinate2D]
     let airMinutes: Double
+    /// Which points are over the US, where the map has data. Past it the route is drawn faded and dashed.
+    let overUS: [Bool]
+
+    enum USCoverage { case all, part, none }
+
+    var usCoverage: USCoverage {
+        if !overUS.contains(false) { return .all }
+        return overUS.contains(true) ? .part : .none
+    }
 
     init?(flight: Flight, forecast: Forecast?) {
         guard let a = flight.originAirport, let b = flight.destinationAirport, a != b else { return nil }
@@ -20,6 +29,7 @@ struct MapRoute: Equatable {
             CLLocationCoordinate2D(latitude: b.lat, longitude: b.lon),
             count: Self.sampleCount)
         airMinutes = forecast?.durationMin.map(Double.init) ?? flight.estimatedAirMinutes
+        overUS = points.map { Coverage.latitude.contains($0.latitude) && Coverage.longitude.contains($0.longitude) }
     }
 
     static func == (lhs: MapRoute, rhs: MapRoute) -> Bool {
@@ -166,13 +176,18 @@ struct RouteProfile {
         return best
     }
 
-    /// "Mostly smooth · Light chop near Denver for about 8 min"
+    /// "Mostly smooth · Light chop near Denver for about 8 min". A route that leaves the US only
+    /// speaks for the part over it: "Over the US part of your route: smooth at this height."
     func summary(route: MapRoute) -> String {
         guard let overall else { return "No map data along your route at this height yet." }
-        guard overall > .smooth, let run = longestRun(atLeast: overall) else { return "Smooth along your route at this height." }
+        let partly = route.usCoverage == .part
+        guard overall > .smooth, let run = longestRun(atLeast: overall) else {
+            return partly ? "\(GlobalOutlookCopy.mapUSPart) smooth at this height." : "Smooth along your route at this height."
+        }
         let middle = route.points[(run.lowerBound + run.upperBound) / 2]
         let place = Geo.nearestCity(to: middle).map { " near \($0)" } ?? ""
-        return "\(overall.mapHeadline) · \(overall.phrase.sentenceCased)\(place) for about \(route.minutes(samples: run.count)) min"
+        let line = "\(overall.mapHeadline) · \(overall.phrase.sentenceCased)\(place) for about \(route.minutes(samples: run.count)) min"
+        return partly ? "\(GlobalOutlookCopy.mapUSPart) \(line.prefix(1).lowercased())\(line.dropFirst())" : line
     }
 }
 

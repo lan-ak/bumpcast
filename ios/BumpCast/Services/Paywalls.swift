@@ -23,6 +23,9 @@ enum Placement: String, CaseIterable {
     case liveActivityLocked = "live_activity_locked"
     /// Gated: pilot reports on the map.
     case pilotReportsLocked = "pilot_reports_locked"
+    /// Gated: adding flights from email (connect, keep checking). A subscription feature: a flight
+    /// pass doesn't unlock it.
+    case emailImportLocked = "email_import_locked"
     /// Gated: saving more than the free number of upcoming flights.
     case flightLimitReached = "flight_limit_reached"
     /// "Get BumpCast Pro" in Settings.
@@ -167,6 +170,9 @@ final class Paywalls {
         isPro || FlightStore.shared.passes.contains(flight.id) || unlockedFlights.contains(flight.id)
             || !isConfigured  // demo builds without a Superwall key show everything
     }
+
+    /// Adding flights from email: Pro only, never a flight pass.
+    var hasEmailImport: Bool { isPro || !isConfigured }
 
     var canAddFlight: Bool {
         isPro || !isConfigured || FlightStore.shared.upcomingFlights.count < Self.freeUpcomingFlights
