@@ -16,3 +16,7 @@ xcuserdata/
 ios/.asc/artifacts/
 # App Store Connect CLI's local release checkpoints
 .asc/
+# Meta Marketing API token for scripts/meta_ads.py
+.meta/
+# Google verification demo video (42 MB; the submitted copy is on YouTube)
+docs/release/google-verification/*.mp4

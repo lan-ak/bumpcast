@@ -1,0 +1,502 @@
+{
+  "plan": "https://claude.ai/artifact/JqUXBSzb479APPPp4pkpiQ",
+  "status": "live",
+  "graph_version": "v24.0",
+  "plan_currency": "USD",
+  "account_currency": "CAD",
+  "usd_to_account": 1.4,
+  "ad_account": "act_2805776443152912",
+  "page_id": "1467303836456537",
+  "instagram_user_id": "17841414669511981",
+  "dataset_id": "2299041164252027",
+  "optimization_event": "sw_paywall_open",
+  "superwall_app": 58179,
+  "campaign": {
+    "name": "BumpCast · US",
+    "id": "120250863074000238",
+    "by_goal": {
+      "OFFSITE_CONVERSIONS": "120250863074000238",
+      "LINK_CLICKS": "120250873023760238"
+    },
+    "all": [
+      "120250863074000238",
+      "120250873023760238"
+    ]
+  },
+  "ad_sets": {
+    "turbulence": {
+      "name": "Turbulence page",
+      "id": "120250922013650238",
+      "link": "https://install.link/pk_YaoU5p3VsalDAlF6PmSFx/meta-mvrg5n78?app_store_language=english&placement=%7B%7Bplacement%7D%7D&campaign_name=%7B%7Bcampaign.name%7D%7D&site_source_name=%7B%7Bsite_source_name%7D%7D&campaignid=%7B%7Bcampaign.id%7D%7D&adsetname=%7B%7Badset.name%7D%7D&adsetid=%7B%7Badset.id%7D%7D&adname=%7B%7Bad.name%7D%7D&adid=%7B%7Bad.id%7D%7D",
+      "product_page": "8adbd3bd-c144-4933-9028-1d9a786c2b28",
+      "goal": "OFFSITE_CONVERSIONS"
+    },
+    "tracker": {
+      "name": "Tracker page",
+      "id": "120250922018100238",
+      "link": "https://install.link/pk_YaoU5p3VsalDAlF6PmSFx/meta-mvrg6xu2?app_store_language=english&placement=%7B%7Bplacement%7D%7D&campaign_name=%7B%7Bcampaign.name%7D%7D&site_source_name=%7B%7Bsite_source_name%7D%7D&campaignid=%7B%7Bcampaign.id%7D%7D&adsetname=%7B%7Badset.name%7D%7D&adsetid=%7B%7Badset.id%7D%7D&adname=%7B%7Bad.name%7D%7D&adid=%7B%7Bad.id%7D%7D",
+      "product_page": "b6fd4dd8-ee68-4782-b509-aa8e822fe159",
+      "goal": "OFFSITE_CONVERSIONS"
+    },
+    "standard": {
+      "name": "Standard page",
+      "id": "120250922137360238",
+      "link": "https://install.link/pk_YaoU5p3VsalDAlF6PmSFx/meta-mvrg5k1s?app_store_language=english&placement=%7B%7Bplacement%7D%7D&campaign_name=%7B%7Bcampaign.name%7D%7D&site_source_name=%7B%7Bsite_source_name%7D%7D&campaignid=%7B%7Bcampaign.id%7D%7D&adsetname=%7B%7Badset.name%7D%7D&adsetid=%7B%7Badset.id%7D%7D&adname=%7B%7Bad.name%7D%7D&adid=%7B%7Bad.id%7D%7D",
+      "product_page": null,
+      "goal": "OFFSITE_CONVERSIONS"
+    }
+  },
+  "targeting": {
+    "countries": [
+      "US"
+    ],
+    "exclude_regions": [
+      "Alaska",
+      "Hawaii"
+    ],
+    "age_min": 25,
+    "interests": [
+      "Air travel",
+      "Delta Air Lines",
+      "United Airlines",
+      "American Airlines",
+      "Southwest Airlines"
+    ],
+    "behaviors": [
+      "Frequent travelers"
+    ],
+    "placements": "feeds and Stories only",
+    "placements_note": "Lanre, Oct 31: Reels dropped. Through Oct 30, Instagram Reels took 88% of taps and ~90% of spend, and taps installed at 1.9% overall."
+  },
+  "budget": {
+    "total": 400,
+    "periods": [
+      {
+        "name": "Test",
+        "from": "2026-10-27",
+        "to": "2026-11-18",
+        "daily_per_set": 2.3,
+        "live_per_set": 3,
+        "total": 253,
+        "boost_per_set": 14.0,
+        "min_per_set": 1.0,
+        "boost_note": "Lanre, Oct 30: $7, then $14/day per page until the spend call is made; then the rest of the $253 test budget is spread evenly to Nov 18. Thanksgiving's $132 is unchanged."
+      },
+      {
+        "name": "Thanksgiving",
+        "from": "2026-11-19",
+        "to": "2026-11-29",
+        "daily_total": 12,
+        "live_per_set": 3
+      }
+    ],
+    "news_reserve": {
+      "amount": 15,
+      "daily": 7.5,
+      "page": "turbulence"
+    },
+    "news_reserve_used": [],
+    "note": "Live Oct 27 (Lanre: 'go live tonight'). The approved $153 test budget spread over Oct 27–Nov 18: $2.30/day per page.",
+    "total_note": "Lanre, Oct 30: raised from $300 to $400 for more traffic (CA$560 account limit). Thanksgiving keeps $132, news reserve $15, the test gets the rest ($253)."
+  },
+  "page_rule": {
+    "decide_on": "2026-11-18",
+    "min_installs": 5,
+    "margin": 0.25
+  },
+  "rules": {
+    "no_installs_after": 7,
+    "tap_rate_after": 5,
+    "min_tap_rate": 0.005,
+    "relative_after": 10,
+    "relative_cost_per_install": 1.5,
+    "relative_min_set_installs": 3,
+    "starved_days": 4,
+    "starved_impressions": 250,
+    "max_frequency": 3.5,
+    "keeper_installs": 3,
+    "keeper_cost_per_install": 0.7,
+    "max_pauses_per_set_per_day": 2,
+    "holiday_from": "2026-11-16",
+    "min_daily_impressions": 100
+  },
+  "anchor": "01",
+  "auto_approve_drafts": true,
+  "auto_approve_note": "Lanre, Oct 27: drafted ads are approved automatically and launch without asking; the report says what started and why.",
+  "description": "Continental US flights · Free to try",
+  "call_to_action": "DOWNLOAD",
+  "creatives": {
+    "01": {
+      "slug": "know",
+      "approved": true,
+      "headline": "Know how bumpy before you board",
+      "primary": "Turbulence is weather, and weather can be forecast. BumpCast shows when the bumps will come on your exact flight, how strong they'll be and when they'll end. Built for nervous flyers."
+    },
+    "02": {
+      "slug": "countdown",
+      "approved": true,
+      "headline": "A countdown to every bump",
+      "primary": "BumpCast counts down to each bumpy stretch on your Lock Screen, so nothing takes you by surprise. The forecast is saved before takeoff, so it works in airplane mode."
+    },
+    "03": {
+      "slug": "tg-bumpy",
+      "approved": true,
+      "holiday": true,
+      "headline": "See the bumps before you board",
+      "primary": "Flying for Thanksgiving? Add your flight to BumpCast now. 48 hours before takeoff you'll see when the bumps will come, how strong they'll be and when they'll end, in plain words."
+    },
+    "04": {
+      "slug": "tracking",
+      "approved": true,
+      "headline": "Flight tracking for nervous flyers",
+      "primary": "Live status, gates and delays, plus a minute-by-minute turbulence forecast for your exact flight. Flight tracking, built for nervous flyers."
+    },
+    "05": {
+      "slug": "delayed",
+      "approved": true,
+      "headline": "Delayed? You'll know first",
+      "primary": "If your flight is delayed, BumpCast tells you, and your turbulence forecast moves with the new departure time. One app for the flight and the bumps."
+    },
+    "06": {
+      "slug": "tg-tracking",
+      "approved": true,
+      "holiday": true,
+      "headline": "Add your flight in seconds",
+      "primary": "Thanksgiving travel, minus the guesswork. Type your flight number and BumpCast tracks delays and gates, and forecasts the turbulence on your exact flight."
+    },
+    "07": {
+      "slug": "minute",
+      "approved": true,
+      "headline": "Every bump, minute by minute",
+      "primary": "BumpCast lays out your flight minute by minute: when the bumps start, how strong they'll be and when it's smooth again. For your exact flight, 48 hours out."
+    },
+    "08": {
+      "slug": "bumpy",
+      "approved": true,
+      "headline": "Will my flight be bumpy?",
+      "primary": "Will my flight be bumpy? Type your flight number into BumpCast and it tells you in plain words: when the bumps come, how strong they'll be and how long they last."
+    },
+    "09": {
+      "slug": "weather",
+      "approved": true,
+      "headline": "Turbulence is weather",
+      "primary": "The most common bumps at cruise come from fast winds next to slower air. That's weather, and BumpCast forecasts it for your exact flight, 48 hours before takeoff."
+    },
+    "10": {
+      "slug": "map",
+      "approved": true,
+      "headline": "See where the bumps are",
+      "primary": "See the bumpy patches along your route by altitude, with live reports from pilots in the air. BumpCast shows where the bumps are and when you'll reach them."
+    },
+    "11": {
+      "slug": "breathe",
+      "approved": true,
+      "headline": "Breathe through the bumpy bits",
+      "primary": "When BumpCast says light chop is 12 minutes away, you can breathe through it with a guided exercise timed to the bumpy stretch. Built for nervous flyers."
+    },
+    "12": {
+      "slug": "updates",
+      "approved": true,
+      "headline": "Updates that say what changed",
+      "primary": "Your forecast updates from 48 hours out until it's confirmed on the day, and every update says what changed. Smoother over Colorado? You'll know."
+    },
+    "13": {
+      "slug": "takeoff",
+      "approved": true,
+      "headline": "Tracked from takeoff to landing",
+      "primary": "From the gate to landing, BumpCast tracks your flight and counts down to each bumpy stretch on your Lock Screen, even in airplane mode."
+    },
+    "14": {
+      "slug": "find",
+      "approved": true,
+      "headline": "Find your flight in seconds",
+      "primary": "Type a flight number or pick from the day's nonstops. BumpCast finds it in seconds, then tracks status and gates and forecasts the turbulence."
+    },
+    "15": {
+      "slug": "also",
+      "approved": true,
+      "headline": "The tracker that forecasts the bumps",
+      "primary": "Status, gates and delays, like any flight tracker. Plus a turbulence forecast for your exact flight, in plain words."
+    },
+    "16": {
+      "slug": "nervous",
+      "approved": true,
+      "headline": "Built for nervous flyers",
+      "primary": "BumpCast is built for nervous flyers. It shows where the bumps are on your route, when they'll come and how strong they'll be, with guided breathing for each one."
+    },
+    "17": {
+      "slug": "plain",
+      "approved": true,
+      "headline": "Turbulence, in plain words",
+      "primary": "BumpCast explains each bumpy stretch on your flight in plain words: how strong it is, how long it lasts and why it happens. Built for nervous flyers."
+    },
+    "18": {
+      "slug": "sharper",
+      "approved": true,
+      "headline": "Gets sharper as you get closer",
+      "primary": "Your BumpCast forecast starts 48 hours before takeoff and gets sharper as your flight gets closer, until it's confirmed on the day. Every update says what changed."
+    },
+    "19": {
+      "slug": "right",
+      "approved": true,
+      "headline": "See how right we were",
+      "primary": "After you land, BumpCast shows what it forecast for your flight, and you can say how it felt. Every answer helps make the forecasts more accurate. Built for nervous flyers."
+    },
+    "20": {
+      "slug": "smooth",
+      "approved": true,
+      "headline": "Know when it's smooth again",
+      "primary": "BumpCast counts down to each bumpy stretch on your Lock Screen and tells you how long it lasts, so you know when it's smooth again. Built for nervous flyers."
+    },
+    "21": {
+      "slug": "glance",
+      "approved": true,
+      "headline": "The next bump, at a glance",
+      "primary": "BumpCast keeps a countdown to the next bumpy stretch in the Dynamic Island and on your Lock Screen. The forecast is saved before takeoff, so it keeps counting in airplane mode."
+    },
+    "22": {
+      "slug": "offline",
+      "approved": true,
+      "headline": "Keeps counting in airplane mode",
+      "primary": "Your BumpCast forecast is saved before takeoff, so the countdown to every bumpy stretch keeps going in airplane mode. Minute by minute, from takeoff to landing."
+    }
+  },
+  "queue": {
+    "turbulence": [
+      "01",
+      "02",
+      "07",
+      "10",
+      "09",
+      "20",
+      "21",
+      "22"
+    ],
+    "tracker": [
+      "01",
+      "04",
+      "05",
+      "12",
+      "13",
+      "14",
+      "15"
+    ],
+    "standard": [
+      "01",
+      "16",
+      "08",
+      "11",
+      "17",
+      "18",
+      "19"
+    ]
+  },
+  "holiday": {
+    "turbulence": "03",
+    "tracker": "06",
+    "standard": "03"
+  },
+  "ads": {
+    "01-turbulence": {
+      "id": "120250922014180238",
+      "launched": "2026-10-27",
+      "paused": null
+    },
+    "02-turbulence": {
+      "id": "120250922014520238",
+      "launched": "2026-10-27",
+      "paused": null
+    },
+    "07-turbulence": {
+      "id": "120250922014670238",
+      "launched": "2026-10-27",
+      "paused": "2026-10-31",
+      "reason": "Meta showed it only 15 times in 4 days"
+    },
+    "10-turbulence": {
+      "id": "120250922015280238",
+      "launched": "2026-10-31",
+      "paused": null
+    },
+    "09-turbulence": {
+      "id": "120250922015480238",
+      "launched": null,
+      "paused": null
+    },
+    "03-turbulence": {
+      "id": "120250922015770238",
+      "launched": null,
+      "paused": null
+    },
+    "01-tracker": {
+      "id": "120250922019190238",
+      "launched": "2026-10-27",
+      "paused": "2026-10-31",
+      "reason": "no installs after $14.30"
+    },
+    "04-tracker": {
+      "id": "120250922020030238",
+      "launched": "2026-10-27",
+      "paused": null
+    },
+    "05-tracker": {
+      "id": "120250922020780238",
+      "launched": "2026-10-27",
+      "paused": "2026-10-31",
+      "reason": "Meta showed it only 198 times in 4 days"
+    },
+    "12-tracker": {
+      "id": "120250922021690238",
+      "launched": "2026-10-31",
+      "paused": null
+    },
+    "13-tracker": {
+      "id": "120250922022160238",
+      "launched": "2026-10-31",
+      "paused": null
+    },
+    "14-tracker": {
+      "id": "120250922023050238",
+      "launched": null,
+      "paused": null
+    },
+    "15-tracker": {
+      "id": "120250922024670238",
+      "launched": null,
+      "paused": null
+    },
+    "06-tracker": {
+      "id": "120250922026440238",
+      "launched": null,
+      "paused": null
+    },
+    "01-standard": {
+      "id": "120250922138430238",
+      "launched": "2026-10-27",
+      "paused": null
+    },
+    "16-standard": {
+      "id": "120250922139760238",
+      "launched": "2026-10-27",
+      "paused": "2026-10-31",
+      "reason": "Meta showed it only 75 times in 4 days"
+    },
+    "08-standard": {
+      "id": "120250922141630238",
+      "launched": "2026-10-27",
+      "paused": null
+    },
+    "11-standard": {
+      "id": "120250922142380238",
+      "launched": "2026-10-31",
+      "paused": null
+    },
+    "03-standard": {
+      "id": "120250922143210238",
+      "launched": null,
+      "paused": null
+    },
+    "17-standard": {
+      "id": "120250922143820238",
+      "launched": null,
+      "paused": null
+    },
+    "18-standard": {
+      "id": "120250922144450238",
+      "launched": null,
+      "paused": null
+    },
+    "19-standard": {
+      "id": "120250922145430238",
+      "launched": null,
+      "paused": null
+    },
+    "20-turbulence": {
+      "id": "120250922016260238",
+      "launched": null,
+      "paused": null
+    },
+    "21-turbulence": {
+      "id": "120250922016710238",
+      "launched": null,
+      "paused": null
+    },
+    "22-turbulence": {
+      "id": "120250922017210238",
+      "launched": null,
+      "paused": null
+    }
+  },
+  "approved_on": "2026-10-27",
+  "business_id": "1655980428996697",
+  "optimization": {
+    "current": "OFFSITE_CONVERSIONS",
+    "since": "2026-10-31 14:09:40",
+    "switch_back_at": 50,
+    "note": "Oct 28: moved to link clicks because the dataset had no real sw_paywall_open yet. Oct 31: Lanre asked to switch back early; the dataset had 23 paywall opens (plus 6 purchase starts and 3 trials), so the ad sets are back in the Sales campaign optimising for sw_paywall_open, feeds and Stories only."
+  },
+  "retired_ads": {
+    "120250863093790238": "01-turbulence",
+    "120250863095550238": "02-turbulence",
+    "120250863096230238": "07-turbulence",
+    "120250863097360238": "10-turbulence",
+    "120250863099810238": "09-turbulence",
+    "120250863101750238": "03-turbulence",
+    "120250863102430238": "01-tracker",
+    "120250863103830238": "04-tracker",
+    "120250863104990238": "05-tracker",
+    "120250863106400238": "12-tracker",
+    "120250863107450238": "13-tracker",
+    "120250863108920238": "14-tracker",
+    "120250863109940238": "15-tracker",
+    "120250863110740238": "06-tracker",
+    "120250863112260238": "01-standard",
+    "120250863113490238": "16-standard",
+    "120250863114720238": "08-standard",
+    "120250863116090238": "11-standard",
+    "120250863117510238": "03-standard",
+    "120250871221270238": "17-standard",
+    "120250871223480238": "18-standard",
+    "120250871224970238": "19-standard",
+    "120250873024730238": "01-turbulence",
+    "120250873033510238": "02-turbulence",
+    "120250873034300238": "07-turbulence",
+    "120250873034870238": "10-turbulence",
+    "120250873035730238": "09-turbulence",
+    "120250873036470238": "03-turbulence",
+    "120250921432200238": "20-turbulence",
+    "120250921433900238": "21-turbulence",
+    "120250921435910238": "22-turbulence",
+    "120250873037550238": "01-tracker",
+    "120250873037780238": "04-tracker",
+    "120250873038180238": "05-tracker",
+    "120250873038340238": "12-tracker",
+    "120250873038630238": "13-tracker",
+    "120250873038970238": "14-tracker",
+    "120250873039440238": "15-tracker",
+    "120250873039600238": "06-tracker",
+    "120250873040710238": "01-standard",
+    "120250873041150238": "16-standard",
+    "120250873041810238": "08-standard",
+    "120250873042500238": "11-standard",
+    "120250873043530238": "03-standard",
+    "120250873045070238": "17-standard",
+    "120250873046250238": "18-standard",
+    "120250873047150238": "19-standard"
+  },
+  "retired_ad_sets": [
+    "120250863075280238",
+    "120250863075620238",
+    "120250863075870238",
+    "120250873024200238",
+    "120250873037000238",
+    "120250873040250238"
+  ],
+  "spend_call": {
+    "on": "2026-11-02",
+    "min_taps": 100,
+    "raise_at": 0.1,
+    "fix_below": 0.05,
+    "note": "Lanre, Oct 29: on Nov 2 recommend raise (10%+ of taps install), hold (5-10%) or fix (under 5%). Advice only; budgets don't change on it."
+  }
+}

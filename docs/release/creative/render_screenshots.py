@@ -5,21 +5,24 @@ Serves the repo over localhost so the page can load the fonts and captures, then
 Chrome screenshot each frame. Frames 1 and 2 are the two halves of the opening panorama.
 
     python3 docs/release/creative/render_screenshots.py
+    python3 docs/release/creative/render_screenshots.py cpp-screenshots.html   # custom product pages
 
-Output: docs/release/creative/screenshots/en-US/NN-name.png
+Output: docs/release/creative/screenshots/en-US/NN-name.png (a data-out with a folder, like
+cpp-tracker/01-name, lands in that folder under en-US).
 """
 
 import functools
 import http.server
 import re
 import subprocess
+import sys
 import tempfile
 import threading
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[2]
-HTML = HERE / "screenshots.html"
+HTML = HERE / (sys.argv[1] if len(sys.argv) > 1 else "screenshots.html")
 OUT = HERE / "screenshots" / "en-US"
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 W, H = 1320, 2868
@@ -47,6 +50,7 @@ def main():
     with tempfile.TemporaryDirectory() as profile:
         for section, offset, name in frames():
             path = OUT / f"{name}.png"
+            path.parent.mkdir(parents=True, exist_ok=True)
             subprocess.run([
                 CHROME, "--headless=new", "--disable-gpu", "--hide-scrollbars", "--force-device-scale-factor=1",
                 f"--user-data-dir={profile}", f"--window-size={W},{H}", "--virtual-time-budget=15000",
