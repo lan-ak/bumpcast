@@ -1,20 +1,159 @@
 <!doctype html>
 <html lang="en">
 <head>
+<link rel="canonical" href="https://bumpcast.app/">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>BumpCast Flight: Turbulence</title>
-<meta name="description" content="Know what your flight will feel like. Turbulence forecasts in plain words, before you board and while you fly.">
+<title>BumpCast: Flight Tracker for Nervous Flyers</title>
+<meta name="description" content="BumpCast is a flight tracker for nervous flyers: live status and delay alerts, plus a calm turbulence forecast for your exact route.">
 <meta name="apple-itunes-app" content="app-id=6824269447">
+<meta property="og:title" content="BumpCast">
+<meta property="og:description" content="Flight tracking for nervous flyers. Track your flight. Know how it'll feel.">
+<meta property="og:image" content="icon.png">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="stylesheet" href="style.css">
+<script src="sky.js"></script>
 </head>
 <body>
+<header class="nav"><div class="nav-inner">
+  <a class="brand" href="./"><img src="icon.png" alt="" width="30" height="30">BumpCast</a>
+  <nav aria-label="Site"><a class="hide-sm" href="support.html">Support</a><a href="privacy.html">Privacy</a><a class="pill" href="https://apps.apple.com/app/id6824269447">Get the app</a></nav>
+</div></header>
+
 <main>
-<p class="eyebrow">BumpCast</p>
-<h1>Know what your flight will feel like.</h1>
-<p>Turbulence forecasts in plain words, before you board and while you fly. See when the bumps will come, how strong they'll be, and when they'll end.</p>
-<p><a href="https://apps.apple.com/app/id6824269447">Download on the App Store</a></p>
-<p class="muted"><a href="support.html">Support</a> · <a href="privacy.html">Privacy</a> · <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/">Terms</a></p>
+<div class="wrap hero">
+  <div class="hero-copy">
+    <p class="eyebrow">Flight tracking for nervous flyers</p>
+    <h1>Track your flight. Know how it'll feel.</h1>
+    <p class="lede">Live status and delay alerts, plus a calm turbulence forecast for your exact route. When the bumps will come, how strong they'll be, and when they'll end.</p>
+    <div class="actions">
+      <a class="button" href="https://apps.apple.com/app/id6824269447">Download on the App Store</a>
+      <span class="muted small">Free · No ads · No account</span>
+    </div>
+  </div>
+  <div class="hero-shots">
+    <figure class="device back"><img src="shots/03-lockscreen.webp" width="660" height="1434" alt="" aria-hidden="true" fetchpriority="high"></figure>
+    <figure class="device front"><img src="shots/01-forecast.webp" width="660" height="1434" alt="Forecast for B6 23, JFK to LAX: flight status on time from gate B12, and a confirmed forecast: A few bumps, mostly calm." fetchpriority="high"></figure>
+  </div>
+</div>
+
+<div class="wrap">
+<section class="row" id="tracking">
+  <div class="copy">
+    <p class="eyebrow">Find your flight</p>
+    <h2>Type the flight number. That's it.</h2>
+    <p>Enter <span class="mono">B6 23</span> and the day you fly, and BumpCast fills in the airports and times. Or pick your airports and choose from that day's nonstops. Add connecting flights in a row.</p>
+    <ul class="ticks"><li>Live status: delays, gates, terminals, cancellations and diversions</li><li>One gentle alert when your flight is delayed</li><li>Free for every flight you add</li></ul>
+  </div>
+  <figure class="device "><img src="shots/09-search.webp" width="660" height="1434" alt="The Find your flight screen with flight number B6 23 and Monday selected, showing the match: JFK to LAX, departs 7:15 AM EDT." loading="lazy" decoding="async"></figure>
+</section>
+
+<section class="row flip">
+  <div class="copy">
+    <p class="eyebrow">Bumps along the way</p>
+    <h2>What other trackers don't tell you.</h2>
+    <p>Turbulence is weather, and weather can be forecast. BumpCast maps your route from climb to cruise to descent and shows when each bumpy stretch starts, how long it lasts, and what it will feel like.</p>
+    <ul class="levels" aria-label="The four levels">
+      <li style="--c:var(--smooth)"><svg class="glass-glyph" viewBox="0 0 20 24" aria-hidden="true"><path class="w" d="M3.82 11 L16.18 11 L15.68 22 L4.32 22 Z"/><path class="s" d="M3.82 11 L16.18 11"/><path class="g" d="M2 2 L3.92 22 L16.08 22 L18 2"/></svg><span><b>Smooth</b> Your drink stays still.</span></li>
+      <li style="--c:var(--light)"><svg class="glass-glyph" viewBox="0 0 20 24" aria-hidden="true"><path class="w" d="M3.82 11 C6.54 11 7.65 9.6 10 9.6 C12.35 9.6 13.46 11 16.18 11 L15.68 22 L4.32 22 Z"/><path class="s" d="M3.82 11 C6.54 11 7.65 9.6 10 9.6 C12.35 9.6 13.46 11 16.18 11"/><path class="g" d="M2 2 L3.92 22 L16.08 22 L18 2"/></svg><span><b>Light chop</b> Your drink ripples.</span></li>
+      <li style="--c:var(--moderate)"><svg class="glass-glyph" viewBox="0 0 20 24" aria-hidden="true"><path class="w" d="M3.82 11 C5.18 11 5.74 9.3 6.91 9.3 C8.09 9.3 8.64 11 10 11 C11.36 11 11.91 9.3 13.09 9.3 C14.26 9.3 14.82 11 16.18 11 L15.68 22 L4.32 22 Z"/><path class="s" d="M3.82 11 C5.18 11 5.74 9.3 6.91 9.3 C8.09 9.3 8.64 11 10 11 C11.36 11 11.91 9.3 13.09 9.3 C14.26 9.3 14.82 11 16.18 11"/><path class="g" d="M2 2 L3.92 22 L16.08 22 L18 2"/></svg><span><b>Moderate</b> Drinks can spill. Stay seated.</span></li>
+      <li style="--c:var(--severe)"><svg class="glass-glyph" viewBox="0 0 20 24" aria-hidden="true"><path class="w" d="M3.82 11 C4.73 11 5.1 9 5.88 9 C6.66 9 7.04 11 7.94 11 C8.85 11 9.22 9 10 9 C10.78 9 11.15 11 12.06 11 C12.96 11 13.34 9 14.12 9 C14.9 9 15.27 11 16.18 11 L15.68 22 L4.32 22 Z"/><path class="s" d="M3.82 11 C4.73 11 5.1 9 5.88 9 C6.66 9 7.04 11 7.94 11 C8.85 11 9.22 9 10 9 C10.78 9 11.15 11 12.06 11 C12.96 11 13.34 9 14.12 9 C14.9 9 15.27 11 16.18 11"/><path class="g" d="M2 2 L3.92 22 L16.08 22 L18 2"/></svg><span><b>Strong</b> Rare. Your belt keeps you safe.</span></li>
+    </ul>
+  </div>
+  <figure class="device "><img src="shots/02-timeline.webp" width="660" height="1434" alt="Bumps along the way: a chart of the whole flight with light chop 41 minutes in and again 3 hours 48 minutes in, each explained under What to expect." loading="lazy" decoding="async"></figure>
+</section>
+
+<section class="row">
+  <div class="copy">
+    <p class="eyebrow">In the air</p>
+    <h2>A countdown to every bump, on your Lock Screen.</h2>
+    <p>Once you've taken off, the Live Activity and Dynamic Island count down to the next bumpy stretch, with a heads-up two minutes before it starts. Your forecast is saved before you board, so it all works in airplane mode.</p>
+  </div>
+  <figure class="device "><img src="shots/03-lockscreen.webp" width="660" height="1434" alt="Lock Screen Live Activity: JFK to LAX, smooth for 12:11, then light chop for about 18 minutes." loading="lazy" decoding="async"></figure>
+</section>
+
+<section class="row flip">
+  <div class="copy">
+    <p class="eyebrow">Honest about certainty</p>
+    <h2>Sharper as you get closer.</h2>
+    <p>An advance forecast 48 hours before departure, updates at 24, 6 and 2 hours out, and a confirmed forecast on the day you fly. Each update says what changed and why. Delayed? Your forecast follows the new departure time, with one alert for both.</p>
+  </div>
+  <figure class="device "><img src="shots/04-updates.webp" width="660" height="1434" alt="Forecast updates: smoother over Colorado, forecast confirmed, and the earlier 24-hour and advance forecasts, each with what changed." loading="lazy" decoding="async"></figure>
+</section>
+
+<section class="row pair-row">
+  <div class="copy">
+    <p class="eyebrow">Calm, on cue</p>
+    <h2>Built for when the seatbelt sign comes on.</h2>
+    <p>Guided breathing paced to your next bumpy stretch. Short, factual explainers on what causes bumps at cruise, over mountains and near clouds, and why planes are built for it. No red alerts, no scare graphics.</p>
+  </div>
+  <div class="pair">
+    <figure class="device "><img src="shots/06-breathe.webp" width="660" height="1434" alt="Guided breathing: Breathe in, 2. Light chop in about 12 minutes." loading="lazy" decoding="async"></figure>
+    <figure class="device "><img src="shots/05-explainer.webp" width="660" height="1434" alt="Explainer: Mountain waves. What is happening, what the crew is doing, and what you will feel." loading="lazy" decoding="async"></figure>
+  </div>
+</section>
+
+<section class="row flip">
+  <div class="copy">
+    <p class="eyebrow">Turbulence map</p>
+    <h2>See the whole sky, at every height.</h2>
+    <p>Turbulence across the country by altitude, now and up to six hours ahead, with your route drawn on top. Pro adds live pilot reports of what planes are actually feeling.</p>
+  </div>
+  <figure class="device "><img src="shots/07-map.webp" width="660" height="1434" alt="Turbulence map with light chop near Colorado Springs on the JFK to LAX route at flight level 380, and pilot reports." loading="lazy" decoding="async"></figure>
+</section>
+
+<section class="row">
+  <div class="copy">
+    <p class="eyebrow">After you land</p>
+    <h2>We check our work.</h2>
+    <p>Tell us how bumpy it really felt. Every rating is checked against the forecast, and we publish our accuracy in the app.</p>
+  </div>
+  <figure class="device "><img src="shots/08-landed.webp" width="660" height="1434" alt="After landing, DEN to SFO: How did it feel? Smoother, About right, or Bumpier. Forecast: Mostly smooth." loading="lazy" decoding="async"></figure>
+</section>
+</div>
+
+<div class="wrap">
+<section class="split" aria-labelledby="plans-h">
+  <div>
+    <p class="eyebrow">Free and Pro</p>
+    <h2 id="plans-h">Start free. Go Pro for the full ride.</h2>
+    <p class="muted">Pro is monthly or annual (with a 7-day free trial), or a one-time Flight Pass for a single trip.</p>
+  </div>
+  <div class="plan-list">
+    <div><h3>Free</h3><ul class="ticks"><li>Flight search by number or route</li><li>Live status and delay alerts</li><li>Forecast grade for up to 2 upcoming flights</li><li>A heads-up when your forecast is ready</li></ul></div>
+    <div><h3>Pro</h3><ul class="ticks"><li>Every forecast update, including after delays</li><li>The minute-by-minute timeline</li><li>Live Activity and in-flight reminders</li><li>Pilot reports on the map</li><li>Flights added from your booking emails (coming soon)</li><li>Unlimited flights</li></ul></div>
+  </div>
+</section>
+
+<section class="split" id="email" aria-labelledby="email-h">
+  <div>
+    <p class="eyebrow">Coming soon to BumpCast Pro</p>
+    <h2 id="email-h">Your trips, found for you.</h2>
+    <p class="muted">Optionally connect Gmail and BumpCast adds your upcoming flights automatically.</p>
+  </div>
+  <div>
+    <ul class="ticks">
+      <li><b>Read on your iPhone.</b> Booking emails never reach our servers and are never stored.</li>
+      <li><b>Only the flight.</b> Flight number, date and airports. Names, booking references and payment details are ignored.</li>
+      <li><b>Read-only,</b> and you can disconnect any time.</li>
+    </ul>
+    <p><a href="email.html">How email access works</a></p>
+  </div>
+</section>
+
+<section class="cta" aria-labelledby="cta">
+  <span class="orb" aria-hidden="true"></span>
+  <h2 id="cta">Breathe easier on your next flight.</h2>
+  <p>Covers the continental United States and southern Canada.</p>
+  <a class="button" href="https://apps.apple.com/app/id6824269447">Download on the App Store</a>
+</section>
+</div>
 </main>
+
+<footer>
+  <nav aria-label="Footer"><a href="./">Home</a><a href="support.html">Support</a><a href="privacy.html">Privacy Policy</a><a href="email.html">Email access</a><a href="terms.html">Terms of Use</a></nav>
+  <p>© 2026 Akinyemi &amp; Co Ltd · <a href="mailto:support@akinyemi.ca">support@akinyemi.ca</a></p>
+</footer>
 </body>
 </html>

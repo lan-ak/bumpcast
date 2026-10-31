@@ -4,8 +4,25 @@
     {
       "name": "superwall-studio",
       "runtimeExecutable": "/bin/sh",
-      "runtimeArgs": ["-c", "cd superwall && SUPERWALL_CHANNEL=next npx superwall dev --port 6100"],
+      "runtimeArgs": [
+        "-c",
+        "cd superwall && SUPERWALL_CHANNEL=next npx superwall dev --port 6100"
+      ],
       "port": 6100
+    },
+    {
+      "name": "site",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "4173",
+        "--directory",
+        "site",
+        "--bind",
+        "127.0.0.1"
+      ],
+      "port": 4173
     }
   ]
 }
