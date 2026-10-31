@@ -13,12 +13,26 @@ GRADE_TITLES = {
     "rough": "Some rough patches",
 }
 GRADE_ORDER = list(GRADE_TITLES)
+# A global outlook never says smooth and only says bumps are possible, as in the app
+# (Grade.outlookTitle in GlobalOutlookCopy.swift).
+OUTLOOK_TITLES = {
+    "smooth": "No major bumps",
+    "mostly_smooth": "No major bumps",
+    "some_bumps": "A few bumps possible",
+    "bumpy": "Bumpy in places",
+    "rough": "Bumpy in places",
+}
 SEVERITY_TITLES = {"light": "light chop", "moderate": "moderate bumps", "severe": "strong bumps"}
 PHASES = {"climb": "climbing", "cruise": "cruising", "descent": "descending"}
 
 
-def grade_title(grade: str | None) -> str:
-    return GRADE_TITLES.get(grade or "", "Forecast ready")
+def grade_title(grade: str | None, outlook: bool = False) -> str:
+    return (OUTLOOK_TITLES if outlook else GRADE_TITLES).get(grade or "", "Forecast ready")
+
+
+def is_outlook(forecast: dict | None) -> bool:
+    """A route NOAA's detailed forecast never fully covers: it stays a global outlook."""
+    return bool(forecast) and forecast.get("noaa_possible") is False
 
 
 def minutes_text(minutes: int) -> str:
@@ -77,11 +91,12 @@ def describe(old: dict | None, new: dict, tz: str | None = None) -> list[str]:
 
     points: list[str] = []
     old_grade, new_grade = old.get("grade"), new.get("grade")
+    outlook = is_outlook(new)
     if old_grade != new_grade:
         direction = "better" if GRADE_ORDER.index(new_grade) < GRADE_ORDER.index(old_grade) else "bumpier"
-        points.append(f"Looking {direction}: {grade_title(old_grade)} → {grade_title(new_grade)}.")
+        points.append(f"Looking {direction}: {grade_title(old_grade, outlook)} → {grade_title(new_grade, outlook)}.")
     else:
-        points.append(f"Still {grade_title(new_grade).lower()}.")
+        points.append(f"Still {grade_title(new_grade, outlook).lower()}.")
 
     if old.get("profile") != new.get("profile"):
         # Built with an older flight profile: stretches moved because we now model the climb,

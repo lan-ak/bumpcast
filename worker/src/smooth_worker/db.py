@@ -2,7 +2,7 @@
 
 import os
 from collections import defaultdict
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 
 import httpx
 
@@ -15,7 +15,7 @@ STATUS_EMBED = "status:flight_status(*)"
 # What the poll needs of a flight's latest forecast: when it's due, whether a new result would
 # have less of NOAA's detailed forecast than it (id and model_run, see smooth_worker.loses_gtg),
 # and when it lands, for a flight the airline didn't have (status.ends).
-LATEST_FORECAST_FIELDS = "id,issued_at,status,source,model_run,departure_at,retimed,duration_min"
+LATEST_FORECAST_FIELDS = "id,issued_at,status,source,model_run,departure_at,retimed,duration_min,airport_wind"
 if os.environ.get("SMOOTH_GLOBAL") == "1":
     LATEST_FORECAST_FIELDS += ",noaa_possible"
 # What a Live Activity push needs of the latest forecast: its plan and how confirmed it is.
@@ -265,6 +265,16 @@ class Database:
 
     def delete_flight_status(self, flight_id: str) -> None:
         self.http.delete("/flight_status", params={"flight_id": f"eq.{flight_id}"}).raise_for_status()
+
+    def note_aircraft(self, row: dict) -> None:
+        """Merges what a status check learned about the plane into flight_aircraft (aircraft.py)."""
+        r = self.http.post(
+            "/flight_aircraft",
+            params={"on_conflict": "flight_id"},
+            json={**row, "updated_at": datetime.now(UTC).isoformat()},
+            headers={"Prefer": "return=minimal,resolution=merge-duplicates"},
+        )
+        r.raise_for_status()
 
     def prune_flight_status(self, before: datetime) -> int:
         """Delete status last checked before `before`, finished or not. Returns rows deleted."""

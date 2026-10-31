@@ -298,6 +298,15 @@ def test_compose_delay_messages():
     assert status.compose(earlier, FLIGHT, row(), SMOOTH, SMOOTH)[0] == "Leaving earlier than expected"
 
 
+def test_delay_message_on_a_global_outlook_never_promises_calm_air():
+    event = status.plan(row())
+    outlook = {**SMOOTH, "noaa_possible": False}
+    bumpier = {**outlook, "grade": "some_bumps", "segments": [{"severity": "moderate", "start_min": 70, "end_min": 85}]}
+    assert status.compose(event, FLIGHT, row(), outlook, bumpier)[1] == "B6 23 now leaves at 7:55 AM. Now a few bumps possible."
+    calm = {**outlook, "grade": "mostly_smooth"}
+    assert status.compose(event, FLIGHT, row(), bumpier, calm)[1] == "B6 23 now leaves at 7:55 AM. Now no major bumps."
+
+
 def test_compose_cancelled_and_diverted_never_name_a_source():
     title, body = status.compose(status.Event("cancelled", "cancelled"), FLIGHT, row(status="cancelled"), None, None)
     assert title == "B6 23 is cancelled"

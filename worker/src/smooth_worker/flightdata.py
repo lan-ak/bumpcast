@@ -54,6 +54,11 @@ class Leg:
     departure: Movement
     arrival: Movement
     codeshare: bool
+    # The planned or assigned plane, e.g. "Airbus A320". Often empty days ahead.
+    aircraft_model: str | None = None
+    # Whether the provider named the actual airframe (it does so near the day); the
+    # registration itself is never kept.
+    aircraft_reg_present: bool = False
 
     @property
     def cancelled(self) -> bool:
@@ -92,6 +97,7 @@ def _movement(m: dict | None) -> Movement:
 
 
 def parse_leg(f: dict) -> Leg:
+    aircraft = f.get("aircraft") or {}
     return Leg(
         number=normalize_number(f.get("number") or "") or (f.get("number") or ""),
         airline=(f.get("airline") or {}).get("name"),
@@ -99,6 +105,8 @@ def parse_leg(f: dict) -> Leg:
         departure=_movement(f.get("departure")),
         arrival=_movement(f.get("arrival")),
         codeshare=f.get("codeshareStatus") == "IsCodeshared",
+        aircraft_model=(aircraft.get("model") or "").strip() or None,
+        aircraft_reg_present=bool(aircraft.get("reg")),
     )
 
 

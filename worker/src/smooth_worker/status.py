@@ -16,7 +16,7 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
-from . import airports, changes
+from . import aircraft, airports, changes
 from .flightdata import Leg
 from .route import TAXI_OUT_MIN
 
@@ -185,6 +185,10 @@ def build(leg: Leg, flight: dict, previous: dict | None, now: datetime) -> dict:
         "arrival_terminal": arr.terminal,
         "diverted_to": diverted_to,
         "takeoff_at": _iso(takeoff),
+        # Measured only, never shown or pushed (aircraft.py).
+        "aircraft_model": leg.aircraft_model,
+        "aircraft_reg_present": leg.aircraft_reg_present,
+        "aircraft_first_seen_at": aircraft.first_seen_at(leg, previous, now),
         "checked_at": now.isoformat(),
         "next_check_at": None,
         "finished": False,
@@ -285,9 +289,13 @@ def compose(event: Event, flight: dict, status: dict, old: dict | None, new: dic
 
 
 def _forecast_line(old: dict, new: dict) -> str:
-    title = changes.grade_title(new.get("grade")).lower()
+    outlook = changes.is_outlook(new)
+    title = changes.grade_title(new.get("grade"), outlook).lower()
     lead = "Still" if old.get("grade") == new.get("grade") else "Now"
     segs = new.get("segments") or []
+    if outlook:
+        # An outlook's times are approximate and it can't promise calm air: the grade alone.
+        return f"{lead} {title}."
     if not segs:
         return f"{lead} {title}, with calm air the whole way."
     worst = max(segs, key=lambda s: changes.severity.ORDER.index(s["severity"]))

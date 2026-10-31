@@ -154,6 +154,23 @@ def test_folds_only_for_short_layovers():
     assert not notify.folds("2h", a, leg("b", "KDEN", "KSFO", T0 + timedelta(hours=1)))
 
 
+def test_global_outlook_pushes_say_outlook_not_advance():
+    flight = leg("g", "CYYZ", "RJTT", T0)
+    ready = notify.Plan("48h", "ready", pro_only=False)
+    outlook = {**READY, "source": "mixed", "noaa_possible": False, "grade": "some_bumps", "segments": [seg(60, 90, "light")]}
+    title, body, _ = notify.compose(ready, flight, outlook, None, "America/Toronto")
+    assert title == "Your YYZ→HND forecast is ready"
+    assert body == "A few bumps possible (beta outlook). Tap to see when the bumps are."
+    # Never "smooth" on an outlook, in the body or a later update's title.
+    calm = {**outlook, "grade": "smooth", "segments": []}
+    assert notify.compose(ready, flight, calm, None, None)[1] == "No major bumps (beta outlook). Tap for the details."
+    update = notify.Plan("24h", "update", pro_only=True)
+    assert notify.compose(update, flight, calm, outlook, None)[0] == "YYZ→HND in 24 hours: no major bumps"
+    # A US advance forecast keeps its label.
+    us = {**READY, "grade": "some_bumps"}
+    assert notify.compose(ready, leg("u", "KEWR", "KDEN", T0), us, None, None)[1] == "A few bumps (advance forecast). Tap for the details."
+
+
 def test_compose_trip():
     a = leg("a", "KEWR", "KDEN", T0)
     b = leg("b", "KDEN", "KSFO", T0 + timedelta(hours=4), grade="some_bumps")

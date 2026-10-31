@@ -161,14 +161,17 @@ def retry(sent: list[dict], now: datetime) -> dict | None:
 def compose(p: Plan, flight: dict, forecast: dict, previous: dict | None, tz: str | None) -> tuple[str, str, list[str]]:
     origin, destination = airports.lookup(flight["origin"]), airports.lookup(flight["destination"])
     route = f"{origin.iata}→{destination.iata}"
-    grade = changes.grade_title(forecast.get("grade"))
+    outlook = changes.is_outlook(forecast)
+    grade = changes.grade_title(forecast.get("grade"), outlook)
     points = changes.describe(previous if p.kind != "ready" else None, forecast, tz)
     early = changes.confidence(forecast.get("source"), forecast.get("noaa_possible")) == "early"
 
     if p.kind == "ready":
         title = f"Your {route} forecast is ready"
         detail = "Tap to see when the bumps are." if forecast.get("segments") else "Tap for the details."
-        body = f"{grade}{' (advance forecast)' if early else ''}. {detail}"
+        # An outlook is never confirmed, so it isn't "advance": say what it is.
+        label = " (beta outlook)" if outlook else " (advance forecast)" if early else ""
+        body = f"{grade}{label}. {detail}"
     elif p.kind == "confirmed":
         title = f"{route}: forecast confirmed"
         body = f"{grade}. " + " ".join(points[:-1][:2])
@@ -214,7 +217,7 @@ def compose_trip(p: Plan, first: dict, second: dict, f1: dict, f2: dict) -> tupl
     legs = []
     for flight, forecast in ((first, f1), (second, f2)):
         route = f"{airports.lookup(flight['origin']).iata}→{airports.lookup(flight['destination']).iata}"
-        legs.append(f"{route}: {changes.grade_title(forecast.get('grade')).lower()}")
+        legs.append(f"{route}: {changes.grade_title(forecast.get('grade'), changes.is_outlook(forecast)).lower()}")
     summary = ". ".join(legs) + "."
     if p.kind == "ready":
         return f"Your trip via {via}: forecasts ready", f"{summary} Tap to see when the bumps are."

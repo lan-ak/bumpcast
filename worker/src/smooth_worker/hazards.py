@@ -13,7 +13,7 @@ import math
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 
-from . import severity
+from . import firs, severity
 from .http import client
 from .mapdata import PIREP_INTENSITY
 
@@ -62,7 +62,7 @@ class Hazard:
         }[self.hazard]
         if self.kind == "pirep":
             return f"Pilot reported {self.severity} {name}"
-        where = f" ({self.region})" if self.region else ""
+        where = f" over {self.region}" if self.region else ""
         return f"Official warning: {name}{where}"
 
     def applies(self, lat: float, lon: float, altitude_ft: float, when: datetime) -> bool:
@@ -136,7 +136,7 @@ def from_isigmets(rows: list[dict]) -> list[Hazard]:
                         valid_to=_epoch(r["validTimeTo"]),
                         base_ft=int(r.get("base") or 0),
                         top_ft=int(r.get("top") or NO_TOP_FT),
-                        region=_region(r.get("firName")),
+                        region=firs.place(r.get("firName"), r.get("firId"), _centre(polygon)),
                         polygon=polygon,
                     )
                 )
@@ -145,14 +145,14 @@ def from_isigmets(rows: list[dict]) -> list[Hazard]:
     return out
 
 
-def _region(fir: str | None) -> str | None:
-    """'LPPO SANTA MARIA OCEANIC' -> 'Santa Maria Oceanic'."""
-    if not fir:
-        return None
-    words = fir.split()
-    if len(words) > 1 and len(words[0]) == 4 and words[0].isupper() and words[0].isalpha():
-        words = words[1:]
-    return " ".join(w.capitalize() for w in words)
+def _centre(polygon: tuple[tuple[float, float], ...]) -> tuple[float, float]:
+    """A rough middle of a warned area (lat, lon), for naming the ocean it's over."""
+    lat = sum(p[0] for p in polygon) / len(polygon)
+    lons = [p[1] for p in polygon]
+    if max(lons) - min(lons) > 180:  # across the dateline
+        lons = [lon % 360 for lon in lons]
+    lon = sum(lons) / len(lons)
+    return lat, (lon + 180) % 360 - 180
 
 
 def from_airsigmets(rows: list[dict]) -> list[Hazard]:
@@ -179,7 +179,7 @@ def from_airsigmets(rows: list[dict]) -> list[Hazard]:
                         valid_to=_epoch(r["validTimeTo"]),
                         base_ft=int(r.get("altitudeLow1") or 0),
                         top_ft=int(r.get("altitudeHi1") or NO_TOP_FT),
-                        region="United States",
+                        region="the United States",
                         polygon=polygon,
                     )
                 )

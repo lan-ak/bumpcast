@@ -59,6 +59,8 @@ class Forecast:
     noaa_possible: bool | None = None  # can GTG ever cover the whole route?
     extended: bool = False
     profile: int | None = None  # route.PROFILE_VERSION the path was built with
+    # Gusty takeoff and landing: what was decided for each end (airfield.py). Never shown.
+    airport_wind: list[dict] = field(default_factory=list)
 
     def to_row(self) -> dict:
         row = {
@@ -73,6 +75,7 @@ class Forecast:
             "samples": self.samples,
             "route": self.route,
             "profile": self.profile,
+            "airport_wind": self.airport_wind,
         }
         if self.extended:
             row |= {"sources": self.sources, "warnings": self.warnings, "noaa_possible": self.noaa_possible}

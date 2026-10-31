@@ -14,10 +14,10 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-from . import airports, flightdata, forecast, hazards, mapdata, notify, status
+from . import aircraft, airfield, airports, archive, flightdata, forecast, hazards, mapdata, notify, status
 from .apns import Apns
 from .flightdata import FlightData
-from .sources import GfsSource, GtgEnsemble, GtgSource, gfs, gtg
+from .sources import EcmwfSource, GfsSource, GtgEnsemble, GtgSource, Outlook, ecmwf, gfs, gtg
 
 log = logging.getLogger("smooth_worker")
 
@@ -35,6 +35,13 @@ GTG_CHECK_SECONDS = 60
 GTG_PACE_SECONDS = 30
 # NOMADS throttling us (429, or a 302 with nowhere to go): back off for longer than a normal check.
 GTG_THROTTLED_SECONDS = 300
+# ECMWF runs every 6 hours; each step is one ~17 MB download and ~4 s of work under the lock.
+ECMWF_CHECK_SECONDS = 600
+ECMWF_PACE_SECONDS = 5
+# The outlook blends ECMWF in with GFS (sources/outlook.py). SMOOTH_ECMWF=0 turns it off.
+ECMWF_ENABLED = os.environ.get("SMOOTH_ECMWF", "1") != "0"
+# A decoded ECMWF run older than this (the thread stalled) is left out rather than used stale.
+ECMWF_MAX_AGE = timedelta(hours=24)
 GTG_REFRESH = timedelta(hours=1)  # GTG cycles hourly
 GFS_REFRESH = timedelta(hours=6)  # GFS cycles every 6 hours
 # A GFS-only forecast for a flight GTG reaches (GTG was unavailable, e.g. right after a restart, or
@@ -78,12 +85,28 @@ def load_sources(now: datetime, global_coverage: bool | None = None) -> list:
         sources.append(GtgSource(cycle, CACHE_DIR))
     if not sources:
         log.warning("gtg: no run available (none decoded, no NOMADS listing); outlook only, GTG forecasts are kept")
-    if cycle := gfs.latest_cycle(now):
-        sources.append(GfsSource(cycle, CACHE_DIR))
+    gfs_source = GfsSource(cycle, CACHE_DIR) if (cycle := gfs.latest_cycle(now)) else None
+    ecmwf_source = EcmwfSource(cycle, CACHE_DIR) if (cycle := ecmwf_cycle(now)) else None
+    if gfs_source or ecmwf_source:
+        sources.append(Outlook(gfs_source, ecmwf_source))
     if not sources:
-        raise RuntimeError("No GTG or GFS cycle available")
-    log.info("sources: %s", ", ".join(f"{s.name}@{s.cycle:%Y-%m-%d %HZ}" for s in sources))
+        raise RuntimeError("No GTG, GFS or ECMWF cycle available")
+    log.info("sources: %s", ", ".join(_describe(s) for s in sources))
     return sources
+
+
+def _describe(source) -> str:
+    members = getattr(source, "members", [source])
+    return " + ".join(f"{m.name}@{m.cycle:%Y-%m-%d %HZ}" for m in members)
+
+
+def ecmwf_cycle(now: datetime) -> datetime | None:
+    """The newest ECMWF run decoded in full (`watch_ecmwf`), if it's recent: forecasts never wait
+    for ECMWF downloads."""
+    if not ECMWF_ENABLED:
+        return None
+    ready = ecmwf.ready_cycles(CACHE_DIR)
+    return ready[0] if ready and now - ready[0] <= ECMWF_MAX_AGE else None
 
 
 def gtg_cycle(now: datetime) -> datetime | None:
@@ -228,7 +251,17 @@ def refresh_status(db, data: FlightData, flight: dict, previous: dict | None, no
     else:
         row = status.build(leg, flight, previous, now)
     db.upsert_flight_status(row)
-    log.info("flight %s %s: %s", flight["id"], flight["flight_number"], row.get("status") or "not found")
+    log.info(
+        "flight %s %s: %s (%s)", flight["id"], flight["flight_number"], row.get("status") or "not found",
+        row.get("aircraft_model") or "plane not named",
+    )
+    if leg is not None:
+        try:
+            # Measured only: a failure here never holds up status or the forecast.
+            if seen := aircraft.observation(leg, previous, status.effective_departure(flight, row), now):
+                db.note_aircraft({"flight_id": flight["id"], **seen})
+        except Exception:
+            log.exception("flight %s: aircraft note failed", flight["id"])
     return row
 
 
@@ -244,6 +277,10 @@ def run_once(db, data: FlightData | None = None) -> int:
         for flight_id, at in list(seen.items()):
             if now - at > timedelta(hours=1):
                 del seen[flight_id]
+    try:
+        airfield.prefetch(wind_airports(flights, now), now)
+    except Exception:
+        log.exception("airport forecasts failed")
     for flight in flights:
         try:
             # Status only counts for flights that have live status.
@@ -291,7 +328,9 @@ class ForecastInputs:
 
     def runs(self) -> list[tuple[str, datetime]] | None:
         """Which model runs these inputs hold, once loaded."""
-        return None if self._sources is None else [(s.name, s.cycle) for s in self._sources]
+        if self._sources is None:
+            return None
+        return [(s.name, s.cycle, getattr(s, "runs", None)) for s in self._sources]
 
     def hazards(self):
         if forecast.GLOBAL_COVERAGE and not self._hazards_loaded:
@@ -311,7 +350,7 @@ def refresh_inputs(now: datetime) -> str:
             _shared_inputs.now = now
         else:
             _shared_inputs = fresh
-    return ", ".join(f"{s.name}@{s.cycle:%Y-%m-%d %HZ}" for s in fresh.sources())
+    return ", ".join(_describe(s) for s in fresh.sources())
 
 
 def shared_inputs(now: datetime) -> ForecastInputs:
@@ -333,6 +372,10 @@ def store_forecast(
         result = forecast.Forecast(status="too_early")
     else:
         result = forecast.compute(origin, destination, departure, now, inputs.sources(), inputs.hazards())
+        try:
+            airport_wind(flight, departure, result, previous, now)
+        except Exception:
+            log.exception("flight %s: airport wind failed; stored without it", flight["id"])
     if loses_gtg(previous, result, departure):
         log.warning(
             "flight %s %s->%s: no GTG this pass (got %s %s); keeping its %s forecast from %s",
@@ -354,6 +397,39 @@ def store_forecast(
     db.prune_forecasts(flight["id"], now - HISTORY)
     log.info("flight %s %s->%s: %s %s", flight["id"], origin.iata, destination.iata, result.status, result.grade or "")
     return True
+
+
+def airport_wind(
+    flight: dict, departure: datetime, result: forecast.Forecast, previous: dict | None, now: datetime
+) -> None:
+    """Tag the gusty takeoff and landing stretches of a confirmed forecast (airfield.py). Takeoff and
+    landing are timed as the pushes time them: the reported runway time once it has passed, else
+    departure plus taxi, and landing by the airline's arrival when it's near the plan."""
+    if result.status != "ready" or result.source == "gfs":
+        return
+    origin, destination = airports.lookup(flight["origin"]), airports.lookup(flight["destination"])
+    live = flight.get("status") or {}
+    reported = _parse_time(live["takeoff_at"]) if live.get("takeoff_at") else None
+    takeoff = reported if reported and reported <= now else departure + timedelta(minutes=status.TAXI_OUT_MIN)
+    landing = takeoff + timedelta(minutes=notify.duration_min(result.to_row(), takeoff, live))
+    before = {wind.get("end"): wind for wind in (previous or {}).get("airport_wind") or []}
+    ends = [
+        airfield.decide(end, airport, (at - airfield.WINDOW, at + airfield.WINDOW), before.get(end), now)
+        for end, airport, at in ((airfield.ORIGIN, origin, takeoff), (airfield.DESTINATION, destination, landing))
+    ]
+    result.airport_wind = airfield.tag(
+        result, ends, {airfield.ORIGIN: origin, airfield.DESTINATION: destination}, forecast._grade
+    )
+
+
+def wind_airports(flights: list[dict], now: datetime) -> set[str]:
+    """The airports of flights taking off or landing within airfield.AHEAD, fetched in one go."""
+    icaos = set()
+    for flight in flights:
+        departure = status.effective_departure(flight, flight.get("status"))
+        if now - timedelta(hours=18) <= departure <= now + airfield.AHEAD:
+            icaos |= {flight["origin"], flight["destination"]}
+    return icaos
 
 
 def run_new_flights(db, failed: dict[str, datetime], data: FlightData | None = None) -> int:
@@ -431,12 +507,15 @@ def prune_cache(max_age: timedelta = timedelta(days=1)) -> None:
         if path.stat().st_mtime < cutoff:
             path.unlink(missing_ok=True)
     gtg.prune(CACHE_DIR)
+    ecmwf.prune(CACHE_DIR)
+    archive.prune(CACHE_DIR)
 
 
 def prepare_gtg(now: datetime, pace: float = GTG_PACE_SECONDS) -> int:
     """Decode every hour of the newest GTG run(s) to disk ahead of the forecasts and map that read
     them. One hour per lock, so a new flight's forecast can go between, and `pace` seconds apart
-    to stay well inside NOMADS' rate limit. Returns hours decoded."""
+    to stay well inside NOMADS' rate limit. The hours the archive keeps are sampled once decoded
+    (archive.py), including ones decoded before a restart. Returns hours decoded."""
     cycles = gtg.latest_cycles(now, 2 if forecast.GLOBAL_COVERAGE else 1)
     # Never older than what's decoded already (a listing can lag, or fall back to yesterday's runs).
     if ready := gtg.ready_cycles(CACHE_DIR):
@@ -445,12 +524,14 @@ def prepare_gtg(now: datetime, pace: float = GTG_PACE_SECONDS) -> int:
     for cycle in cycles:
         source = GtgSource(cycle, CACHE_DIR)
         for fhr in range(gtg.MAX_FHR + 1):
-            if source.is_cached(fhr):
-                continue
-            with work_lock:
-                source.cache(fhr)
-            decoded += 1
-            time.sleep(pace)
+            if not source.is_cached(fhr):
+                with work_lock:
+                    source.cache(fhr)
+                decoded += 1
+                time.sleep(pace)
+            if archive.wanted(cycle, fhr):
+                with work_lock:
+                    archive.save_gtg(source, fhr, CACHE_DIR)
     if decoded:
         with work_lock:
             gtg.prune(CACHE_DIR)
@@ -477,6 +558,37 @@ def watch_gtg() -> None:
         time.sleep(gtg_step())
 
 
+def prepare_ecmwf(now: datetime, pace: float = ECMWF_PACE_SECONDS) -> int:
+    """Decode every step the outlook reads of the newest ECMWF run, one per lock so forecasts can
+    go between. Returns steps decoded."""
+    cycle = ecmwf.latest_cycle(now)
+    if cycle is None or (ready := ecmwf.ready_cycles(CACHE_DIR)) and ready[0] >= cycle:
+        return 0
+    source = EcmwfSource(cycle, CACHE_DIR)
+    decoded = 0
+    for step in range(0, ecmwf.NEEDED_STEP + 1, ecmwf.STEP_H):
+        if source.is_cached(step):
+            continue
+        with work_lock:
+            source.cache(step)
+        decoded += 1
+        time.sleep(pace)
+    with work_lock:
+        ecmwf.prune(CACHE_DIR)
+    return decoded
+
+
+def watch_ecmwf() -> None:
+    """Runs beside the poll loop: decodes each new ECMWF run as it's published."""
+    while True:
+        try:
+            if count := prepare_ecmwf(datetime.now(UTC)):
+                log.info("ecmwf: %d step(s) decoded", count)
+        except Exception:
+            log.exception("ecmwf failed")
+        time.sleep(ECMWF_CHECK_SECONDS)
+
+
 def poll(db, apns: Apns | None, data: FlightData | None = None) -> None:
     """One pass: fresh weather inputs, status and forecasts first (notifications describe them),
     then notifications, then published schedules, then map data. Each step is isolated
@@ -490,6 +602,7 @@ def poll(db, apns: Apns | None, data: FlightData | None = None) -> None:
         ("status purge", lambda: f"{db.prune_flight_status(datetime.now(UTC) - status.KEEP)} old status row(s) deleted"),
         ("pireps", lambda: f"{mapdata.refresh_pireps(db, datetime.now(UTC))} pilot report(s)"),
         ("map", lambda: f"{refresh_map(db)} map layer(s)"),
+        ("archive", lambda: f"{archive.upload_pending(CACHE_DIR)} GTG hour(s) uploaded"),
     ]
     for name, step in steps:
         try:
@@ -533,6 +646,8 @@ def cmd_run(args: argparse.Namespace) -> None:
             target=watch_new_flights, args=(Database(), FlightData.create()), name="new-flights", daemon=True
         ).start()
         threading.Thread(target=watch_gtg, name="gtg", daemon=True).start()
+        if ECMWF_ENABLED:
+            threading.Thread(target=watch_ecmwf, name="ecmwf", daemon=True).start()
     while True:
         poll(db, apns, data)
         if args.once:

@@ -23,12 +23,12 @@ def isigmet(**over):
 
 def test_sigmet_polygon_altitude_and_time():
     [h] = hazards.from_isigmets([isigmet()])
-    assert h.severity == SEVERE and h.region == "Santa Maria Oceanic"
+    assert h.severity == SEVERE and h.region == "the Atlantic near the Azores"
     assert h.applies(35, -25, 35000, NOW)
     assert not h.applies(35, -25, 20000, NOW)  # below the warned band
     assert not h.applies(45, -25, 35000, NOW)  # outside the area
     assert not h.applies(35, -25, 35000, NOW + timedelta(hours=8))  # expired
-    assert "Official warning" in h.label
+    assert h.label == "Official warning: turbulence over the Atlantic near the Azores"
 
 
 def test_sigmet_across_the_dateline():
@@ -92,7 +92,7 @@ def test_warning_raises_outlook_to_severe_and_is_listed():
     assert result.grade in ("bumpy", "rough")
     assert any(s["severity"] == SEVERE for s in result.segments)
     [w] = result.warnings
-    assert w["kind"] == "sigmet" and w["severity"] == SEVERE and "Shanwick Oceanic" in w["label"]
+    assert w["kind"] == "sigmet" and w["severity"] == SEVERE and w["region"] == "the North Atlantic"
     assert all(classify(s["edr"]) == SEVERE for s in result.samples if w["start_min"] <= s["min"] <= w["end_min"])
 
 
