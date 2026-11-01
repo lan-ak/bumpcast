@@ -147,7 +147,7 @@ Flights outside coverage, flights saved offline, and app versions without the ca
 - `onboarding` (281980) is **hard**: the flight paywall and the pass offer have no close button.
 - `onboarding-soft` (284375) is **soft**: both have one.
 
-`onboarding-soft` re-exports every page of `onboarding` and only sets `variant.soft` in its layout, so edit `onboarding` and publish both. Its name must stay "Onboarding" while people are still on 1.0 or 1.0.1: they wait for a paywall with that name before they present the flow. From 1.0.2 the app asks the `onboarding` placement which paywall it shows, so names and identifiers can be anything.
+`onboarding-soft` re-exports every page of `onboarding` and only sets `variant.soft` in its layout, so edit `onboarding` and publish both. They're named "Onboarding · hard" and "Onboarding · soft". From 1.0.2 the app asks the `onboarding` placement which paywall it shows, so names and identifiers can be anything (1.0 and 1.0.1 waited for one named "Onboarding", but only on a first launch, and new installs have been on 1.0.2 or later since Oct 25).
 
 Only people flying in the next 3 days who add their flight (app 1.0.1+) reach the flight paywall; everyone else sees the closable Plans page in both. Each flow sets `onboarding_paywall_variant` (`hard` / `soft`) when it opens. Superwall's experiment view on the campaign shows onboarding conversion per variant; `docs/superwall/onboarding-hard-vs-soft.sql` also counts flight passes bought later in the app, split by that attribute.
 

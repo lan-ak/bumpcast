@@ -8,7 +8,7 @@
     "onboarding": {
       "ios": {
         "paywallId": "281980",
-        "snapshot": "648149a2cc33795cf69dfe37a319c6c894300af3052b518a3c93944a9fbd98cf"
+        "snapshot": "31f8f3095055ee303557385e16fab4f7cbd1304980c7952b93f5cc67f3c6971a"
       }
     },
     "forecast-moment": {
@@ -32,7 +32,7 @@
     "onboarding-soft": {
       "ios": {
         "paywallId": "284375",
-        "snapshot": "b2c715db8786c0c72f726980800d11c4d9c28addacfa3978930c454c49f7a489"
+        "snapshot": "3d7f1e04ae42cda07a4727761cc4a1418234dfb883fbe104a71673e91212cc7d"
       }
     }
   },
