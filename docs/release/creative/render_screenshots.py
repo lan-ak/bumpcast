@@ -6,6 +6,7 @@ Chrome screenshot each frame. Frames 1 and 2 are the two halves of the opening p
 
     python3 docs/release/creative/render_screenshots.py
     python3 docs/release/creative/render_screenshots.py cpp-screenshots.html   # custom product pages
+    python3 docs/release/creative/render_screenshots.py duo-screenshots.html   # open iPhone Duo, 2853 x 2007
 
 Output: docs/release/creative/screenshots/en-US/NN-name.png (a data-out with a folder, like
 cpp-tracker/01-name, lands in that folder under en-US).
@@ -25,7 +26,9 @@ ROOT = HERE.parents[2]
 HTML = HERE / (sys.argv[1] if len(sys.argv) > 1 else "screenshots.html")
 OUT = HERE / "screenshots" / "en-US"
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-W, H = 1320, 2868
+# A page can set its own frame size with <html data-size="2853x2007">; the default is the 6.9" iPhone.
+_size = re.search(r'<html[^>]*data-size="(\d+)x(\d+)"', HTML.read_text())
+W, H = (int(_size.group(1)), int(_size.group(2))) if _size else (1320, 2868)
 
 
 def frames():

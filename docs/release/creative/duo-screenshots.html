@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en" data-size="2853x2007">
+<head>
+<meta charset="utf-8">
+<title>BumpCast App Store frames, iPhone Duo</title>
+<!--
+  App Store screenshots for the open iPhone Duo (APP_IPHONE_DUO, 2853 x 2007). Same night sky, type
+  and device treatment as screenshots.html, turned for the open Duo's landscape spread.
+  Render: python3 docs/release/creative/render_screenshots.py duo-screenshots.html
+  Captures: docs/release/screenshot-captures/duo (open Duo, -demo -forcePro, 2853 x 2007; raw/ holds
+  the untouched originals, 01 has the demo-mode line painted out). Demo mode has no map layers, so no map frame.
+  Never name data sources.
+-->
+<style>
+  @font-face { font-family: "Familjen"; src: url("../../../ios/Shared/Fonts/FamiljenGrotesk-Bold.ttf"); font-weight: 700; }
+  @font-face { font-family: "Atkinson"; src: url("../../../ios/Shared/Fonts/AtkinsonHyperlegible-Regular.ttf"); font-weight: 400; }
+  @font-face { font-family: "Atkinson"; src: url("../../../ios/Shared/Fonts/AtkinsonHyperlegible-Bold.ttf"); font-weight: 700; }
+
+  :root {
+    --night-top: #1B2A45; --night-mid: #121D31; --night-bottom: #0B1322;
+    --accent: #6FBCCC; --muted: #B9C6D6; --ink-light: #EEF3F8;
+  }
+  html, body { margin: 0; background: var(--night-bottom); }
+  .frame { position: relative; overflow: hidden; width: 2853px; height: 2007px; display: none;
+           font-family: "Atkinson", sans-serif; color: var(--ink-light); }
+  .frame.on { display: block; }
+
+  .sky { position: absolute; inset: 0;
+         background:
+           radial-gradient(ellipse 2400px 700px at 60% 108%, rgba(246, 217, 196, .14), transparent 70%),
+           radial-gradient(circle 1500px at var(--glow-x, 66%) 52%, rgba(42, 115, 133, .5), transparent 72%),
+           linear-gradient(180deg, var(--night-top) 0%, var(--night-mid) 55%, var(--night-bottom) 100%); }
+
+  /* Copy column on the left, the open Duo on the right. */
+  .copy { position: absolute; left: 100px; width: 680px; top: 50%; transform: translateY(-54%); }
+  .headline { font-family: "Familjen"; font-weight: 700; font-size: 116px; line-height: 1.0;
+              letter-spacing: -0.025em; margin: 0; color: #fff; }
+  .headline em { font-style: normal; color: var(--accent); }
+  .sub { font-size: 54px; line-height: 1.3; color: var(--muted); margin: 48px 0 0; }
+  .badge { display: inline-block; margin-bottom: 44px; padding: 16px 34px; border-radius: 999px;
+           font-weight: 700; font-size: 40px; letter-spacing: .02em; color: var(--accent);
+           background: rgba(111, 188, 204, .14); box-shadow: inset 0 0 0 3px rgba(111, 188, 204, .38); }
+
+  /* The open Duo: black glass, thin titanium edge, a soft line where it folds. Screen is 951 x 669 pt. */
+  .duo { position: absolute; --w: 1960px; right: 60px; top: 50%; transform: translateY(-50%);
+         width: var(--w); padding: 34px; border-radius: 96px; background: #0A0A0C;
+         box-shadow: inset 0 0 0 5px #8A929C, inset 0 0 0 9px #1E2126,
+                     0 70px 140px rgba(0, 0, 0, .55), 0 24px 48px rgba(0, 0, 0, .35); }
+  .duo > img { display: block; width: 100%; aspect-ratio: 2853 / 2007; border-radius: 64px; }
+  .duo .hinge { position: absolute; top: 34px; bottom: 34px; width: 28px; margin-left: -14px;
+                left: calc(34px + (var(--w) - 68px) * 475.5 / 951);
+                background: linear-gradient(90deg, transparent, rgba(0, 0, 0, .07) 40%, rgba(255, 255, 255, .10) 50%, rgba(0, 0, 0, .07) 60%, transparent); }
+</style>
+</head>
+<body>
+
+<section class="frame" id="flights" data-out="duo/01-made-for-duo">
+  <div class="sky"></div>
+  <div class="copy">
+    <div class="badge">NEW</div>
+    <h1 class="headline">Made for <em>iPhone Duo.</em></h1>
+    <p class="sub">Your flight and its forecast, side by side.</p>
+  </div>
+  <div class="duo" data-src="01-flights"></div>
+</section>
+
+<section class="frame" id="timeline" data-out="duo/02-every-bump-at-a-glance">
+  <div class="sky"></div>
+  <div class="copy">
+    <h1 class="headline">Every bump, <em>at a glance.</em></h1>
+    <p class="sub">The whole flight's timeline, across both screens.</p>
+  </div>
+  <div class="duo" data-src="02-timeline"></div>
+</section>
+
+<section class="frame" id="air" data-out="duo/03-in-the-air">
+  <div class="sky"></div>
+  <div class="copy">
+    <h1 class="headline">Up there,<br><em>step by step.</em></h1>
+    <p class="sub">Know what's still ahead, even in airplane mode.</p>
+  </div>
+  <div class="duo" data-src="03-air"></div>
+</section>
+
+<section class="frame" id="learn" data-out="duo/04-plain-words">
+  <div class="sky"></div>
+  <div class="copy">
+    <h1 class="headline">Plain words, <em>two panes.</em></h1>
+    <p class="sub">Why planes are built for turbulence.</p>
+  </div>
+  <div class="duo" data-src="04-learn"></div>
+</section>
+
+<section class="frame" id="calm" data-out="duo/05-breathe">
+  <div class="sky"></div>
+  <div class="copy">
+    <h1 class="headline">Breathe through <em>the bumps.</em></h1>
+    <p class="sub">Guided breathing, paced to your next bumpy stretch.</p>
+  </div>
+  <div class="duo" data-src="05-calm"></div>
+</section>
+
+<script>
+const CAP = "../screenshot-captures/duo/";
+
+async function build() {
+  for (const d of document.querySelectorAll(".duo")) {
+    const img = new Image();
+    img.src = CAP + d.dataset.src + ".png";
+    d.appendChild(img);
+    d.appendChild(Object.assign(document.createElement("div"), { className: "hinge" }));
+  }
+  await Promise.all([...document.images].map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; })));
+  await document.fonts.ready;
+  document.body.dataset.ready = "1";
+}
+
+function show() {
+  const id = location.hash.slice(1).split(":")[0];
+  document.querySelectorAll(".frame").forEach(f => f.classList.toggle("on", !id || f.id === id));
+}
+addEventListener("hashchange", show);
+show();
+build();
+</script>
+</body>
+</html>
