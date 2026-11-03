@@ -13,6 +13,7 @@ struct TurbulenceMapView: View {
     @Environment(Paywalls.self) private var paywalls
     @Environment(Router.self) private var router
     @Environment(\.verticalSizeClass) private var verticalSizeClass
+    @Environment(\.isWideLayout) private var isWideLayout
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.scenePhase) private var scenePhase
     @AppStorage("haptics.enabled") private var hapticsEnabled = true
@@ -37,11 +38,15 @@ struct TurbulenceMapView: View {
     @State private var loadFailed = false
     @State private var framing: MapFraming?
     @State private var routeProgress = 0.0
-    @State private var openedFlightID: UUID?
+    /// The route the map last opened on. Compared by its points, so an edited route opens afresh.
+    @State private var openedRoute: MapRoute?
+    @State private var drawTask: Task<Void, Never>?
     @State private var selectedReport: PilotReport?
     @State private var showTeaser = false
 
-    private var isLandscape: Bool { verticalSizeClass == .compact }
+    /// Landscape chrome whenever the screen is wide: a landscape phone, or the open iPhone Duo,
+    /// whose wide inner screen is regular height.
+    private var isLandscape: Bool { verticalSizeClass == .compact || isWideLayout }
 
     private var flight: Flight? { store.nextFlight }
     private var forecast: Forecast? { flight.flatMap { store.forecasts[$0.id] } }
@@ -69,24 +74,30 @@ struct TurbulenceMapView: View {
                     faded: isLoading && layer != nil,
                     route: visibleRoute,
                     routeOverUS: route?.overUS ?? [],
-                    reports: showReports ? visibleReports : [],
+                    reports: showReports && hasPilotReports ? visibleReports : [],
                     framing: framing,
                     insets: mapInsets,
-                    onSelectReport: { selectedReport = $0 })
+                    onSelectReport: { report in
+                        Analytics.log(.pilotReportTapped, ["severity": report.intensity.rawValue])
+                        selectedReport = report
+                    })
                 .ignoresSafeArea()
                 if isLandscape { landscapeChrome } else { portraitChrome }
                 stateCard
+                    // Centred; partly open, bottom left clear of the fold and the attribution.
+                    .floatsClearOfFold()
             }
             .navigationTitle("Turbulence map")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar(isLandscape ? .hidden : .visible, for: .navigationBar)
             .sensoryFeedback(.selection, trigger: level) { _, _ in hapticsEnabled }
             .task {
+                Analytics.log(.mapOpened, ["has_route": route != nil])
                 if layers.isEmpty { await showSavedMap() }
                 await loadAll()
             }
             .task(id: showReports) { if showReports { await loadReports() } }
-            .onChange(of: route?.flightID) { openOnRoute() }
+            .onChange(of: route) { openOnRoute() }
             // A refreshed forecast means a newer model run: pull fresh grids too.
             .onChange(of: forecast?.issuedAt ?? forecast?.modelRun) {
                 if Connectivity.shared.isOnline { Task { await loadAll(maxAge: 0) } }
@@ -106,14 +117,18 @@ struct TurbulenceMapView: View {
             }
             .onChange(of: scope) { reframe() }
             .onChange(of: isLandscape) { reframe() }
-            .sheet(item: $selectedReport) { report in
-                PilotReportSheet(report: report, route: route, forecast: forecast) { id in
+            .adaptiveSheet(item: $selectedReport) { report in
+                // The forecast note quotes severity and minutes, so only for a flight the user can see in full.
+                PilotReportSheet(
+                    report: report, route: route,
+                    forecast: flight.flatMap { paywalls.hasFullAccess(to: $0) ? forecast : nil }
+                ) { id in
                     selectedReport = nil
-                    router.openFlight(id)
+                    router.openFlight(id, from: "map")
                 }
                 .presentationDetents([.medium, .large])
             }
-            .sheet(isPresented: $showTeaser) {
+            .adaptiveSheet(isPresented: $showTeaser) {
                 PilotReportsTeaser {
                     showTeaser = false
                     paywalls.unlock(.pilotReportsLocked) { showReports = true }
@@ -313,7 +328,7 @@ struct TurbulenceMapView: View {
                 .font(.bcSubheadline)
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
-            Button(GlobalOutlookCopy.mapOpenForecast) { router.openFlight(route.flightID) }
+            Button(GlobalOutlookCopy.mapOpenForecast) { router.openFlight(route.flightID, from: "map") }
                 .font(.bcSubheadlineStrong)
                 .tint(Theme.accent)
         }
@@ -370,7 +385,7 @@ struct TurbulenceMapView: View {
                     Text("Your saved flight forecasts still work without one.")
                         .font(.bcSubheadline).foregroundStyle(.secondary)
                     if let flight {
-                        Button("Open my forecast") { router.openFlight(flight.id) }
+                        Button("Open my forecast") { router.openFlight(flight.id, from: "map") }
                             .font(.bcSubheadlineStrong)
                             .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent)
                             .tint(Theme.accent)
@@ -406,7 +421,6 @@ struct TurbulenceMapView: View {
             .padding(16)
             .frame(maxWidth: 340, alignment: .leading)
             .glassEffect(.regular, in: .rect(cornerRadius: 24))
-            .padding()
         }
     }
 
@@ -435,19 +449,33 @@ struct TurbulenceMapView: View {
         }
     }
 
-    private func toggleReports() {
-        if showReports { showReports = false; return }
-        if paywalls.isPro || !paywalls.isConfigured { showReports = true } else { showTeaser = true }
+    /// "12 min ago", "2 h ago", "1 h 5 min ago".
+    static func reportAge(minutes: Int) -> String {
+        "\(minutes.durationText) ago"
     }
+
+    private func toggleReports() {
+        if showReports {
+            showReports = false
+            Analytics.log(.pilotReportsToggled, ["on": false, "pro": hasPilotReports])
+            return
+        }
+        Analytics.log(.pilotReportsToggled, ["on": hasPilotReports, "pro": hasPilotReports])
+        if hasPilotReports { showReports = true } else { showTeaser = true }
+    }
+
+    /// Pilot reports are Pro, with the same rule as `Paywalls.unlock` uses for features with no
+    /// flight: Pro, or a build with no Superwall key (demo builds show everything).
+    private var hasPilotReports: Bool { paywalls.isPro || !paywalls.isConfigured }
 
     /// First open with a flight: its cruise height, the time nearest now, framed on the
     /// bumpiest stretch; the route draws from origin to destination.
     private func openOnRoute() {
-        guard let route, openedFlightID != route.flightID else {
+        guard let route, openedRoute != route else {
             if route == nil { scope = .us; reframe() }
             return
         }
-        openedFlightID = route.flightID
+        openedRoute = route
         scope = .route
         if let cruiseLevel { level = cruiseLevel }
         timeIndex = nowIndex
@@ -456,12 +484,14 @@ struct TurbulenceMapView: View {
     }
 
     private func drawRoute() {
+        drawTask?.cancel()
         guard !reduceMotion else { routeProgress = 1; return }
         routeProgress = 0
-        Task {
+        drawTask = Task {
             let steps = 30
             for step in 1...steps {
                 try? await Task.sleep(for: .milliseconds(30))
+                guard !Task.isCancelled else { return }
                 routeProgress = Double(step) / Double(steps)
             }
         }
@@ -552,6 +582,7 @@ struct TurbulenceMapView: View {
         if fresh.isEmpty {
             if let failure { Connectivity.shared.noteFailure(failure) }
             loadFailed = layers.isEmpty
+            if failure != nil { Analytics.logOnce(.mapLoadFailed, ["what": "levels", "nothing_shown": layers.isEmpty]) }
         } else {
             Connectivity.shared.noteSuccess()
             var merged = layers
@@ -563,7 +594,7 @@ struct TurbulenceMapView: View {
             saveIfChanged(merged)
         }
         // Keep the hour the user was looking at if the new run still has it.
-        if openedFlightID == nil {
+        if openedRoute == nil {
             timeIndex = nowIndex
         } else if let selectedTime {
             timeIndex = max(nowIndex, times.firstIndex { $0.grid.validAt == selectedTime } ?? nowIndex)
@@ -600,7 +631,11 @@ struct TurbulenceMapView: View {
 
     private func loadReports() async {
         guard Connectivity.shared.isOnline else { return }
-        reports = (try? await store.service.pilotReports(since: .now.addingTimeInterval(-3 * 3600))) ?? reports
+        do {
+            reports = try await store.service.pilotReports(since: .now.addingTimeInterval(-3 * 3600))
+        } catch {
+            Analytics.logOnce(.mapLoadFailed, ["what": "reports"])
+        }
     }
 }
 
@@ -694,8 +729,7 @@ private struct PilotReportSheet: View {
     }
 
     private var ago: String {
-        let minutes = max(1, Int(-report.observedAt.timeIntervalSinceNow / 60))
-        return minutes < 60 ? "\(minutes) min ago" : "\(minutes / 60) h \(minutes % 60) min ago"
+        TurbulenceMapView.reportAge(minutes: max(1, Int(-report.observedAt.timeIntervalSinceNow / 60)))
     }
 
     private var headline: String {
@@ -712,11 +746,12 @@ private struct PilotReportSheet: View {
 
     /// What the user's own forecast expects at the matching point of their flight.
     private var forecastNote: String? {
-        guard let route, let nearest, let forecast, forecast.status == .ready, let duration = forecast.durationMin else { return nil }
+        guard let route, route.points.count > 1, let nearest, let forecast, forecast.status == .ready,
+              let duration = forecast.durationMin else { return nil }
         let minute = Int(Double(nearest.index) / Double(route.points.count - 1) * Double(duration))
         guard let segment = forecast.segments.first(where: { $0.startMin <= minute && minute <= $0.endMin }) else { return nil }
         if segment.severity > .smooth {
-            return "Your forecast already expects \(segment.severity.title.lowercased()) here for about \(segment.minutes) minutes."
+            return "Your forecast already expects \(segment.severity.title.lowercased()) here for about \(segment.minutes) \(segment.minutes == 1 ? "minute" : "minutes")."
         }
         return "Your forecast expects smooth air here at your time. It keeps updating until you fly."
     }

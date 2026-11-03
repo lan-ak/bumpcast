@@ -11,6 +11,8 @@ struct FlightsListView: View {
     @AppStorage("haptics.enabled") private var hapticsEnabled = true
     @Namespace private var zoom
     @State private var isAdding = false
+    /// Where Add flight was opened from, for `flight_add_started`.
+    @State private var addSource = "list"
     @State private var isShowingSettings = false
     /// Flights on screen when Add flight opened. A new one settles in once the sheet has closed,
     /// where it can be seen, instead of behind the sheet.
@@ -30,25 +32,27 @@ struct FlightsListView: View {
 
     private var connectivity: Connectivity { .shared }
 
+    /// Tests render the list's content without its navigation stack (which can't be rendered).
+    private let contentOnly: Bool
+
+    init(contentOnly: Bool = false) {
+        self.contentOnly = contentOnly
+    }
+
     var body: some View {
+        if contentOnly {
+            listContent
+        } else {
+            screen
+        }
+    }
+
+    private var screen: some View {
         @Bindable var store = store
         @Bindable var router = router
-        NavigationStack(path: $router.flightPath) {
+        return NavigationStack(path: $router.flightPath) {
             ScrollView {
-                VStack(alignment: .leading, spacing: 18) {
-                    notices
-                    if !flown.isEmpty {
-                        segmentPicker
-                    }
-                    // The two lists cross-fade in place, never slide.
-                    ZStack(alignment: .top) {
-                        if shown == .flown {
-                            flownList.transition(.opacity)
-                        } else {
-                            upcomingList.transition(.opacity)
-                        }
-                    }
-                }
+                listContent
                 .padding()
                 // A new flight settles in with the house spring, as do a switch of list and a rated
                 // Just landed card leaving.
@@ -71,17 +75,19 @@ struct FlightsListView: View {
                 }
             }
             .refreshable { await store.refresh() }
-            .sheet(isPresented: $isAdding, onDismiss: addingClosed) { AddFlightView() }
+            .adaptiveSheet(isPresented: $isAdding, onDismiss: addingClosed) { AddFlightView(source: addSource) }
             .onChange(of: isAdding) { _, open in
                 if open { heldIDs = Set(store.flights.map(\.id)) }
             }
             .onChange(of: router.showAddFlight, initial: true) { _, show in
                 guard show else { return }
                 router.showAddFlight = false
+                addSource = router.addFlightSource
+                router.addFlightSource = "list"
                 isAdding = true
             }
-            .sheet(isPresented: $isShowingSettings) { SettingsView() }
-            .sheet(item: $rating) { RateFlightSheet(flight: $0).presentationDetents([.medium, .large]) }
+            .adaptiveSheet(isPresented: $isShowingSettings) { SettingsView() }
+            .adaptiveSheet(item: $rating) { RateFlightSheet(flight: $0).presentationDetents([.medium, .large]) }
             // The one "flight added" haptic, as the new card settles in.
             .sensoryFeedback(trigger: shownIDs.count) { old, new in
                 new > old && hapticsEnabled ? .impact(flexibility: .soft, intensity: 0.5) : nil
@@ -195,7 +201,7 @@ struct FlightsListView: View {
     /// Add flight's "Tell me when it's ready" toggle, asked for once the sheet has gone.
     private func askForNotifications(_ flight: Flight) async {
         guard flight.notify, PushNotifications.shared.status == .notDetermined else { return }
-        await PushNotifications.shared.requestPermission()
+        await PushNotifications.shared.requestPermission(from: "add_flight")
     }
 
     /// On Upcoming the sky follows the next flight's local departure time; otherwise it's now.
@@ -246,22 +252,98 @@ struct FlightsListView: View {
                 .buttonStyle(.plain)
                 .matchedTransitionSource(id: next.id, in: zoom)
                 .contextMenu { deleteButton(next) }
-                noticeRows(cancelled)
-                if upcoming.count > 1 {
-                    section("Coming up", flights: Array(upcoming.dropFirst()))
+                // The card is one VoiceOver element, which hides its locked timeline's button.
+                .accessibilityActions {
+                    if hasLockedTimeline(next) {
+                        Button("See when the bumps are") { paywalls.unlock(.timelineLocked, flight: next) {} }
+                    }
                 }
-                // Under Coming up, never above the next flight; only once the free limit is reached.
-                if !paywalls.canAddFlight, !emailImport.readyToAdd.isEmpty { readyRow }
-                noticeRows(justLanded)
-                if !paywalls.canAddFlight { limitNote }
-            } else if shownIDs.isEmpty {
-                if !store.isLoading { emptyState }
+                afterNextFlight()
             } else {
-                ForEach(justLanded) { JustLandedCard(flight: $0) }
-                noticeRows(cancelled)
-                noUpcomingState
+                noNextFlight
             }
             LearnCard()
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    /// Under the next flight: cancelled flights, Coming up, flights just landed and the free limit.
+    /// `compact` is the open Duo, where they sit beside the next flight's forecast.
+    @ViewBuilder
+    private func afterNextFlight(compact: Bool = false) -> some View {
+        noticeRows(cancelled)
+        let comingUp = store.comingUp(after: upcoming.first?.id).filter(isShown)
+        if !comingUp.isEmpty {
+            section(FlightRowsSection.comingUpTitle, flights: comingUp, compact: compact)
+        }
+        // Under Coming up, never above the next flight; only once the free limit is reached.
+        if !paywalls.canAddFlight, !emailImport.readyToAdd.isEmpty { readyRow }
+        noticeRows(justLanded)
+        if !paywalls.canAddFlight { limitNote }
+    }
+
+    /// Nothing coming up: the empty card, or flights just landed and cancelled with a way to the next.
+    @ViewBuilder
+    private var noNextFlight: some View {
+        if shownIDs.isEmpty {
+            if !store.isLoading { emptyState }
+        } else {
+            ForEach(justLanded) { JustLandedCard(flight: $0) }
+            noticeRows(cancelled)
+            noUpcomingState
+        }
+    }
+
+    /// The list, Upcoming or Flown. On the open Duo, Upcoming shows the next flight's forecast in
+    /// place (`spreadUpcoming`); the container picks.
+    private var listContent: some View {
+        OpenLayout {
+            phoneList
+        } open: {
+            if shown == .upcoming { spreadUpcoming } else { phoneList }
+        }
+    }
+
+    private var phoneList: some View {
+        VStack(alignment: .leading, spacing: 18) {
+            notices
+            if !flown.isEmpty {
+                segmentPicker
+            }
+            // The two lists cross-fade in place, never slide.
+            ZStack(alignment: .top) {
+                if shown == .flown {
+                    flownList.transition(.opacity)
+                } else {
+                    upcomingList.transition(.opacity)
+                }
+            }
+        }
+    }
+
+    /// The open Duo: the list's controls, then the next flight's forecast as one list with them,
+    /// then the rest of Upcoming and the Learn card. With nothing coming up, the list's cards and
+    /// the Learn card.
+    private var spreadUpcoming: some View {
+        Group {
+            if let next = upcoming.first {
+                FlightDetailView(
+                    flightID: next.id, embedded: true,
+                    listLeading: [AdaptiveItem(ListControls { notices; if !flown.isEmpty { segmentPicker } })],
+                    // After the forecast, so however many flights are coming up, the timeline stays
+                    // on the first screen.
+                    listTail: [
+                        AdaptiveItem(UpcomingRest { afterNextFlight(compact: true) }),
+                        AdaptiveItem(LearnCard()),
+                    ]
+                )
+                .id(next.id)
+            } else {
+                AdaptiveSpread(items: [
+                    AdaptiveItem(ListControls { notices; if !flown.isEmpty { segmentPicker }; noNextFlight }),
+                    AdaptiveItem(LearnCard()),
+                ])
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -274,7 +356,8 @@ struct FlightsListView: View {
             VStack(alignment: .leading, spacing: 10) {
                 ForEach(flights) { flight in
                     // A cancelled flight's replacement is never behind the free limit.
-                    let action: () -> Void = flight.isCancelled ? { isAdding = true } : { rating = flight }
+                    let action: () -> Void =
+                        flight.isCancelled ? { addSource = "cancelled_card"; isAdding = true } : { rating = flight }
                     NavigationLink(value: flight.id) {
                         NoticeRow(flight: flight, forecast: store.forecasts[flight.id], action: action)
                             .skyCard(cornerRadius: 18, padding: 14)
@@ -339,27 +422,11 @@ struct FlightsListView: View {
     /// "1 flight", "3 flights".
     private static func count(_ flights: Int) -> String { flights == 1 ? "1 flight" : "\(flights) flights" }
 
-    /// Flown rows show the day and the rating, or a way to rate.
-    private func section(_ title: String, flights: [Flight], flown: Bool = false) -> some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text(title).eyebrow().foregroundStyle(.secondary).accessibilityAddTraits(.isHeader)
-                .fixedSize(horizontal: false, vertical: true)
-            ForEach(flights) { flight in
-                let rate: (() -> Void)? = flown && canRate(flight) ? { rating = flight } : nil
-                NavigationLink(value: flight.id) {
-                    FlightRow(
-                        flight: flight, forecast: store.forecasts[flight.id], report: store.reports[flight.id],
-                        flown: flown, rate: rate
-                    )
-                    .skyCard(cornerRadius: 18, padding: 14)
-                }
-                .buttonStyle(.plain)
-                .matchedTransitionSource(id: flight.id, in: zoom)
-                .contextMenu { deleteButton(flight) }
-                .accessibilityActions {
-                    if let rate { Button("Rate this flight", action: rate) }
-                }
-            }
+    /// Flown rows show the day and the rating, or a way to rate. `compact` is Coming up on the
+    /// open Duo, after the next flight's forecast: the same rows, denser and without cards.
+    private func section(_ title: String, flights: [Flight], flown: Bool = false, compact: Bool = false) -> some View {
+        FlightRowsSection(title: title, flights: flights, flown: flown, compact: compact, zoom: zoom) { flight in
+            flown && canRate(flight) ? { rating = flight } : nil
         }
     }
 
@@ -379,7 +446,7 @@ struct FlightsListView: View {
         }
         .buttonStyle(.plain)
         .skyCard(cornerRadius: 18, padding: 14)
-        .sheet(isPresented: $showingReady) { ReadyToAddSheet() }
+        .adaptiveSheet(isPresented: $showingReady) { ReadyToAddSheet() }
     }
 
     /// At the free limit: said calmly under the flights, so the paywall behind + isn't a surprise.
@@ -406,9 +473,7 @@ struct FlightsListView: View {
     }
 
     private func deleteButton(_ flight: Flight) -> some View {
-        Button("Delete flight", systemImage: "trash", role: .destructive) {
-            Task { await store.delete(flight.id) }
-        }
+        DeleteFlightButton(flight: flight)
     }
 
     private var emptyState: some View {
@@ -444,8 +509,16 @@ struct FlightsListView: View {
         .skyCard()
     }
 
+    /// The next flight card shows the locked timeline: a forecast is ready and the flight isn't unlocked.
+    private func hasLockedTimeline(_ flight: Flight) -> Bool {
+        guard case .ready = ForecastState(flight: flight, forecast: store.forecasts[flight.id], betaOn: GlobalBeta.shared.isOn)
+        else { return false }
+        return !paywalls.hasFullAccess(to: flight)
+    }
+
     /// Free users can keep a couple of upcoming flights; more goes through the paywall.
     private func addFlight() {
+        addSource = "list"
         if paywalls.canAddFlight {
             isAdding = true
         } else {
@@ -672,6 +745,104 @@ private struct LockedWaveTimeline: View {
     }
 }
 
+/// The list's controls (notices, Upcoming or Flown), top left on a spread, where notifications land.
+private struct ListControls<Content: View>: View, DuoPlaced {
+    @ViewBuilder var content: Content
+    var duoRole: DuoRole { .leading }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 18) { content }
+    }
+}
+
+/// The rest of Upcoming after the next flight: cancelled and landed flights, Coming up, the limit.
+private struct UpcomingRest<Content: View>: View, DuoPlaced {
+    @ViewBuilder var content: Content
+    var duoRole: DuoRole { .flow }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) { content }
+    }
+}
+
+/// A titled list of flights, one row each, opening the flight: Coming up (on the Flights list, and
+/// on the open Duo after a forecast) and Flown by month.
+struct FlightRowsSection: View, DuoPlaced {
+    var duoRole: DuoRole { .flow }
+    static let comingUpTitle = "Coming up"
+
+    let title: String
+    let flights: [Flight]
+    var flown = false
+    /// Coming up on the open Duo: the same rows, denser and without cards.
+    var compact = false
+    /// The list's zoom transition source, where the rows open from one.
+    var zoom: Namespace.ID? = nil
+    /// "Rate it" for a flown flight that can be rated.
+    var rate: (Flight) -> (() -> Void)? = { _ in nil }
+
+    @Environment(FlightStore.self) private var store
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: compact ? 6 : 10) {
+            Text(title).eyebrow().foregroundStyle(.secondary).accessibilityAddTraits(.isHeader)
+                .fixedSize(horizontal: false, vertical: true)
+            ForEach(flights) { flight in
+                let rate = rate(flight)
+                NavigationLink(value: flight.id) {
+                    let row = FlightRow(
+                        flight: flight, forecast: store.forecasts[flight.id], report: store.reports[flight.id],
+                        flown: flown, rate: rate, compact: compact
+                    )
+                    if compact { row } else { row.skyCard(cornerRadius: 18, padding: 14) }
+                }
+                .buttonStyle(.plain)
+                .zoomSource(id: flight.id, in: zoom)
+                .contextMenu { DeleteFlightButton(flight: flight) }
+                .accessibilityActions {
+                    if let rate { Button("Rate this flight", action: rate) }
+                }
+            }
+        }
+    }
+}
+
+/// "Delete flight": in a row's or a card's context menu it deletes the flight; a screen that must
+/// do more (the forecast screen closes once it's gone) passes its own action.
+struct DeleteFlightButton: View {
+    private let flight: Flight?
+    private let action: (() -> Void)?
+    @Environment(FlightStore.self) private var store
+
+    init(flight: Flight) {
+        self.flight = flight
+        self.action = nil
+    }
+
+    init(action: @escaping () -> Void) {
+        self.flight = nil
+        self.action = action
+    }
+
+    var body: some View {
+        Button("Delete flight", systemImage: "trash", role: .destructive) {
+            if let action {
+                action()
+            } else if let flight {
+                Task { await store.delete(flight.id) }
+            }
+        }
+    }
+}
+
+private extension View {
+    /// The list's zoom into a flight, where there is one.
+    @ViewBuilder
+    func zoomSource(id: UUID, in zoom: Namespace.ID?) -> some View {
+        if let zoom { matchedTransitionSource(id: id, in: zoom) } else { self }
+    }
+}
+
 struct FlightRow: View {
     let flight: Flight
     let forecast: Forecast?
@@ -681,6 +852,8 @@ struct FlightRow: View {
     var flown = false
     /// "Rate it" for a flown flight with no rating yet.
     var rate: (() -> Void)? = nil
+    /// Under Coming up on the open iPhone Duo: the same row, denser (smaller glass, tighter lines).
+    var compact = false
 
     var body: some View {
         let state = ForecastState(flight: flight, forecast: forecast, betaOn: GlobalBeta.shared.isOn)
@@ -689,9 +862,9 @@ struct FlightRow: View {
             if cancelledFlight {
                 CancelledMark()
             } else {
-                WaterGlass(severity: state.severity, size: 30)
+                WaterGlass(severity: state.severity, size: compact ? 22 : 30)
             }
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: compact ? 2 : 4) {
                 if flown {
                     if cancelledFlight {
                         Text("Cancelled").eyebrow().foregroundStyle(.secondary)
@@ -773,7 +946,8 @@ struct StatusPill: View {
 }
 
 /// A doorway into the Learn library from the Flights screen.
-private struct LearnCard: View {
+struct LearnCard: View, DuoPlaced {
+    var duoRole: DuoRole { .flow }
     @Environment(Router.self) private var router
 
     var body: some View {

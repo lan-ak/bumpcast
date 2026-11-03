@@ -7,19 +7,25 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
     ) -> Bool {
         // First: everything else asks it whether there's a connection.
         Connectivity.shared.start()
+        // The brand font on system controls (navigation titles and the like): local, so tests get it too.
+        BrandFont.applyToSystemControls()
+        // Hosting unit tests: none of the launch work below, all of which reaches the network.
+        if Services.isTestHost { return true }
         // The airport index is decoded on first use (the first list render); do it now, off the main thread.
         Task.detached(priority: .userInitiated) { _ = AirportStore.shared.all.count }
         Paywalls.shared.configure()
-        BrandFont.applyToSystemControls()
+        Analytics.configure()
         UNUserNotificationCenter.current().delegate = PushNotifications.shared
         AppSync.registerBackgroundRefresh()
+        // Before any sync: a silent push or background refresh can launch the app with no window.
+        AppSync.installHooks()
         // "How did it feel?" buttons on the Live Activity after landing.
         FlightRatingHandler.submit = { flightID, rating in
             // Offline the rating is kept on the phone and sent later. The activity stays only if
             // the server refused it, so the buttons are still there to try again. An activity
             // carried over from a flight's old id rates the flight under its new one.
             let id = InFlight.shared.currentID(of: flightID)
-            if await FlightStore.shared.submitLandingReport(flightID: id, rating: rating) != nil {
+            if await FlightStore.shared.submitLandingReport(flightID: id, rating: rating, from: "live_activity") != nil {
                 InFlight.shared.endActivity(id)
             }
         }
@@ -33,6 +39,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print("Push registration failed: \(error.localizedDescription)")
+        Analytics.logOnce(.pushRegistrationFailed)
     }
 
     /// A forecast notification arrived: pull the new forecast so it's saved for offline use.
@@ -64,6 +71,7 @@ struct BumpCastApp: App {
                 .environment(Connectivity.shared)
                 .environment(EmailImport.shared)
                 .task {
+                    guard !Services.isTestHost else { return }
                     // First launch: present the onboarding flow while the rest of the app syncs.
                     Onboarding.shared.start()
                     FlightStore.shared.watchDepartures(true)
@@ -71,6 +79,7 @@ struct BumpCastApp: App {
                 }
                 .onOpenURL { Router.shared.handle(url: $0) }
                 .onChange(of: scenePhase) { _, phase in
+                    guard !Services.isTestHost else { return }
                     switch phase {
                     case .active:
                         InFlight.shared.refreshActivities()
@@ -80,6 +89,7 @@ struct BumpCastApp: App {
                         Task { await Paywalls.shared.verifyEntitlements() }
                         // New bookings in a connected mailbox, at most every 30 minutes.
                         Task { await EmailImport.shared.scanIfDue() }
+                        // Keeps its 5-minute cadence: checks now only when one is due.
                         FlightStore.shared.watchDepartures(true)
                     case .background:
                         FlightStore.shared.watchDepartures(false)
@@ -116,6 +126,7 @@ struct RootView: View {
                 CalmView()
             }
         }
+        .onChange(of: router.tab) { _, tab in Analytics.log(.tabViewed, ["tab": "\(tab)"]) }
         .overlay(alignment: .top) {
             ToastView(text: router.toast, systemImage: router.toastSymbol, undo: router.toastUndoAction)
         }
@@ -124,6 +135,8 @@ struct RootView: View {
         // The one root for type, ink and tint; sheets and covers inherit it.
         .bumpCastTheme()
         .nightAppearanceAfterDark()
+        // The open iPhone Duo's fold, for screens that lay out either side of it.
+        .duoFoldProbe()
     }
 }
 

@@ -258,11 +258,14 @@ final class EmailImport {
             email = account.email
             needsReconnect = false
             loaded = true
+            Analytics.log(.emailConnectFinished, ["result": "connected", "provider": "\(provider)"])
         } catch MailError.cancelled {
             // They closed the sign-in sheet: nothing to say.
+            Analytics.log(.emailConnectFinished, ["result": "cancelled", "provider": "\(provider)"])
             return
         } catch {
             connectFailed = true
+            Analytics.log(.emailConnectFinished, ["result": "failed", "provider": "\(provider)"])
             return
         }
         await scan()
@@ -271,6 +274,7 @@ final class EmailImport {
     /// Ends access and forgets the tokens and which messages were read. Flights already added
     /// stay, and so does what's on them (cancelled, changed, removed).
     func disconnect() async {
+        Analytics.log(.emailDisconnected)
         await session.disconnect()
         provider = nil
         email = nil
@@ -304,6 +308,7 @@ final class EmailImport {
         guard Self.isReady, isConnected, !isScanning, Paywalls.shared.hasEmailImport else { return }
         guard Connectivity.shared.isOnline else {
             lastResult = .offline
+            Analytics.logOnce(.emailScanFinished, ["result": "offline"])
             return
         }
         isScanning = true
@@ -355,6 +360,10 @@ final class EmailImport {
             needsReconnect = false
             let changedSomething = counts.added + counts.ready + counts.needsYou > 0 || !events.isEmpty
             lastResult = changedSomething ? .found(added: counts.added, ready: counts.ready, needsYou: counts.needsYou) : .nothingNew
+            Analytics.log(.emailScanFinished, [
+                "result": changedSomething ? "found" : "nothing_new", "added": counts.added, "ready": counts.ready,
+                "needs_you": counts.needsYou, "first_scan": first, "backlog": ledger.backlog,
+            ])
             if first {
                 summary = Summary(added: events.compactMap { if case .added(let id) = $0 { id } else { nil } })
             } else {
@@ -363,8 +372,10 @@ final class EmailImport {
         } catch MailError.signedOut {
             needsReconnect = true
             lastResult = nil
+            Analytics.logOnce(.emailScanFinished, ["result": "needs_reconnect"])
         } catch {
             lastResult = .unavailable
+            Analytics.logOnce(.emailScanFinished, ["result": "unavailable"])
         }
     }
 
@@ -612,11 +623,13 @@ final class EmailImport {
     }
 
     func discard(_ item: ReadyFlight) {
+        Analytics.log(.emailFlightDismissed, ["list": "ready"])
         ledger.ready.removeAll { $0.key == item.key }
         ledger.dismissed.insert(item.key)
     }
 
     func discard(_ item: NeedsYouItem) {
+        Analytics.log(.emailFlightDismissed, ["list": "needs_you", "reason": "\(item.reason)"])
         ledger.needsYou.removeAll { $0.key == item.key }
         ledger.dismissed.insert(item.key)
     }

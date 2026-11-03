@@ -2,6 +2,13 @@ import SwiftUI
 
 struct FlightDetailView: View {
     let flightID: UUID
+    /// On the open iPhone Duo the Flights tab shows the next flight's forecast in place: the sections
+    /// only, inside the list's own scroll view and navigation bar.
+    var embedded = false
+    /// Embedded: the list's own entries before the flight's (its controls) and after (Coming up,
+    /// the Learn card), so the list and the forecast are one list.
+    var listLeading: [AdaptiveItem] = []
+    var listTail: [AdaptiveItem] = []
 
     @Environment(FlightStore.self) private var store
     @Environment(InFlight.self) private var inFlight
@@ -10,7 +17,6 @@ struct FlightDetailView: View {
     @Environment(EmailImport.self) private var emailImport
     @Environment(\.dismiss) private var dismiss
     @State private var isEditing = false
-    @State private var isAdding = false
 
     private var connectivity: Connectivity { .shared }
 
@@ -19,6 +25,17 @@ struct FlightDetailView: View {
     private var currentID: UUID { inFlight.currentID(of: flightID) }
 
     var body: some View {
+        if embedded {
+            if let flight = store.flight(currentID) {
+                // The flight's menu comes along into the list's navigation bar.
+                clock(flight).modifier(actions(flight)).task(id: flight.id) { await waitForStatus() }
+            }
+        } else {
+            screen
+        }
+    }
+
+    private var screen: some View {
         Group {
             if let flight = store.flight(currentID) {
                 content(flight)
@@ -26,6 +43,7 @@ struct FlightDetailView: View {
                 removed
             }
         }
+        .onAppear(perform: logOpened)
         // While this screen is on top, what's done here that doesn't go through (a delete, or an
         // edit still saving after its sheet closed) says so here; the list's alert waits its turn.
         .alert("That didn't go through", isPresented: .constant(store.error != nil && router.flightPath.last == flightID)) {
@@ -33,6 +51,16 @@ struct FlightDetailView: View {
         } message: {
             Text("Check your connection and try again. Your saved forecasts still work offline.")
         }
+    }
+
+    /// `flight_opened`, or `flight_link_missing` for a link or notification to a deleted flight.
+    private func logOpened() {
+        let source = router.openedFrom ?? "list"
+        router.openedFrom = nil
+        guard let flight = store.flight(currentID) else {
+            return Analytics.logOnce(.flightLinkMissing, ["from": source])
+        }
+        Analytics.log(.flightOpened, Analytics.forecastParams(flight).merging(["source": source]) { $1 })
     }
 
     private var removed: some View {
@@ -49,45 +77,47 @@ struct FlightDetailView: View {
     }
 
     private func content(_ flight: Flight) -> some View {
-        let forecast = store.forecasts[flight.id]
-        return ScrollView {
-            // One clock for the screen, on the flight's minutes, so the in-flight card and the
-            // forecast below it never disagree about now. Never behind the real time, so a tap
-            // ("We've landed") shows at once rather than on the next tick. The state follows it
-            // too, so "Your forecast unlocks …" moves on to "Building" when that time comes.
-            TimelineView(.flightMinutes(takeoff: inFlight.effectiveTakeoff(of: flight))) { context in
-                let now = max(context.date, .now)
-                let state = ForecastState(flight: flight, forecast: forecast, now: now, betaOn: GlobalBeta.shared.isOn)
-                sections(flight, forecast: forecast, state: state, now: now)
-                    .task(id: state == .building) {
-                        // While the worker is building the forecast, check back every 30 seconds (online only).
-                        while ForecastState(flight: flight, forecast: store.forecasts[flight.id], betaOn: GlobalBeta.shared.isOn) == .building,
-                            !Task.isCancelled
-                        {
-                            try? await Task.sleep(for: .seconds(30))
-                            guard connectivity.isOnline else { continue }
-                            await store.refreshForecast(flight.id)
-                        }
-                    }
-            }
-            .padding()
+        ScrollView {
+            clock(flight)
+                .padding()
         }
         .skyBackground(Sky(date: flight.departureAt, timeZone: flight.originAirport?.timeZone ?? .current))
         .navigationTitle("Forecast")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            Menu("More", systemImage: "ellipsis") {
-                Button("Edit flight", systemImage: "pencil") { isEditing = true }
-                Button("Delete flight", systemImage: "trash", role: .destructive) {
-                    Task { await delete(flight) }
-                }
-            }
-        }
-        // Add flight opens the new forecast or shows its toast once the sheet has closed.
-        .sheet(isPresented: $isEditing, onDismiss: { router.finishAdding() }) { AddFlightView(flight: flight) }
-        .sheet(isPresented: $isAdding, onDismiss: { router.finishAdding() }) { AddFlightView() }
+        .modifier(actions(flight))
         .refreshable { await store.refresh() }
         .task(id: flight.id) { await waitForStatus() }
+    }
+
+    /// The More menu (edit, delete) and the edit sheet. Add flight opens the new forecast or shows
+    /// its toast once the sheet has closed. A new flight (from the cancelled card) opens from the
+    /// Flights list, which runs the follow-up: the card settling in, the flight_added moment and
+    /// the notification prompt.
+    private func actions(_ flight: Flight) -> FlightActions {
+        FlightActions(flight: flight, isEditing: $isEditing, onDelete: { Task { await delete(flight) } })
+    }
+
+    /// One clock for the screen, on the flight's minutes, so the in-flight card and the forecast
+    /// below it never disagree about now. Never behind the real time, so a tap ("We've landed")
+    /// shows at once rather than on the next tick. The state follows it too, so "Your forecast
+    /// unlocks …" moves on to "Building" when that time comes.
+    private func clock(_ flight: Flight) -> some View {
+        let forecast = store.forecasts[flight.id]
+        return TimelineView(.flightMinutes(takeoff: inFlight.effectiveTakeoff(of: flight))) { context in
+            let now = max(context.date, .now)
+            let state = ForecastState(flight: flight, forecast: forecast, now: now, betaOn: GlobalBeta.shared.isOn)
+            entries(flight, forecast: forecast, state: state, now: now)
+                .task(id: state == .building) {
+                    // While the worker is building the forecast, check back every 30 seconds (online only).
+                    while ForecastState(flight: flight, forecast: store.forecasts[flight.id], betaOn: GlobalBeta.shared.isOn) == .building,
+                        !Task.isCancelled
+                    {
+                        try? await Task.sleep(for: .seconds(30))
+                        guard connectivity.isOnline else { continue }
+                        await store.refreshForecast(flight.id)
+                    }
+                }
+        }
     }
 
     /// Leaves the screen only once the flight is gone: one that wasn't deleted stays, with the alert.
@@ -96,7 +126,38 @@ struct FlightDetailView: View {
         if store.flight(flight.id) == nil { dismiss() }
     }
 
-    private func sections(_ flight: Flight, forecast: Forecast?, state: ForecastState, now: Date) -> some View {
+    /// The screen as one list: the route and its notes, the status cards, the forecast (or what
+    /// stands in for it), then the updates. Embedded in the Flights list, the list's own entries
+    /// go first and last. `AdaptiveSpread` shows it as the phone's stack or as a spread.
+    @ViewBuilder
+    private func entries(_ flight: Flight, forecast: Forecast?, state: ForecastState, now: Date) -> some View {
+        let header = listLeading + headerItems(flight, forecast: forecast, state: state, now: now)
+        // Opened from Coming up on a spread, the other flights coming up and the Learn card follow.
+        let comingUp = store.comingUp(after: flight.id)
+        let more: [AdaptiveItem] =
+            !listTail.isEmpty
+            ? listTail
+            : (comingUp.isEmpty
+                ? [] : [AdaptiveItem(FlightRowsSection(title: FlightRowsSection.comingUpTitle, flights: comingUp, compact: true), onPhone: false)])
+                + [AdaptiveItem(LearnCard(), onPhone: false)]
+        let tail = [AdaptiveItem(UpdatesSection(flight: flight))] + more
+        switch state {
+        case _ where flight.isCancelled:
+            // The forecast describes a flight that isn't happening.
+            AdaptiveSpread(items: header + tail, spacing: 20)
+        case .ready(let forecast) where flight.status?.state == .diverted:
+            ForecastView(
+                forecast: forecast, flight: flight, now: now,
+                before: header + [AdaptiveItem(DivertedForecastNote(flight: flight))], after: tail, leadSpacing: 8, fade: 0.45)
+        case .ready(let forecast):
+            ForecastView(forecast: forecast, flight: flight, now: now, before: header, after: tail)
+        default:
+            AdaptiveSpread(items: header + [standIn(flight, state: state)].compactMap { $0 } + tail, spacing: 20)
+        }
+    }
+
+    /// The route, its status and notes, then the cards for where the flight is now, in order.
+    private func headerItems(_ flight: Flight, forecast: Forecast?, state: ForecastState, now: Date) -> [AdaptiveItem] {
         let landed = inFlight.landing(of: flight, forecast: forecast) <= now
         // The flying card carries its own connection note, so the label above it steps aside.
         let cardShowsConnection: Bool =
@@ -106,68 +167,66 @@ struct FlightDetailView: View {
                 false
             }
         let note = ConnectionNote(store: store)
-        return VStack(alignment: .leading, spacing: 20) {
-            FlightRouteHeader(flight: flight)
-            ScheduleNote(flight: flight)
-            EmailFlightNotes(flight: flight) { dismiss() }
-            if !cardShowsConnection,
-                let text = OfflineCopy.detail(
-                    note, checkedAt: OfflineCopy.lastChecked(syncedAt: store.syncedAt, issued: [forecast?.issuedAt]))
-            {
-                Label(text, systemImage: note.symbol)
-                    .font(.bcFootnote)
-                    .foregroundStyle(.secondary)
+        var items = [
+            AdaptiveItem(FlightRouteHeader(flight: flight)),
+            AdaptiveItem(ScheduleNote(flight: flight)),
+            AdaptiveItem(EmailFlightNotes(flight: flight) { dismiss() }),
+        ]
+        if !cardShowsConnection,
+            let text = OfflineCopy.detail(
+                note, checkedAt: OfflineCopy.lastChecked(syncedAt: store.syncedAt, issued: [forecast?.issuedAt]))
+        {
+            items.append(AdaptiveItem(OfflineNote(text: text, symbol: note.symbol)))
+        }
+        if case .ready(let forecast) = state {
+            if landed {
+                // A cancelled flight wasn't flown: nothing to rate.
+                if !flight.isCancelled { items.append(AdaptiveItem(LandingCheckCard(flight: flight))) }
+            } else {
+                items.append(AdaptiveItem(InFlightCard(flight: flight, forecast: forecast, now: now)))
             }
-            if case .ready(let forecast) = state {
-                if landed {
-                    // A cancelled flight wasn't flown: nothing to rate.
-                    if !flight.isCancelled { LandingCheckCard(flight: flight) }
-                } else {
-                    InFlightCard(flight: flight, forecast: forecast, now: now)
+        }
+        // Before the flight, while notifications are off.
+        if !landed, flight.departureAt > now, !push.isEnabled, state != .outOfCoverage, state != .betaAvailable {
+            items.append(AdaptiveItem(NotificationsCard(
+                flight: flight, forecastReady: { if case .ready = state { true } else { false } }(),
+                globalOutlook: !Coverage.covers(flight))))
+        }
+        if flight.isCancelled {
+            items.append(AdaptiveItem(CancelledCard(
+                flight: flight, fromEmail: emailImport.isCancelledFromEmail(flight.id),
+                addFlight: {
+                    router.addFlightSource = "cancelled_card"
+                    router.showAddFlight = true
                 }
-            }
-            if !landed, flight.departureAt > now, !push.isEnabled, state != .outOfCoverage, state != .betaAvailable {
-                NotificationsCard(
-                    flight: flight, forecastReady: { if case .ready = state { true } else { false } }(),
-                    globalOutlook: !Coverage.covers(flight))
-            }
-            if flight.isCancelled {
-                CancelledCard(flight: flight, fromEmail: emailImport.isCancelledFromEmail(flight.id), addFlight: { isAdding = true }) {
-                    Task { await delete(flight) }
-                }
-            } else if flight.status?.state == .diverted {
-                DivertedCard(flight: flight)
-            }
-            switch state {
-            case _ where flight.isCancelled:
-                EmptyView()  // the forecast describes a flight that isn't happening
-            case .ready(let forecast) where flight.status?.state == .diverted:
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("This forecast was for the original route to \(flight.destinationAirport?.iata ?? flight.destination).")
-                        .font(.bcFootnote)
-                        .foregroundStyle(.secondary)
-                    ForecastView(forecast: forecast, flight: flight, now: now).opacity(0.45)
-                }
-            case .ready(let forecast):
-                ForecastView(forecast: forecast, flight: flight, now: now)
-            case .unlocksAt(let date):
-                MessageCard(
-                    symbol: "clock",
-                    title: "Your forecast unlocks \(date.formatted(.relative(presentation: .named)))",
-                    message: "Turbulence forecasts are only reliable about two days out. We'll have yours ready 48 hours before departure, then refresh it as your flight gets closer."
-                )
-            case .building:
-                MessageCard(
-                    symbol: "hourglass",
-                    title: "Building your forecast",
-                    message: "We're checking the latest turbulence data along your route. This usually takes a few minutes."
-                )
-            case .betaAvailable:
-                BetaInviteCard(flight: flight)
-            case .outOfCoverage:
-                WaitlistCard(flight: flight)
-            }
-            UpdatesSection(flight: flight)
+            ) { Task { await delete(flight) } }))
+        } else if flight.status?.state == .diverted {
+            items.append(AdaptiveItem(DivertedCard(flight: flight)))
+        }
+        return items
+    }
+
+    /// What stands in for the forecast before it's ready, or on a route it can't cover.
+    private func standIn(_ flight: Flight, state: ForecastState) -> AdaptiveItem? {
+        switch state {
+        case .unlocksAt(let date):
+            AdaptiveItem(MessageCard(
+                symbol: "clock",
+                title: "Your forecast unlocks \(date.formatted(.relative(presentation: .named)))",
+                message: "Turbulence forecasts are only reliable about two days out. We'll have yours ready 48 hours before departure, then refresh it as your flight gets closer."
+            ))
+        case .building:
+            AdaptiveItem(MessageCard(
+                symbol: "hourglass",
+                title: "Building your forecast",
+                message: "We're checking the latest turbulence data along your route. This usually takes a few minutes."
+            ))
+        case .betaAvailable:
+            AdaptiveItem(BetaInviteCard(flight: flight))
+        case .outOfCoverage:
+            AdaptiveItem(WaitlistCard(flight: flight))
+        case .ready:
+            nil
         }
     }
 
@@ -189,7 +248,59 @@ struct FlightDetailView: View {
     }
 }
 
-struct MessageCard<Actions: View>: View {
+/// A flight's More menu: on its forecast screen, and in the Flights toolbar on the open iPhone Duo,
+/// where the next flight's forecast is in place. Each screen keeps its own edit and delete.
+struct FlightActionsMenu: View {
+    let onEdit: () -> Void
+    let onDelete: () -> Void
+
+    var body: some View {
+        Menu("More", systemImage: "ellipsis") {
+            Button("Edit flight", systemImage: "pencil", action: onEdit)
+            DeleteFlightButton(action: onDelete)
+        }
+    }
+}
+
+/// "You're offline" or "Couldn't refresh" under the route.
+private struct OfflineNote: View, DuoPlaced {
+    let text: String
+    let symbol: String
+    var duoRole: DuoRole { .leading }
+
+    var body: some View {
+        Label(text, systemImage: symbol).font(.bcFootnote).foregroundStyle(.secondary)
+    }
+}
+
+/// Above a diverted flight's faded forecast.
+private struct DivertedForecastNote: View {
+    let flight: Flight
+
+    var body: some View {
+        Text("This forecast was for the original route to \(flight.destinationAirport?.iata ?? flight.destination).")
+            .font(.bcFootnote)
+            .foregroundStyle(.secondary)
+    }
+}
+
+/// The flight's More menu and edit sheet, wherever its forecast is shown.
+private struct FlightActions: ViewModifier {
+    let flight: Flight
+    @Binding var isEditing: Bool
+    let onDelete: () -> Void
+    @Environment(Router.self) private var router
+
+    func body(content: Content) -> some View {
+        content
+            .toolbar { FlightActionsMenu(onEdit: { isEditing = true }, onDelete: onDelete) }
+            .adaptiveSheet(isPresented: $isEditing, onDismiss: { router.finishAdding() }) { AddFlightView(flight: flight) }
+    }
+}
+
+/// Stands where the forecast's grade would: beside the route header on a spread.
+struct MessageCard<Actions: View>: View, DuoPlaced {
+    var duoRole: DuoRole { .trailing }
     let symbol: String
     let title: String
     let message: String
@@ -213,7 +324,8 @@ extension MessageCard where Actions == EmptyView {
 }
 
 /// A route only the global outlook covers, with the beta off: offer it, plainly.
-private struct BetaInviteCard: View {
+private struct BetaInviteCard: View, DuoPlaced {
+    var duoRole: DuoRole { .trailing }
     let flight: Flight
     @Environment(FlightStore.self) private var store
     @State private var dismissed = false
@@ -228,12 +340,12 @@ private struct BetaInviteCard: View {
             MessageCard(symbol: "globe", title: GlobalOutlookCopy.waitlistTitle, message: GlobalOutlookCopy.waitlistBody) {
                 HStack {
                     Button(GlobalOutlookCopy.turnOn) {
-                        GlobalBeta.shared.set(true)
+                        GlobalBeta.shared.set(true, from: "flight_invite")
                         Task { await store.refreshForecast(flight.id) }
                     }
                     .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent).tint(Theme.accent)
                     Button(GlobalOutlookCopy.notNow) {
-                        GlobalBeta.shared.set(false)
+                        GlobalBeta.shared.set(false, from: "flight_invite")
                         dismissed = true
                         UserDefaults.standard.set(true, forKey: key)
                     }
@@ -249,7 +361,8 @@ private struct BetaInviteCard: View {
 }
 
 /// No forecast can cover this route yet (polar and other routes the worker can't do).
-private struct WaitlistCard: View {
+private struct WaitlistCard: View, DuoPlaced {
+    var duoRole: DuoRole { .trailing }
     let flight: Flight
     @Environment(FlightStore.self) private var store
     @State private var isJoining = false
@@ -310,7 +423,7 @@ private struct NotificationsCard: View {
                         openURL(URL(string: UIApplication.openNotificationSettingsURLString)!)
                     } else {
                         // A Superwall surface if a campaign takes it, otherwise the system prompt.
-                        paywalls.take(.turnOnNotifications, flight: flight) { await push.requestPermission() }
+                        paywalls.take(.turnOnNotifications, flight: flight) { await push.requestPermission(from: "flight_card") }
                     }
                 }
                 .buttonStyle(.bordered)

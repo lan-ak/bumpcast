@@ -173,13 +173,28 @@ private struct SkySurface<S: InsettableShape>: ViewModifier {
     }
 }
 
+extension EnvironmentValues {
+    /// Whether screens on a sky tell the navigation bar about a night sky (the open iPhone Duo).
+    @Entry var navigationBarFollowsSky = false
+}
+
 private struct OnSky: ViewModifier {
     let sky: Sky
     @Environment(\.colorScheme) private var systemScheme
+    @Environment(\.navigationBarFollowsSky) private var navigationBarFollowsSky
 
     func body(content: Content) -> some View {
         let scheme: ColorScheme = sky.isDark || systemScheme == .dark ? .dark : .light
-        content.environment(\.colorScheme, scheme)
+        if navigationBarFollowsSky {
+            // The open iPhone Duo: the navigation bar, which is UIKit and doesn't read the
+            // environment, is told about a night sky directly, so its title takes the screen's ink.
+            content
+                .environment(\.colorScheme, scheme)
+                .toolbarColorScheme(sky.isDark ? .dark : nil, for: .navigationBar)
+        } else {
+            // Everywhere else the bar is left exactly as it was (any toolbar scheme, even none, changes it).
+            content.environment(\.colorScheme, scheme)
+        }
     }
 }
 

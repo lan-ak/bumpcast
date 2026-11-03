@@ -20,7 +20,10 @@ struct SettingsView: View {
                     if paywalls.isPro {
                         Label("You have Pro", systemImage: "checkmark.seal.fill").foregroundStyle(Theme.accent)
                         // Easy cancel: straight to Apple's subscription management.
-                        Button("Manage or cancel subscription") { isManagingSubscription = true }
+                        Button("Manage or cancel subscription") {
+                            Analytics.log(.manageSubscriptionOpened)
+                            isManagingSubscription = true
+                        }
                     } else {
                         Button("Get BumpCast Pro") {
                             paywalls.unlock(.upgradeFromSettings) {}
@@ -36,10 +39,18 @@ struct SettingsView: View {
                             restoreMessage = Connectivity.shared.hasPath
                                 ? "Your connection isn't reaching the internet right now. Try again in a moment."
                                 : "You're offline. Connect to wifi to restore purchases."
+                            Analytics.log(.restoreFinished, ["result": "offline"])
                             return
                         }
                         Task {
-                            restoreMessage = await paywalls.restorePurchases() ? "Purchases restored." : "Nothing to restore."
+                            // With nothing active, Superwall's own alert already says so: no second one.
+                            let outcome = await paywalls.restorePurchases()
+                            switch outcome {
+                            case .restored: restoreMessage = "Purchases restored."
+                            case .unavailable: restoreMessage = "Nothing to restore."
+                            case .nothingFound: break
+                            }
+                            Analytics.log(.restoreFinished, ["result": "\(outcome)"])
                         }
                     }
                 } header: {
@@ -52,7 +63,7 @@ struct SettingsView: View {
                             if push.status == .denied {
                                 openURL(URL(string: UIApplication.openNotificationSettingsURLString)!)
                             } else {
-                                Task { await push.requestPermission() }
+                                Task { await push.requestPermission(from: "settings") }
                             }
                         }
                     }
@@ -61,7 +72,7 @@ struct SettingsView: View {
                 }
                 EmailSettingsSection()
                 Section {
-                    Toggle(isOn: Binding(get: { GlobalBeta.shared.isOn }, set: { GlobalBeta.shared.set($0) })) {
+                    Toggle(isOn: Binding(get: { GlobalBeta.shared.isOn }, set: { GlobalBeta.shared.set($0, from: "settings") })) {
                         HStack(spacing: 6) {
                             Text(GlobalOutlookCopy.settingsLabel)
                             BetaTag().foregroundStyle(.secondary)
@@ -73,6 +84,7 @@ struct SettingsView: View {
                 }
                 Section {
                     Toggle("Haptics", isOn: $hapticsEnabled).tint(Theme.accent)
+                        .onChange(of: hapticsEnabled) { _, on in Analytics.log(.hapticsSet, ["on": on, "where": "settings"]) }
                 } footer: {
                     Text("Soft taps for breathing and when a forecast is confirmed. Never used as a warning.")
                 }

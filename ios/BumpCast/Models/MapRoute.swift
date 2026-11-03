@@ -106,13 +106,30 @@ final class MapLayer: Identifiable {
 
     init(_ grid: TurbulenceGrid) {
         self.grid = grid
-        values = grid.severities()
+        // A grid whose cells don't fill nx*ny, or with no usable step, is no data: every cell nil,
+        // still nx*ny long so anything indexing the grid stays in bounds.
+        let (count, overflow) = grid.nx.multipliedReportingOverflow(by: grid.ny)
+        if Self.isWellFormed(grid) {
+            values = grid.severities()
+        } else {
+            values = grid.nx > 0 && grid.ny > 0 && !overflow && count <= 4_000_000 ? Array(repeating: nil, count: count) : []
+        }
+    }
+
+    static func isWellFormed(_ grid: TurbulenceGrid) -> Bool {
+        let (count, overflow) = grid.nx.multipliedReportingOverflow(by: grid.ny)
+        return grid.step.isFinite && grid.step > 0 && grid.north.isFinite && grid.west.isFinite
+            && grid.nx > 0 && grid.ny > 0 && !overflow && grid.cells.utf8.count == count
     }
 
     func severity(at c: CLLocationCoordinate2D) -> Severity? {
-        let j = Int(((grid.north - c.latitude) / grid.step).rounded())
-        let i = Int(((c.longitude - grid.west) / grid.step).rounded())
-        guard (0..<grid.ny).contains(j), (0..<grid.nx).contains(i) else { return nil }
+        guard !values.isEmpty, grid.step.isFinite, grid.step > 0 else { return nil }
+        let y = ((grid.north - c.latitude) / grid.step).rounded()
+        let x = ((c.longitude - grid.west) / grid.step).rounded()
+        // Int(_:) traps on NaN, infinity and anything past Int's range.
+        guard y.isFinite, x.isFinite, abs(y) < 1e9, abs(x) < 1e9 else { return nil }
+        let j = Int(y), i = Int(x)
+        guard (0..<grid.ny).contains(j), (0..<grid.nx).contains(i), j * grid.nx + i < values.count else { return nil }
         return values[j * grid.nx + i]
     }
 

@@ -54,6 +54,14 @@ final class Connectivity {
 
     func noteSuccess() { clearDegraded() }
 
+    #if DEBUG
+        /// Tests only: offline (no network) or on wifi that isn't reaching the internet.
+        func debugSet(hasPath: Bool, isDegraded: Bool = false) {
+            self.hasPath = hasPath
+            self.isDegraded = isDegraded
+        }
+    #endif
+
     func noteFailure(_ error: Error) {
         guard error.isConnectivityFailure, hasPath else { return }
         if !isDegraded { isDegraded = true }

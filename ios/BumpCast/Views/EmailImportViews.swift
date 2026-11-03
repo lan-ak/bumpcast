@@ -310,7 +310,7 @@ struct NeedsYouList: View {
                 if item.id != items.last?.id { Divider() }
             }
         }
-        .sheet(item: $adding, onDismiss: { router.finishAdding() }) { item in
+        .adaptiveSheet(item: $adding, onDismiss: { router.finishAdding() }) { item in
             AddFlightView(prefill: item)
         }
     }
@@ -473,7 +473,7 @@ struct EmailSettingsSection: View {
             } footer: {
                 Text("Adds your booked flights and keeps them up to date from airline emails.")
             }
-            .sheet(isPresented: $connecting) { EmailImportSheet() }
+            .adaptiveSheet(isPresented: $connecting) { EmailImportSheet() }
             .confirmationDialog(
                 "Stop adding flights from your email?", isPresented: $confirmingDisconnect, titleVisibility: .visible
             ) {
@@ -488,7 +488,8 @@ struct EmailSettingsSection: View {
 
 /// On the flight screen for a day after email changed it: "Updated from your email" with what it
 /// is now and what it was, and Undo.
-struct EmailFlightNotes: View {
+struct EmailFlightNotes: View, DuoPlaced {
+    var duoRole: DuoRole { .leading }
     let flight: Flight
     /// The flight is gone: the screen closes.
     let removed: () -> Void

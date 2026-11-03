@@ -63,7 +63,7 @@ struct TurbulenceMapLayer: UIViewRepresentable {
         var onSelectReport: (PilotReport) -> Void = { _ in }
         private var current: GridOverlay?
         private var currentFaded = false
-        private var routeCount = 0
+        private var routeKey: [Double] = []
         private var routeOverlays: [MKPolyline] = []
         private var reportIDs: Set<String> = []
         private var fadeTask: Task<Void, Never>?
@@ -110,10 +110,13 @@ struct TurbulenceMapLayer: UIViewRepresentable {
         // MARK: Route
 
         func showRoute(_ points: [CLLocationCoordinate2D], overUS: [Bool], on map: MKMapView) {
-            guard points.count != routeCount || (points.isEmpty && !routeOverlays.isEmpty) else { return }
+            // Every route has the same point count, so compare the points and flags themselves.
+            let key = points.flatMap { [$0.latitude, $0.longitude] }
+                + overUS.map { $0 ? 1 : 0 }
+            guard key != routeKey || (points.isEmpty && !routeOverlays.isEmpty) else { return }
             map.removeOverlays(routeOverlays)
             routeOverlays = []
-            routeCount = points.count
+            routeKey = key
             guard points.count >= 2 else { return }
             // Runs on and off the map's data, sharing their end points so the line stays joined.
             var runs: [(onMap: Bool, points: [CLLocationCoordinate2D])] = []
@@ -281,6 +284,8 @@ private final class GridOverlay: NSObject, MKOverlay {
                 return (severity, SIMD4(Float(r) * alpha, Float(g) * alpha, Float(b) * alpha, alpha))
             })
         var pixels = [SIMD4<Float>](repeating: .zero, count: width * height)
+        // A grid whose values don't fill nx × ny draws nothing rather than trapping.
+        guard width > 0, height > 0, layer.values.count >= grid.nx * grid.ny else { return nil }
         for row in 0..<height {
             // Rows are evenly spaced in map space, so each samples the grid row at its latitude.
             let y = top + (Double(row) + 0.5) / Double(height) * (bottom - top)

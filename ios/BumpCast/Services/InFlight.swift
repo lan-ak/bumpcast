@@ -38,6 +38,9 @@ final class InFlight {
     @ObservationIgnored private var observedTokens: Set<String> = []
     @ObservationIgnored private var registeredTokens: [String: String] = [:]
     @ObservationIgnored private var registering: Set<String> = []
+    /// When each scheduled activity was asked to come up, by activity id. ActivityKit doesn't say,
+    /// and a takeoff that moves needs a new one at the new time (an update keeps the old start).
+    @ObservationIgnored private var scheduledStarts: [String: Date] = [:]
     /// One reconcile at a time, so two syncs can't both start an activity.
     @ObservationIgnored private var reconciling: Task<Void, Never>?
     /// Stretch reminders are written one pass at a time, and only a flight's newest pass adds any,
@@ -81,6 +84,8 @@ final class InFlight {
         trips = Self.loadByID("trips", from: defaults)
         seatbelts = Self.loadByID("seatbelts", from: defaults)
         replaced = (Self.loadByID("replacedFlights", from: defaults) as [UUID: String]).compactMapValues(UUID.init(uuidString:))
+        scheduledStarts = ((defaults.dictionary(forKey: "activityScheduledStarts") as? [String: Double]) ?? [:])
+            .mapValues { Date(timeIntervalSince1970: $0) }
     }
 
     // MARK: Takeoff
@@ -165,6 +170,7 @@ final class InFlight {
     func getReady(_ flight: Flight, forecast: Forecast, now: Date = .now) {
         if takeoff(of: flight) != nil || now < flight.expectedDeparture {
             arm(flight, forecast: forecast)
+            Self.logCountdown(how: "tapped")
         } else {
             takeOff(flight, forecast: forecast, at: now)
         }
@@ -206,7 +212,12 @@ final class InFlight {
                 landing(of: flight, forecast: forecast) > now
             else { continue }
             arm(flight, forecast: forecast)
+            Self.logCountdown(how: "auto_24h")
         }
+    }
+
+    private static func logCountdown(how: String) {
+        Analytics.log(.countdownStarted, ["how": how, "live_activities": ActivityAuthorizationInfo().areActivitiesEnabled])
     }
 
     /// After a sync: follow a real wheels-up, or a delay or departure the airline reported. Before
@@ -279,6 +290,11 @@ final class InFlight {
     func takeOff(_ flight: Flight, forecast: Forecast, at date: Date = .now) {
         takeoffs[flight.id] = date
         let time = takeoff(of: flight) ?? date
+        // Minutes from the airline's (or the expected) departure, so late taps show.
+        Analytics.log(.tookOff, [
+            "wheels_up_known": takeoff(of: flight) != nil,
+            "minutes_after_departure": Int(date.timeIntervalSince(flight.expectedDeparture) / 60),
+        ])
         armed[flight.id] = time
         trips[flight.id] = Self.trip(flight)
         dismissed.remove(flight.id)
@@ -292,6 +308,7 @@ final class InFlight {
 
     func land(_ flight: Flight, at date: Date = .now) {
         landings[flight.id] = date
+        Analytics.log(.landed, ["minutes_flying": Int(date.timeIntervalSince(effectiveTakeoff(of: flight)) / 60)])
         persist()
         let ids = ids(of: flight.id)
         Task {
@@ -309,6 +326,7 @@ final class InFlight {
         let minute = max(0, Int(now.timeIntervalSince(effectiveTakeoff(of: flight)) / 60))
         if let last = seatbelts[flight.id]?.last, abs(minute - last) < 2 { return }
         seatbelts[flight.id, default: []].append(minute)
+        Analytics.log(.seatbeltTapped, ["minute": minute])
         persist()
     }
 
@@ -341,6 +359,8 @@ final class InFlight {
         dismissed.remove(flightID)
         started.remove(flightID)
         if !keepAliases { replaced = replaced.filter { $0.value != flightID } }
+        // The gate this phone showed was for that departure.
+        GateMemory.remove(flightID)
         persist()
         UNUserNotificationCenter.current().removePendingNotificationRequests(
             withIdentifiers: ["landing-\(flightID)", "boarding-\(flightID)"])
@@ -378,6 +398,8 @@ final class InFlight {
         trips[old] = nil
         dismissed.remove(old)
         started.remove(old)
+        // The same trip: the gate this phone showed for it still counts ("was B18").
+        GateMemory.move(from: old, to: new)
         persist()
         activityVersion += 1
     }
@@ -480,6 +502,12 @@ final class InFlight {
         let live = Activity<FlightActivityAttributes>.activities.filter { $0.activityState.isLive }
             .map { (id: $0.id, flightID: $0.attributes.flightID) }
             .sorted { replaced[$0.flightID] == nil && replaced[$1.flightID] != nil }
+        // Start times only for activities still waiting to come up.
+        let pending = Set(Activity<FlightActivityAttributes>.activities.filter { $0.activityState == .pending }.map(\.id))
+        if scheduledStarts.keys.contains(where: { !pending.contains($0) }) {
+            scheduledStarts = scheduledStarts.filter { pending.contains($0.key) }
+            persist()
+        }
         for (id, startedFor) in live {
             // By id, so the activity is looked up fresh and never crosses isolation.
             guard let activity = Self.activity(id) else { continue }
@@ -529,6 +557,15 @@ final class InFlight {
             // Up hours early (started by an earlier build, or the departure was delayed): it goes
             // back to coming up close to the flight.
             let show = showTime(flight, takeoff: state.takeoff)
+            // Scheduled for a takeoff that has moved: asked again for the new time. The old one
+            // never came up, so its alert never fires and the flight still gets one.
+            if inForeground, activity.activityState == .pending, let forecast, isMistimed(id, show: show),
+                requestActivity(flight, forecast: forecast, takeoff: state.takeoff, at: show)
+            {
+                await activity.end(nil, dismissalPolicy: .immediate)
+                activityVersion += 1
+                continue
+            }
             if inForeground, activity.activityState == .active, takeoff(of: flight) == nil, let forecast,
                 show > now.addingTimeInterval(5 * 60),
                 requestActivity(flight, forecast: forecast, takeoff: state.takeoff, at: show)
@@ -678,6 +715,14 @@ final class InFlight {
                 if !hasLiveActivity(flightID) { requestActivity(flight, forecast: forecast, takeoff: takeoff, at: .now) }
                 return
             }
+            // Scheduled for the old takeoff: an update can't move its start, so it's asked for again.
+            if inForeground, Self.activity(id)?.activityState == .pending, isMistimed(id, show: start),
+                requestActivity(flight, forecast: forecast, takeoff: takeoff, at: start)
+            {
+                await Self.activity(id)?.end(nil, dismissalPolicy: .immediate)
+                activityVersion += 1
+                return
+            }
             observePushToken(id: id)
             if let first = Self.activity(id) {
                 // A plan the worker pushed after the phone's forecast stays: only the takeoff moves.
@@ -725,6 +770,7 @@ final class InFlight {
         }
         guard let id = activity?.id else { return false }
         started.insert(flight.id)
+        if start > now, !startsNow(flight, forecast, takeoff: takeoff, now: now) { scheduledStarts[id] = start }
         persist()
         activityVersion += 1
         observePushToken(id: id)
@@ -734,6 +780,13 @@ final class InFlight {
             await registerToken(activityID: id)
         }
         return true
+    }
+
+    /// A scheduled activity asked to come up more than a minute away from `show`. One whose start
+    /// isn't known (requested by an earlier build) is left as it is.
+    private func isMistimed(_ activityID: String, show: Date) -> Bool {
+        guard let scheduled = scheduledStarts[activityID] else { return false }
+        return abs(scheduled.timeIntervalSince(show)) > 60
     }
 
     /// Scheduled, showing, or showing but out of date: still ours to update.
@@ -963,6 +1016,7 @@ final class InFlight {
         defaults.set(Dictionary(uniqueKeysWithValues: seatbelts.map { ($0.key.uuidString, $0.value) }), forKey: "seatbelts")
         defaults.set(
             Dictionary(uniqueKeysWithValues: replaced.map { ($0.key.uuidString, $0.value.uuidString) }), forKey: "replacedFlights")
+        defaults.set(scheduledStarts.mapValues(\.timeIntervalSince1970), forKey: "activityScheduledStarts")
     }
 
     private static func load(_ name: String, from defaults: UserDefaults) -> [UUID: Date] {

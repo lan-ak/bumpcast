@@ -67,16 +67,8 @@ final class Onboarding {
             return
         }
 
-        // The flow is full-bleed web content. Superwall infers the safe area from the device
-        // model, which simulators (and future models) don't report, so hand it the real insets.
-        if let window = UIApplication.shared.connectedScenes
-            .compactMap({ ($0 as? UIWindowScene)?.keyWindow }).first
-        {
-            let insets = window.safeAreaInsets
-            paywalls.setUserAttributes([
-                "safe_area_top": Int(insets.top.rounded()), "safe_area_bottom": Int(insets.bottom.rounded()),
-            ])
-        }
+        // Before the flow preloads, so its first page already has the real insets.
+        paywalls.shareSafeArea()
 
         Task { [weak self] in
             await self?.waitForPreload()
@@ -113,7 +105,7 @@ final class Onboarding {
                     if self.loadedPaywalls.contains(paywall) {
                         if logoDrawn { return self.present() }
                     } else if self.failedPaywalls.contains(paywall) {
-                        return self.fallBack()
+                        return self.fallBack(.pageFailed)
                     } else if !self.loadingPaywalls.contains(paywall), logoDrawn,
                         let answered = self.placementResultAt, ContinuousClock.now - answered >= Self.pageStartGrace
                     {
@@ -134,7 +126,7 @@ final class Onboarding {
                 if !Connectivity.shared.hasPath, ContinuousClock.now - launched >= Self.minimumLogoTime { break }
                 try? await Task.sleep(for: .milliseconds(100))
             }
-            self?.fallBack()
+            self?.fallBack(Connectivity.shared.hasPath ? .timeout : .offline)
         }
     }
 
@@ -188,18 +180,18 @@ final class Onboarding {
                 if case .holdout = reason {
                     await self?.finish()
                 } else {
-                    self?.fallBack()
+                    self?.fallBack(.skipped)
                 }
             }
         }
         handler.onError { [weak self] _ in
-            Task { @MainActor in self?.fallBack() }
+            Task { @MainActor in self?.fallBack(.error) }
         }
         // People flying soon add their flight from inside the flow (OnboardingFlight). Asking for a
         // rating is part of the flow too: a page sends `request_review`.
         handler.onCustomCallback { callback in
             if callback.name == Paywalls.requestReviewCallback {
-                await ReviewPrompt.requestNow()
+                await ReviewPrompt.requestNow(from: .onboarding)
                 return .success()
             }
             return await OnboardingFlight.handle(callback)
@@ -210,7 +202,7 @@ final class Onboarding {
         // leave the logo up forever.
         Task { [weak self] in
             try? await Task.sleep(for: .seconds(4))
-            self?.fallBack()
+            self?.fallBack(.presentTimeout)
         }
     }
 
@@ -229,20 +221,33 @@ final class Onboarding {
         await finish(addFlight: addFlight)
     }
 
-    private func fallBack() {
+    /// Why the Superwall flow didn't show, for `onboarding_fell_back`.
+    private enum FallBack: String {
+        case pageFailed = "page_failed", timeout, offline, skipped, error, presentTimeout = "present_timeout"
+    }
+
+    private func fallBack(_ reason: FallBack) {
         guard phase == .loading else { return }
         phase = .native
+        Analytics.log(.onboardingFellBack, ["reason": reason.rawValue])
     }
 
     private func finish(addFlight: Bool = false) async {
         guard phase != .done else { return }
+        Analytics.log(.onboardingFinished, [
+            "flow": phase == .native ? "native" : phase == .superwall ? "superwall" : "holdout",
+            "added_flight": addFlight || OnboardingFlight.flightID != nil,
+        ])
         defaults.set(true, forKey: Self.doneKey)
         phase = .done
-        if addFlight { Router.shared.showAddFlight = true }
+        if addFlight {
+            Router.shared.addFlightSource = "onboarding_native"
+            Router.shared.showAddFlight = true
+        }
         // A flight added during the flow: open it, so its forecast is the first thing they see.
         if let id = OnboardingFlight.flightID {
             OnboardingFlight.forget()
-            if FlightStore.shared.flight(id) != nil { Router.shared.openFlight(id) }
+            if FlightStore.shared.flight(id) != nil { Router.shared.openFlight(id, from: "onboarding") }
         }
         // The flow may have asked for notification permission: register for pushes and tell
         // the worker and Superwall.

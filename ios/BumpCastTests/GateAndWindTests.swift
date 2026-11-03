@@ -97,4 +97,54 @@ struct GateAndWindTests {
         let gusty = #"{"start_min":0,"end_min":1,"severity":"light","peak_edr":0.1,"phase":"climb","altitude_ft":0,"cause":"wind_origin"}"#
         #expect(try decoder.decode(Forecast.Segment.self, from: Data(gusty.utf8)).gustyEnd == .takeoff)
     }
+
+    @Test func pruneKeepsOnlySavedFlights() throws {
+        let defaults = try #require(UserDefaults(suiteName: "GateAndWindTests-\(UUID().uuidString)"))
+        let kept = UUID(), gone = UUID()
+        defaults.set(Data(), forKey: "gate.seen.\(kept)")
+        defaults.set(Data(), forKey: "gate.seen.\(gone)")
+        defaults.set(Data(), forKey: "gate.seen.not-an-id")
+        defaults.set(true, forKey: "haptics.enabled")
+        GateMemory.prune(keeping: [kept], in: defaults)
+        #expect(defaults.object(forKey: "gate.seen.\(kept)") != nil)
+        #expect(defaults.object(forKey: "gate.seen.\(gone)") == nil)
+        #expect(defaults.object(forKey: "gate.seen.not-an-id") == nil)
+        #expect(defaults.bool(forKey: "haptics.enabled"))
+    }
+
+    @Test func moveAndRemoveGateMemory() {
+        let old = UUID(), new = UUID()
+        _ = shown(status("B18", "5"), for: old)
+        GateMemory.move(from: old, to: new)
+        #expect(GateMemory.record(for: old) == nil)
+        #expect(shown(status("B22", "5"), for: new) == GateMemory.Change(wasGate: "B18"))
+        GateMemory.remove(new)
+        #expect(GateMemory.record(for: new) == nil)
+    }
+
+    // MARK: Map grids
+
+    private func grid(step: Double = 1, ny: Int = 2, nx: Int = 3, cells: String = "012301") -> TurbulenceGrid {
+        TurbulenceGrid(
+            validAt: .now, levelFt: 35000, cycle: .now, north: 50, west: -100, step: step, ny: ny, nx: nx, cells: cells)
+    }
+
+    @Test func aWellFormedGridReadsItsCells() {
+        let layer = MapLayer(grid())
+        #expect(layer.severity(at: .init(latitude: 50, longitude: -100)) == .smooth)
+        #expect(layer.severity(at: .init(latitude: 49, longitude: -98)) == .light)
+        #expect(layer.severity(at: .init(latitude: 40, longitude: -100)) == nil)
+    }
+
+    @Test func aMalformedGridIsNoData() {
+        let short = MapLayer(grid(cells: "0123"))
+        #expect(short.values.count == 6)
+        #expect(short.values.allSatisfy { $0 == nil })
+        #expect(short.severity(at: .init(latitude: 49, longitude: -98)) == nil)
+        #expect(short.shares.isEmpty)
+        for bad in [grid(step: 0), grid(step: -1), grid(step: .nan), grid(ny: 0, cells: ""), grid(nx: -3)] {
+            #expect(MapLayer(bad).severity(at: .init(latitude: 49, longitude: -98)) == nil)
+        }
+        #expect(MapLayer(grid()).severity(at: .init(latitude: .nan, longitude: .infinity)) == nil)
+    }
 }

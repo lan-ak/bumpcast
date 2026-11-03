@@ -18,6 +18,21 @@
       "productID" : "bumpcast_flight_pass",
       "referenceName" : "Flight Pass",
       "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "9.99",
+      "familyShareable" : false,
+      "internalID" : "687596",
+      "localizations" : [
+        {
+          "description" : "Full forecast and in-flight tools for one flight.",
+          "displayName" : "Flight Pass",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "bumpcast_flight_pass_999",
+      "referenceName" : "Flight Pass 9.99",
+      "type" : "Consumable"
     }
   ],
   "settings" : {

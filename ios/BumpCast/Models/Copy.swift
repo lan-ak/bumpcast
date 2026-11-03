@@ -229,7 +229,21 @@ extension Forecast.Confidence {
 }
 
 extension Date {
-    /// "today around 7:15 PM", "tomorrow around 6 AM", "Tuesday around 9:30 AM".
+    /// "Tuesday" within the coming week, "Tuesday, Nov 24" further out (and "Tuesday, Jan 5, 2027"
+    /// in another year), so a day weeks away never reads as this week. Past days get the date too.
+    func dayName(_ width: Date.FormatStyle.Symbol.Weekday = .wide, now: Date = .now, in tz: TimeZone = .current) -> String {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = tz
+        let days = calendar.dateComponents([.day], from: calendar.startOfDay(for: now), to: calendar.startOfDay(for: self)).day ?? 0
+        var style = Date.FormatStyle(timeZone: tz).weekday(width)
+        if (0..<7).contains(days) { return formatted(style) }
+        style = style.month(.abbreviated).day()
+        if calendar.component(.year, from: self) != calendar.component(.year, from: now) { style = style.year() }
+        return formatted(style)
+    }
+
+    /// "today around 7:15 PM", "tomorrow around 6 AM", "Tuesday around 9:30 AM",
+    /// "Tuesday, Nov 24 around 9:30 AM".
     func approximateDayAndTime(now: Date = .now) -> String {
         let time = formatted(date: .omitted, time: .shortened)
         let calendar = Calendar.current
@@ -237,10 +251,10 @@ extension Date {
         if let tomorrow = calendar.date(byAdding: .day, value: 1, to: now), calendar.isDate(self, inSameDayAs: tomorrow) {
             return "tomorrow around \(time)"
         }
-        return "\(formatted(.dateTime.weekday(.wide))) around \(time)"
+        return "\(dayName(now: now)) around \(time)"
     }
 
-    /// "this afternoon", "tonight", "tomorrow morning", "Tuesday".
+    /// "this afternoon", "tonight", "tomorrow morning", "Tuesday", "Tuesday, Nov 24".
     func relativeDay(now: Date = .now) -> String {
         let calendar = Calendar.current
         let hour = calendar.component(.hour, from: self)
@@ -249,16 +263,17 @@ extension Date {
         if let tomorrow = calendar.date(byAdding: .day, value: 1, to: now), calendar.isDate(self, inSameDayAs: tomorrow) {
             return part == "evening" ? "tomorrow night" : "tomorrow \(part)"
         }
-        return formatted(.dateTime.weekday(.wide))
+        return dayName(now: now)
     }
 
-    /// "today at 7:15 PM", "tomorrow at 6:00 AM", or "on Tuesday at 9:30 AM".
+    /// "today at 7:15 PM", "tomorrow at 6:00 AM", "on Tuesday at 9:30 AM", or
+    /// "on Tuesday, Nov 24 at 9:30 AM".
     var dayAndTime: String {
         let time = formatted(date: .omitted, time: .shortened)
         let calendar = Calendar.current
         if calendar.isDateInToday(self) { return "today at \(time)" }
         if calendar.isDateInTomorrow(self) { return "tomorrow at \(time)" }
-        return "on \(formatted(.dateTime.weekday(.wide))) at \(time)"
+        return "on \(dayName()) at \(time)"
     }
 }
 
@@ -438,11 +453,14 @@ enum OfflineCopy {
     /// A landing rating kept on the phone until it can be sent.
     static let reportPending = "We'll send your answer when you're back online."
 
-    /// "2:20 PM" today, else "Thu 2:20 PM".
+    /// "2:20 PM" today, "Thu 2:20 PM" this past week, else "Thu, Oct 22 2:20 PM".
     static func time(_ date: Date) -> String {
-        Calendar.current.isDateInToday(date)
-            ? date.formatted(date: .omitted, time: .shortened)
-            : date.formatted(.dateTime.weekday(.abbreviated).hour().minute())
+        let time = date.formatted(date: .omitted, time: .shortened)
+        if Calendar.current.isDateInToday(date) { return time }
+        let weekAgo = Calendar.current.date(byAdding: .day, value: -6, to: Calendar.current.startOfDay(for: .now)) ?? .now
+        return date >= weekAgo
+            ? date.formatted(.dateTime.weekday(.abbreviated).hour().minute())
+            : "\(date.formatted(.dateTime.weekday(.abbreviated).month(.abbreviated).day())) \(time)"
     }
 }
 

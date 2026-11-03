@@ -64,5 +64,27 @@ enum GateMemory {
         return Change()
     }
 
-    private static func key(_ id: UUID) -> String { "gate.seen.\(id)" }
+    /// The flight was deleted, or is another departure now (date or flight number changed).
+    static func remove(_ id: UUID) {
+        UserDefaults.standard.removeObject(forKey: key(id))
+    }
+
+    /// The same trip saved again under a new id: what this phone showed still applies.
+    static func move(from old: UUID, to new: UUID) {
+        guard old != new else { return }
+        if let record = record(for: old) { save(record, for: new) }
+        remove(old)
+    }
+
+    /// Drops what's kept for flights no longer saved (deleted elsewhere, or before removal existed).
+    /// Only with the full list from a good sync: before the first unlock the list can read empty.
+    static func prune(keeping ids: Set<UUID>, in defaults: UserDefaults = .standard) {
+        for key in defaults.dictionaryRepresentation().keys where key.hasPrefix(prefix) {
+            if let id = UUID(uuidString: String(key.dropFirst(prefix.count))), ids.contains(id) { continue }
+            defaults.removeObject(forKey: key)
+        }
+    }
+
+    private static let prefix = "gate.seen."
+    private static func key(_ id: UUID) -> String { "\(prefix)\(id)" }
 }

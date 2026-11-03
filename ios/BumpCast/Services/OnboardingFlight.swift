@@ -57,17 +57,26 @@ enum OnboardingFlight {
         case .saved(let flight) where store.isPending(flight.id):
             // Saved on the phone only (offline): no forecast or purchase can happen now, so the
             // flow goes on to its closable plans rather than the flight's paywall.
+            logResult("add", "pending")
             return .failure(data: ["reason": "unavailable"])
         case .saved(let flight):
             UserDefaults.standard.set(flight.id.uuidString, forKey: flightKey)
             Paywalls.shared.sellPass(for: flight.id)
+            logResult("add", "saved")
             return .success(data: data(for: flight))
         case .cancelled:
+            logResult("add", "cancelled")
             return .failure(data: ["reason": "cancelled"])
         case .unavailable:
+            logResult("add", "unavailable")
             return .failure(data: ["reason": "unavailable"])
         }
     }
+
+    private static func logResult(_ step: String, _ state: String) {
+        Analytics.log(.onboardingFlightResult, ["step": step, "state": state])
+    }
+
 
     private enum Outcome {
         case saved(Flight)
@@ -151,15 +160,15 @@ enum OnboardingFlight {
         // A first flight outside the US turns the global outlook (beta) on, unless they've
         // answered already: no extra question in the flow, and Settings shows it on to turn off.
         if !Coverage.covers(flight) && !GlobalBeta.shared.hasAnswered {
-            GlobalBeta.shared.set(true)
+            GlobalBeta.shared.set(true, from: "onboarding")
         }
         // A flight we can't forecast is never sold on the hard paywall, so this is checked first
         // (as the worker will decide), rather than waiting or calling it "too early".
         guard Coverage.covers(flight) || GlobalBeta.shared.isOn else {
-            return .success(data: ["state": "out_of_coverage"])
+            return logged("out_of_coverage")
         }
         // More than 48 h out there's nothing to wait for.
-        if flight.forecastUnlocksAt > .now { return .success(data: ["state": "too_early"]) }
+        if flight.forecastUnlocksAt > .now { return logged("too_early") }
         let deadline = ContinuousClock.now + forecastWait
         while true {
             await store.refreshForecast(id)
@@ -174,18 +183,24 @@ enum OnboardingFlight {
                         data["grade"] = grade.rawValue
                         data["grade_title"] = grade.title
                     }
+                    logResult("forecast", "ready")
                     return .success(data: data)
                 case .tooEarly where flight.forecastUnlocksAt > .now:
-                    return .success(data: ["state": "too_early"])
+                    return logged("too_early")
                 case .tooEarly:
                     break  // the window has just opened; the real forecast is on its way
                 case .outOfCoverage:
-                    return .success(data: ["state": "out_of_coverage"])
+                    return logged("out_of_coverage")
                 }
             }
             guard ContinuousClock.now + forecastPoll < deadline else { break }
             try? await Task.sleep(for: forecastPoll)
         }
-        return .success(data: ["state": "pending"])
+        return logged("pending")
+    }
+
+    private static func logged(_ state: String) -> CustomCallbackResult {
+        logResult("forecast", state)
+        return .success(data: ["state": state])
     }
 }

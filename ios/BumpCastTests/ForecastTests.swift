@@ -321,6 +321,30 @@ struct ForecastTests {
         #expect(entries.next().map { Int($0.timeIntervalSince(flying) / 60) } == 120)
     }
 
+    /// A first forecast weeks away names its date, so it never reads as this week.
+    @Test func farOffDaysNameTheDate() throws {
+        let tz = try #require(TimeZone(identifier: "America/New_York"))
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = tz
+        let now = try #require(calendar.date(from: DateComponents(year: 2026, month: 11, day: 1, hour: 10)))
+        let day = { (n: Int) in calendar.date(byAdding: .day, value: n, to: now)! }
+        func name(_ date: Date, _ width: Date.FormatStyle.Symbol.Weekday = .wide) -> String {
+            var style = Date.FormatStyle(timeZone: tz).weekday(width)
+            let days = calendar.dateComponents([.day], from: calendar.startOfDay(for: now), to: calendar.startOfDay(for: date)).day!
+            if !(0..<7).contains(days) { style = style.month(.abbreviated).day() }
+            if calendar.component(.year, from: date) != 2026 { style = style.year() }
+            return date.formatted(style)
+        }
+        #expect(day(3).dayName(now: now, in: tz) == name(day(3)))
+        #expect(!day(3).dayName(now: now, in: tz).contains("Nov"))
+        #expect(day(6).dayName(now: now, in: tz) == name(day(6)))
+        // A week on is the same weekday as today, so it gets the date.
+        #expect(day(7).dayName(now: now, in: tz) == name(day(7)))
+        #expect(day(7).dayName(now: now, in: tz) != day(0).dayName(now: now, in: tz))
+        #expect(day(21).dayName(.abbreviated, now: now, in: tz) == name(day(21), .abbreviated))
+        #expect(day(70).dayName(now: now, in: tz).contains("2027"))
+    }
+
     @Test func airportSearchPrefersExactCode() {
         #expect(AirportStore.shared.search("lax").first?.icao == "KLAX")
         #expect(AirportStore.shared.airport("JFK")?.tz == "America/New_York")

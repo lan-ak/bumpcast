@@ -23,8 +23,10 @@ final class GlobalBeta {
         choice = UserDefaults.standard.object(forKey: Self.key) as? Bool
     }
 
-    func set(_ on: Bool) {
+    /// `place` is where it was answered, for `global_outlook_set`.
+    func set(_ on: Bool, from place: String = "other") {
         guard choice != on else { return }
+        Analytics.log(.globalOutlookSet, ["on": on, "where": place, "first_answer": choice == nil])
         choice = on
         UserDefaults.standard.set(on, forKey: Self.key)
         Task { await AppSync.saveProfile() }

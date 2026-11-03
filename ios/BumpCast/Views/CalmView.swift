@@ -8,46 +8,43 @@ struct CalmView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.dynamicTypeSize) private var typeSize
     @State private var breathing = false
+    /// Tests render the open layout's panes at the Duo's height, without the navigation stack.
+    private let contentOnly: Bool
+
+    init(contentOnly: Bool = false) {
+        self.contentOnly = contentOnly
+    }
 
     var body: some View {
+        if contentOnly {
+            panes(height: 635).skyBackground(.night)
+        } else {
+            screen
+        }
+    }
+
+    private var screen: some View {
         NavigationStack {
             GeometryReader { geo in
                 // Scrolls at large text sizes; otherwise fills the screen, with the orb sized to
                 // the screen so tall phones don't end up with empty bands above and below.
                 ScrollView {
-                    VStack(spacing: 20) {
-                        // Its own header: the system title can't follow the night sky's light ink.
-                        Text("Calm")
-                            .font(.bcDisplay)
-                            .displayTypeLimit()
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .accessibilityAddTraits(.isHeader)
-                        Spacer(minLength: 8)
-                        // Smaller at accessibility text sizes, so the button stays near the top.
-                        orb(diameter: min(geo.size.width * 0.5, geo.size.height * 0.24)
-                            * (typeSize.isAccessibilitySize ? 0.5 : 1))
-                        Text("Breathe through the bumps")
-                            .font(.bcDisplay)
-                            .displayTypeLimit()
-                            .multilineTextAlignment(.center)
-                        // On the flight's own minutes, like the flight screen, so the two agree.
-                        TimelineView(.flightMinutes(takeoff: NextStretch.current(store: store, inFlight: inFlight)?.takeoff ?? .now)) {
-                            context in
-                            Text(subtitle(at: max(context.date, .now))).multilineTextAlignment(.center).foregroundStyle(.secondary)
+                    OpenLayout {
+                        VStack(spacing: 20) {
+                            header
+                            Spacer(minLength: 8)
+                            // Smaller at accessibility text sizes, so the button stays near the top.
+                            orb(diameter: min(geo.size.width * 0.5, geo.size.height * 0.24)
+                                * (typeSize.isAccessibilitySize ? 0.5 : 1))
+                            breathe
+                            Spacer(minLength: 16)
+                            readingCards
                         }
-                        Button {
-                            router.showBreathing = true
-                        } label: {
-                            Label("Start breathing", systemImage: "wind").frame(maxWidth: .infinity)
-                        }
-                        .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent)
-                        .tint(Theme.accent)
-                        .controlSize(.large)
-                        Spacer(minLength: 16)
-                        readingCards
+                        .padding(24)
+                        .frame(minHeight: geo.size.height)
+                    } open: {
+                        panes(height: geo.size.height)
                     }
-                    .padding(24)
-                    .frame(minHeight: geo.size.height)
                 }
                 .scrollBounceBehavior(.basedOnSize)
             }
@@ -55,6 +52,58 @@ struct CalmView: View {
             .toolbar(.hidden, for: .navigationBar)
             .toolbarColorScheme(.dark, for: .navigationBar)
         }
+    }
+
+    /// Its own header: the system title can't follow the night sky's light ink.
+    private var header: some View {
+        Text("Calm")
+            .font(.bcDisplay)
+            .displayTypeLimit()
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .accessibilityAddTraits(.isHeader)
+    }
+
+    /// "Breathe through the bumps", the heads-up, and the way in.
+    @ViewBuilder
+    private var breathe: some View {
+        Text("Breathe through the bumps")
+            .font(.bcDisplay)
+            .displayTypeLimit()
+            .multilineTextAlignment(.center)
+        // On the flight's own minutes, like the flight screen, so the two agree.
+        TimelineView(.flightMinutes(takeoff: NextStretch.current(store: store, inFlight: inFlight)?.takeoff ?? .now)) {
+            context in
+            Text(subtitle(at: max(context.date, .now))).multilineTextAlignment(.center).foregroundStyle(.secondary)
+        }
+        Button {
+            router.showBreathing = true
+        } label: {
+            Label("Start breathing", systemImage: "wind").frame(maxWidth: .infinity)
+        }
+        .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent)
+        .tint(Theme.accent)
+        .controlSize(.large)
+    }
+
+    /// Side by side (the open Duo): the orb and Start breathing in one pane, the reading cards in
+    /// the other.
+    private func panes(height: CGFloat) -> some View {
+        VStack(spacing: 20) {
+            header
+            Spacer(minLength: 8)
+            Panes(alignment: .center) {
+                VStack(spacing: 16) {
+                    orb(diameter: height * 0.27 * (typeSize.isAccessibilitySize ? 0.5 : 1))
+                    breathe
+                }
+            } trailing: {
+                readingCards
+            }
+            Spacer(minLength: 16)
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 22)
+        .frame(minHeight: height)
     }
 
     /// The same orb as the breathing screen, breathing slowly here too (a glow with Reduce Motion).
@@ -65,9 +114,13 @@ struct CalmView: View {
                 center: UnitPoint(x: 0.38, y: 0.32), startRadius: 0, endRadius: diameter * 0.6))
             .frame(width: diameter, height: diameter)
             .shadow(color: Theme.orbGlow.opacity(0.35), radius: diameter * 0.2)
-            .scaleEffect(reduceMotion ? 1 : (breathing ? 1 : 0.88))
-            .opacity(reduceMotion ? (breathing ? 1 : 0.7) : 1)
-            .animation(.easeInOut(duration: 5).repeatForever(autoreverses: true), value: breathing)
+            // Only the breath repeats: the orb's place on screen never rides the animation, so it
+            // doesn't drift in while the Duo's columns settle as the screen appears.
+            .animation(.easeInOut(duration: 5).repeatForever(autoreverses: true)) { orb in
+                orb
+                    .scaleEffect(reduceMotion ? 1 : (breathing ? 1 : 0.88))
+                    .opacity(reduceMotion ? (breathing ? 1 : 0.7) : 1)
+            }
             .onAppear { breathing = true }
             .accessibilityHidden(true)
     }
@@ -79,6 +132,7 @@ struct CalmView: View {
             ForEach(["built", "seatbelt"], id: \.self) { id in
                 if let explainer = Explainer.byID(id) {
                     Button {
+                        router.explainerFrom = "calm"
                         router.learnPath = [explainer]
                         router.tab = .learn
                     } label: {
@@ -154,6 +208,8 @@ struct BreathingView: View {
     @Environment(InFlight.self) private var inFlight
     @AppStorage("haptics.enabled") private var hapticsEnabled = true
     @State private var startedAt = Date.now
+    /// Left with Done, rather than swiped away.
+    @State private var finished = false
 
     static let inhale: TimeInterval = 4
     static let exhale: TimeInterval = 6
@@ -162,54 +218,110 @@ struct BreathingView: View {
     var body: some View {
         TimelineView(.animation(minimumInterval: 1 / 30)) { context in
             let (inhaling, progress, remaining) = phase(at: context.date)
-            VStack(spacing: 28) {
-                HStack {
-                    Toggle(isOn: $hapticsEnabled) {
-                        Label("Haptics", systemImage: "hand.tap")
-                    }
-                    .toggleStyle(.button)
-                    .disabled(!Haptics.isSupported)
+            OpenLayout {
+                VStack(spacing: 28) {
+                    controls
+                    headsUp(at: context.date)
                     Spacer()
-                    Button("Done") { dismiss() }
-                        .buttonStyle(.bordered)
+                    breath(inhaling: inhaling, progress: progress, remaining: remaining)
+                    Spacer()
+                    reminder()
                 }
-                if let next = NextStretch.current(store: store, inFlight: inFlight, now: context.date) {
-                    Text(next.headsUp(now: context.date))
-                        .font(.bcHeadline)
-                        .multilineTextAlignment(.center)
-                        .foregroundStyle(.secondary)
-                }
-                Spacer()
-                ZStack {
-                    Circle()
-                        .fill(RadialGradient(colors: [Theme.accent.opacity(0.7), Theme.accent.opacity(0.1)], center: .center, startRadius: 10, endRadius: 170))
-                        .frame(width: 280, height: 280)
-                        .scaleEffect(reduceMotion ? 1 : orbScale(inhaling: inhaling, progress: progress))
-                        .opacity(reduceMotion ? 0.45 + 0.55 * glow(inhaling: inhaling, progress: progress) : 1)
-                    VStack(spacing: 8) {
-                        Text(inhaling ? "Breathe in" : "Breathe out").font(.bcTitle)
-                        Text("\(Int(remaining.rounded(.up)))").font(.bcBigFigure)
-                            .contentTransition(.numericText(countsDown: true))
-                    }
-                }
-                .accessibilityElement(children: .combine)
-                Spacer()
-                Text("Unclench your hands and let your shoulders drop. The seatbelt is doing the work.")
-                    .font(.bcSubheadline)
-                    .multilineTextAlignment(.center)
-                    .foregroundStyle(.secondary)
+                .padding(28)
+            } open: {
+                panes(at: context.date, inhaling: inhaling, progress: progress, remaining: remaining)
             }
-            .padding(28)
         }
         .skyBackground(.night)
         .onAppear {
             startedAt = .now
             if hapticsEnabled { Haptics.shared.startBreathing(inhale: Self.inhale, exhale: Self.exhale) }
+            Analytics.log(.breathingStarted, ["where": Router.shared.breathingFrom, "haptics": hapticsEnabled])
+            Router.shared.breathingFrom = "calm"
         }
         .onChange(of: hapticsEnabled) { _, on in
             on ? Haptics.shared.startBreathing(inhale: Self.inhale, exhale: Self.exhale) : Haptics.shared.stop()
+            Analytics.log(.hapticsSet, ["on": on, "where": "breathing"])
         }
-        .onDisappear { Haptics.shared.stop() }
+        .onDisappear {
+            Haptics.shared.stop()
+            Analytics.log(.breathingFinished, ["seconds": Int(Date.now.timeIntervalSince(startedAt)), "done": finished])
+        }
+    }
+
+    /// Side by side (the open Duo): the same pieces, the orb in one pane and the heads-up and the
+    /// reminder in the other.
+    private func panes(at date: Date, inhaling: Bool, progress: Double, remaining: Double) -> some View {
+        VStack(spacing: 0) {
+            controls
+            Panes(alignment: .center) {
+                breath(inhaling: inhaling, progress: progress, remaining: remaining)
+                    .frame(maxWidth: .infinity)
+            } trailing: {
+                VStack(alignment: .leading, spacing: 22) {
+                    headsUp(at: date, alignment: .leading)
+                    reminder(alignment: .leading)
+                }
+            }
+            .frame(maxHeight: .infinity)
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 22)
+    }
+
+    // MARK: The breathing screen's pieces, shared by the iPhone and Duo layouts
+
+    private var controls: some View {
+        HStack {
+            Toggle(isOn: $hapticsEnabled) {
+                Label("Haptics", systemImage: "hand.tap")
+            }
+            .toggleStyle(.button)
+            .disabled(!Haptics.isSupported)
+            Spacer()
+            Button("Done") {
+                finished = true
+                dismiss()
+            }
+                .buttonStyle(.bordered)
+        }
+    }
+
+    /// Where the flight's bumps are, while one is in the air. The colour goes on after the
+    /// alignment, as a view style rather than the text's own: on the night sky that keeps its
+    /// lighter, vibrant secondary.
+    @ViewBuilder
+    private func headsUp(at date: Date, alignment: TextAlignment = .center) -> some View {
+        if let next = NextStretch.current(store: store, inFlight: inFlight, now: date) {
+            Text(next.headsUp(now: date))
+                .font(.bcHeadline)
+                .multilineTextAlignment(alignment)
+                .foregroundStyle(.secondary)
+        }
+    }
+
+    /// The orb with the count.
+    private func breath(inhaling: Bool, progress: Double, remaining: Double) -> some View {
+        ZStack {
+            Circle()
+                .fill(RadialGradient(colors: [Theme.accent.opacity(0.7), Theme.accent.opacity(0.1)], center: .center, startRadius: 10, endRadius: 170))
+                .frame(width: 280, height: 280)
+                .scaleEffect(reduceMotion ? 1 : orbScale(inhaling: inhaling, progress: progress))
+                .opacity(reduceMotion ? 0.45 + 0.55 * glow(inhaling: inhaling, progress: progress) : 1)
+            VStack(spacing: 8) {
+                Text(inhaling ? "Breathe in" : "Breathe out").font(.bcTitle)
+                Text("\(Int(remaining.rounded(.up)))").font(.bcBigFigure)
+                    .contentTransition(.numericText(countsDown: true))
+            }
+        }
+        .accessibilityElement(children: .combine)
+    }
+
+    private func reminder(alignment: TextAlignment = .center) -> some View {
+        Text("Unclench your hands and let your shoulders drop. The seatbelt is doing the work.")
+            .font(.bcSubheadline)
+            .multilineTextAlignment(alignment)
+            .foregroundStyle(.secondary)
     }
 
     private func phase(at date: Date) -> (inhaling: Bool, progress: Double, remaining: Double) {

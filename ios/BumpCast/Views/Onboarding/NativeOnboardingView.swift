@@ -40,10 +40,13 @@ struct NativeOnboardingView: View {
     var body: some View {
         ZStack(alignment: .top) {
             background
-            page
-                .id(step)
-                .transition(pageTransition)
-            chrome
+            ZStack(alignment: .top) {
+                page
+                    .id(step)
+                    .transition(pageTransition)
+                chrome
+            }
+            .leftOfFold()
         }
         .animation(Theme.motion(reduceMotion), value: step)
         .environment(\.colorScheme, isNight ? .dark : colorScheme)
@@ -297,7 +300,7 @@ struct NativeOnboardingView: View {
         } footer: {
             PrimaryButton("Turn on notifications") {
                 Task {
-                    let granted = await PushNotifications.shared.requestPermission()
+                    let granted = await PushNotifications.shared.requestPermission(from: "onboarding_native")
                     Paywalls.shared.setUserAttributes(["notifications_prompt": granted ? "granted" : "denied"])
                     await finish()
                 }

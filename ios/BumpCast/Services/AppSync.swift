@@ -11,13 +11,15 @@ enum AppSync {
     private static var announcedUserID: UUID?
     private static var announcing: Task<Void, Never>?
 
-    static func start() async {
-        // RootView's task runs again when the scene comes back; the launch work only needs doing once.
-        guard !started else {
-            await FlightStore.shared.refreshIfStale()
-            return
-        }
-        started = true
+    private static var hooksInstalled = false
+
+    /// What follows every sync and every reconnect. From didFinishLaunching, so a launch with no
+    /// window (a silent push, background refresh) still arms countdowns and re-times reminders.
+    /// Nothing here is on screen: Superwall attributes, the account's profile, Live Activities
+    /// (requested only in the foreground) and local notifications.
+    static func installHooks() {
+        guard !hooksInstalled else { return }
+        hooksInstalled = true
         let store = FlightStore.shared
         store.onSync = {
             // The account can be known only later (offline at launch, or after flights moved over).
@@ -37,6 +39,18 @@ enum AppSync {
         Connectivity.shared.onReconnect = {
             Task { await FlightStore.shared.refreshIfStale(olderThan: 60) }
         }
+    }
+
+    /// The foreground launch: once a window is up (RootView's task).
+    static func start() async {
+        // RootView's task runs again when the scene comes back; the launch work only needs doing once.
+        guard !started else {
+            await FlightStore.shared.refreshIfStale()
+            return
+        }
+        started = true
+        installHooks()
+        let store = FlightStore.shared
         // What's saved first: the countdown, reminders and Superwall attributes never wait on the network.
         store.onSync?()
         let userID = await store.start()
@@ -47,6 +61,8 @@ enum AppSync {
             await PushNotifications.shared.refreshStatus()
         }
         store.onSync?()
+        // The full list from a good sync: gate notes for flights no longer saved go.
+        if userID != nil, !store.isOffline { GateMemory.prune(keeping: Set(store.flights.map(\.id))) }
         scheduleBackgroundRefresh()
         // After the sync, so flights already saved aren't found again.
         await EmailImport.shared.scanIfDue()

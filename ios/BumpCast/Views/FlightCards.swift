@@ -167,11 +167,12 @@ struct InFlightCard: View {
             .foregroundStyle(.secondary)
     }
 
-    /// The trip so far, with the landing time at the destination. The bar moves by itself; the
-    /// words follow the screen's clock.
+    /// The trip so far, with the landing time at the destination. Both follow the screen's clock:
+    /// a self-running timer bar would lay the whole screen out again on every frame.
     private func landingProgress(from takeoff: Date) -> some View {
         let landing = max(takeoff, inFlight.landing(of: flight, forecast: forecast))
-        return ProgressView(timerInterval: takeoff...landing, countsDown: false) {
+        let total = max(landing.timeIntervalSince(takeoff), 1)
+        return ProgressView(value: min(max(now.timeIntervalSince(takeoff), 0), total), total: total) {
             EmptyView()
         } currentValueLabel: {
             Text(InFlightCopy.landing(landing, now: now, tz: flight.destinationTimeZone))
@@ -324,11 +325,15 @@ struct LandingCheckCard: View {
                     Text(isBeta ? GlobalOutlookCopy.compareTitle : "How did it feel?").font(.bcSection)
                     Spacer()
                     if isBeta {
-                        Button("Dismiss", systemImage: "xmark") {
+                        Button {
                             UserDefaults.standard.set(true, forKey: Self.dismissKey(flight.id))
                             dismissed = true
+                        } label: {
+                            Label("Dismiss", systemImage: "xmark")
+                                .labelStyle(.iconOnly)
+                                // About a 44 pt target around the cross, without moving it.
+                                .contentShape(Rectangle().inset(by: -14))
                         }
-                        .labelStyle(.iconOnly)
                         .foregroundStyle(.secondary)
                     }
                 }
@@ -411,7 +416,8 @@ struct LandingRatingChoices: View {
 }
 
 /// The "what changed and why" feed: every notification the worker sent for this flight.
-struct UpdatesSection: View {
+struct UpdatesSection: View, DuoPlaced {
+    var duoRole: DuoRole { .flow }
     let flight: Flight
 
     @Environment(FlightStore.self) private var store
@@ -441,7 +447,8 @@ struct UpdatesSection: View {
                     .foregroundStyle(.secondary)
             }
             if fullAccess {
-                ForEach(update.changes, id: \.text) { change in
+                // By position: two changes can read the same.
+                ForEach(Array(update.changes.enumerated()), id: \.offset) { _, change in
                     Label(change.text, systemImage: "circle.fill")
                         .labelStyle(BulletLabelStyle())
                         .font(.bcSubheadline)

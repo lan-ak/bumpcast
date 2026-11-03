@@ -21,10 +21,14 @@ final class PushNotifications: NSObject {
         }
     }
 
-    /// Ask once the user has a reason to say yes (after saving a flight).
+    /// Ask once the user has a reason to say yes (after saving a flight). `place` is where it was
+    /// asked, for `notification_prompt_answered`.
     @discardableResult
-    func requestPermission() async -> Bool {
+    func requestPermission(from place: String) async -> Bool {
+        let asking = status == .notDetermined
         let granted = (try? await center.requestAuthorization(options: [.alert, .sound, .badge])) ?? false
+        // Only a real answer: once it's answered, iOS doesn't ask again.
+        if asking { Analytics.log(.notificationPromptAnswered, ["where": place, "granted": granted]) }
         await refreshStatus()
         await AppSync.saveProfile()
         Paywalls.shared.updateAttributes()
@@ -73,11 +77,15 @@ final class PushNotifications: NSObject {
         // Sent for a flight that was saved again since: the new id.
         let flightID = InFlight.shared.currentID(of: old)
         let kind = userInfo["kind"] as? String ?? ""
+        var params: [String: Any] = ["kind": kind]
+        if let flight = FlightStore.shared.flight(flightID) { params["full_access"] = Paywalls.shared.hasFullAccess(to: flight) }
+        Analytics.log(.notificationOpened, params)
         switch kind {
         case "stretch":
             Router.shared.handle(url: URL(string: "bumpcast://breathe")!)
+            Router.shared.breathingFrom = "notification"
         default:
-            Router.shared.openFlight(flightID)
+            Router.shared.openFlight(flightID, from: "notification")
             Task {
                 await FlightStore.shared.refreshForecast(flightID)
                 if Self.forecastKinds.contains(kind), let flight = FlightStore.shared.flight(flightID) {

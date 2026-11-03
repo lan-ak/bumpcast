@@ -8,7 +8,9 @@ extension Forecast.Warning: Identifiable {
 
 /// Dark ink banner, the first thing on the forecast screen when an official warning
 /// covers the route. A flag, never red or a warning triangle.
-struct WarningBanner: View {
+struct WarningBanner: View, DuoPlaced {
+    /// Under the route header, so the grade keeps the top of the right column.
+    var duoRole: DuoRole { .leading }
     let warning: Forecast.Warning
     let open: () -> Void
 
@@ -160,6 +162,7 @@ struct OutlookSegmentRow: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .fixedSize(horizontal: false, vertical: true)
+        .modifier(FillsPairHeight())
         .skyCard(cornerRadius: 16, padding: 14)
         .accessibilityElement(children: .combine)
     }

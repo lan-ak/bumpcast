@@ -190,7 +190,7 @@ struct LiveStatusRow: View {
     private var text: String {
         guard let status = flight.status, status.hasStatus else {
             if Date.now < flight.liveStatusStartsAt {
-                return "Live status starts \(flight.liveStatusStartsAt.formatted(.dateTime.weekday(.abbreviated)))"
+                return "Live status starts \(flight.liveStatusStartsAt.dayName(.abbreviated))"
             }
             // No row yet: the worker checks within a few minutes. A row without a status was checked.
             return flight.status == nil ? "Checking live status…" : "Live status isn't available for this flight"
@@ -227,29 +227,40 @@ struct LiveStatusRow: View {
 
 /// The detail view's route header, tracker-style: times beside the airports and the status in a
 /// small label under the plane. Tap for the details. Approved: docs/design/flight-status-compact.html.
-struct FlightRouteHeader: View {
+struct FlightRouteHeader: View, DuoPlaced {
+    var duoRole: DuoRole { .leading }
     let flight: Flight
 
     @Environment(\.dynamicTypeSize) private var typeSize
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.isWideLayout) private var isWideLayout
     @State private var expanded = false
     @State private var seen: GateMemory.Record?
+
+    /// On a wide screen (the open iPhone Duo) there's room, so the details are always shown and the
+    /// header isn't a toggle.
+    private var alwaysOpen: Bool { isWideLayout }
 
     var body: some View {
         let status = flight.status.flatMap { $0.hasStatus ? $0 : nil }
         let hasDetails = status != nil && status?.state != .cancelled && flight.flightNumber != nil
         VStack(alignment: .leading, spacing: 12) {
-            Button {
-                withAnimation(.snappy) { expanded.toggle() }
-            } label: {
-                header(status, chevron: hasDetails)
+            if alwaysOpen {
+                header(status, chevron: false)
                     .frame(minHeight: 44)
-                    .contentShape(.rect)
+            } else {
+                Button {
+                    withAnimation(.snappy) { expanded.toggle() }
+                } label: {
+                    header(status, chevron: hasDetails)
+                        .frame(minHeight: 44)
+                        .contentShape(.rect)
+                }
+                .buttonStyle(.plain)
+                .disabled(!hasDetails)
+                .accessibilityHint(hasDetails ? (expanded ? "Hides flight details" : "Shows flight details") : "")
             }
-            .buttonStyle(.plain)
-            .disabled(!hasDetails)
-            .accessibilityHint(hasDetails ? (expanded ? "Hides flight details" : "Shows flight details") : "")
-            if expanded, let status, hasDetails {
+            if expanded || alwaysOpen, let status, hasDetails {
                 FlightStatusDetails(flight: flight, status: status, seen: seen)
                     .transition(.opacity.combined(with: .move(edge: .top)))
             }
@@ -466,7 +477,7 @@ private struct StatusLabel: View {
             }
         }
         if Date.now < flight.liveStatusStartsAt {
-            return "Live status from \(flight.liveStatusStartsAt.formatted(.dateTime.weekday(.abbreviated)))"
+            return "Live status from \(flight.liveStatusStartsAt.dayName(.abbreviated))"
         }
         if flight.status == nil, flight.expectedDeparture > .now.addingTimeInterval(-3600) { return "Checking…" }
         return nil  // unavailable: scheduled times only
@@ -591,7 +602,7 @@ private struct FlightStatusDetails: View {
     }
 
     private var freshness: String {
-        let updated = "Updated \(status.checkedAt.localTime(in: .current))"
+        let updated = "Updated \(status.checkedAt.phoneTime(nextTo: flight.originTimeZone))"
         guard !status.finished, let next = status.nextCheckAt else {
             return "\(updated) · status updates have finished for this flight"
         }
@@ -600,7 +611,18 @@ private struct FlightStatusDetails: View {
             return "\(updated) · we'll check again when you're back online"
         }
         guard next > .now else { return updated }
-        return "\(updated) · next update around \(next.localTime(in: .current))"
+        return "\(updated) · next update around \(next.phoneTime(nextTo: flight.originTimeZone))"
+    }
+}
+
+extension Date {
+    /// The phone's own time, for "Updated…" lines that sit next to airport-local times. When the
+    /// phone's zone isn't the airport's, the zone is named ("2:20 PM EDT") so the two can't be mixed up.
+    func phoneTime(nextTo airport: TimeZone?, phone: TimeZone = .current) -> String {
+        guard let airport, airport.secondsFromGMT(for: self) != phone.secondsFromGMT(for: self) else {
+            return localTime(in: phone)
+        }
+        return localTimeWithZone(in: phone)
     }
 }
 
@@ -662,7 +684,8 @@ struct DivertedCard: View {
 }
 
 /// The one-time "Schedule published" note, from the worker's schedule notification.
-struct ScheduleNote: View {
+struct ScheduleNote: View, DuoPlaced {
+    var duoRole: DuoRole { .leading }
     let flight: Flight
     @Environment(FlightStore.self) private var store
     @AppStorage("schedule.notes.seen") private var seen = ""
@@ -676,15 +699,28 @@ struct ScheduleNote: View {
                 Text(update.changes.first?.text ?? update.body).font(.bcSubheadline)
                 Spacer(minLength: 0)
                 Button {
-                    seen += update.id.uuidString + ","
+                    markSeen(update.id)
                 } label: {
                     Image(systemName: "xmark").font(.bcFootnoteStrong).foregroundStyle(.secondary)
+                        // About a 44 pt target around the small cross, without moving it.
+                        .contentShape(Rectangle().inset(by: -16))
                 }
                 .accessibilityLabel("Dismiss")
             }
             .skyCard(cornerRadius: 16, padding: 12)
             // One time: once it's been on screen, it's seen.
-            .onDisappear { if !seen.contains(update.id.uuidString) { seen += update.id.uuidString + "," } }
+            .onDisappear { markSeen(update.id) }
         }
     }
+
+    /// Adds the note to the seen list, keeping only notes the phone still holds (a deleted
+    /// flight's go with it), so the list doesn't grow for good.
+    private func markSeen(_ id: UUID) {
+        let held = Set(store.updates.values.joined().map(\.id.uuidString))
+        var ids = seen.split(separator: ",").map(String.init).filter(held.contains)
+        if !ids.contains(id.uuidString) { ids.append(id.uuidString) }
+        seen = ids.suffix(Self.seenLimit).map { $0 + "," }.joined()
+    }
+
+    private static let seenLimit = 200
 }

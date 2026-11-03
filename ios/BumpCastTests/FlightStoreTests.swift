@@ -184,6 +184,30 @@ struct FlightStoreTests {
         #expect(local.load()?.reports[id] != nil)
     }
 
+    /// A pass Apple can't confirm yet stays queued and unlocks the flight; one it rejects is dropped.
+    @Test func passesApplesNoIsFinalButItsSilenceIsNot() async throws {
+        let service = FakeFlightService(stored: a, sessions: [a], remote: saved)
+        let (store, _) = await makeStore(service, owner: a)
+        await store.reload()
+        let id = saved[0].id
+        service.passError = FunctionsError.httpError(code: 503, data: Data())
+        await store.recordPass(flightID: id, transactionID: "2000001", productID: "bumpcast_flight_pass")
+        #expect(store.pendingPasses.map(\.transactionId) == ["2000001"])
+        await store.reload()
+        #expect(store.passes.contains(id))
+        service.passError = PassRejected()
+        await store.reload()
+        #expect(store.pendingPasses.isEmpty)
+        await store.reload()
+        #expect(!store.passes.contains(id))
+        // Apple confirms: saved, and the server's answer unlocks it.
+        service.passError = nil
+        await store.recordPass(flightID: id, transactionID: "2000002", productID: "bumpcast_flight_pass")
+        #expect(store.pendingPasses.isEmpty)
+        await store.reload()
+        #expect(store.passes.contains(id))
+    }
+
     @Test func userActionsSayWhenTheAccountCantBeReached() async throws {
         // The flights' account was lost and moving them keeps failing.
         let service = FakeFlightService(stored: b, sessions: [b], remote: saved)
@@ -415,6 +439,114 @@ struct FlightStoreTests {
         #expect(service.calls.adds == 0)
     }
 
+    // MARK: Forecasts a sync fetches, the departure check, gate memory
+
+    @Test func syncFetchesForecastsOnlyForFlightsThatCanChange() async {
+        var longLanded = saved[0]
+        longLanded.departureAt = .now.addingTimeInterval(-5 * 86400)
+        var justLanded = saved[1]
+        justLanded.departureAt = .now.addingTimeInterval(-4 * 3600)
+        var neverForecast = saved[2]
+        neverForecast.departureAt = .now.addingTimeInterval(-6 * 86400)
+        let upcoming = Flight(id: UUID(), origin: "KEWR", destination: "CYYZ", departureAt: .now.addingTimeInterval(86400))
+        let flights = [longLanded, justLanded, neverForecast, upcoming]
+        let service = FakeFlightService(stored: a, sessions: [a], remote: flights)
+        let kept = forecast()
+        let snapshot = Snapshot(
+            flights: flights, forecasts: [longLanded.id: kept, justLanded.id: kept, upcoming.id: kept], userID: a)
+        let (store, _) = await makeStore(service, owner: a, snapshot: snapshot)
+        await store.reload()
+        #expect(Set(service.calls.forecastsFor) == [justLanded.id, neverForecast.id, upcoming.id])
+        // Not asked for: what's saved stays.
+        #expect(store.forecasts[longLanded.id] != nil)
+        // Asked for, and the server has none: mirrored, as before.
+        #expect(store.forecasts[upcoming.id] == nil)
+    }
+
+    @Test func forecastFetchFollowsTheLanding() {
+        let now = Date.now
+        var flight = saved[0]
+        flight.departureAt = now.addingTimeInterval(-3 * 86400)
+        #expect(!FlightStore.fetchesForecast(flight, saved: forecast(), now: now))
+        #expect(FlightStore.fetchesForecast(flight, saved: nil, now: now))
+        // Brought from a lost account: fetched until the server has one for the new id.
+        #expect(FlightStore.fetchesForecast(flight, saved: forecast(), carried: true, now: now))
+        // Delayed by days: the airline's arrival counts.
+        flight.status = FlightStatus(state: .delayed, live: true, arrivalExpected: now.addingTimeInterval(3600), checkedAt: now)
+        #expect(FlightStore.fetchesForecast(flight, saved: forecast(), now: now))
+        // Landed 20 hours ago: still inside the margin.
+        flight.status = nil
+        flight.departureAt = now.addingTimeInterval(-22 * 3600)
+        #expect(FlightStore.fetchesForecast(flight, saved: forecast(), now: now))
+    }
+
+    @Test func departureCheckKeepsItsCadence() {
+        let now = Date.now
+        #expect(FlightStore.departureCheckWait(since: nil, now: now) == 300)
+        #expect(FlightStore.departureCheckWait(since: now.addingTimeInterval(-60), now: now) == 240)
+        // Due: at once.
+        #expect(FlightStore.departureCheckWait(since: now.addingTimeInterval(-301), now: now) == 0)
+        #expect(FlightStore.departureCheckWait(since: now.addingTimeInterval(-3600), now: now) == 0)
+        // A clock set back never waits more than the interval.
+        #expect(FlightStore.departureCheckWait(since: now.addingTimeInterval(3600), now: now) == 300)
+    }
+
+    @Test func statusRefreshedDuringSyncKeepsTheNewerGate() async throws {
+        var flight = saved[0]
+        flight.status = FlightStatus(state: .scheduled, live: true, departureGate: "B18", departureTerminal: "5", checkedAt: .now)
+        let service = FakeFlightService(stored: a, sessions: [a], remote: [flight])
+        let snapshot = Snapshot(flights: [flight], userID: a)
+        let (store, _) = await makeStore(service, owner: a, snapshot: snapshot)
+        // The sync has read the flights (gate B18) when the departure check finds B22.
+        service.onPasses = {
+            var moved = flight
+            moved.status?.departureGate = "B22"
+            service.remote = [moved]
+            await store.refreshFlight(flight.id)
+            #expect(store.flight(flight.id)?.status?.departureGate == "B22")
+        }
+        await store.reload()
+        #expect(store.flight(flight.id)?.status?.departureGate == "B22")
+        // The next sync is newer than the check, and brings what the server has.
+        await store.reload()
+        #expect(store.flight(flight.id)?.status?.departureGate == "B22")
+    }
+
+    @Test func gateMemoryGoesWithTheFlight() async throws {
+        let service = FakeFlightService(stored: a, sessions: [a], remote: saved)
+        let snapshot = Snapshot(flights: saved, pendingAdds: [FlightDraft(saved[1])], userID: a)
+        let (store, _) = await makeStore(service, owner: a, snapshot: snapshot)
+        for flight in saved { GateMemory.save(.init(gate: "B18", terminal: "5"), for: flight.id) }
+        // Deleted here.
+        await store.delete(saved[0].id)
+        #expect(GateMemory.record(for: saved[0].id) == nil)
+        // A new notify choice keeps it; another day means the gate shown was another departure's.
+        var draft = FlightDraft(saved[1])
+        draft.notify = false
+        await store.save(draft, editing: saved[1].id)
+        #expect(GateMemory.record(for: saved[1].id) != nil)
+        draft.departureAt = draft.departureAt.addingTimeInterval(86400)
+        await store.save(draft, editing: saved[1].id)
+        #expect(GateMemory.record(for: saved[1].id) == nil)
+        // Deleted elsewhere: gone with the sync that no longer has it.
+        service.remote = []
+        await store.reload()
+        #expect(GateMemory.record(for: saved[2].id) == nil)
+    }
+
+    @Test func gateMemoryFollowsAFlightSavedAgain() async throws {
+        let service = FakeFlightService(stored: b, sessions: [b], remote: [])
+        service.adopted = []
+        let (store, _) = await makeStore(service, owner: a)
+        GateMemory.save(.init(gate: "B18", terminal: "5"), for: saved[0].id)
+        _ = try await store.account()
+        let moved = try #require(store.flights.first { $0.departureAt == saved[0].departureAt })
+        #expect(moved.id != saved[0].id)
+        #expect(GateMemory.record(for: moved.id)?.gate == "B18")
+        #expect(GateMemory.record(for: saved[0].id) == nil)
+        GateMemory.remove(moved.id)
+    }
+
     @Test func lessCertainForecastForSameDepartureIsHeldBack() {
         let departure = Date(timeIntervalSince1970: 1_800_000_000)
         func forecast(_ source: String, issued: TimeInterval) -> Forecast {
@@ -466,6 +598,8 @@ final class FakeFlightService: FlightService {
         var adds = 0
         var reports = 0
         var deletes = 0
+        /// Flights whose forecast was asked for, in order.
+        var forecastsFor: [UUID] = []
         var adoptedFrom: [UUID] = []
         var adoptBatches: [Int] = []
         var adoptSecrets: [String] = []
@@ -488,6 +622,8 @@ final class FakeFlightService: FlightService {
         var updateError: PostgrestError?
         var forecasts: [UUID: Forecast] = [:]
         var passes: Set<UUID> = []
+        /// How verify-pass answers: nil saves the pass; otherwise this is thrown.
+        var passError: (any Error)?
         var adopted: Set<UUID> = []
         var adoptError: PostgrestError?
         var submitError: URLError?
@@ -508,7 +644,10 @@ final class FakeFlightService: FlightService {
     }
 
     var calls: Calls { state.withLock { $0.calls } }
-    var remote: [Flight] { state.withLock { $0.remote } }
+    var remote: [Flight] {
+        get { state.withLock { $0.remote } }
+        set { state.withLock { $0.remote = newValue } }
+    }
     var adopted: Set<UUID> {
         get { state.withLock { $0.adopted } }
         set { state.withLock { $0.adopted = newValue } }
@@ -665,6 +804,7 @@ final class FakeFlightService: FlightService {
     func latestForecast(for flightID: UUID) async throws -> Forecast? {
         let (forecast, hook) = state.withLock { state in
             defer { state.onForecast = nil }
+            state.calls.forecastsFor.append(flightID)
             return (state.forecasts[flightID], state.onForecast)
         }
         if let hook { await hook(flightID) }
@@ -687,7 +827,17 @@ final class FakeFlightService: FlightService {
         if let hook { await hook() }
         return passes
     }
-    func recordPass(_ pass: FlightPassRecord) async throws { _ = state.withLock { $0.passes.insert(pass.flightId) } }
+    func recordPass(_ pass: FlightPassRecord) async throws {
+        try state.withLock { state in
+            if let error = state.passError { throw error }
+            state.passes.insert(pass.flightId)
+        }
+    }
+
+    var passError: (any Error)? {
+        get { state.withLock { $0.passError } }
+        set { state.withLock { $0.passError = newValue } }
+    }
     func landingReports() async throws -> [LandingReport] { [] }
 
     func submitLandingReport(

@@ -3,16 +3,37 @@ import SwiftUI
 /// The Learn library ("Field Guide"): short, factual explainers, bundled so they work offline.
 struct LearnView: View {
     @Environment(Router.self) private var router
+    /// With list and explainer side by side (the open Duo): the explainer shown.
+    @State private var selected = Explainer.causes[0]
+
+    /// Tests render the open layout's panes without the navigation stack (which can't be rendered).
+    private let contentOnly: Bool
+
+    init(contentOnly: Bool = false) {
+        self.contentOnly = contentOnly
+    }
 
     var body: some View {
+        if contentOnly {
+            panes.skyBackground(Sky(date: .now))
+        } else {
+            screen
+        }
+    }
+
+    private var screen: some View {
         @Bindable var router = router
-        NavigationStack(path: $router.learnPath) {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 18) {
-                    group("Why it gets bumpy", Explainer.causes)
-                    group("Good to know", Explainer.basics)
+        return NavigationStack(path: $router.learnPath) {
+            OpenLayout {
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 18) {
+                        group("Why it gets bumpy", Explainer.causes)
+                        group("Good to know", Explainer.basics)
+                    }
+                    .padding()
                 }
-                .padding()
+            } open: {
+                panes
             }
             .skyBackground(Sky(date: .now))
             .navigationTitle("Learn")
@@ -20,27 +41,73 @@ struct LearnView: View {
         }
     }
 
-    private func group(_ title: String, _ items: [Explainer]) -> some View {
+    /// Side by side (the open Duo): the list and the explainer picked, each scrolling on its own.
+    /// Its own header, as Calm has, so the explainer starts at the top too. An explainer opened
+    /// from elsewhere (Calm's reading cards) is picked instead of pushed.
+    private var panes: some View {
+        Panes(fillsHeight: true) {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 18) {
+                    Text("Learn")
+                        .font(.bcDisplay)
+                        .displayTypeLimit()
+                        .accessibilityAddTraits(.isHeader)
+                    group("Why it gets bumpy", Explainer.causes) { selected = $0 }
+                    group("Good to know", Explainer.basics) { selected = $0 }
+                }
+                .padding(.vertical)
+            }
+        } trailing: {
+            ExplainerView(explainer: selected, select: { selected = $0 })
+                .id(selected)
+        }
+        .toolbar(.hidden, for: .navigationBar)
+        .onChange(of: selected) { _, picked in ExplainerView.logOpened(picked, from: nil) }
+        .onChange(of: router.learnPath, initial: true) { _, path in
+            guard let last = path.last else { return }
+            selected = last
+            router.learnPath = []
+        }
+    }
+
+    /// The rows push the explainer, or with `pick` (side by side) show it beside the list.
+    private func group(_ title: String, _ items: [Explainer], pick: ((Explainer) -> Void)? = nil) -> some View {
         VStack(alignment: .leading, spacing: 10) {
             Text(title).eyebrow().foregroundStyle(.secondary)
             ForEach(items) { explainer in
-                NavigationLink(value: explainer) {
-                    HStack(spacing: 14) {
-                        // The diagram moves above the text at accessibility sizes.
-                        AdaptiveStack {
-                            ExplainerDiagram(kind: explainer.diagram)
-                                .frame(width: 56, height: 40)
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(explainer.title).font(.bcHeadline)
-                                Text(explainer.subtitle).font(.bcSubheadline).foregroundStyle(.secondary)
-                            }
-                        }
-                        Spacer(minLength: 0)
-                        Image(systemName: "chevron.right").foregroundStyle(.tertiary)
-                    }
-                    .skyCard(cornerRadius: 18, padding: 14)
+                if let pick {
+                    Button { pick(explainer) } label: { row(explainer, isSelected: explainer == selected) }
+                        .buttonStyle(.plain)
+                        .accessibilityAddTraits(explainer == selected ? .isSelected : [])
+                } else {
+                    NavigationLink(value: explainer) { row(explainer) }
+                        .buttonStyle(.plain)
                 }
-                .buttonStyle(.plain)
+            }
+        }
+    }
+
+    /// The picked row on the Duo spread is raised, with the accent hairline.
+    private func row(_ explainer: Explainer, isSelected: Bool = false) -> some View {
+        HStack(spacing: 14) {
+            // The diagram moves above the text at accessibility sizes.
+            AdaptiveStack {
+                ExplainerDiagram(kind: explainer.diagram)
+                    .frame(width: 56, height: 40)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(explainer.title).font(.bcHeadline)
+                    Text(explainer.subtitle).font(.bcSubheadline).foregroundStyle(.secondary)
+                }
+            }
+            Spacer(minLength: 0)
+            Image(systemName: "chevron.right").foregroundStyle(.tertiary)
+        }
+        .padding(14)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .skySurface(RoundedRectangle(cornerRadius: 18, style: .continuous), raised: isSelected)
+        .overlay {
+            if isSelected {
+                RoundedRectangle(cornerRadius: 18, style: .continuous).strokeBorder(Theme.accent.opacity(0.45), lineWidth: 1.5)
             }
         }
     }
@@ -48,6 +115,10 @@ struct LearnView: View {
 
 struct ExplainerView: View {
     let explainer: Explainer
+    /// On the Duo spread, beside the list: related types are picked there instead of pushed.
+    var select: ((Explainer) -> Void)? = nil
+    /// Where it was opened from, for `explainer_opened`; nil reads `Router.explainerFrom`.
+    var from: String? = nil
 
     var body: some View {
         ScrollView {
@@ -73,7 +144,13 @@ struct ExplainerView: View {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
                             ForEach(explainer.related) { other in
-                                NavigationLink(other.title) { ExplainerView(explainer: other) }
+                                Group {
+                                    if let select {
+                                        Button(other.title) { select(other) }
+                                    } else {
+                                        NavigationLink(other.title) { ExplainerView(explainer: other, from: "related") }
+                                    }
+                                }
                                     .buttonStyle(.bordered)
                                     .tint(Theme.accent)
                             }
@@ -81,10 +158,21 @@ struct ExplainerView: View {
                     }
                 }
             }
-            .padding()
+            .padding(select == nil ? .all : [.vertical, .trailing])
         }
-        .skyBackground(Sky(date: .now))
+        // Beside the Learn list, the list's sky is already behind it.
+        .modifier(SkyUnlessSpread(onSpread: select != nil))
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            // Beside the list, the spread logs what's picked (one shows before anything is).
+            guard select == nil else { return }
+            ExplainerView.logOpened(explainer, from: from)
+        }
+    }
+
+    static func logOpened(_ explainer: Explainer, from: String?) {
+        Analytics.log(.explainerOpened, ["id": explainer.id, "where": from ?? Router.shared.explainerFrom])
+        Router.shared.explainerFrom = "learn"
     }
 
     private func section(_ title: String, _ text: String) -> some View {
@@ -277,4 +365,13 @@ struct Explainer: Identifiable, Hashable {
             feel: "We assume a direct route and a typical climb, cruise and descent, so treat it as a guide, not a guarantee.",
             goodToKnow: "We'll notify you when your forecast is confirmed and if anything changes."),
     ]
+}
+
+/// The explainer's own sky, except on the Duo spread, where it sits on the Learn list's.
+private struct SkyUnlessSpread: ViewModifier {
+    let onSpread: Bool
+
+    func body(content: Content) -> some View {
+        if onSpread { content } else { content.skyBackground(Sky(date: .now)) }
+    }
 }

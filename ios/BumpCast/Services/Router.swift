@@ -12,8 +12,14 @@ final class Router {
     var flightPath: [UUID] = []
     var learnPath: [Explainer] = []
     var showBreathing = false
+    /// Where the explainer opening now was opened from, for `explainer_opened`.
+    @ObservationIgnored var explainerFrom = "learn"
+    /// Where breathing was opened from, for `breathing_started`.
+    @ObservationIgnored var breathingFrom = "calm"
     /// Opens Add flight on the Flights tab (the native onboarding, for people flying soon).
     var showAddFlight = false
+    /// Where `showAddFlight` came from, for `flight_add_started`.
+    var addFlightSource = "list"
     /// A short confirmation shown over the tabs ("YYZ → EWR added. First forecast…").
     private(set) var toast: String?
     /// The toast's symbol, so a note ("You're offline…") doesn't show a checkmark.
@@ -65,12 +71,16 @@ final class Router {
     func finishAdding() {
         guard let after = afterAdd else { return }
         afterAdd = nil
-        if after.openForecast { openFlight(after.flightID) }
+        if after.openForecast { openFlight(after.flightID, from: "add_flight") }
         if let toast = after.toast { showToast(toast) }
     }
 
+    /// Where the flight opening now was opened from, for `flight_opened`; nil is the list.
+    @ObservationIgnored var openedFrom: String?
+
     /// Links and notifications made for a flight's old id (one saved again) open it under its new one.
-    func openFlight(_ id: UUID) {
+    func openFlight(_ id: UUID, from source: String) {
+        openedFrom = source
         tab = .flights
         flightPath = [InFlight.shared.currentID(of: id)]
     }
@@ -80,12 +90,15 @@ final class Router {
         guard url.scheme == "bumpcast" else { return }
         switch url.host() {
         case "flight":
-            if let id = UUID(uuidString: url.lastPathComponent) { openFlight(id) }
+            if let id = UUID(uuidString: url.lastPathComponent) { openFlight(id, from: "live_activity") }
         case "breathe":
+            breathingFrom = "live_activity"
             showBreathing = true
         case "learn":
+            explainerFrom = "live_activity"
             tab = .learn
             learnPath = Explainer.byID(url.lastPathComponent).map { [$0] } ?? []
+
         default:
             break
         }

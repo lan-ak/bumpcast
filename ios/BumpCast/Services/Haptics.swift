@@ -1,5 +1,6 @@
 import CoreHaptics
 import Foundation
+import UIKit
 
 /// Soft, sparse, optional haptics (DESIGN_SPEC §5). Never warning/error patterns for turbulence.
 @MainActor
@@ -9,12 +10,35 @@ final class Haptics {
 
     private var engine: CHHapticEngine?
     private var player: CHHapticAdvancedPatternPlayer?
+    /// iOS stopped the engine (the app went to the background, an audio interruption): it and its
+    /// players need starting again before the next use.
+    private var engineStopped = false
+    /// The breath being played, and when it began, so it picks up in step with the orb.
+    private var breath: (inhale: TimeInterval, exhale: TimeInterval, startedAt: Date)?
+
+    private init() {
+        // iOS stops the engine in the background; the breath carries on when the app is back.
+        NotificationCenter.default.addObserver(
+            forName: UIApplication.didBecomeActiveNotification, object: nil, queue: .main
+        ) { _ in
+            MainActor.assumeIsolated { Haptics.shared.resumeBreathing() }
+        }
+    }
 
     /// A continuous breath: intensity swells 0.1 → 0.6 over the inhale and fades back over the exhale.
     func startBreathing(inhale: TimeInterval, exhale: TimeInterval) {
-        guard Self.isSupported, let engine = prepareEngine() else { return }
+        guard Self.isSupported else { return }
         stop()
-        let cycle = inhale + exhale
+        breath = (inhale, exhale, .now)
+        playBreath()
+    }
+
+    /// Plays the breath from where it is now in its cycle.
+    private func playBreath() {
+        guard let breath, let engine = prepareEngine() else { return }
+        try? player?.stop(atTime: CHHapticTimeImmediate)
+        player = nil
+        let cycle = breath.inhale + breath.exhale
         let event = CHHapticEvent(
             eventType: .hapticContinuous,
             parameters: [
@@ -26,7 +50,7 @@ final class Haptics {
             parameterID: .hapticIntensityControl,
             controlPoints: [
                 .init(relativeTime: 0, value: 0.1),
-                .init(relativeTime: inhale, value: 0.6),
+                .init(relativeTime: breath.inhale, value: 0.6),
                 .init(relativeTime: cycle, value: 0.1),
             ],
             relativeTime: 0)
@@ -35,10 +59,18 @@ final class Haptics {
             let player = try engine.makeAdvancedPlayer(with: pattern)
             player.loopEnabled = true
             try player.start(atTime: CHHapticTimeImmediate)
+            let offset = Date.now.timeIntervalSince(breath.startedAt).truncatingRemainder(dividingBy: cycle)
+            if offset > 0.05 { try? player.seek(toOffset: offset) }
             self.player = player
         } catch {
             self.player = nil
         }
+    }
+
+    /// Back in the foreground (or after the engine reset): the breath starts again if it stopped.
+    private func resumeBreathing() {
+        guard breath != nil, engineStopped || player == nil else { return }
+        playBreath()
     }
 
     /// Opt-in "what light chop feels like": gentle irregular taps, intensity ≤ 0.4.
@@ -61,16 +93,44 @@ final class Haptics {
     }
 
     func stop() {
+        breath = nil
         try? player?.stop(atTime: CHHapticTimeImmediate)
         player = nil
     }
 
+    /// The engine, started. One iOS stopped is started again, and replaced if it won't start.
     private func prepareEngine() -> CHHapticEngine? {
-        if let engine { return engine }
+        if let engine {
+            guard engineStopped else { return engine }
+            if (try? engine.start()) != nil {
+                engineStopped = false
+                return engine
+            }
+            self.engine = nil
+        }
         guard let engine = try? CHHapticEngine() else { return nil }
         engine.playsHapticsOnly = true
-        engine.resetHandler = { [weak engine] in try? engine?.start() }
-        try? engine.start()
+        // Both arrive on a CoreHaptics queue. A stopped engine's players are gone with it.
+        engine.stoppedHandler = { _ in
+            Task { @MainActor in
+                Haptics.shared.engineStopped = true
+                Haptics.shared.player = nil
+            }
+        }
+        // The haptic server restarted: the engine and its players have to be started again.
+        engine.resetHandler = {
+            Task { @MainActor in
+                Haptics.shared.engineStopped = true
+                Haptics.shared.player = nil
+                Haptics.shared.resumeBreathing()
+            }
+        }
+        do {
+            try engine.start()
+        } catch {
+            return nil
+        }
+        engineStopped = false
         self.engine = engine
         return engine
     }

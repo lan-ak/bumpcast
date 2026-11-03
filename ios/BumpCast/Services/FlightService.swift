@@ -1,4 +1,5 @@
 import Foundation
+import OSLog
 import Supabase
 
 protocol FlightService: Sendable {
@@ -61,6 +62,10 @@ protocol FlightService: Sendable {
 /// How many flights `adopt_flights` takes in one call.
 let adoptLimit = 200
 
+/// Apple says a flight pass's transaction isn't a pass for this app (another app's or product's,
+/// refunded, or a test-store purchase the server doesn't accept). It's not sent again.
+struct PassRejected: Error {}
+
 /// Who requests go out as, and with which access token.
 struct AccountSession: Equatable, Sendable {
     let userID: UUID
@@ -86,6 +91,8 @@ enum Services {
         #if DEBUG
             // Development: `-demo` uses the bundled demo data even when Supabase is configured.
             if ProcessInfo.processInfo.arguments.contains("-demo") { return DemoFlightService() }
+            // Unit tests never sign in to production: each run would leave an account behind.
+            if isTestHost { return DemoFlightService() }
         #endif
         if let urlString = info["SupabaseURL"] as? String, let url = URL(string: urlString), url.host() != nil,
             let key = info["SupabaseAnonKey"] as? String, !key.isEmpty
@@ -110,6 +117,18 @@ enum Services {
     }()
 
     static var isDemo: Bool { flights is DemoFlightService }
+
+    /// Debug builds only: the app is hosting unit tests. It then uses the demo service and skips
+    /// the launch work that reaches the network (Superwall, push, onboarding, the first sync).
+    static var isTestHost: Bool {
+        #if DEBUG
+            let environment = ProcessInfo.processInfo.environment
+            return environment["XCTestConfigurationFilePath"] != nil || environment["XCTestBundlePath"] != nil
+                || environment["XCTestSessionIdentifier"] != nil
+        #else
+            false
+        #endif
+    }
 }
 
 struct SupabaseFlightService: FlightService {
@@ -119,11 +138,30 @@ struct SupabaseFlightService: FlightService {
         "id,origin,destination,departure_at,notify,flight_number,airline_name,arrival_at,schedule_pending,status:flight_status(*)"
     private static let updateColumns = "id,flight_id,milestone,kind,grade,title,body,changes,pro_only,created_at"
 
+    #if DEBUG
+        /// Sign-ups that reached Supabase, for the test that none happen under unit tests.
+        nonisolated(unsafe) static var signInAttempts = 0
+
+        /// Debug builds sign up for a production account only when launched with `-allowLiveSignIn`.
+        static var liveSignInAllowed: Bool { ProcessInfo.processInfo.arguments.contains("-allowLiveSignIn") }
+    #endif
+
     func signIn(allowSignUp: Bool) async throws -> UUID {
         // The saved session even when its token has expired: refreshes fail on planes and behind
         // captive portals, and signing up then would leave the saved flights behind (AC 1507).
         if let id = storedUserID() { return id }
         guard allowSignUp else { throw AuthError.sessionMissing }
+        #if DEBUG
+            // Debug builds never make a production account by accident: a launch without `-demo`
+            // (or a background launch, which gets no arguments) would leave one behind each time.
+            guard Self.liveSignInAllowed else {
+                Logger(subsystem: "ca.akinyemi.bumpcast", category: "auth").fault(
+                    "Refused to create a production account: launch with -demo, or with -allowLiveSignIn to sign up for real.")
+                print("⚠️ BumpCast (Debug): refused to create a production account. Launch with -demo, or -allowLiveSignIn.")
+                throw AuthError.sessionMissing
+            }
+            Self.signInAttempts += 1
+        #endif
         return try await client.auth.signInAnonymously().user.id
     }
 
@@ -252,14 +290,32 @@ struct SupabaseFlightService: FlightService {
         }
     }
 
+    /// Flights with a pass Apple confirmed. A pass still being checked is in the store's queue, so
+    /// it unlocks the flight meanwhile.
     func passFlightIDs() async throws -> Set<UUID> {
         struct Row: Decodable { let flight_id: UUID }
-        let rows: [Row] = try await client.from("flight_passes").select("flight_id").execute().value
-        return Set(rows.map(\.flight_id))
+        do {
+            let rows: [Row] = try await client.from("flight_passes").select("flight_id")
+                .not("verified_at", operator: .is, value: "null").execute().value
+            return Set(rows.map(\.flight_id))
+        } catch let error as PostgrestError where error.code == "42703" {
+            // A database without the verified-passes migration yet: every pass counts.
+            let rows: [Row] = try await client.from("flight_passes").select("flight_id").execute().value
+            return Set(rows.map(\.flight_id))
+        }
     }
 
+    /// The verify-pass function checks the transaction with Apple and saves it. Throws
+    /// `PassRejected` when Apple says it isn't a pass for this app; any other error means try again.
     func recordPass(_ pass: FlightPassRecord) async throws {
-        try await client.from("flight_passes").upsert(pass, onConflict: "transaction_id", ignoreDuplicates: true).execute()
+        do {
+            try await client.functions.invoke("verify-pass", options: FunctionInvokeOptions(body: pass, timeoutInterval: 30))
+        } catch FunctionsError.httpError(let code, _) where code == 422 {
+            throw PassRejected()
+        } catch FunctionsError.httpError(let code, _) where code == 404 {
+            // The function isn't deployed yet: saved as before, unchecked.
+            try await client.from("flight_passes").upsert(pass, onConflict: "transaction_id", ignoreDuplicates: true).execute()
+        }
     }
 
     private static let reportColumns = "flight_id,felt,felt_relative,forecast_worst,matched"
@@ -440,6 +496,35 @@ actor DemoFlightService: FlightService {
         return forecast
     }()
 
+    /// The sample forecast with a moderate stretch early on and strong chop over the long cruise
+    /// stretch (`-demoStrong`), for checking the strongest grades and colours on every layout.
+    static let strongSample: Forecast = {
+        let url = Bundle.main.url(forResource: "sample_forecast", withExtension: "json")!
+        var json = try! JSONSerialization.jsonObject(with: Data(contentsOf: url)) as! [String: Any]
+        var segments = json["segments"] as! [[String: Any]]
+        var samples = json["samples"] as! [[String: Any]]
+        func raise(_ range: ClosedRange<Int>, to edr: Double) {
+            for i in samples.indices where range.contains(samples[i]["min"] as! Int) { samples[i]["edr"] = edr }
+        }
+        if let i = segments.firstIndex(where: { $0["start_min"] as? Int == 17 }) {
+            segments[i]["severity"] = "moderate"; segments[i]["peak_edr"] = 0.27
+            raise(17...22, to: 0.27)
+        }
+        if let i = segments.firstIndex(where: { $0["start_min"] as? Int == 161 }) {
+            segments[i]["severity"] = "severe"; segments[i]["peak_edr"] = 0.41
+            raise(161...200, to: 0.25)
+            raise(175...186, to: 0.41)
+        }
+        json["segments"] = segments
+        json["samples"] = samples
+        json["grade"] = "rough"
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        var forecast = try! decoder.decode(Forecast.self, from: JSONSerialization.data(withJSONObject: json))
+        forecast.issuedAt = forecast.issuedAt ?? .now
+        return forecast
+    }()
+
     /// Like the worker, a stretch over the US isn't confirmed until the detailed forecast reaches it.
     static func notYetConfirmed(_ forecast: Forecast, departure: Date) -> Forecast {
         var forecast = forecast
@@ -524,6 +609,7 @@ actor DemoFlightService: FlightService {
             default: return Self.load(startsInUS ? "sample_partly_outlook" : "sample_global_outlook")
             }
         }
+        if ProcessInfo.processInfo.arguments.contains("-demoStrong") { return Self.strongSample }
         return ProcessInfo.processInfo.arguments.contains("-demoGateWind") ? Self.gustySample : Self.sampleForecast
     }
 

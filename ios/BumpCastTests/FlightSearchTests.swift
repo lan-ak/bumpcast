@@ -57,4 +57,22 @@ struct FlightSearchTests {
         let flying = flight(departs: -2, arrives: 2, departed: true, takeoff: -1.8, reference: .now)
         #expect(flying.liveText?.hasPrefix("In the air") == true)
     }
+
+    @Test func updatedTimesNameThePhonesZoneOnlyWhenItDiffers() throws {
+        let toronto = try #require(TimeZone(identifier: "America/Toronto"))
+        let vancouver = try #require(TimeZone(identifier: "America/Vancouver"))
+        let newYork = try #require(TimeZone(identifier: "America/New_York"))
+        // Same offset as the airport: just the time.
+        #expect(now.phoneTime(nextTo: newYork, phone: toronto) == now.localTime(in: toronto))
+        #expect(now.phoneTime(nextTo: nil, phone: toronto) == now.localTime(in: toronto))
+        // A phone in another zone says which.
+        #expect(now.phoneTime(nextTo: vancouver, phone: toronto) == now.localTimeWithZone(in: toronto))
+        #expect(now.phoneTime(nextTo: vancouver, phone: toronto) != now.localTime(in: toronto))
+    }
+
+    @Test func pilotReportAgeDropsZeroMinutes() {
+        #expect(TurbulenceMapView.reportAge(minutes: 12) == "12 min ago")
+        #expect(TurbulenceMapView.reportAge(minutes: 120) == "2 h ago")
+        #expect(TurbulenceMapView.reportAge(minutes: 65) == "1 h 5 min ago")
+    }
 }

@@ -64,6 +64,9 @@ final class FlightStore {
     /// Flights saved or deleted here while a sync was running: its answer can be older than them.
     @ObservationIgnored private var savedDuringSync: Set<UUID> = []
     @ObservationIgnored private var deletedDuringSync: Set<UUID> = []
+    /// Flights whose live status was read again while a sync ran (the 5-minute departure check):
+    /// its answer can carry an older gate. Unlike an edit, their forecasts still apply.
+    @ObservationIgnored private var refreshedDuringSync: Set<UUID> = []
     /// Passes, ratings and waitlist countries the server took while a sync was running: its
     /// answers can be older than them.
     @ObservationIgnored private var passesSavedDuringSync: Set<UUID> = []
@@ -359,6 +362,7 @@ final class FlightStore {
     private func forgetSavedDuringSync() {
         savedDuringSync = []
         deletedDuringSync = []
+        refreshedDuringSync = []
         passesSavedDuringSync = []
         reportsSavedDuringSync = []
         waitlistSavedDuringSync = []
@@ -401,11 +405,13 @@ final class FlightStore {
             }
             let answered = fetched.filter { !deletedDuringSync.contains($0.id) && !pendingDeletes.contains($0.id) }
                 .map { flight in
-                    savedDuringSync.contains(flight.id) ? (current.first { $0.id == flight.id } ?? flight) : flight
+                    savedDuringSync.contains(flight.id) || refreshedDuringSync.contains(flight.id)
+                        ? (current.first { $0.id == flight.id } ?? flight) : flight
                 }
             flights = (answered + kept).sorted { $0.departureAt < $1.departureAt }
             // Drop cached data for flights deleted elsewhere.
             let ids = Set(flights.map(\.id))
+            for id in Set(current.map(\.id)).subtracting(ids) { GateMemory.remove(id) }
             forecasts = forecasts.filter { ids.contains($0.key) }
             updates = updates.filter { ids.contains($0.key) }
             carriedForecasts.formIntersection(ids)
@@ -423,13 +429,19 @@ final class FlightStore {
                 for id in reportsSavedDuringSync where reports[id] == nil { reports[id] = before[id] }
             }
             if let newWaitlist { waitlist = newWaitlist.union(waitlistSavedDuringSync) }
-            let fresh = await fetchForecasts(answered.map(\.id))
+            // Landed a while ago with a forecast saved: it won't change, so what's saved stays.
+            let saved = forecasts
+            let fresh = await fetchForecasts(
+                answered.filter { Self.fetchesForecast($0, saved: saved[$0.id], carried: carriedForecasts.contains($0.id)) }
+                    .map(\.id))
             try await verify(owner, still: token)
             // A flight edited meanwhile has a newer (reset) forecast than this answer.
             for (id, result) in fresh where !savedDuringSync.contains(id) {
                 applyForecast(result.forecast, updates: result.updates, for: id)
             }
             syncedAt = .now
+            // The answer had every flight's status: the departure check counts from it.
+            departuresCheckedAt = .now
             isOffline = false
             connectivity.noteSuccess()
             await persist()
@@ -439,8 +451,23 @@ final class FlightStore {
             await performSync(retrying: true)
         } catch {
             noteFailure(error)
+            Analytics.logOnce(.syncFailed, ["offline": error.isConnectivityFailure])
             report(error, quietlyIfOffline: true)
         }
+    }
+
+    /// How long after landing a flight's forecast and updates are still fetched (the landing
+    /// check and its scored rating come after it).
+    static let forecastFetchMargin: TimeInterval = 24 * 3600
+
+    /// Whether a sync fetches this flight's forecast and updates: one with none saved yet (or only
+    /// the one it brought from a lost account), and any that hasn't landed `forecastFetchMargin` ago.
+    static func fetchesForecast(_ flight: Flight, saved: Forecast?, carried: Bool = false, now: Date = .now) -> Bool {
+        guard saved != nil, !carried else { return true }
+        let status = flight.status
+        let landing = max(
+            flight.estimatedLanding(saved), status?.arrivalActual ?? status?.arrivalExpected ?? flight.arrivalAt ?? .distantPast)
+        return landing > now.addingTimeInterval(-forecastFetchMargin)
     }
 
     /// Each flight's latest forecast and updates. A flight whose requests fail keeps what's saved.
@@ -527,14 +554,27 @@ final class FlightStore {
     /// While the app is open, flights from 3 hours before departure until takeoff are read again
     /// every 5 minutes, so a gate change the server already has reaches the screen. Silent: no
     /// spinner or banner. Stops when the app goes to the background.
+    /// The 5 minutes count from the last check (or sync), not from coming back to the app: someone
+    /// looking every few minutes still gets one, and one coming back after longer gets it at once.
     func watchDepartures(_ on: Bool) {
-        departureWatch?.cancel()
-        departureWatch = nil
-        guard on else { return }
+        guard on else {
+            departureWatch?.cancel()
+            departureWatch = nil
+            return
+        }
+        guard departureWatch == nil else { return }
+        // The launch sync is on its way.
+        if departuresCheckedAt == nil { departuresCheckedAt = .now }
         departureWatch = Task { [weak self] in
             while !Task.isCancelled {
-                try? await Task.sleep(for: .seconds(5 * 60))
-                guard let self, !Task.isCancelled else { return }
+                guard let wait = self.map({ Self.departureCheckWait(since: $0.departuresCheckedAt) }) else { return }
+                if wait > 0 {
+                    // Then looked at again: a sync meanwhile moves the next check.
+                    try? await Task.sleep(for: .seconds(wait))
+                    continue
+                }
+                guard let self else { return }
+                departuresCheckedAt = .now
                 for flight in flights where Self.watchesDeparture(flight) {
                     await refreshFlight(flight.id)
                 }
@@ -542,7 +582,17 @@ final class FlightStore {
         }
     }
 
+    static let departureCheckInterval: TimeInterval = 5 * 60
+
+    /// Seconds until the next departure check, given the last one.
+    static func departureCheckWait(since last: Date?, now: Date = .now) -> TimeInterval {
+        guard let last else { return departureCheckInterval }
+        // A clock set back counts as just checked.
+        return min(departureCheckInterval, max(0, departureCheckInterval - now.timeIntervalSince(last)))
+    }
+
     @ObservationIgnored private var departureWatch: Task<Void, Never>?
+    @ObservationIgnored private(set) var departuresCheckedAt: Date?
 
     private static func watchesDeparture(_ flight: Flight) -> Bool {
         let toDeparture = flight.expectedDeparture.timeIntervalSinceNow
@@ -564,6 +614,8 @@ final class FlightStore {
             guard let index = flights.firstIndex(where: { $0.id == id }), flights[index] == asked else { return }
             let changed = flights[index].status != fresh.status
             flights[index] = fresh
+            // A sync that read the flights before this keeps this newer status.
+            if sync != nil { refreshedDuringSync.insert(id) }
             flights.sort { $0.departureAt < $1.departureAt }
             connectivity.noteSuccess()
             await persist()
@@ -639,8 +691,10 @@ final class FlightStore {
     private func flushPendingPasses() async {
         for pass in pendingPasses where flight(pass.flightId) != nil && !isPending(pass.flightId) {
             do {
-                // Upserts on the transaction, so a repeat is harmless.
+                // Saved once per transaction, so a repeat is harmless.
                 try await service.recordPass(pass)
+            } catch is PassRejected {
+                // Apple says it isn't a pass: dropped, and the next sync relocks the flight.
             } catch let error as PostgrestError where !error.isSessionRefusal {
                 continue  // refused for now (e.g. the flight isn't saved yet): try again next sync
             } catch {
@@ -815,6 +869,8 @@ final class FlightStore {
 
     /// A different flight now: its taps, Live Activity and reminders no longer apply.
     private func forgetIfDifferent(_ id: UUID, _ draft: FlightDraft) {
+        // Another day or flight number: the gate this phone showed was for another departure.
+        if let old = flight(id), !Self.sameForecast(old, draft) { GateMemory.remove(id) }
         guard let old = flight(id),
             old.departureAt != draft.departureAt || old.origin != draft.origin || old.destination != draft.destination
         else { return }
@@ -840,6 +896,10 @@ final class FlightStore {
                 report(error)
                 return
             }
+        }
+        if let flight = flight(id) {
+            let landed = InFlight.shared.landing(of: flight, forecast: forecasts[id]) <= .now
+            Analytics.log(.flightDeleted, ["flown": landed, "cancelled": flight.isCancelled])
         }
         if sync != nil { deletedDuringSync.insert(id) }
         pendingAdds.removeAll { $0.id == id }
@@ -872,6 +932,10 @@ final class FlightStore {
                 pendingPasses.removeAll { $0.transactionId == transactionID }
                 if sync != nil { passesSavedDuringSync.insert(flightID) }
                 await persist()
+            } catch is PassRejected {
+                Analytics.log(.passRejected, ["product_id": productID])
+                pendingPasses.removeAll { $0.transactionId == transactionID }
+                await persist()
             } catch {
                 // Kept, and sent on the next sync.
                 if error.isConnectivityFailure { connectivity.noteFailure(error) }
@@ -881,9 +945,24 @@ final class FlightStore {
     }
 
     /// Offline (or on wifi that isn't answering) the rating is kept on the phone, shown as given,
-    /// and sent on the next sync. Nil only when the server refused it.
-    func submitLandingReport(flightID: UUID, rating: FeltRating) async -> LandingReport? {
+    /// and sent on the next sync. Nil only when the server refused it. `place` is where it was
+    /// rated, for `landing_rated`.
+    func submitLandingReport(flightID: UUID, rating: FeltRating, from place: String = "app") async -> LandingReport? {
         if let existing = reports[flightID] { return existing }
+        let forecast = forecasts[flightID]
+        let result = await sendLandingReport(flightID: flightID, rating: rating)
+        var params: [String: Any] = [
+            "rating": rating.rawValue, "where": place, "beta": forecast?.isGlobalOutlook ?? false,
+            "saved_offline": isReportPending(flightID), "refused": result == nil,
+            "seatbelt_taps": InFlight.shared.seatbelts[flightID]?.count ?? 0,
+        ]
+        if let matched = result?.matched { params["matched"] = matched }
+        if let grade = forecast?.grade { params["forecast_grade"] = grade.rawValue }
+        Analytics.log(.landingRated, params)
+        return result
+    }
+
+    private func sendLandingReport(flightID: UUID, rating: FeltRating) async -> LandingReport? {
         let forecast = forecasts[flightID]
         let pending = PendingLandingReport(
             rating: rating, report: LandingReport(flightId: flightID, rating: rating, forecast: forecast),
@@ -930,6 +1009,7 @@ final class FlightStore {
             try await verify(owner)
             try await service.joinWaitlist(WaitlistEntry(country: country, airport: airport))
             waitlist.insert(country)
+            Analytics.log(.waitlistJoined, ["country": country])
             if sync != nil { waitlistSavedDuringSync.insert(country) }
             await persist()
             onSync?()
@@ -958,6 +1038,12 @@ final class FlightStore {
     /// and the free limit share: a flight in the air first, then by expected departure (the
     /// airline's live time when there is one), so a delay re-sorts it. Cancelled flights are never
     /// next; see `cancelledUpcoming`.
+    /// The flights coming up after this one, in the same order and with the same rules as
+    /// `upcomingFlights` (never cancelled, never landed): Coming up on the list and on the Duo.
+    func comingUp(after id: UUID?) -> [Flight] {
+        upcomingFlights.filter { $0.id != id }
+    }
+
     var upcomingFlights: [Flight] {
         _ = localRevision
         let now = Date.now
@@ -982,19 +1068,44 @@ final class FlightStore {
     }
 
     func resetLocalData() async {
+        // A write on its way would put the file back.
+        await writing?.value
         await local.clear()
     }
 
+    /// The latest snapshot not written yet, and the one write on its way. Writes go one at a time
+    /// and always the newest, so an older snapshot can never land after a newer one.
+    @ObservationIgnored private var unwritten: Snapshot?
+    @ObservationIgnored private var writing: Task<Void, Never>?
+
+    /// Returns once this snapshot, or a newer one, is written.
     private func persist() async {
         guard !snapshotUnread else { return }
-        await local.save(
-            Snapshot(
-                flights: flights, forecasts: forecasts, updates: updates, passes: passes,
-                reports: reports, waitlist: waitlist, syncedAt: syncedAt, pendingAdds: pendingAdds,
-                userID: ownerID, pendingPasses: pendingPasses, pendingReports: pendingReports,
-                previousOwners: previousOwners, carriedForecasts: carriedForecasts, carriedPasses: carriedPasses,
-                adoptSecret: adoptSecret, pendingDeletes: pendingDeletes))
+        unwritten = Snapshot(
+            flights: flights, forecasts: forecasts, updates: updates, passes: passes,
+            reports: reports, waitlist: waitlist, syncedAt: syncedAt, pendingAdds: pendingAdds,
+            userID: ownerID, pendingPasses: pendingPasses, pendingReports: pendingReports,
+            previousOwners: previousOwners, carriedForecasts: carriedForecasts, carriedPasses: carriedPasses,
+            adoptSecret: adoptSecret, pendingDeletes: pendingDeletes)
+        if writing == nil {
+            writing = Task {
+                while let snapshot = unwritten {
+                    unwritten = nil
+                    await local.save(snapshot)
+                }
+                writing = nil
+            }
+        }
+        await writing?.value
     }
+
+    #if DEBUG
+        /// Tests only: the last sync failed, for a connection reason or not.
+        func debugNoteSyncFailed(onConnection: Bool) {
+            isOffline = true
+            failedOnConnection = onConnection
+        }
+    #endif
 
     /// Showing what's saved from now on; nil when there was no network to try.
     private func noteFailure(_ error: Error?) {
@@ -1067,6 +1178,18 @@ enum ForecastState: Equatable {
             self = .unlocksAt(flight.forecastUnlocksAt)
         } else {
             self = .building
+        }
+    }
+
+    /// For Superwall: a confidence once it's ready, otherwise "too_early", "building",
+    /// "beta_available" or "not_covered".
+    func analyticsValue(departure: Date) -> String {
+        switch self {
+        case .ready(let forecast): forecast.confidence(departure: departure).attributeValue
+        case .unlocksAt: "too_early"
+        case .building: "building"
+        case .betaAvailable: "beta_available"
+        case .outOfCoverage: "not_covered"
         }
     }
 }

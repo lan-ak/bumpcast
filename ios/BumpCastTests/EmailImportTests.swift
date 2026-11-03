@@ -155,3 +155,19 @@ struct EmailImportTests {
         #expect(!flight.isCancelled)
     }
 }
+
+/// A flight pass that completes outside a paywall (Ask to Buy, the app closed mid-purchase) is
+/// matched to the purchase that started on the flight's paywall.
+struct PendingPassTests {
+    let started = Date(timeIntervalSince1970: 1_800_000_000)
+
+    @Test func laterPassMatchesThePurchaseThatStarted() {
+        let pending = Paywalls.PendingPass(flightID: UUID(), productID: "bumpcast_flight_pass", startedAt: started)
+        // Approved a few hours later.
+        #expect(pending.matches(productID: "bumpcast_flight_pass", purchaseDate: started + 3 * 3600, now: started + 3 * 3600))
+        // Another pass product, one bought before this purchase started, or one long after.
+        #expect(!pending.matches(productID: "bumpcast_flight_pass_999", purchaseDate: started + 60, now: started + 60))
+        #expect(!pending.matches(productID: "bumpcast_flight_pass", purchaseDate: started - 3600, now: started + 60))
+        #expect(!pending.matches(productID: "bumpcast_flight_pass", purchaseDate: started + 3 * 86400, now: started + 3 * 86400))
+    }
+}

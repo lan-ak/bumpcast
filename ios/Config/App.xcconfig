@@ -3,6 +3,8 @@
 SUPABASE_URL =
 SUPABASE_ANON_KEY =
 SUPERWALL_API_KEY =
+// Analytics (Mixpanel project token: public, ships in the app). Empty sends nothing to Mixpanel.
+MIXPANEL_TOKEN =
 // Email import's OAuth clients. With MS_CLIENT_ID empty, Outlook isn't offered.
 GOOGLE_IOS_CLIENT_ID =
 GOOGLE_REDIRECT_SCHEME =

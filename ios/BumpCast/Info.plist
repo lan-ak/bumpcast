@@ -26,6 +26,8 @@
 	<string>$(SUPABASE_ANON_KEY)</string>
 	<key>SuperwallAPIKey</key>
 	<string>$(SUPERWALL_API_KEY)</string>
+	<key>MixpanelToken</key>
+	<string>$(MIXPANEL_TOKEN)</string>
 	<key>GoogleClientID</key>
 	<string>$(GOOGLE_IOS_CLIENT_ID)</string>
 	<key>GoogleRedirectScheme</key>

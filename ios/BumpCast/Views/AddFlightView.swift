@@ -11,6 +11,8 @@ struct AddFlightView: View {
     var onboarding: ((Flight?) -> Void)?
     /// A booking from email that needs picking by hand: its number and day, already filled in.
     var prefill: EmailImport.NeedsYouItem? = nil
+    /// Where Add flight was opened from, for `flight_add_started`.
+    var source = "list"
 
     enum Step: Int, CaseIterable { case find, route, when, check }
 
@@ -113,7 +115,7 @@ struct AddFlightView: View {
                     Group {
                         if !added.isEmpty && step == .find {
                             Button("Done") { finish() }  // the first flight is already saved
-                        } else if step == firstStep || (isEditing && step == .check) {
+                        } else if isEditing ? step == .check : step == firstStep {
                             Button(added.isEmpty ? "Cancel" : "Done") { added.isEmpty ? cancel() : finish() }
                         } else {
                             Button("Back", action: back)
@@ -139,7 +141,7 @@ struct AddFlightView: View {
             .onAppear(perform: loadExisting)
             // Once email is connected, its flights are on the Flights screen: closing the email
             // sheet closes Add flight too, rather than landing back on Find your flight.
-            .sheet(isPresented: $findingInEmail, onDismiss: { if EmailImport.shared.isConnected { closeSheet() } }) {
+            .adaptiveSheet(isPresented: $findingInEmail, onDismiss: { if EmailImport.shared.isConnected { closeSheet() } }) {
                 EmailImportSheet(sky: sky)
             }
             // A new route lists its flights again (unless the number's schedule isn't out yet).
@@ -182,6 +184,9 @@ struct AddFlightView: View {
 
     private func back() {
         switch step {
+        case .route where isEditing:
+            // Editing opens on Check, so Route's Back returns there with the change kept.
+            go(to: .check, forward: false)
         case .check where picked != nil:
             // A searched flight came straight from Find or the route list.
             go(to: pickedFrom, forward: false)
@@ -435,20 +440,41 @@ struct AddFlightView: View {
             try? await Task.sleep(for: FlightStore.addWait)
             if !Task.isCancelled { slowSave = true }
         }
+        let method = saveMethod
         let saved = await store.save(draft, editing: flight?.id)
         slow.cancel()
         slowSave = false
         guard let saved else {
+            Analytics.log(.flightSaveFailed, ["method": method, "editing": flight != nil])
             // Still open: say so here (the Flights list's alert can't show over the sheet).
             if !closed { saveFailed = true }
             return
         }
         added.append(saved)
+        if let flight {
+            let reset = flight.origin != saved.origin || flight.destination != saved.destination
+                || flight.departureAt != saved.departureAt
+            Analytics.log(.flightEdited, ["forecast_reset": reset])
+        } else {
+            Analytics.log(.flightSaved, [
+                "method": method, "covered": Coverage.covers(saved), "in_air": picked?.isInAir() ?? false,
+                "saved_offline": store.isPending(saved.id), "leg": added.count,
+                "hours_to_departure": Analytics.hours(to: saved.departureAt), "notify": saved.notify,
+            ])
+        }
         if thenConnect {
             startConnection(after: saved)
             return
         }
         finish()
+    }
+
+    /// How the flight being saved was found: by its number, from the route's list of flights,
+    /// by number before the schedule is out, or airports and a time entered by hand.
+    private var saveMethod: String {
+        if onboarding != nil { return "onboarding" }
+        if picked != nil { return pickedFrom == .find ? "search" : "route" }
+        return pendingNumber != nil ? "schedule_pending" : "manual_time"
     }
 
     /// Reopen the sheet for the next leg, from where this one lands.
@@ -532,7 +558,7 @@ struct AddFlightView: View {
     }
 
     private static func unlockDay(_ flight: Flight) -> String {
-        flight.forecastUnlocksAt <= .now ? "today" : flight.forecastUnlocksAt.formatted(.dateTime.weekday(.abbreviated))
+        flight.forecastUnlocksAt <= .now ? "today" : flight.forecastUnlocksAt.dayName(.abbreviated)
     }
 
     // MARK: Setup
@@ -556,7 +582,11 @@ struct AddFlightView: View {
             number = prefill.number
             if let day = prefill.date { departure = day }
         }
-        guard let flight else { return }
+        guard let flight else {
+            let from = onboarding != nil ? "onboarding" : prefill != nil ? "email_needs_you" : source
+            Analytics.log(.flightAddStarted, ["source": from])
+            return
+        }
         origin = flight.originAirport
         destination = flight.destinationAirport
         departure = flight.departureAt
@@ -834,6 +864,7 @@ private struct FindStep: View {
         let retrying = search == .offline && Connectivity.shared.hasPath
         guard Connectivity.shared.isOnline || retrying else {
             search = .offline
+            Analytics.log(.flightSearched, ["result": "offline", "matches": 0, "connection": connection != nil])
             return
         }
         search = .searching
@@ -874,6 +905,17 @@ private struct FindStep: View {
             // A lookup that failed for want of a connection says so.
             case .unavailable: search = Connectivity.shared.isOnline ? .unavailable : .offline
             }
+            let outcome: String =
+                switch search {
+                case .found: "found"
+                case .notFound: "not_found"
+                case .notPublished: "not_published"
+                case .offline: "offline"
+                default: "unavailable"
+                }
+            Analytics.log(.flightSearched, [
+                "result": outcome, "matches": flights.count, "connection": connection != nil,
+            ])
         }
     }
 
@@ -1082,7 +1124,7 @@ private struct RouteStep: View {
                                 Button("Save anyway") { allowOutsideCoverage = true }
                                     .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent).tint(Theme.accent)
                                 Button(GlobalOutlookCopy.turnOn) {
-                                    beta.set(true)
+                                    beta.set(true, from: "add_flight")
                                     allowOutsideCoverage = true
                                 }
                                     .buttonStyle(.bordered).tint(Theme.accent)
@@ -1100,12 +1142,12 @@ private struct RouteStep: View {
                                 .foregroundStyle(.secondary)
                             HStack {
                                 Button(GlobalOutlookCopy.turnOn) {
-                                    beta.set(true)
+                                    beta.set(true, from: "add_flight")
                                     allowOutsideCoverage = true
                                 }
                                     .buttonStyle(.borderedProminent).foregroundStyle(Theme.onAccent).tint(Theme.accent)
                                 Button(GlobalOutlookCopy.notNow) {
-                                    beta.set(false)
+                                    beta.set(false, from: "add_flight")
                                     allowOutsideCoverage = true
                                 }
                                 .buttonStyle(.bordered).tint(Theme.accent)
@@ -1653,7 +1695,7 @@ private struct DayPicker: View {
             .padding(.vertical, 2)
         }
         .scrollClipDisabled()
-        .sheet(isPresented: $isPickingDate) {
+        .adaptiveSheet(isPresented: $isPickingDate) {
             NavigationStack {
                 VStack(alignment: .leading, spacing: 18) {
                     Text("Pick a date").font(.bcTitle)
@@ -2058,7 +2100,8 @@ private struct CheckStep: View {
         let confirmed = departure.addingTimeInterval(-Forecast.noaaHorizon + Forecast.noaaPublishLag)
         var items = [
             Item(
-                when: "Now", title: isEditing ? "Saved" : "Saved",
+                // Nothing is saved until the button: say which one.
+                when: "Now", title: isEditing ? "Updated when you save" : "Added when you tap Add flight",
                 detail: advance > .now ? "Too early to tell yet." : "Your forecast will be ready in a few minutes.",
                 isNow: true)
         ]
