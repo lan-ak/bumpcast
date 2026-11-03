@@ -14,6 +14,7 @@ Preview locally: the `site` entry in `.claude/launch.json` (`python3 -m http.ser
 | `/terms.html` | Google and Microsoft terms of service URL. Supplements Apple's standard EULA |
 | `/support.html` | App Store support URL |
 | `/.well-known/microsoft-identity-association.json` | Microsoft publisher-domain verification. **Replace the zero GUID with the Entra app's Application (client) ID** before deploying |
+| `/llms.txt` | Plain Markdown summary of the app and its key features for AI agents and LLM crawlers ([llms.txt](https://llmstxt.org) convention). Keep in step with the App Store description |
 | `/404.html` | Host not-found page (root-relative links, so it works at any depth) |
 
 Look: the app's "Cabin Dawn" mood layer (docs/design/DESIGN_SPEC.md). `sky.js` picks a dawn, day, dusk or night sky from the visitor's clock (dark mode is always night), with glass cards, the wave timeline, water-glass severity glyphs and the breathing orb. No cookies, analytics, third-party scripts or fonts. Fonts are the app's own OFL fonts in `fonts/`.

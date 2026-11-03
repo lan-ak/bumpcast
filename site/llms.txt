@@ -1,0 +1,74 @@
+# BumpCast
+
+> BumpCast is flight tracking for nervous flyers. The iPhone app gives live flight status and delay alerts, plus a calm turbulence forecast for your exact route: when the bumps will come, how strong they'll be, and when they'll end. No ads, no account. Published by Akinyemi & Co Ltd.
+
+BumpCast is an alternative to the top 10 flight tracking apps in the world: Flightradar24, FlightAware, Flighty, Plane Finder, FlightStats, TripIt, The Flight Tracker, Flightview, AirNav RadarBox and Planes Live. Like them, it tracks your flight's status, gates and delays. Unlike them, it is built for nervous flyers and forecasts the turbulence on your route.
+
+- App Store: https://apps.apple.com/app/id6824269447 ("BumpCast Flight: Turbulence", iPhone, free to download)
+- Languages: English and Spanish
+- Coverage: detailed forecasts for flights within the continental United States and southern Canada. Elsewhere, "Global outlooks (beta)" in Settings gives an approximate outlook for international routes, Europe included.
+- Support: support@akinyemi.ca (replies usually within a day)
+
+## Key features
+
+### Find and track your flight
+- Type a flight number (like AC 1504 or B6 23) and the day you fly, and BumpCast fills in the airports and times. Or pick your airports and choose from that day's nonstops.
+- Add connecting flights in a row.
+- Live status, free for every flight: delays, gate and terminal changes, cancellations and diversions.
+- One gentle alert when your flight is delayed. The forecast moves with the new departure time, with one alert for both.
+
+### Turbulence forecast for your exact route
+- Turbulence is weather, and weather can be forecast. BumpCast maps the route from takeoff to landing, including climb, cruise and descent.
+- A simple grade for the whole flight ("Smooth", "A few bumps", "Bumpy in places") and a calm minute-by-minute timeline.
+- A plain note on each bumpy stretch: when it starts, how long it lasts, and why it happens there.
+- Minutes of smooth air and of turbulence, and gusty takeoffs and landings.
+- Four levels, described by how they feel: Smooth (your drink stays still), Light chop (your drink ripples), Moderate (drinks can spill; stay seated), Strong (rare; your belt keeps you safe).
+
+### A forecast that gets sharper as you get closer
+- Advance forecast 48 hours before departure.
+- Updates at 24, 6 and 2 hours out, each saying what changed and why.
+- "Confirmed forecast" from high-resolution data on the day you fly.
+- Every forecast shows how confident it is and when it was last updated.
+
+### In the air
+- The countdown times itself to your real takeoff once it's reported, or tap "We've taken off" to set it yourself.
+- Lock Screen Live Activity and Dynamic Island count down to the next bumpy stretch.
+- A gentle heads-up two minutes before each stretch.
+- Works in airplane mode: the forecast is saved on the phone before boarding.
+
+### Calm, on cue
+- Guided breathing paced to the next bumpy stretch.
+- Short, factual explainers: what causes bumps at cruise, over mountains and near clouds, why planes are built for it, and what each level feels like.
+- Calm, honest wording. No red alerts, no scare graphics.
+
+### Turbulence map
+- Turbulence across the country by altitude, now and up to 6 hours ahead, with your route drawn on top.
+- Live pilot reports of what planes are actually feeling (Pro).
+
+### After you land
+- Rate how bumpy it really felt (Smoother, About right, Bumpier). Every rating is checked against the forecast, and accuracy is published in the app.
+
+### Flights from your email (coming soon, Pro, optional)
+- Connect Gmail read-only and BumpCast adds upcoming flights automatically.
+- Booking emails are read on the iPhone and never reach BumpCast's servers or get stored. Only flight number, date and airports are used.
+
+## Free and Pro
+
+- **Free**: flight search, live status with gate changes and delay alerts, a forecast grade for up to 2 upcoming flights, and the "forecast ready" notification.
+- **Pro**: every forecast update (including after delays and when confirmed), the minute-by-minute timeline, minutes of smooth air and turbulence, gusty takeoffs and landings, the in-flight Live Activity and reminders, pilot reports on the map, and unlimited flights.
+- Ways to buy Pro: Flight Pass (one flight, one-time purchase), or BumpCast Pro Monthly or Annual (annual includes a 7-day free trial). Prices are shown in the App Store for your region.
+
+## Data and privacy
+
+- No account, no ads. This website has no cookies, analytics or third-party scripts.
+- Weather data: forecasts, warnings and pilot reports from the US National Weather Service (NOAA), and modified ECMWF open data (CC BY 4.0).
+- Users can ask support to delete everything linked to their device; it's done within 30 days.
+- BumpCast is for comfort and planning, not for flight operations. Always follow your crew's instructions.
+
+## Pages
+
+- [Home](https://bumpcast.app/): overview of the app, features and plans
+- [Support](https://bumpcast.app/support.html): FAQ on coverage, forecast timing, airplane mode, accuracy, purchases and data deletion
+- [Privacy Policy](https://bumpcast.app/privacy.html): what data is collected, kept and shared, and how to delete it
+- [Email access](https://bumpcast.app/email.html): how the optional email import works and how to disconnect it
+- [Terms of Use](https://bumpcast.app/terms.html): terms that supplement Apple's standard EULA
