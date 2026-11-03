@@ -596,6 +596,7 @@ def poll(db, apns: Apns | None, data: FlightData | None = None) -> None:
     steps = [
         ("inputs", lambda: refresh_inputs(datetime.now(UTC))),
         ("forecasts", lambda: f"processed {run_once(db, data)} status/forecast update(s)"),
+        ("passes", lambda: verify_passes(db, datetime.now(UTC))),
         ("notifications", lambda: f"{notify.run(db, apns, datetime.now(UTC))} notification(s)"),
         ("takeoffs", lambda: f"{notify.push_takeoffs(db, apns, datetime.now(UTC))} takeoff(s) pushed"),
         ("schedules", lambda: f"{notify.check_schedules(db, data, apns, datetime.now(UTC))} schedule(s) published"),
@@ -617,6 +618,23 @@ def poll(db, apns: Apns | None, data: FlightData | None = None) -> None:
             log.exception("%s failed", name)
     with work_lock:
         prune_cache()
+
+
+PASS_SWEEP_EVERY = timedelta(minutes=10)
+_last_pass_sweep: datetime | None = None
+
+
+def verify_passes(db, now: datetime) -> str:
+    """Passes that apps up to 1.0.3 saved themselves are checked with Apple (by the verify-pass
+    function) before notifications count them. At most every 10 minutes, and only when one waits."""
+    global _last_pass_sweep
+    if _last_pass_sweep and now - _last_pass_sweep < PASS_SWEEP_EVERY:
+        return "not due"
+    _last_pass_sweep = now
+    if not db.passes_waiting():
+        return "none waiting"
+    counts = db.verify_passes()
+    return ", ".join(f"{n} {status}" for status, n in counts.items())
 
 
 def refresh_map(db) -> int:

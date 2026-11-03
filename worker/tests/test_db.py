@@ -85,3 +85,53 @@ def test_a_kept_forecast_copied_to_a_delay_is_marked_retimed():
     assert "id" not in row and row["flight_id"] == "a" and row["source"] == "gtg"
     assert row["retimed"] is True and row["departure_at"] == delayed.isoformat()
     assert row["issued_at"] == "2026-10-23T16:55:00.124456+00:00"  # just after: the latest
+
+
+def test_only_verified_passes_count():
+    """Notifications count a pass once Apple confirmed it; before the migration, every pass."""
+    asked = []
+
+    def handler(request):
+        asked.append(request.url.params)
+        return httpx.Response(200, json=[{"flight_id": "f1"}])
+
+    assert database(handler).flights_with_passes(["f1", "f2"]) == {"f1"}
+    assert asked[0]["verified_at"] == "not.is.null"
+
+    asked.clear()
+
+    def old_database(request):
+        asked.append(request.url.params)
+        if "verified_at" in request.url.params:
+            return httpx.Response(400, json={"code": "42703", "message": "column flight_passes.verified_at does not exist"})
+        return httpx.Response(200, json=[{"flight_id": "f2"}])
+
+    assert database(old_database).flights_with_passes(["f2"]) == {"f2"}
+    assert "verified_at" not in asked[-1]
+    assert database(old_database).passes_waiting() is False
+
+
+def test_waiting_passes_go_to_the_verify_function():
+    """Passes apps up to 1.0.3 saved themselves are handed to verify-pass, with the service key."""
+    calls = []
+
+    def handler(request):
+        calls.append(request)
+        if request.url.path.endswith("/flight_passes"):
+            return httpx.Response(200, json=[{"transaction_id": "2000001"}])
+        return httpx.Response(200, json={"verified": 1, "rejected": 0, "unavailable": 0})
+
+    db = Database("https://example.supabase.co", "service-key")
+    db.http = httpx.Client(
+        base_url="https://example.supabase.co/rest/v1",
+        headers={"Authorization": "Bearer service-key"},
+        transport=httpx.MockTransport(handler),
+    )
+    assert db.passes_waiting()
+    waiting = calls[0].url.params
+    assert (waiting["verified_at"], waiting["rejected_at"]) == ("is.null", "is.null")
+    assert db.verify_passes() == {"verified": 1, "rejected": 0, "unavailable": 0}
+    sweep = calls[1]
+    assert str(sweep.url) == "https://example.supabase.co/functions/v1/verify-pass"
+    assert json.loads(sweep.content) == {"sweep": True}
+    assert sweep.headers["Authorization"] == "Bearer service-key"

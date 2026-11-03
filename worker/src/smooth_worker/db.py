@@ -37,6 +37,7 @@ class Database:
     def __init__(self, url: str | None = None, service_key: str | None = None):
         url = url or os.environ["SUPABASE_URL"]
         key = service_key or os.environ["SUPABASE_SERVICE_ROLE_KEY"]
+        self.functions_url = f"{url.rstrip('/')}/functions/v1"
         self.http = httpx.Client(
             base_url=f"{url.rstrip('/')}/rest/v1",
             headers={"apikey": key, "Authorization": f"Bearer {key}"},
@@ -194,10 +195,38 @@ class Database:
         return {r["user_id"] for r in rows}
 
     def flights_with_passes(self, flight_ids: list[str]) -> set[str]:
+        """Flights with a pass Apple confirmed (or one from before passes were checked)."""
         if not flight_ids:
             return set()
-        rows = self._get("/flight_passes", {"select": "flight_id", "flight_id": _in(flight_ids)})
+        params = {"select": "flight_id", "flight_id": _in(flight_ids), "verified_at": "not.is.null"}
+        try:
+            rows = self._get("/flight_passes", params)
+        except httpx.HTTPStatusError as e:
+            # A database without the verified-passes migration yet: every pass counts, as before.
+            if e.response.status_code != 400 or "verified_at" not in e.response.text:
+                raise
+            del params["verified_at"]
+            rows = self._get("/flight_passes", params)
         return {r["flight_id"] for r in rows}
+
+    def passes_waiting(self) -> bool:
+        """Whether a pass is waiting to be checked with Apple (inserted by an app up to 1.0.3)."""
+        try:
+            rows = self._get(
+                "/flight_passes",
+                {"select": "transaction_id", "verified_at": "is.null", "rejected_at": "is.null", "verify_attempts": "lt.48", "limit": "1"},
+            )
+        except httpx.HTTPStatusError as e:
+            if e.response.status_code == 400 and "verified_at" in e.response.text:
+                return False  # no verified-passes migration yet
+            raise
+        return bool(rows)
+
+    def verify_passes(self) -> dict:
+        """Has the verify-pass function check waiting passes with Apple. Returns its counts."""
+        r = self.http.post(f"{self.functions_url}/verify-pass", json={"sweep": True}, timeout=120)
+        r.raise_for_status()
+        return r.json()
 
     def devices(self, user_ids: list[str]) -> dict[str, list[dict]]:
         if not user_ids:

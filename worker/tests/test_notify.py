@@ -333,3 +333,27 @@ def test_a_new_flight_profile_is_not_described_as_new_weather():
     assert points[-1] == "Why: we've improved how we model your flight."
     # Both built with the new model: changes are described as usual.
     assert changes.describe({**old, "profile": 2}, new)[-1].startswith("Why: updated with the latest forecast data")
+
+
+def test_pass_sweep_runs_at_most_every_ten_minutes(monkeypatch):
+    import smooth_worker
+
+    class Db:
+        waiting = True
+        sweeps = 0
+
+        def passes_waiting(self):
+            return self.waiting
+
+        def verify_passes(self):
+            self.sweeps += 1
+            return {"verified": 1, "rejected": 0, "unavailable": 0}
+
+    monkeypatch.setattr(smooth_worker, "_last_pass_sweep", None)
+    db = Db()
+    now = datetime(2026, 11, 1, 18, tzinfo=UTC)
+    assert smooth_worker.verify_passes(db, now) == "1 verified, 0 rejected, 0 unavailable"
+    assert smooth_worker.verify_passes(db, now + timedelta(minutes=5)) == "not due"
+    db.waiting = False
+    assert smooth_worker.verify_passes(db, now + timedelta(minutes=11)) == "none waiting"
+    assert db.sweeps == 1
