@@ -1,7 +1,7 @@
 import { definePaywall } from "superwall/config";
 
-// The hard side of the hard-vs-soft test (see components/variant.ts): the flight paywall and the
-// pass offer can't be closed. `onboarding-soft` is the same flow with both closable.
+// The hard side of the hard-vs-soft test (see components/variant.ts): the flight paywall can't
+// be closed. `onboarding-soft` is the same flow with it closable.
 export default definePaywall({
   name: "Onboarding · hard",
   products: {
@@ -11,8 +11,6 @@ export default definePaywall({
     // App Store sheet on the yearly plan (components/more-time.tsx).
     annual7: "bumpcast_pro_annual",
     monthly: "bumpcast_pro_monthly",
-    // The flight pass, sold on the flight page to people flying in the next 3 days.
-    pass: "bumpcast_flight_pass",
   },
   transition: "slide",
   // Matches the dawn sky (light) and the night sky (dark) so the load never flashes.

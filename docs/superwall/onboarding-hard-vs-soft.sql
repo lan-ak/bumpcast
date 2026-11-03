@@ -1,7 +1,7 @@
 -- Onboarding hard vs soft flight paywall: conversion in onboarding, and flight passes bought later.
 --
 -- The Onboarding campaign (113534) splits 50/50 between `onboarding` (paywall 281980, hard: the
--- flight paywall and pass offer can't be closed) and `onboarding-soft` (284375, both can). Only
+-- flight paywall can't be closed) and `onboarding-soft` (284375, it can). Only
 -- people who say they fly in the next 3 days and add their flight (app 1.0.1+) reach the flight
 -- paywall; everyone else sees the same closable Plans page in both. Each flow saves the
 -- `onboarding_paywall_variant` user attribute ("hard" / "soft") when it opens.

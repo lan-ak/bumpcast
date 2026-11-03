@@ -41,7 +41,7 @@
 
 /* Short screens (iPhone SE): the ticket and the button both stay in view; the countdown eyebrow
    and the selling line give way, and the sky tightens around the grade. */
-@media (max-height: 700px) {
+@media (max-height: 700px) and (max-width: 799px), (max-height: 559px) {
   .tk { margin-bottom: 10px; padding: 12px 14px; }
   .tk-top { margin-bottom: 8px; }
   .tk-code { font-size: 32px; }
@@ -59,3 +59,8 @@
 /* "More options" open: they're choosing a plan now, so the selling lines give way to the three
    cards (coverage stays, it's what each plan buys). */
 .pw:has(.tk):has(.plan-grid--three) .feature:not(.feature--coverage) { display: none; }
+
+/* iPhone Duo, open (see components/pro/theme.css): the ticket and headline hold the left half. */
+@media (min-width: 800px) and (min-height: 560px) {
+  .pw-hero:has(.tk) { flex-basis: calc(50% - 20px); padding-top: 72px; padding-bottom: 190px; }
+}

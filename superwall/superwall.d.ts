@@ -16,7 +16,6 @@ declare module "superwall/navigation" {
     "how": true;
     "index": true;
     "notifications": true;
-    "pass-offer": true;
     "plans": true;
     "reassure": true;
     "source": true;

@@ -63,11 +63,18 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 .secondary { color: var(--ink-2); }
 .footnote { font-size: 13px; line-height: 1.35; }
 
+/* The iPhone Duo's status column (84 pt on the right, with no left inset), and 0 on every iPhone,
+   sideways ones included. The paywall runs under it, with its content clear of it. */
+:root {
+  --duo-column: min(var(--sw-page-inset-right, 0px), max(0px, calc(1000px - var(--sw-page-inset-left, 0px) * 1000)));
+}
+
 /* The page is the sky; the sheet with the offer sits at the bottom of it. */
 .pw {
   display: flex;
   min-height: 100%;
   flex-direction: column;
+  margin-right: calc(-1 * var(--duo-column));
   background: linear-gradient(var(--sky-top), var(--sky-bottom) 62%);
 }
 
@@ -78,10 +85,10 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
   min-height: 236px;
   flex-direction: column;
   justify-content: center;
-  padding: 60px 24px 104px;
+  padding: 60px calc(24px + var(--duo-column)) 104px 24px;
 }
 .pw-scene { position: absolute; inset: auto 0 0 0; width: 100%; height: 120px; }
-.pw-bar { position: absolute; top: 8px; left: 14px; right: 14px; z-index: 1; display: flex; align-items: center; justify-content: space-between; }
+.pw-bar { position: absolute; top: 8px; left: 14px; right: calc(14px + var(--duo-column)); z-index: 1; display: flex; align-items: center; justify-content: space-between; }
 .pw-heading { position: relative; text-align: center; }
 .pw-eyebrow {
   margin: 0 0 8px;
@@ -123,7 +130,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
   flex-direction: column;
   margin-top: -14px;
   margin-bottom: calc(-1 * var(--sw-page-inset-bottom, 0px));
-  padding: 24px 20px calc(12px + var(--sw-page-inset-bottom, 0px));
+  padding: 24px calc(20px + var(--duo-column)) calc(12px + var(--sw-page-inset-bottom, 0px)) 20px;
   border-radius: 28px 28px 0 0;
   background: var(--sheet);
 }
@@ -208,12 +215,42 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 .legal { margin-top: 10px; text-align: center; }
 .legal-links { display: flex; justify-content: center; gap: 20px; }
 
-@media (max-height: 700px) {
+@media (max-height: 700px) and (max-width: 799px), (max-height: 559px) {
   .pw-hero { flex-basis: 196px; min-height: 196px; }
   .pw-hero { padding-top: 60px; padding-bottom: 96px; }
   .feature + .feature:not(.feature--coverage) { display: none; }
   .pw-title { font-size: 26px; }
 }
 .pw-sub { margin-top: 8px; color: var(--ink-2); font-size: 16px; }
-@media (max-height: 700px) { .pw-sub { display: none; } }
+@media (max-height: 700px) and (max-width: 799px), (max-height: 559px) { .pw-sub { display: none; } }
 :root.dark .pw-sheet { border-top: 0.5px solid var(--card-border); }
+
+/* iPhone Duo, open (and partly open): the only phone screen this wide and tall (951 × 669). The
+   fold runs down the middle in a 40 pt band, so the sky, headline and sunrise take the left half
+   and the offer the whole right half, with only sky on the fold. Closed, it's a phone. */
+@media (min-width: 800px) and (min-height: 560px) {
+  /* Wider than tall reads as a landscape iPhone to the framework, which then floors the sides at
+     the island's 59 pt. The open Duo has no side cutout. */
+  html:root[data-sw-platform="ios"] {
+    --sw-safe-area-floor-left: 0px;
+    --sw-safe-area-floor-right: 0px;
+    --sw-safe-area-floor-top: 24px;
+    --sw-safe-area-floor-bottom: 34px;
+  }
+  html, body { background: var(--sky-top); }
+  .pw { flex-direction: row; min-height: 100vh; margin: var(--sw-page-bleed); padding-top: var(--sw-page-inset-top); }
+  .pw-hero { flex: 0 0 calc(50% - 20px); min-width: 0; padding: 72px 32px 190px; }
+  .pw-bar { right: 14px; }
+  /* The sunrise runs on under the fold to meet the panel, as on the onboarding's Plans. */
+  .pw-scene { right: auto; width: calc(100% + 40px); height: 190px; }
+  .pw-title { font-size: 34px; }
+  .pw-sheet {
+    flex: 0 0 calc(50% - 20px);
+    min-width: 0;
+    justify-content: center;
+    margin: calc(-1 * var(--sw-page-inset-top)) 0 0 40px;
+    /* Clear of the status column on the right (84 pt on the Duo, sent by the app). */
+    padding: calc(24px + var(--sw-page-inset-top)) calc(28px + var(--duo-column)) calc(12px + var(--sw-page-inset-bottom, 0px)) 28px;
+    border-radius: 0;
+  }
+}

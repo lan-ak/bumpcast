@@ -109,15 +109,6 @@ export default {
     featureTimeline: "See exactly when the bumps happen, and how long they last",
     featureUpdates: "Get an update if the weather changes before you leave",
   },
-  passOffer: {
-    eyebrow: "Just this flight",
-    title: "Unlock {route} for one trip.",
-    titleBare: "Unlock just this flight.",
-    sub: "{price}, one time. No subscription.",
-    subBare: "One payment. No subscription.",
-    back: "Back to plans",
-    legal: "One-time purchase for this flight. It doesn't renew.",
-  },
   moreTime: {
     title: "Need more time?",
     body: "Have {days} days instead. Try Pro free, then {price}/year.",

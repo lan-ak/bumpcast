@@ -11,6 +11,7 @@ Superwall is the only purchase provider. It runs all purchases, the onboarding f
 | Product ID | Type | Price | Grants |
 |---|---|---|---|
 | `bumpcast_flight_pass` | Consumable | $3.99 | Unlocks Pro for **one flight** (recorded in Supabase `flight_passes`) |
+| `bumpcast_flight_pass_999` | Consumable | $9.99 | Same as the $3.99 pass. Created 2026-11-01. Only app builds that include `Products.flightPasses` record it, so keep it off paywalls until that build is live |
 | `bumpcast_pro_monthly` | Auto-renewing | $6.99 / month | `pro` |
 | `bumpcast_pro_annual` | Auto-renewing | $39.99 / year, 7-day free trial | `pro` |
 | `bumpcast_pro_annual_3999_3d` | Auto-renewing | $39.99 / year, 3-day free trial | `pro` |
@@ -21,7 +22,7 @@ The three 3-day-trial plans were created on 2026-10-25 in the BumpCast Pro group
 
 For local testing, `ios/BumpCast/Products.storekit` mirrors the first three and is attached to the Run scheme.
 
-**Flight passes:** when a `bumpcast_flight_pass` purchase completes on a paywall opened from a flight, the app records the transaction against that flight. Every flight placement passes `flight_id`, so a paywall can sell the pass in context.
+**Flight passes:** when a purchase of any product in `Products.flightPasses` completes on a paywall opened from a flight, the app records the transaction against that flight. Every flight placement passes `flight_id`, so a paywall can sell the pass in context. The flight is taken when the paywall is presented (a register Superwall refuses because a paywall is already up leaves the one on screen in charge) and dropped when it closes. When a pass purchase starts, its flight is saved on the phone (`pass.pending`) until the purchase ends, so a pass approved later (Ask to Buy) or completed while the app was closed, which reaches the app only as a StoreKit `Transaction.updates` entry with no Superwall `transactionComplete`, is still recorded (1.0.4+). **Checked with Apple (from 1.0.4, once `verify-pass` is deployed):** the app sends each pass to the `verify-pass` function, which looks the transaction up with Apple and saves it; only verified passes unlock a flight off the phone that bought it, and in the worker's notifications. Test-store passes (UUID ids) count only while the function's `ALLOW_TEST_STORE_PASSES` is `1`. See `docs/release/1.0.4.md`, "Server: verified flight passes".
 
 ## Placements
 
@@ -45,7 +46,7 @@ For local testing, `ios/BumpCast/Products.storekit` mirrors the first three and 
 
 ### Pro, and what a lock does (`Paywalls.unlock`)
 
-The app's Pro is Superwall's subscription status (`Superwall.shared.subscriptionStatus.isActive`), never stricter. Superwall merges App Store, web, promo-code and test-store entitlements, and every campaign audience checks the same thing, so a lock always ends in the content or a paywall. Pro is re-read when the status or `customerInfo` changes, after a restore, on every lock tap, and when the app comes forward (`verifyEntitlements`). StoreKit's cache on the phone is never used to take Pro away: it can lag a renewal (in the air), and web, promo and test-store Pro have no App Store transaction. The app never calls `refreshConfiguration()`.
+The app's Pro is Superwall's subscription status (`Superwall.shared.subscriptionStatus.isActive`), never stricter. Superwall merges App Store, web, promo-code and test-store entitlements, and every campaign audience checks the same thing, so a lock always ends in the content or a paywall. Pro is re-read when the status or `customerInfo` changes, after a restore, on every lock tap, and when the app comes forward (`verifyEntitlements`). StoreKit's cache on the phone is never used to take Pro away: it can lag a renewal (in the air), and web, promo and test-store Pro have no App Store transaction. The one exception: when StoreKit plainly shows the latest Pro subscription ended (refunded, or expired and not renewing) while Superwall still says Pro, `verifyEntitlements` calls `refreshConfiguration()` so Superwall re-reads purchases, at most once every 6 hours per transaction and only online with the config loaded; Pro then follows what Superwall says.
 
 Every tap ends in one of these:
 
@@ -57,7 +58,9 @@ Every tap ends in one of these:
 - **Skipped for a holdout or a placement with no campaign:** "BumpCast Pro isn't available right now."
 - **Error:** config gave up (104) says to reopen the app once connected; a paywall already on screen (102) is ignored; anything else says "Couldn't open BumpCast Pro."
 
-Soft placements (`first_grade_viewed`, `forecast_ready_opened`, `update_opened`) aren't registered offline; `first_grade_viewed` waits for the next grade seen online.
+Soft placements (`first_grade_viewed`, `forecast_ready_opened`, `update_opened`) aren't registered offline; `first_grade_viewed` waits for the next grade seen online. It also waits for the next launch when the onboarding paywall was on screen this session, so finishing onboarding (which opens the flight) doesn't lead straight into a second paywall (1.0.4+).
+
+**Restore purchases** (Settings): SuperwallKit has no public restore without its own alert, which it shows whenever the restore leaves no active entitlement. The app configures that alert's words (`restoreFailed`: "Nothing to restore"; this also applies to restore buttons on paywalls) and says "Purchases restored." only when Pro is active afterwards, so there's never a second, contradictory alert (1.0.4+).
 
 ### How Superwall behaves for this app (found on the 10-22 flight)
 
@@ -90,6 +93,21 @@ Apple only allows its own rating prompt (guideline 5.6.1): a surface can lead up
 
 The onboarding flow doesn't use these placements: it asks in its own pages, with Request Permission and the same `request_review` callback (see below).
 
+## Events (log only, 1.0.4+)
+
+What people do in the app, from `Analytics.log` (`ios/BumpCast/Services/Analytics.swift`). Each is registered as a placement because Superwall has no other way to take an event, so they land in `sw.events_rep` under their own names. **Never give one a campaign:** a paywall would show in the middle of what the user was doing. A unit test (`AnalyticsTests`) keeps their names apart from the placements above and from Superwall's own events. Unlike the placements, they fire for everyone (Pro or free, online or not), and errors are sent once a launch.
+
+The same events, with the same params, go to **Mixpanel**, plus Superwall's own paywall, purchase, restore and permission events (their `$` params lose the `$`), Mixpanel's automatic first-open and session events, and the user attributes below as the profile (`pro` on every event). Both use the Supabase account id. The token is `MIXPANEL_TOKEN` in `ios/Config/Secrets.xcconfig`; empty sends nothing to Mixpanel.
+
+The full list with params and where each fires: `docs/superwall/events-plan.md`. In short:
+
+- **Adding and keeping flights:** `flight_add_started` (`source`), `flight_searched` (`result`, `matches`), `flight_saved` (`method`, `covered`, `in_air`, `saved_offline`, `leg`), `flight_save_failed`, `flight_edited` (`forecast_reset`), `flight_deleted`, `flight_opened` (`source`, forecast state, grade, `full_access`), `forecast_confirmed_seen`.
+- **Notifications:** `notification_opened` (`kind`), `notification_prompt_answered` (`where`, `granted`).
+- **In the air:** `countdown_started` (`how`), `took_off`, `landed`, `seatbelt_tapped`, `landing_rated` (`rating`, `matched`, `where`), `review_requested` (`moment`: `first_forecast`, `forecast_matched`, or the surface's placement).
+- **What people use:** `tab_viewed`, `breathing_started` / `breathing_finished`, `explainer_opened`, `map_opened`, `pilot_reports_toggled`, `pilot_report_tapped`, `global_outlook_set`, `waitlist_joined`, `haptics_set`, `restore_finished`, `manage_subscription_opened`, `onboarding_fell_back` (`reason`), `onboarding_finished` (`flow`), `onboarding_flight_result`.
+- **When it goes wrong:** `sync_failed`, `map_load_failed`, `lock_unavailable`, `flight_link_missing`, `pass_late_recorded`, `pass_rejected`, `push_registration_failed`.
+- **Email import** (once it's on in Release): `email_connect_finished`, `email_scan_finished`, `email_flight_dismissed`, `email_disconnected`.
+
 ## User attributes
 
 These are kept current after every sync, for audiences and paywall text.
@@ -104,12 +122,13 @@ These are kept current after every sync, for audiences and paywall text.
 | `in_flight` | Currently in a tapped "We've taken off" flight |
 | `landing_reports`, `landing_reports_matched` | After-landing ratings given / where the forecast matched |
 | `waitlist_countries` | Comma-separated ISO codes from the coverage waitlist |
+| `global_outlook_on`, `haptics_on` | The global outlook (beta) and haptics settings (1.0.4+) |
 
 Onboarding answers (fear level, how often they fly, and so on) are set as attributes from inside the Superwall onboarding flow itself, so they don't need app code. `next_flight_window` is `24h`, `3d`, `week` or `later`.
 
 ### Onboarding callbacks (flying in the next 3 days)
 
-People who answer `24h` or `3d` add their flight inside the flow and end on a hard paywall for it (no close button) that sells Pro: Yearly with the trial, Monthly as the fallback. The flight pass is offered only after they close the App Store sheet without buying (`pass-offer`), once per flow. The flow asks the app through two custom callbacks, handled in `ios/BumpCast/Services/OnboardingFlight.swift`:
+People who answer `24h` or `3d` add their flight inside the flow and end on a hard paywall for it (no close button) that sells Pro: Yearly with the trial, Monthly as the fallback. Closing the App Store sheet on Yearly offers a 7-day trial instead (once per flow); the flight pass is never sold in onboarding. The flow asks the app through two custom callbacks, handled in `ios/BumpCast/Services/OnboardingFlight.swift`:
 
 | Callback | App does | Returns |
 |---|---|---|
@@ -144,8 +163,8 @@ Flights outside coverage, flights saved offline, and app versions without the ca
 ## Running experiments
 
 **Onboarding: hard vs soft flight paywall** (Onboarding campaign 113534, 50/50, started 2026-10-23). The two paywalls are the same flow:
-- `onboarding` (281980) is **hard**: the flight paywall and the pass offer have no close button.
-- `onboarding-soft` (284375) is **soft**: both have one.
+- `onboarding` (281980) is **hard**: the flight paywall has no close button.
+- `onboarding-soft` (284375) is **soft**: it has one.
 
 `onboarding-soft` re-exports every page of `onboarding` and only sets `variant.soft` in its layout, so edit `onboarding` and publish both. They're named "Onboarding · hard" and "Onboarding · soft". From 1.0.2 the app asks the `onboarding` placement which paywall it shows, so names and identifiers can be anything (1.0 and 1.0.1 waited for one named "Onboarding", but only on a first launch, and new installs have been on 1.0.2 or later since Oct 25).
 

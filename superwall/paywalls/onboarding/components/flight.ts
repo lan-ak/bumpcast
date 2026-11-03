@@ -20,8 +20,7 @@ export interface FlightForecast {
   confidence?: "early" | "partly_confirmed" | "confirmed" | "global_outlook";
 }
 
-/** `passOffered`: the flight pass was offered after a closed App Store sheet (once per flow). */
-export const flight: { added?: AddedFlight; forecast?: FlightForecast; passOffered?: boolean } = {};
+export const flight: { added?: AddedFlight; forecast?: FlightForecast } = {};
 
 const str = (v: unknown) => (typeof v === "string" && v.trim() ? v.trim() : undefined);
 const date = (v: unknown) => {

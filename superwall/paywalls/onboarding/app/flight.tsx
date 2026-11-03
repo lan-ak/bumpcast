@@ -1,6 +1,5 @@
 import { useState, type ReactNode } from "react";
 import { useActions, useHaptics, useIntroductoryOffer, useProducts, usePurchase, useTranslation } from "superwall/hooks";
-import { useRouter } from "superwall/navigation";
 import { flight, unlockText } from "../components/flight";
 import { Ticket } from "../components/ticket";
 import { MoreTimeSheet, useMoreTime } from "../components/more-time";
@@ -31,7 +30,8 @@ const COVERAGE: { key: string; icon: ReactNode }[] = [
  * The hard paywall for people flying in the next 3 days: their flight, what we know so far (the
  * grade, when it's ready), and Pro: Yearly with the free trial, Monthly as the fallback. No close
  * button on `onboarding` (buying or restoring is the way on); `onboarding-soft` adds one, for the
- * hard-vs-soft test. Closing the App Store sheet offers the flight pass (`pass-offer`), once.
+ * hard-vs-soft test. Closing the App Store sheet on Yearly offers a 7-day trial instead (once);
+ * the flight pass is never sold in onboarding.
  */
 export default function FlightPaywall() {
   const { t } = useTranslation();
@@ -40,7 +40,6 @@ export default function FlightPaywall() {
   const { getProduct } = useProducts();
   const { purchase } = usePurchase();
   const { eligible } = useIntroductoryOffer();
-  const router = useRouter();
   const [choice, setChoice] = useState<"annual" | "monthly">("annual");
   const [restoreFailed, setRestoreFailed] = useState(false);
   const moreTime = useMoreTime();
@@ -85,16 +84,8 @@ export default function FlightPaywall() {
   const buy = async () => {
     haptics.light();
     const result = await purchase(choice);
-    if (result.status !== "abandoned") return;
-    // Closed the App Store sheet on the yearly plan: the 7-day trial first, then the pass.
-    if (choice === "annual" && moreTime.show()) return;
-    offerPass();
-  };
-  // Just this flight, once.
-  const offerPass = () => {
-    if (!flight.added || flight.passOffered) return;
-    flight.passOffered = true;
-    router.push("pass-offer");
+    // Closed the App Store sheet on the yearly plan: the 7-day trial instead.
+    if (result.status === "abandoned" && choice === "annual") moreTime.show();
   };
   const pick = (p: "annual" | "monthly") => {
     haptics.selection();
@@ -183,7 +174,7 @@ export default function FlightPaywall() {
           <button type="button" className="link" onClick={() => openUrl(PRIVACY_URL)}>{t("plans.privacy")}</button>
         </div>
       </div>
-      <MoreTimeSheet open={moreTime.open} onDecline={() => { moreTime.hide(); offerPass(); }} />
+      <MoreTimeSheet open={moreTime.open} onDecline={moreTime.hide} />
     </main>
   );
 }

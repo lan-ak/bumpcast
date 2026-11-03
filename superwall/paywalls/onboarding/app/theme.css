@@ -101,6 +101,20 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 
 /* ---- Layout: backdrop behind the pages, chrome over them ---- */
 
+/* The iPhone Duo keeps its status bar in a side column, so it has no top inset and the pages
+   would start at the very edge. This adds the room a status bar would give, only with no top and
+   no left inset: any top inset (20 pt on an iPhone SE and up) or a sideways iPhone's side insets
+   take it to 0, so every iPhone keeps its own layout. */
+:root {
+  --top-gap: max(0px, calc(24px - (var(--sw-page-inset-top, 0px) + var(--sw-page-inset-left, 0px)) * 24));
+  /* The Duo's status column (84 pt on the right), and 0 on every iPhone, sideways ones included, so
+     only the Duo's Plans and flight paywall run under it. */
+  --duo-column: min(
+    var(--sw-page-inset-right, 0px),
+    max(0px, calc(1000px - (var(--sw-page-inset-top, 0px) + var(--sw-page-inset-left, 0px)) * 1000))
+  );
+}
+
 .shell { display: flex; flex: 1 1 auto; flex-direction: column; color: var(--ink); }
 [data-sw-routes] { z-index: 1; }
 /* Pages are transparent, and going back the router leaves the page under the returning one showing
@@ -159,7 +173,7 @@ html, body, [data-sw-route] { overscroll-behavior: none; }
 
 .chrome {
   position: absolute;
-  top: 4px;
+  top: calc(4px + var(--top-gap));
   left: 16px;
   right: 16px;
   z-index: 2;
@@ -194,9 +208,9 @@ html, body, [data-sw-route] { overscroll-behavior: none; }
   display: flex;
   min-height: 100%;
   flex-direction: column;
-  padding: 60px 20px 16px;
+  padding: calc(60px + var(--top-gap)) 20px 16px;
 }
-.page--bare { padding-top: 12px; }
+.page--bare { padding-top: calc(12px + var(--top-gap)); }
 .page-body { display: flex; flex: 1 1 auto; flex-direction: column; }
 .page-footer { display: flex; flex-direction: column; gap: 4px; padding-top: 16px; }
 .spread { justify-content: center; gap: 36px; }
@@ -324,18 +338,23 @@ html, body, [data-sw-route] { overscroll-behavior: none; }
 .push-head { display: flex; justify-content: space-between; }
 
 /* Plans (paywall) */
-.plans { padding: 0; }
+/* On the Duo, Plans and the flight paywall run under the status column, with their content clear
+   of it. */
+.plans {
+  margin-right: calc(-1 * var(--duo-column));
+  padding: 0;
+}
 .plans-hero { position: relative; flex: 1 0 214px; min-height: 214px; }
 .plans-scene { position: absolute; inset: auto 0 0 0; width: 100%; height: 120px; }
-.plans-bar { position: absolute; top: 2px; left: 14px; right: 14px; z-index: 1; display: flex; align-items: center; justify-content: space-between; }
-.plans-title { position: absolute; top: 52px; left: 20px; right: 20px; text-align: center; }
+.plans-bar { position: absolute; top: calc(2px + var(--top-gap)); left: 14px; right: calc(14px + var(--duo-column)); z-index: 1; display: flex; align-items: center; justify-content: space-between; }
+.plans-title { position: absolute; top: calc(52px + var(--top-gap)); left: 20px; right: calc(20px + var(--duo-column)); text-align: center; }
 .plans-sheet {
   display: flex;
   flex-direction: column;
   flex: none;
   margin-top: -14px;
   margin-bottom: calc(-1 * var(--sw-page-inset-bottom, 0px));
-  padding: 24px 20px calc(12px + var(--sw-page-inset-bottom, 0px));
+  padding: 24px calc(20px + var(--duo-column)) calc(12px + var(--sw-page-inset-bottom, 0px)) 20px;
   border-radius: 28px 28px 0 0;
   background: var(--sheet);
   position: relative;
@@ -388,8 +407,8 @@ html, body, [data-sw-route] { overscroll-behavior: none; }
 
 /* Short phones (iPhone SE, 667pt): the help question has five answers; tighten its spacing so
    every answer and Continue fit without scrolling. */
-@media (max-height: 700px) {
-  .page--help { padding-top: 56px; }
+@media (max-height: 700px) and (max-width: 799px), (max-height: 559px) {
+  .page--help { padding-top: calc(56px + var(--top-gap)); }
   .page--help h1 { font-size: 26px; }
   .page--help .lede--hint { margin-bottom: 6px; }
   .page--help .hint { margin-bottom: 12px; }
@@ -400,9 +419,9 @@ html, body, [data-sw-route] { overscroll-behavior: none; }
 
 /* Phones shorter than the iPhone 17 (mini, 14, 16, SE): the plans page gets a shorter sunrise and
    tighter rows, and the generic last benefit goes, so it fits without scrolling. */
-@media (max-height: 860px) {
+@media (max-height: 860px) and (max-width: 799px), (max-height: 559px) {
   .plans-hero { flex-basis: 158px; min-height: 158px; }
-  .plans-title { top: 46px; font-size: 26px; }
+  .plans-title { top: calc(46px + var(--top-gap)); font-size: 26px; }
   .plans-scene { height: 96px; }
   .plans-sheet { padding-top: 18px; }
   .feature { margin-bottom: 9px; font-size: 15px; }
@@ -417,12 +436,14 @@ html, body, [data-sw-route] { overscroll-behavior: none; }
 /* "Need more time?": a sheet that slides up over the page after a closed App Store sheet. */
 main:has(> .mt) { position: relative; }
 .mt { position: absolute; inset: var(--sw-page-bleed, 0); z-index: 20; display: flex; flex-direction: column; justify-content: flex-end; }
+/* Plans already runs under the Duo's status column, so the sheet only needs the rest of the inset. */
+.mt { right: calc(var(--duo-column) - var(--sw-page-inset-right, 0px)); }
 .mt-scrim { position: absolute; inset: 0; border: 0; padding: 0; background: rgba(11, 19, 34, 0.45); opacity: 0; transition: opacity 0.3s ease; cursor: pointer; }
 .mt-sheet {
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: 10px 20px calc(16px + var(--sw-safe-area-inset-bottom, 0px));
+  padding: 10px calc(20px + var(--duo-column)) calc(16px + var(--sw-safe-area-inset-bottom, 0px)) 20px;
   border-radius: 28px 28px 0 0;
   background: var(--sheet);
   color: var(--ink);
@@ -466,8 +487,8 @@ main:has(> .mt) { position: relative; }
 :root.dark .fp { --tint: rgba(111, 188, 204, 0.16); }
 /* The flight paywall matches the forecast-moment paywall (superwall/components/pro/theme.css):
    the same hero, sheet, rows and spacing, laid out on the onboarding's own sky. */
-.fp-hero { flex-basis: auto; display: flex; flex-direction: column; justify-content: center; padding: 58px 24px 96px; }
-.fp-bar { top: 8px; justify-content: flex-end; }
+.fp-hero { flex-basis: auto; display: flex; flex-direction: column; justify-content: center; padding: calc(58px + var(--top-gap)) calc(24px + var(--duo-column)) 96px 24px; }
+.fp-bar { top: calc(8px + var(--top-gap)); justify-content: flex-end; }
 .fp-bar--soft { justify-content: space-between; }
 .fp-heading { position: relative; z-index: 1; text-align: center; }
 .fp-eyebrow { margin: 0 0 8px; font: 500 12px/1.2 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--brand-line); }
@@ -480,7 +501,7 @@ main:has(> .mt) { position: relative; }
 .fp-cta { margin-top: 10px; }
 /* Two plan cards and the trial button take more room than a single pass button did: a tighter
    sky, ticket, rows and cards keep everything down to Terms on screen. */
-.fp-hero { padding: 50px 24px 68px; }
+.fp-hero { padding: calc(50px + var(--top-gap)) calc(24px + var(--duo-column)) 68px 24px; }
 .fp-title { font-size: 26px; }
 .fp-sub { margin-top: 6px; font-size: 15px; line-height: 1.3; }
 .fp .plans-scene { height: 104px; }
@@ -496,20 +517,20 @@ main:has(> .mt) { position: relative; }
 .fp .plan-price { font-size: 22px; }
 /* The ticket already says "Your flight". */
 .fp .tk + .fp-eyebrow { display: none; }
-@media (max-height: 900px) {
-  .fp-hero { padding-top: 44px; padding-bottom: 58px; }
+@media (max-height: 900px) and (max-width: 799px), (max-height: 559px) {
+  .fp-hero { padding-top: calc(44px + var(--top-gap)); padding-bottom: 58px; }
   .fp .tk { margin-bottom: 10px; }
   .fp .tk-city { display: none; }
   .fp .tk-code { font-size: 34px; }
 }
-@media (max-height: 860px) {
+@media (max-height: 860px) and (max-width: 799px), (max-height: 559px) {
   .fp .plans-sheet { padding-top: 14px; }
   .fp .feature { margin-bottom: 6px; }
   .fp .feature--coverage { margin-bottom: 2px; }
   .fp .plan { padding: 9px 12px; }
   .fp .plan--on { padding: 7.5px 10.5px; }
 }
-@media (max-height: 830px) {
+@media (max-height: 830px) and (max-width: 799px), (max-height: 559px) {
   .fp-hero { padding-bottom: 50px; }
   .fp-title { font-size: 24px; }
 }
@@ -550,8 +571,8 @@ main:has(> .mt) { position: relative; }
 /* Short phones (SE), as the forecast-moment paywall does with its ticket: everything down to
    Terms fits. The selling lines, eyebrow and cities give way to the ticket, the headline and the
    coverage pair, which always stays. */
-@media (max-height: 700px) {
-  .fp-hero { padding-top: 48px; padding-bottom: 68px; }
+@media (max-height: 700px) and (max-width: 799px), (max-height: 559px) {
+  .fp-hero { padding-top: max(48px, calc(44px + var(--top-gap))); padding-bottom: 68px; }
   .tk { margin-bottom: 10px; padding: 10px 14px; }
   .tk-top { margin-bottom: 6px; }
   .tk-code { font-size: 32px; }
@@ -563,8 +584,96 @@ main:has(> .mt) { position: relative; }
   .fp .feature:not(.feature--coverage) { display: none; }
 }
 /* The onboarding Plans page drops its 4th row on shorter phones; here that's coverage, which stays. */
-@media (max-height: 860px) {
+@media (max-height: 860px) and (max-width: 799px), (max-height: 559px) {
   .fp .plans-sheet .feature--coverage { display: flex; }
+}
+
+/* iPhone Duo, open (and partly open): the only phone screen this wide and tall (951 × 669). The
+   fold runs down the middle of the screen in a 40 pt band: the Calm line sunrise holds the left
+   half and the page the right, with nothing on the fold. Plans and the flight paywall put their
+   headline on the left and the sheet across the whole right half, as the Pro paywalls do. The
+   fold is measured from the screen's edge (vw), not the page's: the page already stops short of
+   the 84 pt status column on the right. Closed, it's a phone. */
+@media (min-width: 800px) and (min-height: 560px) {
+  :root { --fold-left: calc(50vw - 20px); --fold-right: calc(50vw + 20px); }
+  /* Wider than tall reads as a landscape iPhone to the framework, which then floors the sides at
+     the island's 59 pt. The Duo has no side cutout; the app sends its real insets (1.0.4 on). */
+  html:root[data-sw-platform="ios"] { --sw-safe-area-floor-left: 0px; --sw-safe-area-floor-right: 0px; }
+
+  /* The sunrise stays up on every page, sized to the left half. */
+  .scene,
+  .scene--fill,
+  .scene--off,
+  .scene--rising { width: var(--fold-left); height: calc((50vw - 20px) * 420 / 390); transform: none; opacity: 1; }
+  /* The water carries on across the fold and under the page, level with the sunrise's horizon. */
+  .backdrop::after {
+    content: "";
+    position: absolute;
+    left: var(--fold-left);
+    right: 0;
+    bottom: 0;
+    height: calc((50vw - 20px) * 270 / 390);
+    background: linear-gradient(var(--water-top), var(--water-bottom));
+  }
+  .backdrop-night { z-index: 1; }
+  /* Plans and the flight paywall bring their own smaller sunrise (as on an iPhone), so the big one
+     and its water fade out behind them. */
+  .shell:has(:is([data-sw-route="plans"], [data-sw-route="flight"])[data-sw-state="active"]) .scene { opacity: 0; }
+  .backdrop::after { transition: opacity 0.7s ease; }
+  .shell:has(:is([data-sw-route="plans"], [data-sw-route="flight"])[data-sw-state="active"]) .backdrop::after { opacity: 0; }
+  .chrome { left: calc(var(--fold-right) + 16px - var(--sw-inset-left, 0px)); right: 16px; }
+  /* The right half is a little narrower and shorter than an iPhone SE's page, so the tallest
+     questions (how, help) get the SE's tighter spacing. */
+  .page {
+    padding: calc(60px + var(--top-gap)) 16px 12px calc(var(--fold-right) + 16px - var(--sw-page-inset-left, 0px));
+  }
+  .page--bare { padding-top: calc(12px + var(--top-gap)); }
+  .spread { gap: 20px; }
+  .lede { margin-bottom: 16px; }
+  .page--help h1 { font-size: 26px; }
+  .page--help .lede--hint { margin-bottom: 6px; }
+  .page--help .hint { margin-bottom: 12px; }
+  .page--help .option { min-height: 46px; margin-bottom: 8px; padding: 11px 16px; font-size: 16px; line-height: 1.3; }
+  .page--help .option--on { padding: 9.5px 14.5px; }
+  .page--help .page-footer,
+  .page-footer { padding-top: 8px; }
+
+  .page.plans { flex-direction: row; padding: 0; }
+  /* The headline (and the flight's ticket) centre in the sky above their own sunrise, which runs
+     on under the fold to meet the panel. */
+  .plans-hero,
+  .fp-hero {
+    flex: 0 0 var(--fold-left);
+    min-width: 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    padding: calc(56px + var(--top-gap)) 32px 214px;
+  }
+  .plans-scene,
+  .fp .plans-scene {
+    bottom: calc(-1 * var(--sw-page-inset-bottom, 0px));
+    width: calc(100% + 40px);
+    height: calc(190px + var(--sw-page-inset-bottom, 0px));
+  }
+  /* The status column is at the far right, not beside the left half. */
+  .plans-bar { left: 14px; right: 14px; }
+  .plans-title { position: static; font-size: 32px; }
+  .fp-title { font-size: 30px; }
+  .plans-sheet {
+    flex: 1 1 auto;
+    min-width: 0;
+    justify-content: center;
+    margin: calc(-1 * var(--sw-page-inset-top, 0px)) 0 calc(-1 * var(--sw-page-inset-bottom, 0px)) 40px;
+    padding: calc(24px + var(--sw-page-inset-top, 0px)) calc(28px + var(--duo-column)) calc(12px + var(--sw-page-inset-bottom, 0px)) 28px;
+    border-radius: 0;
+  }
+  :root.dark .fp .plans-sheet { border-top: 0; }
+
+  /* "Need more time?" rises over the right half only, clear of the status column. */
+  .mt-sheet { margin-left: var(--fold-right); }
 }
 
 @media (prefers-reduced-motion: reduce) {

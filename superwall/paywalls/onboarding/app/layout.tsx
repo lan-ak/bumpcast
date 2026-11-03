@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type PropsWithChildren } from "react";
-import { useActions, useHaptics, useSuperwallSnapshot, useTranslation, useUser } from "superwall/hooks";
+import { useActions, useHaptics, useSuperwallSnapshot, useTranslation } from "superwall/hooks";
 import { useRouter } from "superwall/navigation";
+import { useHostSafeArea } from "@/components/safe-area";
 import { variantName } from "../components/variant";
 import "./theme.css";
 
@@ -24,22 +25,6 @@ const SCENE: Record<string, SceneMode> = {
   when: "fill",
   source: "fill",
 };
-
-/**
- * The app sends its real safe-area insets (`safe_area_top`, `safe_area_bottom`) because Superwall
- * infers them from the device model, which simulators and new models don't report. They become
- * the framework's floors, so `env()` still wins wherever the webview reports a safe area.
- */
-function useHostSafeArea() {
-  const user = useUser();
-  const top = Number(user?.safe_area_top);
-  const bottom = Number(user?.safe_area_bottom);
-  useEffect(() => {
-    const root = document.documentElement.style;
-    if (Number.isFinite(top) && top > 0) root.setProperty("--sw-safe-area-floor-top", `${top}px`);
-    if (Number.isFinite(bottom) && bottom > 0) root.setProperty("--sw-safe-area-floor-bottom", `${bottom}px`);
-  }, [top, bottom]);
-}
 
 export default function Layout({ children }: PropsWithChildren) {
   const router = useRouter();

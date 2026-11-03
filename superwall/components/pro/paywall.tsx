@@ -7,6 +7,7 @@ import {
   usePurchase,
   useTranslation,
 } from "superwall/hooks";
+import { useHostSafeArea } from "../safe-area";
 import { usePlacementContext, type ProPlacement } from "./context";
 import "./theme.css";
 
@@ -98,6 +99,9 @@ export function ProPaywall({
   const { purchase } = usePurchase();
   const { eligible } = useIntroductoryOffer();
   const { placement, flight } = usePlacementContext();
+  // A modal sheet starts below the top inset and the framework knows the bottom; only the sides
+  // can be missed (the closed iPhone Duo's camera column).
+  useHostSafeArea(["left", "right"]);
   const [plan, setPlan] = useState<"annual" | "monthly">("annual");
   const [choice, setChoice] = useState<"pass" | "annual" | "monthly">("pass");
   const [expanded, setExpanded] = useState(false);
