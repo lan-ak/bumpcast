@@ -44,7 +44,7 @@ BumpCast is an iPhone app that forecasts turbulence for your exact flight. You a
 
 **What you'll do**
 - Run a new TikTok account just about flying, and post the same videos to a new Instagram account for Reels. BumpCast owns both accounts: we send you the email address to sign up with, and you post from your own phone. We'll help with the name and bio.
-- Post one short video or photo slideshow a day, starting a day or two after you're hired and running through Nov 15. We'll extend our strongest creators through Dec 22.
+- Post one short video or photo slideshow a day, starting a day or two after you're hired. We keep our strongest creators on.
 - Follow two simple briefs: talk about flying as a nervous flyer and, if you're flying, film the forecast next to what your flight really felt like.
 - We'll give you a free BumpCast Pro code.
 
@@ -52,7 +52,7 @@ BumpCast is an iPhone app that forecasts turbulence for your exact flight. You a
 - 18 or older, living in the US or Canada, with an iPhone.
 - You've felt nervous about flying, now or in the past. It doesn't need to be extreme, but it does need to be true.
 - Comfortable talking to camera, or good at TikTok photo slideshows.
-- Ideally, a flight booked between Oct 28 and Dec 31 within the continental US or southern Canada (not Hawaii, Alaska, Mexico or international). **If you're flying this week or next, we'll hire you first.**
+- Ideally, a flight booked in the next few weeks within the continental US or southern Canada (not Hawaii, Alaska, Mexico or international). **If you're flying this week or next, we'll hire you first.**
 
 **Pay**
 - $9 a day for your approved daily video, posted to both TikTok and Instagram, flight video or not.
@@ -63,14 +63,14 @@ BumpCast is an iPhone app that forecasts turbulence for your exact flight. You a
 BumpCast owns the TikTok and Instagram accounts from day one. You sign them up with an email address we give you, and you post from your own phone. Your personal accounts aren't involved. We can use your videos in BumpCast's ads, including paid ads on TikTok, Instagram and elsewhere, during the campaign and after it ends.
 
 **Timeline**
-- We're hiring now, on a rolling basis. Flying this week? Apply today, and we'll reply within 24 hours.
+- We're hiring on a rolling basis. Flying this week? Apply today, and we'll reply within 24 hours.
 - The day you're hired: set up the account and get your Pro code.
-- From a day or two later through Nov 15: post every day. Everyone is posting by Nov 2.
-- Nov 16 to Dec 22: extended for the best performers.
+- From a day or two later: post every day.
+- After your first few weeks: we keep our best performers on.
 
 **To apply, answer:**
 1. Where do you live (state or province)?
-2. When's your soonest flight? If it's between Oct 28 and Dec 31, give the date, airline, flight number and route (for example, "Oct 30, Delta DL 1234, Atlanta to Denver"). No flight booked? Just say so.
+2. When's your next flight? Give the date, airline, flight number and route (for example, "Next Friday, Delta DL 1234, Atlanta to Denver"). No flight booked? Just say so.
 
 ---
 

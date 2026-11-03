@@ -78,3 +78,11 @@ Lanre asked to switch back before the 50 mark. By then Meta's dataset had 23 rea
 5. `python3 scripts/meta_ads.py publish` turns on the campaign, the ad sets and the first day's 9 ads now, so Meta reviews them early. Delivery waits for the ad sets' Nov 2 start. It sets `"status": "live"`, and the daily review takes over from the next morning.
 
 IDs (Oct 27): business A & Co Apps 1655980428996697, ad account act_2805776443152912 (CAD, Eastern), Page BumpCast 1467303836456537 (no Instagram account connected, so Instagram placements show the Page), dataset 2299041164252027 (`sw_` events confirmed, `install.link` the only allowed domain).
+
+## Nov 2: Tracker page off
+
+The Tracker page turned 0 of 62 taps into installs across six ads, so Lanre paused it. `off_pages` in `config.json` lists it: the review skips that page entirely, and the test's leftover budget and the Thanksgiving split go to the pages still running. To bring it back, delete it from `off_pages` and turn its ad set back on.
+
+## Nov 2: capped at $300, ends Nov 5
+
+Lanre capped the campaign at **$300** (CA$420, the account limit as it already is) and chose to spend the rest now. The Test period ends Nov 5 with `total` 300, so the review spreads what's left over Nov 3–5 and pauses everything from Nov 6. Thanksgiving is removed from `periods` (kept as `dropped_thanksgiving` for reference) and the news reserve is 0. The tests still check the rules against the $400 plan with Thanksgiving.

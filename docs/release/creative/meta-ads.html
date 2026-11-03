@@ -602,6 +602,72 @@
   <div class="phone" data-src="02-timeline" style="--w: 640px; left: 400px; top: 840px; --rot: 5deg"></div>
   <div class="pop" data-src="lockscreen" data-box="44,1980,1232,476" style="--k: .8; left: 40px; top: 1080px; --rot: -2deg"></div>
 </section>
+<!-- 23 gate: live status and gates, plus the bumps (drafted Nov 1 by the daily review) -->
+<section class="frame feed" id="gate-feed" data-out="23-gate-feed" style="--glow-x: 60%; --glow-y: 70%; --dawn-a: .26">
+  <div class="sky"></div>
+  <div class="copy">
+    <div class="brand"><img src="../screenshot-captures/icons/app-icon.png" alt="">BumpCast</div>
+    <h1 class="headline">Gates, delays <em>and the bumps.</em></h1>
+    <p class="sub">Live flight status, plus how bumpy it'll be.</p>
+  </div>
+  <div class="phone" data-src="02-timeline" style="--w: 560px; left: 470px; top: 600px; --rot: 5deg"></div>
+  <div class="pop" data-src="01-forecast" data-box="48,890,1224,670" style="--k: 0.62; left: 30px; top: 820px; --rot: -2deg"></div>
+</section>
+<section class="frame story" id="gate-story" data-out="23-gate-story" style="--glow-x: 60%; --glow-y: 62%; --dawn-a: .26">
+  <div class="sky"></div>
+  <div class="copy">
+    <div class="brand"><img src="../screenshot-captures/icons/app-icon.png" alt="">BumpCast</div>
+    <h1 class="headline">Gates, delays <em>and the bumps.</em></h1>
+    <p class="sub">Live flight status, plus how bumpy it'll be.</p>
+  </div>
+  <div class="phone" data-src="02-timeline" style="--w: 640px; left: 400px; top: 840px; --rot: 5deg"></div>
+  <div class="pop" data-src="01-forecast" data-box="48,890,1224,670" style="--k: 0.67; left: 30px; top: 1060px; --rot: -2deg"></div>
+</section>
+
+<!-- 24 moved: delays first, and the forecast moves with them (drafted Nov 1 by the daily review) -->
+<section class="frame feed" id="moved-feed" data-out="24-moved-feed" style="--glow-x: 45%; --glow-y: 70%; --dawn-a: .26">
+  <div class="sky"></div>
+  <div class="copy">
+    <div class="brand"><img src="../screenshot-captures/icons/app-icon.png" alt="">BumpCast</div>
+    <h1 class="headline">Delayed? <em>The forecast moves too.</em></h1>
+    <p class="sub">You'll know first, and every update says what changed.</p>
+  </div>
+  <div class="phone" data-src="04-updates" style="--w: 560px; left: 470px; top: 600px; --rot: 5deg"></div>
+  <div class="pop" data-src="04-updates" data-box="48,1160,1224,280" style="--k: 0.76; left: 30px; top: 860px; --rot: -2deg"></div>
+</section>
+<section class="frame story" id="moved-story" data-out="24-moved-story" style="--glow-x: 45%; --glow-y: 62%; --dawn-a: .26">
+  <div class="sky"></div>
+  <div class="copy">
+    <div class="brand"><img src="../screenshot-captures/icons/app-icon.png" alt="">BumpCast</div>
+    <h1 class="headline">Delayed? <em>The forecast moves too.</em></h1>
+    <p class="sub">You'll know first, and every update says what changed.</p>
+  </div>
+  <div class="phone" data-src="04-updates" style="--w: 640px; left: 400px; top: 840px; --rot: 5deg"></div>
+  <div class="pop" data-src="04-updates" data-box="48,1160,1224,280" style="--k: 0.8; left: 30px; top: 1100px; --rot: -2deg"></div>
+</section>
+
+<!-- 25 preview: a preview of every bump, from the flight tracker (drafted Nov 1 by the daily review) -->
+<section class="frame feed" id="preview-feed" data-out="25-preview-feed" style="--glow-x: 55%; --glow-y: 70%; --dawn-a: .26">
+  <div class="sky"></div>
+  <div class="copy">
+    <div class="brand"><img src="../screenshot-captures/icons/app-icon.png" alt="">BumpCast</div>
+    <h1 class="headline">A preview of <em>every bump.</em></h1>
+    <p class="sub">Plus live status, gates and delays for your flight.</p>
+  </div>
+  <div class="phone" data-src="01-forecast" style="--w: 560px; left: 470px; top: 600px; --rot: 5deg"></div>
+  <div class="pop" data-src="02-timeline" data-box="48,376,1224,852" style="--k: 0.6; left: 30px; top: 800px; --rot: -2deg"></div>
+</section>
+<section class="frame story" id="preview-story" data-out="25-preview-story" style="--glow-x: 55%; --glow-y: 62%; --dawn-a: .26">
+  <div class="sky"></div>
+  <div class="copy">
+    <div class="brand"><img src="../screenshot-captures/icons/app-icon.png" alt="">BumpCast</div>
+    <h1 class="headline">A preview of <em>every bump.</em></h1>
+    <p class="sub">Plus live status, gates and delays for your flight.</p>
+  </div>
+  <div class="phone" data-src="01-forecast" style="--w: 640px; left: 400px; top: 840px; --rot: 5deg"></div>
+  <div class="pop" data-src="02-timeline" data-box="48,376,1224,852" style="--k: 0.65; left: 30px; top: 1040px; --rot: -2deg"></div>
+</section>
+
 <script>
 const CAP = "../screenshot-captures/";
 const load = src => new Promise((ok, fail) => { const i = new Image(); i.onload = () => ok(i); i.onerror = fail; i.src = src; });

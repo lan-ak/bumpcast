@@ -69,35 +69,36 @@
     "placements_note": "Lanre, Oct 31: Reels dropped. Through Oct 30, Instagram Reels took 88% of taps and ~90% of spend, and taps installed at 1.9% overall."
   },
   "budget": {
-    "total": 400,
+    "total": 300,
     "periods": [
       {
         "name": "Test",
         "from": "2026-10-27",
-        "to": "2026-11-18",
+        "to": "2026-11-05",
         "daily_per_set": 2.3,
         "live_per_set": 3,
-        "total": 253,
+        "total": 300,
         "boost_per_set": 14.0,
         "min_per_set": 1.0,
-        "boost_note": "Lanre, Oct 30: $7, then $14/day per page until the spend call is made; then the rest of the $253 test budget is spread evenly to Nov 18. Thanksgiving's $132 is unchanged."
-      },
-      {
-        "name": "Thanksgiving",
-        "from": "2026-11-19",
-        "to": "2026-11-29",
-        "daily_total": 12,
-        "live_per_set": 3
+        "boost_note": "Lanre, Oct 30: $7, then $14/day per page until the spend call is made; then the rest of the $253 test budget is spread evenly to Nov 18. Thanksgiving's $132 is unchanged. Lanre, Nov 2: capped at $300 and 'spend it all now': the test gets everything left, spread over Nov 3–5, then the campaign ends."
       }
     ],
     "news_reserve": {
-      "amount": 15,
+      "amount": 0,
       "daily": 7.5,
-      "page": "turbulence"
+      "page": "turbulence",
+      "note": "Lanre, Nov 2: folded into the test when the total was capped at $300."
     },
     "news_reserve_used": [],
     "note": "Live Oct 27 (Lanre: 'go live tonight'). The approved $153 test budget spread over Oct 27–Nov 18: $2.30/day per page.",
-    "total_note": "Lanre, Oct 30: raised from $300 to $400 for more traffic (CA$560 account limit). Thanksgiving keeps $132, news reserve $15, the test gets the rest ($253)."
+    "total_note": "Lanre, Oct 30: raised from $300 to $400 for more traffic (CA$560 account limit). Thanksgiving keeps $132, news reserve $15, the test gets the rest ($253). Lanre, Nov 2: capped back at $300 (CA$420, Meta's account limit) and 'spend it all now': Thanksgiving ($132) and the news reserve dropped; everything left goes to the test, ending Nov 5.",
+    "dropped_thanksgiving": {
+      "name": "Thanksgiving",
+      "from": "2026-11-19",
+      "to": "2026-11-29",
+      "daily_total": 12,
+      "live_per_set": 3
+    }
   },
   "page_rule": {
     "decide_on": "2026-11-18",
@@ -259,6 +260,24 @@
       "approved": true,
       "headline": "Keeps counting in airplane mode",
       "primary": "Your BumpCast forecast is saved before takeoff, so the countdown to every bumpy stretch keeps going in airplane mode. Minute by minute, from takeoff to landing."
+    },
+    "23": {
+      "slug": "gate",
+      "approved": true,
+      "headline": "Gates, delays and the bumps",
+      "primary": "BumpCast tracks your flight's live status, gate and delays, and shows how bumpy it'll be, minute by minute. Flight tracking, built for nervous flyers."
+    },
+    "24": {
+      "slug": "moved",
+      "approved": true,
+      "headline": "Delayed? The forecast moves too",
+      "primary": "If your flight is delayed, BumpCast tells you first, and your turbulence forecast moves with the new departure time. Every update says what changed."
+    },
+    "25": {
+      "slug": "preview",
+      "approved": true,
+      "headline": "A preview of every bump",
+      "primary": "Before you board, BumpCast shows a preview of every bumpy stretch on your flight: when it comes, how strong it is and how long it lasts. Plus live status, gates and delays."
     }
   },
   "queue": {
@@ -279,7 +298,10 @@
       "12",
       "13",
       "14",
-      "15"
+      "15",
+      "23",
+      "24",
+      "25"
     ],
     "standard": [
       "01",
@@ -337,7 +359,8 @@
     "04-tracker": {
       "id": "120250922020030238",
       "launched": "2026-10-27",
-      "paused": null
+      "paused": "2026-11-01",
+      "reason": "no installs after $17.98"
     },
     "05-tracker": {
       "id": "120250922020780238",
@@ -357,7 +380,7 @@
     },
     "14-tracker": {
       "id": "120250922023050238",
-      "launched": null,
+      "launched": "2026-11-01",
       "paused": null
     },
     "15-tracker": {
@@ -423,6 +446,21 @@
     },
     "22-turbulence": {
       "id": "120250922017210238",
+      "launched": null,
+      "paused": null
+    },
+    "23-tracker": {
+      "id": "120250935445280238",
+      "launched": null,
+      "paused": null
+    },
+    "24-tracker": {
+      "id": "120250935445660238",
+      "launched": null,
+      "paused": null
+    },
+    "25-tracker": {
+      "id": "120250935446740238",
       "launched": null,
       "paused": null
     }
@@ -497,6 +535,11 @@
     "min_taps": 100,
     "raise_at": 0.1,
     "fix_below": 0.05,
-    "note": "Lanre, Oct 29: on Nov 2 recommend raise (10%+ of taps install), hold (5-10%) or fix (under 5%). Advice only; budgets don't change on it."
+    "note": "Lanre, Oct 29: on Nov 2 recommend raise (10%+ of taps install), hold (5-10%) or fix (under 5%). Advice only; budgets don't change on it.",
+    "made": "2026-11-02",
+    "verdict": "hold"
+  },
+  "off_pages": {
+    "tracker": "Lanre, Nov 2: paused after 0 of 62 taps installed across six ads ($47.67 spent); its share of the test budget goes to the Turbulence and Standard pages."
   }
 }

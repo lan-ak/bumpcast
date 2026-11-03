@@ -12,6 +12,14 @@ import meta_ads
 
 CONFIG = json.loads((Path(__file__).resolve().parents[1] / "docs/release/meta/config.json").read_text())
 D = dt.date.fromisoformat
+# The rules as planned, before the live campaign's own decisions.
+CONFIG["spend_call"].pop("made", None)
+CONFIG["spend_call"].pop("verdict", None)
+CONFIG.pop("off_pages", None)
+# The $400 plan with Thanksgiving, before Lanre capped it at $300 on Nov 2.
+CONFIG["budget"].update(total=400, news_reserve={"amount": 15, "daily": 7.5, "page": "turbulence"})
+CONFIG["budget"]["periods"][0].update(to="2026-11-18", total=253)
+CONFIG["budget"]["periods"][1:] = [CONFIG["budget"].pop("dropped_thanksgiving")]
 
 
 def cfg():
@@ -217,6 +225,20 @@ class Rules(unittest.TestCase):
         # $153 - $60 spent, 17 days left (Nov 2-18), 3 pages: $1.82 a page.
         self.assertEqual(meta_ads.test_daily(c, test, D("2026-11-02"), 60), 1.82)
         self.assertEqual(meta_ads.test_daily(c, test, D("2026-11-17"), 152), 1.0)  # never below the floor
+
+    def test_a_page_switched_off_is_skipped_and_its_budget_shared(self):
+        c = cfg()
+        c["off_pages"] = {"tracker": "no installs"}
+        c["spend_call"]["made"] = "2026-11-02"
+        test = c["budget"]["periods"][0]
+        rows = [ad("02-turbulence", "ACTIVE", spend=5, days=1), ad("04-tracker", "ACTIVE", spend=30, days=1),
+                ad("08-standard", "ACTIVE", spend=5, days=1)]
+        changes, notes = meta_ads.decide(c, D("2026-11-03"), rows, 200)
+        self.assertNotIn("04-tracker", by(changes, "pause") + by(changes, "launch"))
+        self.assertEqual(by(changes, "budget"), ["standard", "turbulence"])
+        self.assertFalse(any("tracker" in n for n in notes))
+        # $253 - $200, 16 days left (Nov 3-18), 2 pages: $1.66 a page.
+        self.assertEqual(meta_ads.test_daily(c, test, D("2026-11-03"), 200), 1.66)
 
     def test_cad_account_converts_both_ways(self):
         c = cfg()

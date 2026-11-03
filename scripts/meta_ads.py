@@ -81,6 +81,11 @@ def period_for(cfg, today):
     return None
 
 
+def live_pages(cfg):
+    """The pages still running. A page in "off_pages" (Lanre's call) is paused in Meta and skipped."""
+    return [p for p in PAGES if p not in cfg.get("off_pages", {})]
+
+
 def test_daily(cfg, period, today, spent):
     """Daily budget per page in the test. While "boost_per_set" is set and the spend call isn't made,
     that boosted amount; after it, what's left of the test's "total" spread evenly over the days left."""
@@ -88,7 +93,7 @@ def test_daily(cfg, period, today, spent):
         return period["boost_per_set"]
     if period.get("total"):
         days_left = (dt.date.fromisoformat(period["to"]) - today).days + 1
-        return max(period.get("min_per_set", 1.0), round((period["total"] - spent) / days_left / len(PAGES), 2))
+        return max(period.get("min_per_set", 1.0), round((period["total"] - spent) / days_left / len(live_pages(cfg)), 2))
     return period["daily_per_set"]
 
 
@@ -100,13 +105,13 @@ def page_split(cfg, ads):
     """Thanksgiving budget per page from the test's cost per install. Pages not listed get nothing."""
     rule = cfg["page_rule"]
     cpi = {}
-    for page in PAGES:
+    for page in live_pages(cfg):
         rows = [a for a in ads if a["page"] == page]
         spend, installs = sum(a["spend"] for a in rows), sum(a["installs"] for a in rows)
         if installs >= rule["min_installs"]:
             cpi[page] = spend / installs
     if not cpi:
-        return {page: 1 / len(PAGES) for page in PAGES}, "no page reached {} installs, so the budget is split evenly".format(rule["min_installs"])
+        return {page: 1 / len(live_pages(cfg)) for page in live_pages(cfg)}, "no page reached {} installs, so the budget is split evenly".format(rule["min_installs"])
     best = min(cpi.values())
     close = [p for p, c in cpi.items() if c <= best * (1 + rule["margin"])]
     note = ", ".join(f"{p} ${c:.2f}" for p, c in sorted(cpi.items(), key=lambda kv: kv[1]))
@@ -162,7 +167,7 @@ def decide(cfg, today, ads, spent_total, news=False, paywall_opens=None, shown_y
             changes.append({"do": "record_split", "split": split, "why": why})
             notes.append("Thanksgiving split: " + why + ".")
 
-    for page in PAGES:
+    for page in live_pages(cfg):
         rows = [a for a in ads if a["page"] == page]
         live = [a for a in rows if a["status"] == "ACTIVE"]
         set_spend = sum(a["spend"] for a in rows)
