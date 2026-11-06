@@ -7,6 +7,7 @@ import {
   useTranslation,
   useVariables,
 } from "superwall/hooks";
+import { LockedForecast } from "../locked-forecast";
 import { useHostSafeArea } from "../safe-area";
 import { usePlacementContext, type ProPlacement } from "./context";
 import { passProduct } from "./pass";
@@ -17,8 +18,8 @@ const TERMS_URL = "https://www.apple.com/legal/internet-services/itunes/dev/stde
 const PRIVACY_URL = "https://docs.google.com/document/d/1wgxMmBIa1OiTJesX83nBVIJl1c2EAz-TxvpMndDK7T0/preview";
 
 /**
- * Which offer is the button. The other is a quiet link under it. This is the A/B test between
- * pro-features and pro-features-pass-first. Without a flight there's no pass, so Pro always leads.
+ * Which offer is the button. The other is a quiet link under it: pro-features leads with Pro, the
+ * forecast moment with the pass. Without a flight there's no pass, so Pro always leads.
  */
 export type Lead = "pro" | "pass";
 
@@ -108,6 +109,7 @@ export function ProPaywall({
   const [choice, setChoice] = useState<"pass" | "annual" | "monthly">("pass");
   const [expanded, setExpanded] = useState(false);
   const [restoreFailed, setRestoreFailed] = useState(false);
+  const [blocked, setBlocked] = useState(false);
 
   const canPass = flight.flightID !== undefined;
   const passLeads = lead === "pass" && canPass;
@@ -120,9 +122,12 @@ export function ProPaywall({
   const save = savePercent(annual, monthly);
 
   const first = highlight ?? placement;
-  const features = [...FEATURES]
+  const chosen = [...FEATURES]
     .sort((a, b) => Number(b.placement === first) - Number(a.placement === first))
     .slice(0, 2);
+  // "When the bumps are" is shown, not described: the forecast blurred under a lock takes its line.
+  const locked = chosen.some((f) => f.key === "featureTimeline");
+  const features = chosen.filter((f) => f.key !== "featureTimeline");
 
   const annualLegal = annual?.price ? t("pro.legalAnnual", { price: annual.price }) : t("pro.legalBare");
   const subscriptionLegal =
@@ -151,9 +156,14 @@ export function ProPaywall({
         ? `${t("pro.legalPass")} ${subscriptionLegal}`
         : `${subscriptionLegal} ${t("pro.legalPass")}`;
 
-  const buy = (product: "annual" | "monthly" | "pass") => {
+  // The App Store refusing before its sheet even shows (a failure, or an "abandon" faster than anyone
+  // can tap) is the phone blocking purchases: say how to fix it (as on the onboarding near page).
+  const buy = async (product: "annual" | "monthly" | "pass") => {
     haptics.light();
-    void purchase(product === "pass" ? pass : product);
+    setBlocked(false);
+    const started = Date.now();
+    const result = await purchase(product === "pass" ? pass : product);
+    if (result.status === "failed" || (result.status === "abandoned" && Date.now() - started < 1500)) setBlocked(true);
   };
   const choose = (p: "annual" | "monthly") => {
     haptics.selection();
@@ -194,16 +204,17 @@ export function ProPaywall({
       </div>
 
       <div className="pw-sheet">
+        {locked && <LockedForecast head={t("pro.lockHead")} title={t("pro.lockTitle")} grade={flight.grade} compact />}
         {features.map((f) => (
           <div key={f.key} className="feature">
             <span className="feature-icon">{f.icon}</span>
-            {t(short ? `pro.short.${f.key}` : `pro.${f.key}`)}
+            {t(short || locked ? `pro.short.${f.key}` : `pro.${f.key}`)}
           </div>
         ))}
-        {COVERAGE.map((f) => (
+        {(short || locked ? [{ key: "coverageBoth", icon: COVERAGE[1].icon }] : COVERAGE).map((f) => (
           <div key={f.key} className="feature feature--coverage">
             <span className="feature-icon">{f.icon}</span>
-            {t(short ? `pro.short.${f.key}` : `pro.${f.key}`)}
+            {t(short || locked ? `pro.short.${f.key}` : `pro.${f.key}`)}
           </div>
         ))}
 
@@ -230,7 +241,7 @@ export function ProPaywall({
                 <span className="plan-note">{t("pro.cancelAnytime")}</span>
               </button>
             </div>
-            <button type="button" className="cta" onClick={() => buy(choice)}>
+            <button type="button" className="cta" onClick={() => void buy(choice)}>
               {choice === "pass"
                 ? passCta
                 : t("pro.ctaSubscribe")}
@@ -238,7 +249,7 @@ export function ProPaywall({
           </>
         ) : passLeads ? (
           <>
-            <button type="button" className="cta cta--spaced" onClick={() => buy("pass")}>
+            <button type="button" className="cta cta--spaced" onClick={() => void buy("pass")}>
               {passCta}
             </button>
             {showMore ? (
@@ -246,7 +257,7 @@ export function ProPaywall({
                 {t("pro.moreOptions")}
               </button>
             ) : (
-            <button type="button" className="alt" onClick={() => buy("annual")}>
+            <button type="button" className="alt" onClick={() => void buy("annual")}>
               {t("pro.altPro")}
             </button>
             )}
@@ -268,18 +279,18 @@ export function ProPaywall({
                 <span className="plan-note">{t("pro.cancelAnytime")}</span>
               </button>
             </div>
-            <button type="button" className="cta" onClick={() => buy(plan)}>
+            <button type="button" className="cta" onClick={() => void buy(plan)}>
               {t("pro.ctaSubscribe")}
             </button>
             {canPass && (
-              <button type="button" className="alt" onClick={() => buy("pass")}>
+              <button type="button" className="alt" onClick={() => void buy("pass")}>
                 {passPrice ? t("pro.altPass", { price: passPrice }) : t("pro.altPassBare")}
               </button>
             )}
           </>
         )}
 
-        <p className="secondary footnote legal">{restoreFailed ? t("pro.restoreFailed") : legal}</p>
+        <p className="secondary footnote legal">{blocked ? t("pro.blocked") : restoreFailed ? t("pro.restoreFailed") : legal}</p>
         <div className="legal-links">
           <button type="button" className="link" onClick={() => openUrl(TERMS_URL)}>{t("pro.terms")}</button>
           <button type="button" className="link" onClick={() => openUrl(PRIVACY_URL)}>{t("pro.privacy")}</button>

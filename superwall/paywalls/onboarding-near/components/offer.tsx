@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useActions, useHaptics, useProducts, usePurchase, useSuperwallSnapshot, useTranslation, useVariables } from "superwall/hooks";
+import { LockedForecast } from "../../../components/locked-forecast";
 import { passProduct } from "../../../components/pro/pass";
 import { flight } from "../../onboarding/components/flight";
 import { Ticket } from "../../onboarding/components/ticket";
@@ -17,44 +18,9 @@ function flyDay(departure: Date, now = new Date()): string | undefined {
   return days === 1 ? "tomorrow" : undefined;
 }
 
-// Stand-ins for the forecast under the blur: never the real one, which would be readable in the page.
-const STRIP = [["light", 8], ["smooth", 22], ["bumpy", 14], ["smooth", 30], ["light", 9], ["smooth", 17]] as const;
-const ROWS = [["7:52 PM", "light", 62], ["9:10 PM", "bumpy", 48], ["10:40 PM", "light", 56]] as const;
-
-/** Their flight's forecast, blurred, under a lock. */
-function LockedForecast() {
-  const { t } = useTranslation();
-  return (
-    <div className="near-lock">
-      <p className="near-lock-head">{t("near.lockHead")}</p>
-      <div className="near-lock-body" aria-hidden="true">
-        <div className="near-lock-strip">
-          {STRIP.map(([kind, width], i) => <span key={i} className={`near-lock-${kind}`} style={{ width: `${width}%` }} />)}
-        </div>
-        {ROWS.map(([time, kind, width]) => (
-          <div key={time} className="near-lock-row">
-            <span className="near-lock-time">{time}</span>
-            <span className={`near-lock-dot near-lock-${kind}`} />
-            <span className="near-lock-bar" style={{ width: `${width}%` }} />
-          </div>
-        ))}
-      </div>
-      <div className="near-lock-over">
-        <span className="near-lock-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
-            <rect x="5" y="11" width="14" height="10" rx="2" fill="none" stroke="currentColor" strokeWidth="2.2" />
-            <path d="M8 11V7a4 4 0 0 1 8 0v4" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
-          </svg>
-        </span>
-        <span className="near-lock-title">{t("near.lockTitle")}</span>
-      </div>
-    </div>
-  );
-}
-
 /**
  * The flight paywall for a flight leaving within 24 hours: their flight, its forecast blurred under
- * "Unlock to see", and two ways to see it: Yearly ($49.99, no trial, selected) or a pass for just
+ * "Unlock to see" (coloured by its real grade, neutral while it's on its way), and two ways to see it: Yearly ($49.99, no trial, selected) or a pass for just
  * this flight. Hard: no close button, so buying or restoring is the way on.
  *
  * No pass when this launch resumed the page after a quit (app/index.tsx): the app learns which
@@ -147,7 +113,7 @@ export default function NearOffer() {
       </div>
 
       <div className="plans-sheet">
-        <LockedForecast />
+        <LockedForecast head={t("near.lockHead")} title={t("near.lockTitle")} grade={forecast?.grade} />
 
         <div className="near-opts" role="radiogroup">
           <button type="button" role="radio" aria-checked={picked === "annual"} className={`near-opt${picked === "annual" ? " near-opt--on" : ""}`} onClick={() => pick("annual")}>

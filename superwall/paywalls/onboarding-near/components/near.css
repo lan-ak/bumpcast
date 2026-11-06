@@ -14,23 +14,7 @@
 /* Room for the close button above the ticket. */
 .near .fp-hero { padding-top: calc(62px + var(--top-gap)); }
 
-/* The near offer: the flight's forecast blurred under a lock, then Yearly and the pass as two rows. */
-.near-lock { position: relative; overflow: hidden; margin: 0 0 12px; padding: 12px 16px 14px; border-radius: 18px; background: var(--card-on); border: 0.5px solid var(--card-border); }
-:root:not(.dark) .near-lock { border-color: rgba(69, 87, 108, 0.18); background: #fff; }
-.near-lock-head { margin: 0 0 8px; font: 500 11px/1.2 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-2); }
-.near-lock-body { filter: blur(7px); user-select: none; }
-.near-lock-strip { display: flex; height: 14px; margin-bottom: 8px; border-radius: 7px; overflow: hidden; }
-.near-lock-row { display: grid; grid-template-columns: 62px 10px 1fr; align-items: center; gap: 10px; padding: 8px 0; border-top: 0.5px solid var(--track); }
-.near-lock-time { font: 500 13px var(--mono); }
-.near-lock-dot { width: 10px; height: 10px; border-radius: 50%; }
-.near-lock-bar { height: 12px; border-radius: 6px; background: var(--ink-2); opacity: 0.35; }
-.near-lock-smooth { background: var(--smooth); }
-.near-lock-light { background: var(--light-chop); }
-.near-lock-bumpy { background: var(--plum); }
-.near-lock-over { position: absolute; inset: 26px 0 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
-.near-lock-icon { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--ink); color: var(--sheet); }
-.near-lock-title { font: 700 19px var(--display); }
-
+/* The near offer: Yearly and the pass as two rows, under the locked forecast. */
 .near-opts { display: flex; flex-direction: column; gap: 8px; margin-bottom: 2px; }
 .near-opt { display: grid; grid-template-columns: 20px 1fr auto; align-items: center; gap: 12px; width: 100%; margin: 0; padding: 11px 14px; border-radius: 16px; border: 0.5px solid var(--card-border); background: var(--card); color: var(--ink); font: inherit; text-align: left; cursor: pointer; }
 :root:not(.dark) .near-opt { border-color: rgba(69, 87, 108, 0.18); background: rgba(255, 255, 255, 0.7); }
@@ -64,11 +48,6 @@
   .near .plan-grid .plan--on { padding: 9.5px 10.5px; }
   .near .plan-grid .plan-price { font-size: 22px; }
   .near .plan-grid { margin-bottom: 10px; }
-  .near-lock { margin-bottom: 10px; padding: 9px 14px 4px; }
-  .near-lock-row:nth-child(n+3) { display: none; }
-  .near-lock-over { flex-direction: row; inset: 22px 0 0; gap: 10px; }
-  .near-lock-icon { width: 34px; height: 34px; }
-  .near-lock-title { font-size: 17px; }
   .near-opts { gap: 6px; }
   .near-opt { padding: 9px 12px; }
   .near-opt--on { padding: 7.5px 10.5px; }

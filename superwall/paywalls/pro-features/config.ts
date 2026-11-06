@@ -1,7 +1,7 @@
 import { definePaywall } from "superwall/config";
 
-// Gated paywall for the Pro features campaign, subscription first. Its A/B partner is
-// pro-features-pass-first, identical except the flight pass leads.
+// Gated paywall for the Pro features campaign, subscription first, with the flight pass as a link
+// when the placement sends a flight. (Its pass-first A/B partner was retired on 2026-11-06.)
 export default definePaywall({
   name: "Pro features · subscription leads",
   products: {

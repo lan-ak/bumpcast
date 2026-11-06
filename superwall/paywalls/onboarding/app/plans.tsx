@@ -7,6 +7,7 @@ import {
   useTranslation,
   type ProductReference,
 } from "superwall/hooks";
+import { LockedForecast } from "../../../components/locked-forecast";
 import { answers, type Help } from "../components/answers";
 import { savePercent } from "../components/savings";
 
@@ -20,11 +21,13 @@ const icon = (d: string): ReactNode => (
 );
 
 // Pro features only (see Paywalls.swift): breathing and explainers are free, so they're not sold here.
+// "When the bumps are" isn't a line: it's the locked forecast above them, a sample flight with a few
+// bumps (no flight's been added here, so it can't claim to be theirs). The lines that answer what
+// they said would help most come first.
 const FEATURES: { key: string; icon: ReactNode; matches: Help[] }[] = [
   // Delays: the forecast moves with the new time. The delay itself is free.
   { key: "featureUpdates", icon: icon("M20 11a8 8 0 1 0-2.3 5.7M20 5v6h-6"), matches: ["when", "delays"] },
-  { key: "featureTimeline", icon: icon("M4 20V10M10 20V4M16 20v-7M22 20H2"), matches: ["how-long"] },
-  { key: "featureLive", icon: icon("M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zM11 18h2"), matches: ["when", "calm-down"] },
+  { key: "featureLive", icon: icon("M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zM11 18h2"), matches: ["when", "how-long", "calm-down"] },
   { key: "featureFlights", icon: icon("M10.5 13.5 3 11l1.5-1.5 7.5 1 4-4.5a1.8 1.8 0 0 1 2.5 2.5L14 13l1 7.5-1.5 1.5-2.5-7.5-3 3V20l-1.5 1-1-3.5L2 16l1-1.5h2.5z"), matches: [] },
 ];
 
@@ -36,6 +39,7 @@ export default function Plans() {
   const { purchase } = usePurchase();
   const [plan, setPlan] = useState<ProductReference>("annual");
   const [restoreFailed, setRestoreFailed] = useState(false);
+  const [blocked, setBlocked] = useState(false);
 
   const annual = getProduct("annual");
   const monthly = getProduct("monthly");
@@ -54,6 +58,9 @@ export default function Plans() {
       : monthlyPrice
         ? t("plans.legalMonthly", { price: monthlyPrice })
         : t("plans.legalBare");
+
+  const matched = (f: (typeof FEATURES)[number]) => f.matches.some((m) => answers.help.includes(m));
+  const features = [...FEATURES].sort((a, b) => Number(matched(b)) - Number(matched(a)));
 
   const choose = (ref: ProductReference) => {
     haptics.selection();
@@ -95,8 +102,9 @@ export default function Plans() {
       </div>
 
       <div className="plans-sheet">
-        {FEATURES.map((f) => (
-          <div key={f.key} className={`feature${f.matches.some((m) => answers.help.includes(m)) ? " feature--match" : ""}`}>
+        <LockedForecast head={t("plans.lockHead")} title={t("plans.lockTitle")} grade="some_bumps" compact />
+        {features.map((f) => (
+          <div key={f.key} className="feature">
             <span className="feature-icon">{f.icon}</span>
             {t(`plans.${f.key}`)}
           </div>
@@ -123,12 +131,16 @@ export default function Plans() {
           className="cta"
           onClick={async () => {
             haptics.light();
-            await purchase(plan);
+            setBlocked(false);
+            // Refused before the App Store sheet could show: the phone is blocking purchases.
+            const started = Date.now();
+            const result = await purchase(plan);
+            if (result.status === "failed" || (result.status === "abandoned" && Date.now() - started < 1500)) setBlocked(true);
           }}
         >
           {cta}
         </button>
-        <p className="secondary footnote legal">{restoreFailed ? t("plans.restoreFailed") : legal}</p>
+        <p className="secondary footnote legal">{blocked ? t("plans.blocked") : restoreFailed ? t("plans.restoreFailed") : legal}</p>
         <div className="legal-links">
           <button type="button" className="link" onClick={() => openUrl(TERMS_URL)}>{t("plans.terms")}</button>
           <button type="button" className="link" onClick={() => openUrl(PRIVACY_URL)}>{t("plans.privacy")}</button>

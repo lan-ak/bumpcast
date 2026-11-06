@@ -16,9 +16,13 @@ export interface AddedFlight {
 
 export interface FlightForecast {
   state: ForecastState;
+  grade?: Grade;
   gradeTitle?: string;
   confidence?: "early" | "partly_confirmed" | "confirmed" | "global_outlook";
 }
+
+export type Grade = "smooth" | "mostly_smooth" | "some_bumps" | "bumpy" | "rough";
+const GRADES: readonly Grade[] = ["smooth", "mostly_smooth", "some_bumps", "bumpy", "rough"];
 
 export const flight: { added?: AddedFlight; forecast?: FlightForecast } = {};
 
@@ -52,6 +56,7 @@ export function parseForecast(data: Record<string, unknown> | undefined): Flight
   const state = STATES.find((s) => s === data?.state) ?? "pending";
   return {
     state,
+    grade: state === "ready" ? GRADES.find((g) => g === data?.grade) : undefined,
     gradeTitle: state === "ready" ? str(data?.grade_title) : undefined,
     confidence: CONFIDENCES.find((c) => c === data?.confidence),
   };

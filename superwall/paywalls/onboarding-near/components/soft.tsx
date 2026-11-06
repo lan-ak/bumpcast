@@ -31,7 +31,7 @@ export default function SoftTimeline() {
   const state = forecast?.state ?? "pending";
   const opened = useSuperwallSnapshot().paywall !== undefined;
 
-  // Which page of the test they reached, for reading it later (the trial sets "trial").
+  // Which page of the test they reached, for reading it later (the near offer sets "annual_or_pass").
   const { setUserAttributes } = actions;
   useEffect(() => {
     if (opened) setUserAttributes({ onboarding_near_offer: "timeline" });

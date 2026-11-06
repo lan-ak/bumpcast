@@ -1,0 +1,30 @@
+/* The locked forecast card (components/locked-forecast.tsx), shared by the onboarding and Pro
+   paywalls. The Pro theme has no turbulence colours, so each falls back to the onboarding's. */
+.lf { position: relative; overflow: hidden; margin: 0 0 12px; padding: 12px 16px 12px; border-radius: 18px; background: var(--card-on); border: 0.5px solid var(--card-border); color: var(--ink); }
+:root:not(.dark) .lf { border-color: rgba(69, 87, 108, 0.18); background: #fff; }
+.lf-head { margin: 0 0 8px; font: 500 11px/1.2 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-2); }
+.lf-body { filter: blur(6px); user-select: none; }
+.lf-strip { display: flex; height: 14px; margin-bottom: 6px; border-radius: 7px; overflow: hidden; }
+.lf-row { display: grid; grid-template-columns: 52px 10px 1fr; align-items: center; gap: 10px; padding: 8px 0; border-top: 0.5px solid var(--track, rgba(69, 87, 108, 0.18)); }
+.lf-time, .lf-bar { height: 10px; border-radius: 5px; background: var(--ink-2); opacity: 0.35; }
+.lf-dot { width: 10px; height: 10px; border-radius: 50%; }
+.lf-calm { background: var(--ink-2); opacity: 0.3; }
+.lf-smooth { background: var(--smooth, #3a9a8f); }
+.lf-light { background: var(--light-chop, #c99a2e); }
+.lf-bumpy { background: var(--plum, #8e4a6b); }
+.lf-over { position: absolute; inset: 24px 0 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
+.lf-icon { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; background: var(--ink); color: var(--sheet); }
+.lf-title { font: 700 18px var(--display); }
+
+/* Compact: one row, the lock beside its words. For short screens and tight sheets. */
+.lf--compact .lf-row:nth-child(n + 3) { display: none; }
+.lf--compact .lf-over { flex-direction: row; gap: 10px; inset: 20px 0 0; }
+.lf--compact .lf-icon { width: 34px; height: 34px; }
+.lf--compact .lf-title { font-size: 17px; }
+@media (max-height: 700px) {
+  .lf { padding: 9px 14px 4px; margin-bottom: 10px; }
+  .lf-row:nth-child(n + 3) { display: none; }
+  .lf-over { flex-direction: row; gap: 10px; inset: 20px 0 0; }
+  .lf-icon { width: 34px; height: 34px; }
+  .lf-title { font-size: 17px; }
+}

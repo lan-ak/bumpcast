@@ -1,7 +1,8 @@
 import { definePaywall } from "superwall/config";
 
 // Soft paywall for the Forecast moments campaign (first_grade_viewed, forecast_ready_opened,
-// update_opened). Shows the user's own forecast and sells the rest of it; always closable.
+// update_opened, and the gated timeline_locked). Shows the user's own forecast and sells the rest
+// of it; always closable.
 export default definePaywall({
   name: "Forecast moment",
   products: {

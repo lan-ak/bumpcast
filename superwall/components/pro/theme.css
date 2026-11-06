@@ -220,6 +220,9 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
   .pw-hero { padding-top: 60px; padding-bottom: 96px; }
   .feature + .feature:not(.feature--coverage) { display: none; }
   .pw-title { font-size: 26px; }
+  /* With the locked forecast, it carries the sell: the lines and plan footnotes give way. */
+  .pw-sheet:has(.lf) .feature, .pw-sheet:has(.lf) .plan-note { display: none; }
+  .pw:has(.lf) .pw-hero:not(:has(.tk)) { flex-basis: 150px; min-height: 150px; padding-bottom: 76px; }
 }
 .pw-sub { margin-top: 8px; color: var(--ink-2); font-size: 16px; }
 @media (max-height: 700px) and (max-width: 799px), (max-height: 559px) { .pw-sub { display: none; } }

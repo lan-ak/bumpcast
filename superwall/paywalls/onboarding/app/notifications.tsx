@@ -13,6 +13,9 @@ export default function Notifications() {
   const added = flight.added;
   const next = added ? toChecking : toPlans;
   const route = added && `${added.origin} → ${added.destination}`;
+  // Within 48 hours its forecast is already being made, so "when it's ready" would be moments away:
+  // say what else they'd hear about (the free delay alert).
+  const soon = added !== undefined && added.unlocks.getTime() <= Date.now();
   const { t } = useTranslation();
   const haptics = useHaptics();
   const { requestPermission, setUserAttributes } = useActions();
@@ -55,8 +58,8 @@ export default function Notifications() {
           </div>
         </div>
         <div>
-          <h1>{route ? t("notifications.titleRoute", { route }) : t("notifications.title")}</h1>
-          <p className="secondary">{t("notifications.body")}</p>
+          <h1>{route ? t(soon ? "notifications.titleSoon" : "notifications.titleRoute", { route }) : t("notifications.title")}</h1>
+          <p className="secondary">{t(soon ? "notifications.bodySoon" : "notifications.body")}</p>
         </div>
       </div>
     </Page>

@@ -23,12 +23,6 @@
         "snapshot": "e05ad070305ebd3d20cd4944cf03baa74956d898f7f69767bd4d8fedd10c1fa7"
       }
     },
-    "pro-features-pass-first": {
-      "ios": {
-        "paywallId": "281985",
-        "snapshot": "8464ff3c7624fe6a09d88b7ccd81c52d764e402b925612c9661165742e3cf84d"
-      }
-    },
     "onboarding-soft": {
       "ios": {
         "paywallId": "284375",

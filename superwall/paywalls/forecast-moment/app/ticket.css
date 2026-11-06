@@ -36,6 +36,9 @@
 
 /* The hero grows to fit the ticket instead of holding its fixed height. */
 .pw-hero:has(.tk) { flex-basis: auto; padding-top: 64px; padding-bottom: 96px; }
+/* With the locked forecast in the sheet, the sky tightens around the ticket to keep the terms on screen. */
+.pw:has(.lf) .pw-hero:has(.tk) { padding-top: 56px; padding-bottom: 84px; }
+.pw:has(.lf) .tk { margin-bottom: 16px; }
 /* The ticket says what the subtitle did; dropping it keeps the button on screen. */
 .pw:has(.tk) .pw-sub { display: none; }
 
@@ -48,17 +51,19 @@
   .tk-pills { margin-top: 10px; }
   .pw-hero:has(.tk) { padding-top: 54px; padding-bottom: 86px; }
   .pw:has(.tk) .pw-eyebrow { display: none; }
-  .pw:has(.tk) .feature:not(.feature--coverage) { display: none; }
+  .pw:has(.tk) .feature--coverage { display: none; }
   .pw:has(.tk) .pw-sheet { padding-top: 18px; }
   .pw:has(.tk) .plan-grid--three { margin: 12px 0 10px; }
   .pw:has(.tk) .plan-grid--three .plan { padding-top: 10px; padding-bottom: 10px; }
   .pw:has(.tk) .plan-grid--three .plan--on { padding-top: 8.5px; padding-bottom: 8.5px; }
   .pw:has(.tk) .plan-grid--three .plan-note { display: none; }
+  /* With the locked forecast too, the ticket keeps just the route. */
+  .pw:has(.lf) .tk-city, .pw:has(.lf) .tk-pills { display: none; }
 }
 
-/* "More options" open: they're choosing a plan now, so the selling lines give way to the three
-   cards (coverage stays, it's what each plan buys). */
-.pw:has(.tk):has(.plan-grid--three) .feature:not(.feature--coverage) { display: none; }
+/* "More options" open: the three cards need the room, so the lines give way. The locked forecast
+   stays: it's what every plan buys. */
+.pw:has(.tk):has(.plan-grid--three) .feature { display: none; }
 
 /* iPhone Duo, open (see components/pro/theme.css): the ticket and headline hold the left half. */
 @media (min-width: 800px) and (min-height: 560px) {
