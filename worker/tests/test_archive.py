@@ -1,6 +1,9 @@
+import gzip
 import io
+import json
 from datetime import UTC, datetime
 
+import httpx
 import numpy as np
 import pytest
 
@@ -110,3 +113,59 @@ def test_prune_drops_the_oldest_pending_past_the_cap(tmp_path, monkeypatch):
     monkeypatch.setattr(archive, "PENDING_MAX_BYTES", size)
     assert archive.prune(tmp_path) == 1
     assert [p.name for p in (tmp_path / "archive/pending").rglob("*.npz")] == ["03z_f000.npz"]
+
+
+class FakeReports:
+    """aviationweather.gov with one report per whole degree of a made-up patch, 400 at most a query."""
+
+    def __init__(self, reports: list[dict]):
+        self.reports, self.queries = reports, []
+
+    def __call__(self, url, params):
+        south, west, north, east = (float(v) for v in params["bbox"].split(","))
+        self.queries.append((south, west, north, east))
+        found = [r for r in self.reports if south <= r["lat"] <= north and west <= r["lon"] <= east]
+        body = json.dumps(found[: archive.REPORTS_CAP]).encode() if found else b""
+        return httpx.Response(200, content=body, request=httpx.Request("GET", url))
+
+
+def _reports(n: int) -> list[dict]:
+    return [
+        {"obsTime": 1793900000 + k, "lat": 40.0 + (k % 30) / 10, "lon": -40.0 + k // 30 / 10,
+         "rawOb": f"ARP TEST{k}", "tbInt1": "MOD" if k == 7 else "", "pirepType": "AIREP"}
+        for k in range(n)
+    ]
+
+
+def test_splits_full_boxes_until_every_report_is_found(monkeypatch):
+    fake = FakeReports(_reports(900))
+    monkeypatch.setattr(archive, "get_with_retry", fake)
+    monkeypatch.setattr(archive, "REPORTS_PAUSE", 0)
+    rows = archive.report_rows(archive.fetch_reports(2))
+    assert len(rows) == 900
+    assert len(fake.queries) > 1
+    assert {r["id"] for r in rows} == {r["id"] for r in archive.report_rows(fake.reports)}
+
+
+def test_report_rows_drop_repeats_and_empty_fields():
+    reports = _reports(3)
+    rows = archive.report_rows(reports + reports[:1] + [{"obsTime": 1, "lat": None, "lon": 0}])
+    assert len(rows) == 3
+    assert "tbInt1" not in rows[0]
+
+
+def test_saves_reports_once_an_hour_and_uploads_them(monkeypatch, tmp_path):
+    monkeypatch.setattr(archive, "get_with_retry", FakeReports(_reports(5)))
+    monkeypatch.setattr(archive, "REPORTS_PAUSE", 0)
+    now = datetime(2026, 11, 5, 21, 40, tzinfo=UTC)
+    assert archive.save_reports(now, tmp_path) == 5
+    assert archive.save_reports(now.replace(minute=55), tmp_path) == 0
+    store = FakeStore()
+    assert archive.upload_pending(tmp_path, store) == 1
+    body = json.loads(gzip.decompress(store.saved["reports/2026/11/05/21z.json.gz"]))
+    assert len(body["reports"]) == 5
+    assert body["reports"][0]["pirepType"] == "AIREP"
+
+
+def test_bbox_edges_round_outwards():
+    assert archive._bbox((39.375, -105.46875, 39.7265625, -104.765625)) == "39.37,-105.47,39.73,-104.76"

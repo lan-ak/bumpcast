@@ -603,7 +603,8 @@ def poll(db, apns: Apns | None, data: FlightData | None = None) -> None:
         ("status purge", lambda: f"{db.prune_flight_status(datetime.now(UTC) - status.KEEP)} old status row(s) deleted"),
         ("pireps", lambda: f"{mapdata.refresh_pireps(db, datetime.now(UTC))} pilot report(s)"),
         ("map", lambda: f"{refresh_map(db)} map layer(s)"),
-        ("archive", lambda: f"{archive.upload_pending(CACHE_DIR)} GTG hour(s) uploaded"),
+        ("reports archive", lambda: f"{archive.save_reports(datetime.now(UTC), CACHE_DIR)} pilot report(s) saved"),
+        ("archive", lambda: f"{archive.upload_pending(CACHE_DIR)} file(s) uploaded"),
     ]
     for name, step in steps:
         try:
