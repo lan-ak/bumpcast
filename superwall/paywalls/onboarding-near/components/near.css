@@ -14,11 +14,33 @@
 /* Room for the close button above the ticket. */
 .near .fp-hero { padding-top: calc(62px + var(--top-gap)); }
 
-/* The trial's one plan: name and monthly equivalent on the left, the yearly price, biggest, on the right. */
-.near-plan { display: flex; align-items: center; justify-content: space-between; margin: 4px 0 12px; cursor: default; }
-.near-plan-name, .near-plan-price { display: flex; flex-direction: column; }
-.near-plan-price { align-items: flex-end; }
-.near-plan .plan-price { margin-top: 0; }
+/* The near offer: the flight's forecast blurred under a lock, then Yearly and the pass as two rows. */
+.near-lock { position: relative; overflow: hidden; margin: 0 0 12px; padding: 12px 16px 14px; border-radius: 18px; background: var(--card-on); border: 0.5px solid var(--card-border); }
+:root:not(.dark) .near-lock { border-color: rgba(69, 87, 108, 0.18); background: #fff; }
+.near-lock-head { margin: 0 0 8px; font: 500 11px/1.2 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-2); }
+.near-lock-body { filter: blur(7px); user-select: none; }
+.near-lock-strip { display: flex; height: 14px; margin-bottom: 8px; border-radius: 7px; overflow: hidden; }
+.near-lock-row { display: grid; grid-template-columns: 62px 10px 1fr; align-items: center; gap: 10px; padding: 8px 0; border-top: 0.5px solid var(--track); }
+.near-lock-time { font: 500 13px var(--mono); }
+.near-lock-dot { width: 10px; height: 10px; border-radius: 50%; }
+.near-lock-bar { height: 12px; border-radius: 6px; background: var(--ink-2); opacity: 0.35; }
+.near-lock-smooth { background: var(--smooth); }
+.near-lock-light { background: var(--light-chop); }
+.near-lock-bumpy { background: var(--plum); }
+.near-lock-over { position: absolute; inset: 26px 0 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
+.near-lock-icon { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--ink); color: var(--sheet); }
+.near-lock-title { font: 700 19px var(--display); }
+
+.near-opts { display: flex; flex-direction: column; gap: 8px; margin-bottom: 2px; }
+.near-opt { display: grid; grid-template-columns: 20px 1fr auto; align-items: center; gap: 12px; width: 100%; margin: 0; padding: 11px 14px; border-radius: 16px; border: 0.5px solid var(--card-border); background: var(--card); color: var(--ink); font: inherit; text-align: left; cursor: pointer; }
+:root:not(.dark) .near-opt { border-color: rgba(69, 87, 108, 0.18); background: rgba(255, 255, 255, 0.7); }
+.near-opt--on { padding: 9.5px 12.5px; border: 2px solid var(--accent) !important; background: var(--card-on) !important; }
+.near-radio { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--track); }
+.near-opt--on .near-radio { border: 6px solid var(--accent); }
+.near-opt-name, .near-opt-price { display: flex; flex-direction: column; font: 700 16px/1.25 var(--display); }
+.near-opt-price { align-items: flex-end; }
+.near-opt .footnote { font-family: var(--body); font-weight: 400; }
+.near-tag { margin-left: 6px; padding: 1px 7px; border-radius: 999px; background: var(--tint); color: var(--brand-line); font: 700 11px var(--body); letter-spacing: 0.03em; text-transform: uppercase; vertical-align: 2px; }
 
 /* iPhone SE and other short screens: the heading and the timeline tighten so the legal lines fit. */
 @media (max-height: 700px) {
@@ -33,8 +55,6 @@
   .near-steps { margin-bottom: 10px; padding: 9px 12px; }
   .near-step { padding-bottom: 6px; }
   .near-line { font-size: 13px; }
-  /* The trial keeps Today and the day it ends (no trial: Today and until they land). */
-  .near-step--land:not(:last-child) { display: none; }
   /* The soft page drops "Today: we're tracking" (the title says it), folds its two Pro steps into one, and the
      plans lose their second line. */
   .near-step--board, .near-step--air, .near-step--pro, .near-step--tracking { display: none; }
@@ -44,6 +64,13 @@
   .near .plan-grid .plan--on { padding: 9.5px 10.5px; }
   .near .plan-grid .plan-price { font-size: 22px; }
   .near .plan-grid { margin-bottom: 10px; }
-  .near-plan { margin-bottom: 10px; padding: 10px 12.5px; }
+  .near-lock { margin-bottom: 10px; padding: 9px 14px 4px; }
+  .near-lock-row:nth-child(n+3) { display: none; }
+  .near-lock-over { flex-direction: row; inset: 22px 0 0; gap: 10px; }
+  .near-lock-icon { width: 34px; height: 34px; }
+  .near-lock-title { font-size: 17px; }
+  .near-opts { gap: 6px; }
+  .near-opt { padding: 9px 12px; }
+  .near-opt--on { padding: 7.5px 10.5px; }
   .near .legal { margin-top: 4px; }
 }

@@ -31,7 +31,6 @@ declare module "superwall/hooks" {
     "monthly": true;
     "pass": true;
     "pass399": true;
-    "trial": true;
   }
 
   interface SuperwallStripeProducts {

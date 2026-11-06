@@ -21,17 +21,18 @@ export default {
     proLineShort: "When the bumps come, updates, and a Lock Screen countdown",
     proLine: "When the bumps come and how long they last, updates if the weather changes, and a countdown on your Lock Screen",
   },
-  // The trial, for a flight leaving within 24 hours.
+  // The offer for a flight leaving within 24 hours: Yearly or a pass for this flight.
   near: {
     sub: "You fly {day}.",
-    todayTrial: "Pro free: when the bumps come and how long they last",
-    todayPaid: "When the bumps come and how long they last",
-    untilLand: "Updates if the weather changes, and a countdown on your Lock Screen",
-    endLine: "Trial ends. {price}/year unless you cancel before then.",
-    endLineBare: "Trial ends. Your plan starts unless you cancel before then.",
-    perMonth: "{price}/month",
-    cta: "Start {days}-day free trial",
-    ctaIneligible: "Subscribe · {price}/year",
+    lockHead: "When the bumps come",
+    lockTitle: "Unlock to see",
+    annualName: "Every flight",
+    annualNote: "Yearly, {price}/month",
+    bestValue: "Best value",
+    passName: "This flight only",
+    passNote: "One-time, doesn't renew",
+    once: "once",
+    ctaAnnual: "Subscribe · {price}/year",
     blocked: "The App Store couldn't start the purchase. Check Screen Time › iTunes & App Store Purchases and that you're signed in, then try again.",
   },
 } as const;

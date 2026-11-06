@@ -1,17 +1,19 @@
 import { definePaywall } from "superwall/config";
 
 // The near-flier test (2026-11-04): the soft onboarding flow, page for page, except the flight
-// paywall. A flight leaving within 24 hours gets one plan, Yearly with a 3-day free trial, and can't be
-// closed; any other flight gets Yearly and Monthly with no trial, closable. Both lay out what happens next as a timeline.
+// paywall. A flight leaving within 24 hours gets its forecast blurred under "Unlock to see", with
+// Yearly or a pass for that flight, and can't be closed; any other flight gets Yearly and Monthly
+// with no trial, closable, under a timeline of what happens next.
 export default definePaywall({
-  name: "Onboarding · near-flier trial",
+  name: "Onboarding · near-flier offer",
   products: {
-    // As on onboarding-soft: $49.99/year with no trial, and Monthly, for everyone not flying today.
+    // $49.99/year with no trial (its intro offer was removed on Nov 3, whatever the ID says).
     annual: "bumpcast_pro_annual_4999_3d",
     monthly: "bumpcast_pro_monthly",
-    // Near fliers only: $39.99/year with a 3-day free trial (its intro offer is live in all 175
-    // territories; the $49.99 product's was deleted on Nov 3).
-    trial: "bumpcast_pro_annual_3999_3d",
+    // Near fliers only: the $9.99 pass on 1.0.4 and later, the $3.99 one for older builds
+    // (components/pro/pass.ts).
+    pass: "bumpcast_flight_pass_999",
+    pass399: "bumpcast_flight_pass",
   },
   transition: "slide",
   // Matches the dawn sky (light) and the night sky (dark) so the load never flashes.

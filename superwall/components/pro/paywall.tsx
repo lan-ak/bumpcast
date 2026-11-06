@@ -9,22 +9,12 @@ import {
 } from "superwall/hooks";
 import { useHostSafeArea } from "../safe-area";
 import { usePlacementContext, type ProPlacement } from "./context";
+import { passProduct } from "./pass";
 import { savePercent } from "./savings";
 import "./theme.css";
 
 const TERMS_URL = "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/";
 const PRIVACY_URL = "https://docs.google.com/document/d/1wgxMmBIa1OiTJesX83nBVIJl1c2EAz-TxvpMndDK7T0/preview";
-
-/**
- * The $9.99 pass (`pass`) needs 1.0.4 or later: older builds only unlock a flight for the $3.99 one
- * (`pass399`), so a $9.99 purchase there would charge and unlock nothing. Unknown versions get $3.99.
- */
-function passProduct(appVersion: unknown): "pass" | "pass399" {
-  const [major, minor, patch] = String(appVersion ?? "").split(".").map(Number);
-  if (![major, minor].every(Number.isFinite)) return "pass399";
-  const v = [major, minor, Number.isFinite(patch) ? patch : 0];
-  return v[0] * 1e6 + v[1] * 1e3 + v[2] >= 1_000_004 ? "pass" : "pass399";
-}
 
 /**
  * Which offer is the button. The other is a quiet link under it. This is the A/B test between
