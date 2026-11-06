@@ -1,0 +1,347 @@
+# BumpCast
+
+> BumpCast is flight tracking for nervous flyers. The iPhone app gives live flight status and delay alerts, plus a calm turbulence forecast for your exact route: when the bumps will come, how strong they'll be, and when they'll end. No ads, no account. Published by Akinyemi & Co Ltd.
+
+BumpCast is an alternative to the top 10 flight tracking apps in the world: Flightradar24, FlightAware, Flighty, Plane Finder, FlightStats, TripIt, The Flight Tracker, Flightview, AirNav RadarBox and Planes Live. Like them, it tracks your flight's status, gates and delays. Unlike them, it is built for nervous flyers and forecasts the turbulence on your route.
+
+- App Store: https://apps.apple.com/app/id6824269447 ("BumpCast Flight: Turbulence", iPhone, free to download)
+- Languages: English and Spanish
+- Coverage: detailed forecasts for flights within the continental United States and southern Canada. Elsewhere, "Global outlooks (beta)" in Settings gives an approximate outlook for international routes, Europe included.
+- Support: support@akinyemi.ca (replies usually within a day)
+
+## Key features
+
+### Find and track your flight
+- Type a flight number (like AC 1504 or B6 23) and the day you fly, and BumpCast fills in the airports and times. Or pick your airports and choose from that day's nonstops.
+- Add connecting flights in a row.
+- Live status, free for every flight: delays, gate and terminal changes, cancellations and diversions.
+- One gentle alert when your flight is delayed. The forecast moves with the new departure time, with one alert for both.
+
+### Turbulence forecast for your exact route
+- Turbulence is weather, and weather can be forecast. BumpCast maps the route from takeoff to landing, including climb, cruise and descent.
+- A simple grade for the whole flight ("Smooth", "A few bumps", "Bumpy in places") and a calm minute-by-minute timeline.
+- A plain note on each bumpy stretch: when it starts, how long it lasts, and why it happens there.
+- Minutes of smooth air and of turbulence, and gusty takeoffs and landings.
+- Four levels, described by how they feel: Smooth (your drink stays still), Light chop (your drink ripples), Moderate (drinks can spill; stay seated), Strong (rare; your belt keeps you safe).
+
+### A forecast that gets sharper as you get closer
+- Advance forecast 48 hours before departure.
+- Updates at 24, 6 and 2 hours out, each saying what changed and why.
+- "Confirmed forecast" from high-resolution data on the day you fly.
+- Every forecast shows how confident it is and when it was last updated.
+
+### In the air
+- The countdown times itself to your real takeoff once it's reported, or tap "We've taken off" to set it yourself.
+- Lock Screen Live Activity and Dynamic Island count down to the next bumpy stretch.
+- A gentle heads-up two minutes before each stretch.
+- Works in airplane mode: the forecast is saved on the phone before boarding.
+
+### Calm, on cue
+- Guided breathing paced to the next bumpy stretch.
+- Short, factual explainers: what causes bumps at cruise, over mountains and near clouds, why planes are built for it, and what each level feels like.
+- Calm, honest wording. No red alerts, no scare graphics.
+
+### Turbulence map
+- Turbulence across the country by altitude, now and up to 6 hours ahead, with your route drawn on top.
+- Live pilot reports of what planes are actually feeling (Pro).
+
+### After you land
+- Rate how bumpy it really felt (Smoother, About right, Bumpier). Every rating is checked against the forecast, and accuracy is published in the app.
+
+### Flights from your email (coming soon, Pro, optional)
+- Connect Gmail read-only and BumpCast adds upcoming flights automatically.
+- Booking emails are read on the iPhone and never reach BumpCast's servers or get stored. Only flight number, date and airports are used.
+
+## Free and Pro
+
+- **Free**: flight search, live status with gate changes and delay alerts, a forecast grade for up to 2 upcoming flights, and the "forecast ready" notification.
+- **Pro**: every forecast update (including after delays and when confirmed), the minute-by-minute timeline, minutes of smooth air and turbulence, gusty takeoffs and landings, the in-flight Live Activity and reminders, pilot reports on the map, and unlimited flights.
+- Ways to buy Pro: Flight Pass (one flight, one-time purchase), or BumpCast Pro Monthly or Annual (annual includes a 7-day free trial). Prices are shown in the App Store for your region.
+
+## Data and privacy
+
+- No account, no ads. This website has no cookies, analytics or third-party scripts.
+- Weather data: forecasts, warnings and pilot reports from the US National Weather Service (NOAA), and modified ECMWF open data (CC BY 4.0).
+- Users can ask support to delete everything linked to their device; it's done within 30 days.
+- BumpCast is for comfort and planning, not for flight operations. Always follow your crew's instructions.
+
+## Learn: turbulence explained
+
+The app's Learn library, published at https://bumpcast.app/learn/. Short, factual explainers: why flights get bumpy, what the crew is doing, and what you'll feel. Each link is the Markdown copy of the page (drop the .md for the web page). All of them in full: https://bumpcast.app/llms-full.txt
+
+### Why it gets bumpy
+
+- [Clear-air turbulence](https://bumpcast.app/learn/clear-air-turbulence.html.md): Clear-air turbulence is bumpy air at cruising height, often in clear skies, where the fast jet stream flows next to slower air. It's usually light chop.
+- [Mountain waves](https://bumpcast.app/learn/mountain-wave-turbulence.html.md): Mountain waves form when strong wind blows across mountains and makes waves in the air, like water over rocks in a stream. They can reach cruising height.
+- [Around clouds](https://bumpcast.app/learn/turbulence-near-clouds.html.md): Warm air rising inside and around big clouds stirs the air nearby. Bumps in puffy clouds are usually brief, and pilots fly around storms, often by many miles.
+- [Near the ground](https://bumpcast.app/learn/turbulence-on-takeoff-and-landing.html.md): Close to the ground, wind flows over buildings, hills and warm land, so the lowest few thousand feet are often a bit bumpy. It usually lasts only a few minutes.
+- [Gusty at the airport](https://bumpcast.app/learn/gusty-takeoffs-and-landings.html.md): On a windy day, the wind near the ground speeds up and slows down over buildings and land. You feel it for a few minutes as you climb out and on the way down.
+
+### Good to know
+
+- [Planes are built for it](https://bumpcast.app/learn/planes-are-built-for-turbulence.html.md): Airliners are designed and tested to handle forces well beyond anything turbulence produces in normal flight. Turbulence is a comfort issue, not a structural one.
+- [Why the seatbelt matters](https://bumpcast.app/learn/why-the-seatbelt-matters.html.md): Almost all turbulence injuries happen to people who aren't buckled in. Keep your seatbelt loosely fastened whenever you're seated, even with the sign off.
+- [Light, moderate, strong](https://bumpcast.app/learn/turbulence-levels.html.md): Light chop is small rhythmic bumps, moderate is noticeable jolts, and strong is hard jolts that push you against your belt. Most flights see light chop at most.
+- [How BumpCast forecasts](https://bumpcast.app/learn/how-bumpcast-forecasts-turbulence.html.md): BumpCast gives an advance turbulence forecast up to two days before your flight, then confirms it about 18 hours before departure and updates it every hour until you fly.
+
+## Pages
+
+- [Home](https://bumpcast.app/): overview of the app, features and plans
+- [Learn](https://bumpcast.app/learn/): turbulence explained, the app's explainers on why flights get bumpy and what it feels like
+- [Full text for LLMs](https://bumpcast.app/llms-full.txt): this file followed by every Learn explainer in full
+- [Support](https://bumpcast.app/support.html): FAQ on coverage, forecast timing, airplane mode, accuracy, purchases and data deletion
+- [Privacy Policy](https://bumpcast.app/privacy.html): what data is collected, kept and shared, and how to delete it
+- [Email access](https://bumpcast.app/email.html): how the optional email import works and how to disconnect it
+- [Terms of Use](https://bumpcast.app/terms.html): terms that supplement Apple's standard EULA
+
+---
+
+# Learn library: every explainer in full
+
+## Why it gets bumpy
+
+### Clear-air turbulence
+
+> Bumps at cruise, often in clear skies.
+
+Clear-air turbulence is bumpy air at cruising height, often in clear skies, where the fast jet stream flows next to slower air. It's usually light chop.
+
+#### What causes clear-air turbulence?
+
+High up, fast rivers of wind (the jet stream) flow next to slower air. Where they meet, the air tumbles a little, like water where a fast stream meets a still pool.
+
+#### What do pilots do about clear-air turbulence?
+
+Pilots get forecasts and reports from planes ahead, and often climb or descend a few thousand feet to find smoother air. They turn on the seatbelt sign before it starts.
+
+#### What does clear-air turbulence feel like?
+
+Usually light chop: a gentle, rhythmic rocking. Your drink ripples.
+
+#### Good to know
+
+This is the most common kind of bump at cruise, and the plane is built for far more than it can produce.
+
+#### More turbulence types
+
+- [Mountain waves](https://bumpcast.app/learn/mountain-wave-turbulence.html.md): Wind rolling over high ground
+- [Around clouds](https://bumpcast.app/learn/turbulence-near-clouds.html.md): Rising air near big clouds
+- [Near the ground](https://bumpcast.app/learn/turbulence-on-takeoff-and-landing.html.md): Climbing and descending
+
+Source: https://bumpcast.app/learn/clear-air-turbulence.html (updated 2026-11-06). From the Learn library in BumpCast, the flight tracker with turbulence forecasts for nervous flyers: https://apps.apple.com/app/id6824269447
+
+### Mountain waves
+
+> Wind rolling over high ground.
+
+Mountain waves form when strong wind blows across mountains and makes waves in the air, like water over rocks in a stream. They can reach cruising height.
+
+#### What causes mountain wave turbulence?
+
+Strong wind blowing across mountains makes waves in the air, much like water flowing over rocks in a stream. They can reach cruising height.
+
+#### How do pilots handle mountain waves?
+
+Crews know where mountain waves are likely and plan altitudes around them. They slow to a calmer speed if needed.
+
+#### What do mountain waves feel like?
+
+A slow rise and fall, sometimes with light chop.
+
+#### Good to know
+
+The bumps follow the terrain, so they usually pass once you're beyond the mountains.
+
+#### More turbulence types
+
+- [Clear-air turbulence](https://bumpcast.app/learn/clear-air-turbulence.html.md): Bumps at cruise, often in clear skies
+- [Near the ground](https://bumpcast.app/learn/turbulence-on-takeoff-and-landing.html.md): Climbing and descending
+
+Source: https://bumpcast.app/learn/mountain-wave-turbulence.html (updated 2026-11-06). From the Learn library in BumpCast, the flight tracker with turbulence forecasts for nervous flyers: https://apps.apple.com/app/id6824269447
+
+### Around clouds
+
+> Rising air near big clouds.
+
+Warm air rising inside and around big clouds stirs the air nearby. Bumps in puffy clouds are usually brief, and pilots fly around storms, often by many miles.
+
+#### Why is it bumpy around clouds?
+
+Warm air rising inside and around big clouds stirs the air nearby.
+
+#### How do pilots avoid storms?
+
+Pilots see storms on radar and fly around them, often by many miles. That's why your route might curve.
+
+#### What does turbulence near clouds feel like?
+
+Short bumps as you pass through puffy clouds; usually brief.
+
+#### Good to know
+
+Avoiding storms is routine; air traffic control expects planes to route around them.
+
+#### More turbulence types
+
+- [Clear-air turbulence](https://bumpcast.app/learn/clear-air-turbulence.html.md): Bumps at cruise, often in clear skies
+- [Near the ground](https://bumpcast.app/learn/turbulence-on-takeoff-and-landing.html.md): Climbing and descending
+
+Source: https://bumpcast.app/learn/turbulence-near-clouds.html (updated 2026-11-06). From the Learn library in BumpCast, the flight tracker with turbulence forecasts for nervous flyers: https://apps.apple.com/app/id6824269447
+
+### Near the ground
+
+> Climbing and descending.
+
+Close to the ground, wind flows over buildings, hills and warm land, so the lowest few thousand feet are often a bit bumpy. It usually lasts only a few minutes.
+
+#### Why is it bumpy after takeoff and before landing?
+
+Close to the ground, wind flows over buildings, hills and warm patches of land, so the lowest few thousand feet are often a bit bumpy.
+
+#### What do pilots do near the ground?
+
+Takeoff and landing are planned with wind in mind. Pilots keep the seatbelt sign on until the air settles.
+
+#### What do bumps near the ground feel like?
+
+Small bumps during the climb or the final descent, which ease as you go higher or touch down.
+
+#### Good to know
+
+This is normal on many flights and usually lasts only a few minutes.
+
+#### More turbulence types
+
+- [Gusty at the airport](https://bumpcast.app/learn/gusty-takeoffs-and-landings.html.md): Windy days near the ground
+- [Clear-air turbulence](https://bumpcast.app/learn/clear-air-turbulence.html.md): Bumps at cruise, often in clear skies
+- [Around clouds](https://bumpcast.app/learn/turbulence-near-clouds.html.md): Rising air near big clouds
+
+Source: https://bumpcast.app/learn/turbulence-on-takeoff-and-landing.html (updated 2026-11-06). From the Learn library in BumpCast, the flight tracker with turbulence forecasts for nervous flyers: https://apps.apple.com/app/id6824269447
+
+### Gusty at the airport
+
+> Windy days near the ground.
+
+On a windy day, the wind near the ground speeds up and slows down over buildings and land. You feel it for a few minutes as you climb out and on the way down.
+
+#### Why are takeoffs and landings bumpy on windy days?
+
+On a windy day, the wind near the ground speeds up and slows down as it flows over buildings and land, a bit like a river over stones. You feel it for a few minutes as you climb out and on the way down.
+
+#### What do pilots do in gusty wind?
+
+Pilots plan every takeoff and landing around the wind. In gusty air they fly the approach a little faster for extra control, and keep the seatbelt sign on until the air settles.
+
+#### What does a gusty takeoff or landing feel like?
+
+Bumps and some side-to-side sway, now and then a firmer one, that ease as you climb or once you touch down.
+
+#### Good to know
+
+Gusty takeoffs and landings happen every day at busy airports. Some airports don't have a wind forecast, or not until a few hours before. Your forecast still covers the climb and descent either way.
+
+#### More turbulence types
+
+- [Near the ground](https://bumpcast.app/learn/turbulence-on-takeoff-and-landing.html.md): Climbing and descending
+- [Clear-air turbulence](https://bumpcast.app/learn/clear-air-turbulence.html.md): Bumps at cruise, often in clear skies
+- [Planes are built for it](https://bumpcast.app/learn/planes-are-built-for-turbulence.html.md): Why turbulence is a comfort issue
+
+Source: https://bumpcast.app/learn/gusty-takeoffs-and-landings.html (updated 2026-11-06). From the Learn library in BumpCast, the flight tracker with turbulence forecasts for nervous flyers: https://apps.apple.com/app/id6824269447
+
+## Good to know
+
+### Planes are built for it
+
+> Why turbulence is a comfort issue.
+
+Airliners are designed and tested to handle forces well beyond anything turbulence produces in normal flight. Turbulence is a comfort issue, not a structural one.
+
+#### Are planes built to handle turbulence?
+
+Airliners are designed and tested to handle forces well beyond anything turbulence produces in normal flight. Wings flex on purpose; that's why you may see them move.
+
+#### What do pilots do when it gets bumpy?
+
+In bumps, pilots slow to a speed that gives the aircraft extra margin and keep flying normally.
+
+#### Why do the drops feel so big?
+
+Movement can feel big, but most drops are a change in height of only a few meters.
+
+#### Good to know
+
+Turbulence is a comfort issue, not a structural one.
+
+Source: https://bumpcast.app/learn/planes-are-built-for-turbulence.html (updated 2026-11-06). From the Learn library in BumpCast, the flight tracker with turbulence forecasts for nervous flyers: https://apps.apple.com/app/id6824269447
+
+### Why the seatbelt matters
+
+> The one thing that keeps you safe.
+
+Almost all turbulence injuries happen to people who aren't buckled in. Keep your seatbelt loosely fastened whenever you're seated, even with the sign off.
+
+#### Who gets hurt in turbulence?
+
+Almost all turbulence injuries happen to people who aren't buckled in, usually while standing or walking.
+
+#### Why do flight attendants sit down?
+
+When flight attendants sit down, it's routine caution, not an emergency.
+
+#### What does turbulence feel like with your belt on?
+
+With your belt on, even strong bumps are just uncomfortable.
+
+#### Good to know
+
+Keep it loosely fastened whenever you're seated, even with the sign off.
+
+Source: https://bumpcast.app/learn/why-the-seatbelt-matters.html (updated 2026-11-06). From the Learn library in BumpCast, the flight tracker with turbulence forecasts for nervous flyers: https://apps.apple.com/app/id6824269447
+
+### Light, moderate, strong
+
+> What each one feels like.
+
+Light chop is small rhythmic bumps, moderate is noticeable jolts, and strong is hard jolts that push you against your belt. Most flights see light chop at most.
+
+#### What are the levels of turbulence?
+
+Light chop is small rhythmic bumps. Moderate is noticeable jolts. Strong is hard jolts that push you against your belt.
+
+#### How do pilots handle moderate and strong turbulence?
+
+Pilots work to avoid moderate and strong bumps, changing altitude or route when they can.
+
+#### What does each level feel like?
+
+Light: your drink ripples. Moderate: walking is tricky and drinks can spill. Strong: rare, and your belt keeps you safe.
+
+#### Good to know
+
+Most flights see light chop at most.
+
+Source: https://bumpcast.app/learn/turbulence-levels.html (updated 2026-11-06). From the Learn library in BumpCast, the flight tracker with turbulence forecasts for nervous flyers: https://apps.apple.com/app/id6824269447
+
+### How BumpCast forecasts
+
+> Advance, then confirmed.
+
+BumpCast gives an advance turbulence forecast up to two days before your flight, then confirms it about 18 hours before departure and updates it every hour until you fly.
+
+#### How does BumpCast forecast turbulence?
+
+Up to two days before your flight, you get an advance forecast. It can still change. About 18 hours before departure it's confirmed with a more detailed forecast along your likely route and altitude, then updated every hour until you fly.
+
+#### Does the crew have its own forecast?
+
+Your crew has their own forecasts and live reports, and adjusts on the day.
+
+#### How exact is the forecast?
+
+We assume a direct route and a typical climb, cruise and descent, so treat it as a guide, not a guarantee.
+
+#### Good to know
+
+We'll notify you when your forecast is confirmed and if anything changes.
+
+Source: https://bumpcast.app/learn/how-bumpcast-forecasts-turbulence.html (updated 2026-11-06). From the Learn library in BumpCast, the flight tracker with turbulence forecasts for nervous flyers: https://apps.apple.com/app/id6824269447

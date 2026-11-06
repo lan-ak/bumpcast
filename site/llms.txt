@@ -65,9 +65,30 @@ BumpCast is an alternative to the top 10 flight tracking apps in the world: Flig
 - Users can ask support to delete everything linked to their device; it's done within 30 days.
 - BumpCast is for comfort and planning, not for flight operations. Always follow your crew's instructions.
 
+## Learn: turbulence explained
+
+The app's Learn library, published at https://bumpcast.app/learn/. Short, factual explainers: why flights get bumpy, what the crew is doing, and what you'll feel. Each link is the Markdown copy of the page (drop the .md for the web page). All of them in full: https://bumpcast.app/llms-full.txt
+
+### Why it gets bumpy
+
+- [Clear-air turbulence](https://bumpcast.app/learn/clear-air-turbulence.html.md): Clear-air turbulence is bumpy air at cruising height, often in clear skies, where the fast jet stream flows next to slower air. It's usually light chop.
+- [Mountain waves](https://bumpcast.app/learn/mountain-wave-turbulence.html.md): Mountain waves form when strong wind blows across mountains and makes waves in the air, like water over rocks in a stream. They can reach cruising height.
+- [Around clouds](https://bumpcast.app/learn/turbulence-near-clouds.html.md): Warm air rising inside and around big clouds stirs the air nearby. Bumps in puffy clouds are usually brief, and pilots fly around storms, often by many miles.
+- [Near the ground](https://bumpcast.app/learn/turbulence-on-takeoff-and-landing.html.md): Close to the ground, wind flows over buildings, hills and warm land, so the lowest few thousand feet are often a bit bumpy. It usually lasts only a few minutes.
+- [Gusty at the airport](https://bumpcast.app/learn/gusty-takeoffs-and-landings.html.md): On a windy day, the wind near the ground speeds up and slows down over buildings and land. You feel it for a few minutes as you climb out and on the way down.
+
+### Good to know
+
+- [Planes are built for it](https://bumpcast.app/learn/planes-are-built-for-turbulence.html.md): Airliners are designed and tested to handle forces well beyond anything turbulence produces in normal flight. Turbulence is a comfort issue, not a structural one.
+- [Why the seatbelt matters](https://bumpcast.app/learn/why-the-seatbelt-matters.html.md): Almost all turbulence injuries happen to people who aren't buckled in. Keep your seatbelt loosely fastened whenever you're seated, even with the sign off.
+- [Light, moderate, strong](https://bumpcast.app/learn/turbulence-levels.html.md): Light chop is small rhythmic bumps, moderate is noticeable jolts, and strong is hard jolts that push you against your belt. Most flights see light chop at most.
+- [How BumpCast forecasts](https://bumpcast.app/learn/how-bumpcast-forecasts-turbulence.html.md): BumpCast gives an advance turbulence forecast up to two days before your flight, then confirms it about 18 hours before departure and updates it every hour until you fly.
+
 ## Pages
 
 - [Home](https://bumpcast.app/): overview of the app, features and plans
+- [Learn](https://bumpcast.app/learn/): turbulence explained, the app's explainers on why flights get bumpy and what it feels like
+- [Full text for LLMs](https://bumpcast.app/llms-full.txt): this file followed by every Learn explainer in full
 - [Support](https://bumpcast.app/support.html): FAQ on coverage, forecast timing, airplane mode, accuracy, purchases and data deletion
 - [Privacy Policy](https://bumpcast.app/privacy.html): what data is collected, kept and shared, and how to delete it
 - [Email access](https://bumpcast.app/email.html): how the optional email import works and how to disconnect it

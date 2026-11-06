@@ -1,0 +1,6 @@
+# bumpcast.app is public. Search engines and AI crawlers are welcome to read and cite every page.
+# For AI agents: https://bumpcast.app/llms.txt (summary) and https://bumpcast.app/llms-full.txt (full text).
+User-agent: *
+Allow: /
+
+Sitemap: https://bumpcast.app/sitemap.xml
