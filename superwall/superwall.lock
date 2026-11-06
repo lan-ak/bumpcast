@@ -14,13 +14,13 @@
     "forecast-moment": {
       "ios": {
         "paywallId": "281983",
-        "snapshot": "64a8a91c1a5604f6cba8990281a033891f17bd8b30aac131882423f61e4b825a"
+        "snapshot": "7dbaf82315a1ded0f553100f04b3e6acff0cebcc4a792168b52d34f3887970ad"
       }
     },
     "pro-features": {
       "ios": {
         "paywallId": "281984",
-        "snapshot": "e05ad070305ebd3d20cd4944cf03baa74956d898f7f69767bd4d8fedd10c1fa7"
+        "snapshot": "8457cb59b74316c3fdd5aae038119463ec701e71916e7b37d45892bd473e7e2b"
       }
     },
     "onboarding-soft": {
@@ -32,7 +32,7 @@
     "onboarding-near": {
       "ios": {
         "paywallId": "289001",
-        "snapshot": "b617936ffbaee071839f10318dc5ed409c479bb42adf9e3ea7db49e1dbe5e522"
+        "snapshot": "004d264374bb564a804df7be38262873b52f6cdd37dd2c327de9bd9e6dfc0677"
       }
     }
   },
