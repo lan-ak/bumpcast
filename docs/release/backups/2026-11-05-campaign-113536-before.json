@@ -1,0 +1,239 @@
+{
+  "id": "113536",
+  "object": "campaign",
+  "application_id": "58179",
+  "description": "Pro features",
+  "notes": null,
+  "is_legacy": false,
+  "is_prioritized": false,
+  "delivery_mode": null,
+  "placements": [
+    {
+      "id": "147371",
+      "object": "placement",
+      "event_name": "updates_locked",
+      "enabled": true,
+      "delivery_mode": null
+    },
+    {
+      "id": "147372",
+      "object": "placement",
+      "event_name": "live_activity_locked",
+      "enabled": true,
+      "delivery_mode": null
+    },
+    {
+      "id": "147373",
+      "object": "placement",
+      "event_name": "pilot_reports_locked",
+      "enabled": true,
+      "delivery_mode": null
+    },
+    {
+      "id": "147374",
+      "object": "placement",
+      "event_name": "flight_limit_reached",
+      "enabled": true,
+      "delivery_mode": null
+    },
+    {
+      "id": "147375",
+      "object": "placement",
+      "event_name": "upgrade_from_settings",
+      "enabled": true,
+      "delivery_mode": null
+    },
+    {
+      "id": "147492",
+      "object": "placement",
+      "event_name": "live_status_locked",
+      "enabled": true,
+      "delivery_mode": null
+    },
+    {
+      "id": "150292",
+      "object": "placement",
+      "event_name": "email_import_locked",
+      "enabled": true,
+      "delivery_mode": null
+    }
+  ],
+  "audiences": [
+    {
+      "id": "193400",
+      "object": "audience",
+      "enabled": false,
+      "expression": "params.flight_id != null",
+      "rule_conditions": {
+        "operator": "and",
+        "conditions": [
+          {
+            "lhs": {
+              "type": "property",
+              "value": "params.flight_id"
+            },
+            "rhs": {
+              "type": "string",
+              "value": ""
+            },
+            "type": "condition",
+            "operator": "nnull"
+          }
+        ]
+      },
+      "expression_cel": "(size(device.activeEntitlements) == 0) && (params.flight_id != null)",
+      "expression_sql": "JSONExtractString(properties,'flight_id') IS NOT NULL",
+      "rank": "0|hzzzzz:",
+      "description": "Has a flight: subscription vs flight pass",
+      "variant_optimization": "none",
+      "variants": [
+        {
+          "id": "669939",
+          "object": "variant",
+          "type": "holdout",
+          "paywall": null,
+          "percentage": 0,
+          "created_at": "2026-10-18 15:10:48.685Z"
+        },
+        {
+          "id": "676808",
+          "object": "variant",
+          "type": "treatment",
+          "paywall": "281985",
+          "percentage": 50,
+          "created_at": "2026-10-24 13:20:12.330Z"
+        },
+        {
+          "id": "676809",
+          "object": "variant",
+          "type": "treatment",
+          "paywall": "281984",
+          "percentage": 50,
+          "created_at": "2026-10-24 13:20:17.142Z"
+        }
+      ],
+      "frequency_limit": null
+    },
+    {
+      "id": "199275",
+      "object": "audience",
+      "enabled": true,
+      "expression": "params.flight_id != null",
+      "rule_conditions": {
+        "operator": "and",
+        "conditions": [
+          {
+            "lhs": {
+              "type": "property",
+              "value": "params.flight_id"
+            },
+            "rhs": {
+              "type": "string",
+              "value": ""
+            },
+            "type": "condition",
+            "operator": "nnull"
+          }
+        ]
+      },
+      "expression_cel": "(size(device.activeEntitlements) == 0) && (params.flight_id != null)",
+      "expression_sql": "JSONExtractString(properties,'flight_id') IS NOT NULL",
+      "rank": "0|i00003:",
+      "description": "[03/11] Claude v1 Review - Has a flight: subscription vs flight pass",
+      "variant_optimization": "none",
+      "variants": [
+        {
+          "id": "689250",
+          "object": "variant",
+          "type": "holdout",
+          "paywall": null,
+          "percentage": 0,
+          "created_at": "2026-11-03 21:34:41.199Z"
+        },
+        {
+          "id": "689251",
+          "object": "variant",
+          "type": "treatment",
+          "paywall": "281985",
+          "percentage": 50,
+          "created_at": "2026-11-03 21:34:41.199Z"
+        },
+        {
+          "id": "689252",
+          "object": "variant",
+          "type": "treatment",
+          "paywall": "281984",
+          "percentage": 50,
+          "created_at": "2026-11-03 21:34:41.199Z"
+        }
+      ],
+      "frequency_limit": null
+    },
+    {
+      "id": "195604",
+      "object": "audience",
+      "enabled": false,
+      "expression": null,
+      "rule_conditions": null,
+      "expression_cel": null,
+      "expression_sql": null,
+      "rank": "0|i00007:",
+      "description": "No flight: subscription only",
+      "variant_optimization": "none",
+      "variants": [
+        {
+          "id": "676811",
+          "object": "variant",
+          "type": "holdout",
+          "paywall": null,
+          "percentage": 0,
+          "created_at": "2026-10-24 13:24:33.336Z"
+        },
+        {
+          "id": "676812",
+          "object": "variant",
+          "type": "treatment",
+          "paywall": "281984",
+          "percentage": 100,
+          "created_at": "2026-10-24 13:24:40.129Z"
+        }
+      ],
+      "frequency_limit": null
+    },
+    {
+      "id": "199276",
+      "object": "audience",
+      "enabled": true,
+      "expression": null,
+      "rule_conditions": null,
+      "expression_cel": null,
+      "expression_sql": null,
+      "rank": "0|i0000f:",
+      "description": "[03/11] Claude v1 Review - No flight: subscription only",
+      "variant_optimization": "none",
+      "variants": [
+        {
+          "id": "689253",
+          "object": "variant",
+          "type": "holdout",
+          "paywall": null,
+          "percentage": 0,
+          "created_at": "2026-11-03 21:34:42.064Z"
+        },
+        {
+          "id": "689254",
+          "object": "variant",
+          "type": "treatment",
+          "paywall": "281984",
+          "percentage": 100,
+          "created_at": "2026-11-03 21:34:42.064Z"
+        }
+      ],
+      "frequency_limit": null
+    }
+  ],
+  "created_at": "2026-10-18 15:10:48.685Z",
+  "updated_at": "2026-10-18 15:10:48.685Z",
+  "archived": false,
+  "can_reset_assignments": true
+}

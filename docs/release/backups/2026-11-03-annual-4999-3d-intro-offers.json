@@ -1,0 +1,5790 @@
+{
+  "data": [
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJBRSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "ARE"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJBRSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJBRiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "AFG"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJBRiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJBRyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "ATG"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJBRyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJBSSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "AIA"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJBSSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJBTCIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "ALB"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJBTCIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJBTSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "ARM"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJBTSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJBTyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "AGO"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJBTyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJBUiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "ARG"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJBUiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJBVCIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "AUT"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJBVCIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJBVSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "AUS"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJBVSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJBWiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "AZE"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJBWiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJCQSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "BIH"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJCQSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJCQiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "BRB"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJCQiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJCRSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "BEL"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJCRSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJCRiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "BFA"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJCRiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJCRyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "BGR"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJCRyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJCSCIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "BHR"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJCSCIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJCSiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "BEN"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJCSiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJCTSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "BMU"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJCTSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJCTiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "BRN"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJCTiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJCTyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "BOL"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJCTyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJCUiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "BRA"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJCUiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJCUyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "BHS"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJCUyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJCVCIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "BTN"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJCVCIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJCVyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "BWA"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJCVyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJCWSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "BLR"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJCWSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJCWiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "BLZ"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJCWiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJDQSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "CAN"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJDQSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJDRCIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "COD"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJDRCIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJDRyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "COG"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJDRyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJDSCIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "CHE"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJDSCIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJDSSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "CIV"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJDSSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJDTCIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "CHL"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJDTCIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJDTSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "CMR"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJDTSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJDTiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "CHN"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJDTiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJDTyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "COL"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJDTyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJDUiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "CRI"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJDUiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJDViIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "CPV"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJDViIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJDWSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "CYP"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJDWSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJDWiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "CZE"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJDWiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJERSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "DEU"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJERSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJESyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "DNK"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJESyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJETSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "DMA"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJETSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJETyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "DOM"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJETyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJEWiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "DZA"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJEWiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJFQyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "ECU"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJFQyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJFRSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "EST"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJFRSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJFRyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "EGY"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJFRyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJFUyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "ESP"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJFUyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJGSSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "FIN"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJGSSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJGSiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "FJI"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJGSiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJGTSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "FSM"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJGTSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJGUiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "FRA"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJGUiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJHQSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "GAB"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJHQSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJHQiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "GBR"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJHQiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJHRCIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "GRD"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJHRCIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJHRSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "GEO"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJHRSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJHSCIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "GHA"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJHSCIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJHTSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "GMB"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJHTSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJHUiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "GRC"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJHUiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJHVCIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "GTM"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJHVCIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJHVyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "GNB"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJHVyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJHWSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "GUY"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJHWSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJISyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "HKG"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJISyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJITiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "HND"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJITiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJIUiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "HRV"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJIUiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJIVSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "HUN"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJIVSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJJRCIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "IDN"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJJRCIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJJRSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "IRL"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJJRSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJJTCIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "ISR"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJJTCIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJJTiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "IND"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJJTiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJJUSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "IRQ"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJJUSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJJUyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "ISL"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJJUyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJJVCIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "ITA"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJJVCIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJKTSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "JAM"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJKTSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJKTyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "JOR"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJKTyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJKUCIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "JPN"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJKUCIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJLRSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "KEN"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJLRSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJLRyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "KGZ"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJLRyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJLSCIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "KHM"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJLSCIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJLTiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "KNA"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJLTiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJLUiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "KOR"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJLUiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJLVyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "KWT"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJLVyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJLWSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "CYM"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJLWSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJLWiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "KAZ"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJLWiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJMQSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "LAO"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJMQSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJMQiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "LBN"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJMQiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJMQyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "LCA"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJMQyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJMSyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "LKA"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJMSyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJMUiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "LBR"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJMUiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJMVCIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "LTU"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJMVCIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJMVSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "LUX"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJMVSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJMViIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "LVA"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJMViIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJMWSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "LBY"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJMWSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJNQSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "MAR"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJNQSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJNRCIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "MDA"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJNRCIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJNRSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "MNE"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJNRSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJNRyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "MDG"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJNRyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJNSyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "MKD"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJNSyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJNTCIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "MLI"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJNTCIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJNTSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "MMR"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJNTSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJNTiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "MNG"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJNTiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJNTyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "MAC"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJNTyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJNUiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "MRT"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJNUiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJNUyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "MSR"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJNUyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJNVCIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "MLT"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJNVCIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJNVSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "MUS"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJNVSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJNViIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "MDV"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJNViIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJNVyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "MWI"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJNVyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJNWCIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "MEX"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJNWCIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJNWSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "MYS"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJNWSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJNWiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "MOZ"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJNWiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJOQSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "NAM"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJOQSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJORSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "NER"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJORSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJORyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "NGA"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJORyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJOSSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "NIC"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJOSSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJOTCIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "NLD"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJOTCIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJOTyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "NOR"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJOTyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJOUCIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "NPL"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJOUCIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJOUiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "NRU"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJOUiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJOWiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "NZL"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJOWiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJPTSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "OMN"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJPTSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJQQSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "PAN"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJQQSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJQRSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "PER"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJQRSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJQRyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "PNG"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJQRyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJQSCIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "PHL"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJQSCIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJQSyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "PAK"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJQSyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJQTCIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "POL"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJQTCIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJQVCIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "PRT"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJQVCIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJQVyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "PLW"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJQVyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJQWSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "PRY"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJQWSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJRQSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "QAT"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJRQSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJSTyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "ROU"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJSTyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJSUyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "SRB"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJSUyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJSVSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "RUS"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJSVSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJSVyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "RWA"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJSVyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJTQSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "SAU"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJTQSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJTQiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "SLB"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJTQiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJTQyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "SYC"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJTQyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJTRSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "SWE"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJTRSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJTRyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "SGP"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJTRyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJTSSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "SVN"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJTSSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJTSyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "SVK"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJTSyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJTTCIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "SLE"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJTTCIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJTTiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "SEN"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJTTiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJTUiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "SUR"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJTUiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJTVCIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "STP"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJTVCIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJTViIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "SLV"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJTViIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJTWiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "SWZ"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJTWiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJUQyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "TCA"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJUQyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJURCIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "TCD"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJURCIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJUSCIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "THA"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJUSCIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJUSiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "TJK"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJUSiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJUTSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "TKM"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJUTSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJUTiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "TUN"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJUTiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJUTyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "TON"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJUTyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJUUiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "TUR"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJUUiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJUVCIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "TTO"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJUVCIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJUVyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "TWN"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJUVyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJUWiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "TZA"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJUWiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJVQSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "UKR"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJVQSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJVRyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "UGA"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJVRyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJVUyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "USA"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJVUyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJVWSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "URY"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJVWSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJVWiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "UZB"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJVWiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJWQyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "VCT"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJWQyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJWRSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "VEN"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJWRSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJWRyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "VGB"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJWRyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJWTiIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "VNM"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJWTiIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJWVSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "VUT"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJWVSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJYSyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "XKS"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJYSyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJZRSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "YEM"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJZRSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJaQSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "ZAF"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJaQSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJaTSIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "ZMB"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJaTSIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    },
+    {
+      "type": "subscriptionIntroductoryOffers",
+      "id": "eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJaVyIsInQiOiIiLCJwIjoiMCJ9",
+      "attributes": {
+        "startDate": "2026-10-25",
+        "endDate": null,
+        "duration": "THREE_DAYS",
+        "offerMode": "FREE_TRIAL",
+        "numberOfPeriods": 1,
+        "targetSubscriptionPlanType": "UPFRONT"
+      },
+      "relationships": {
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "ZWE"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionIntroductoryOffers/eyJzIjoiNjgyNjg0NjY0NiIsImQiOjE3OTI5MTE2MDAsImkiOiJaVyIsInQiOiIiLCJwIjoiMCJ9"
+      }
+    }
+  ],
+  "included": [
+    {
+      "type": "territories",
+      "id": "ARE",
+      "attributes": {
+        "currency": "AED"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/ARE"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "AFG",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/AFG"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "ATG",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/ATG"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "AIA",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/AIA"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "ALB",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/ALB"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "ARM",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/ARM"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "AGO",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/AGO"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "ARG",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/ARG"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "AUT",
+      "attributes": {
+        "currency": "EUR"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/AUT"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "AUS",
+      "attributes": {
+        "currency": "AUD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/AUS"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "AZE",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/AZE"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "BIH",
+      "attributes": {
+        "currency": "EUR"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/BIH"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "BRB",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/BRB"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "BEL",
+      "attributes": {
+        "currency": "EUR"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/BEL"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "BFA",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/BFA"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "BGR",
+      "attributes": {
+        "currency": "EUR"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/BGR"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "BHR",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/BHR"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "BEN",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/BEN"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "BMU",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/BMU"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "BRN",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/BRN"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "BOL",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/BOL"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "BRA",
+      "attributes": {
+        "currency": "BRL"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/BRA"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "BHS",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/BHS"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "BTN",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/BTN"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "BWA",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/BWA"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "BLR",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/BLR"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "BLZ",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/BLZ"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "CAN",
+      "attributes": {
+        "currency": "CAD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/CAN"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "COD",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/COD"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "COG",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/COG"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "CHE",
+      "attributes": {
+        "currency": "CHF"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/CHE"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "CIV",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/CIV"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "CHL",
+      "attributes": {
+        "currency": "CLP"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/CHL"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "CMR",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/CMR"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "CHN",
+      "attributes": {
+        "currency": "CNY"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/CHN"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "COL",
+      "attributes": {
+        "currency": "COP"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/COL"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "CRI",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/CRI"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "CPV",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/CPV"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "CYP",
+      "attributes": {
+        "currency": "EUR"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/CYP"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "CZE",
+      "attributes": {
+        "currency": "CZK"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/CZE"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "DEU",
+      "attributes": {
+        "currency": "EUR"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/DEU"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "DNK",
+      "attributes": {
+        "currency": "DKK"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/DNK"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "DMA",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/DMA"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "DOM",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/DOM"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "DZA",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/DZA"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "ECU",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/ECU"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "EST",
+      "attributes": {
+        "currency": "EUR"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/EST"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "EGY",
+      "attributes": {
+        "currency": "EGP"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/EGY"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "ESP",
+      "attributes": {
+        "currency": "EUR"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/ESP"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "FIN",
+      "attributes": {
+        "currency": "EUR"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/FIN"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "FJI",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/FJI"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "FSM",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/FSM"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "FRA",
+      "attributes": {
+        "currency": "EUR"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/FRA"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "GAB",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/GAB"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "GBR",
+      "attributes": {
+        "currency": "GBP"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/GBR"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "GRD",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/GRD"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "GEO",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/GEO"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "GHA",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/GHA"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "GMB",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/GMB"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "GRC",
+      "attributes": {
+        "currency": "EUR"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/GRC"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "GTM",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/GTM"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "GNB",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/GNB"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "GUY",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/GUY"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "HKG",
+      "attributes": {
+        "currency": "HKD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/HKG"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "HND",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/HND"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "HRV",
+      "attributes": {
+        "currency": "EUR"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/HRV"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "HUN",
+      "attributes": {
+        "currency": "HUF"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/HUN"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "IDN",
+      "attributes": {
+        "currency": "IDR"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/IDN"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "IRL",
+      "attributes": {
+        "currency": "EUR"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/IRL"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "ISR",
+      "attributes": {
+        "currency": "ILS"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/ISR"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "IND",
+      "attributes": {
+        "currency": "INR"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/IND"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "IRQ",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/IRQ"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "ISL",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/ISL"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "ITA",
+      "attributes": {
+        "currency": "EUR"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/ITA"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "JAM",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/JAM"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "JOR",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/JOR"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "JPN",
+      "attributes": {
+        "currency": "JPY"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/JPN"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "KEN",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/KEN"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "KGZ",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/KGZ"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "KHM",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/KHM"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "KNA",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/KNA"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "KOR",
+      "attributes": {
+        "currency": "KRW"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/KOR"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "KWT",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/KWT"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "CYM",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/CYM"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "KAZ",
+      "attributes": {
+        "currency": "KZT"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/KAZ"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "LAO",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/LAO"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "LBN",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/LBN"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "LCA",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/LCA"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "LKA",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/LKA"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "LBR",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/LBR"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "LTU",
+      "attributes": {
+        "currency": "EUR"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/LTU"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "LUX",
+      "attributes": {
+        "currency": "EUR"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/LUX"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "LVA",
+      "attributes": {
+        "currency": "EUR"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/LVA"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "LBY",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/LBY"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "MAR",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/MAR"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "MDA",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/MDA"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "MNE",
+      "attributes": {
+        "currency": "EUR"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/MNE"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "MDG",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/MDG"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "MKD",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/MKD"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "MLI",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/MLI"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "MMR",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/MMR"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "MNG",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/MNG"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "MAC",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/MAC"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "MRT",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/MRT"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "MSR",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/MSR"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "MLT",
+      "attributes": {
+        "currency": "EUR"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/MLT"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "MUS",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/MUS"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "MDV",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/MDV"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "MWI",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/MWI"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "MEX",
+      "attributes": {
+        "currency": "MXN"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/MEX"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "MYS",
+      "attributes": {
+        "currency": "MYR"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/MYS"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "MOZ",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/MOZ"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "NAM",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/NAM"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "NER",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/NER"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "NGA",
+      "attributes": {
+        "currency": "NGN"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/NGA"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "NIC",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/NIC"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "NLD",
+      "attributes": {
+        "currency": "EUR"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/NLD"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "NOR",
+      "attributes": {
+        "currency": "NOK"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/NOR"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "NPL",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/NPL"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "NRU",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/NRU"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "NZL",
+      "attributes": {
+        "currency": "NZD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/NZL"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "OMN",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/OMN"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "PAN",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/PAN"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "PER",
+      "attributes": {
+        "currency": "PEN"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/PER"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "PNG",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/PNG"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "PHL",
+      "attributes": {
+        "currency": "PHP"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/PHL"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "PAK",
+      "attributes": {
+        "currency": "PKR"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/PAK"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "POL",
+      "attributes": {
+        "currency": "PLN"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/POL"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "PRT",
+      "attributes": {
+        "currency": "EUR"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/PRT"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "PLW",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/PLW"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "PRY",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/PRY"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "QAT",
+      "attributes": {
+        "currency": "QAR"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/QAT"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "ROU",
+      "attributes": {
+        "currency": "RON"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/ROU"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "SRB",
+      "attributes": {
+        "currency": "EUR"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/SRB"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "RUS",
+      "attributes": {
+        "currency": "RUB"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/RUS"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "RWA",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/RWA"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "SAU",
+      "attributes": {
+        "currency": "SAR"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/SAU"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "SLB",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/SLB"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "SYC",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/SYC"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "SWE",
+      "attributes": {
+        "currency": "SEK"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/SWE"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "SGP",
+      "attributes": {
+        "currency": "SGD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/SGP"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "SVN",
+      "attributes": {
+        "currency": "EUR"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/SVN"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "SVK",
+      "attributes": {
+        "currency": "EUR"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/SVK"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "SLE",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/SLE"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "SEN",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/SEN"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "SUR",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/SUR"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "STP",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/STP"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "SLV",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/SLV"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "SWZ",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/SWZ"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "TCA",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/TCA"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "TCD",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/TCD"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "THA",
+      "attributes": {
+        "currency": "THB"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/THA"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "TJK",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/TJK"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "TKM",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/TKM"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "TUN",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/TUN"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "TON",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/TON"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "TUR",
+      "attributes": {
+        "currency": "TRY"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/TUR"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "TTO",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/TTO"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "TWN",
+      "attributes": {
+        "currency": "TWD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/TWN"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "TZA",
+      "attributes": {
+        "currency": "TZS"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/TZA"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "UKR",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/UKR"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "UGA",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/UGA"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "USA",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/USA"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "URY",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/URY"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "UZB",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/UZB"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "VCT",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/VCT"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "VEN",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/VEN"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "VGB",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/VGB"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "VNM",
+      "attributes": {
+        "currency": "VND"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/VNM"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "VUT",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/VUT"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "XKS",
+      "attributes": {
+        "currency": "EUR"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/XKS"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "YEM",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/YEM"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "ZAF",
+      "attributes": {
+        "currency": "ZAR"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/ZAF"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "ZMB",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/ZMB"
+      }
+    },
+    {
+      "type": "territories",
+      "id": "ZWE",
+      "attributes": {
+        "currency": "USD"
+      },
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/territories/ZWE"
+      }
+    }
+  ],
+  "links": {
+    "self": "https://api.appstoreconnect.apple.com/v1/subscriptions/6826846646/introductoryOffers?include=territory&limit=200"
+  },
+  "meta": {
+    "paging": {
+      "total": 175,
+      "limit": 200
+    }
+  }
+}
