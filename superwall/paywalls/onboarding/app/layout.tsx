@@ -6,10 +6,10 @@ import { variantName } from "../components/variant";
 import "./theme.css";
 
 /**
- * The question flow, in order, for the progress bar. The welcome, plans, and the flying-soon pages
- * after notifications (find, checking, flight) have no chrome: there's no going back from them.
+ * The question flow, in order, for the progress bar. The welcome, plans, and the pages after the
+ * questions (find, notifications, checking, flight) have no chrome: there's no going back from them.
  */
-const STEPS = ["feeling", "reassure", "how", "help", "frequency", "when", "source", "notifications"] as const;
+const STEPS = ["feeling", "reassure", "how", "help", "frequency", "when", "source"] as const;
 
 /**
  * How the "Calm line" sunrise behind the pages behaves on each page: the full logo scene on the

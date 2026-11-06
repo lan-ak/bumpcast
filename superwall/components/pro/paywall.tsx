@@ -2,17 +2,29 @@ import { useState, type ReactNode } from "react";
 import {
   useActions,
   useHaptics,
-  useIntroductoryOffer,
   useProducts,
   usePurchase,
   useTranslation,
+  useVariables,
 } from "superwall/hooks";
 import { useHostSafeArea } from "../safe-area";
 import { usePlacementContext, type ProPlacement } from "./context";
+import { savePercent } from "./savings";
 import "./theme.css";
 
 const TERMS_URL = "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/";
 const PRIVACY_URL = "https://docs.google.com/document/d/1wgxMmBIa1OiTJesX83nBVIJl1c2EAz-TxvpMndDK7T0/preview";
+
+/**
+ * The $9.99 pass (`pass`) needs 1.0.4 or later: older builds only unlock a flight for the $3.99 one
+ * (`pass399`), so a $9.99 purchase there would charge and unlock nothing. Unknown versions get $3.99.
+ */
+function passProduct(appVersion: unknown): "pass" | "pass399" {
+  const [major, minor, patch] = String(appVersion ?? "").split(".").map(Number);
+  if (![major, minor].every(Number.isFinite)) return "pass399";
+  const v = [major, minor, Number.isFinite(patch) ? patch : 0];
+  return v[0] * 1e6 + v[1] * 1e3 + v[2] >= 1_000_004 ? "pass" : "pass399";
+}
 
 /**
  * Which offer is the button. The other is a quiet link under it. This is the A/B test between
@@ -83,7 +95,7 @@ export function ProPaywall({
   /** The feature to list first, when it isn't the placement's own. */
   highlight?: ProPlacement;
   /**
-   * With the pass leading, swap the trial link for "More options", which opens the pass, Yearly
+   * With the pass leading, swap the Pro link for "More options", which opens the pass, Yearly
    * and Monthly as one choice (the forecast moment: they need this flight, Pro is there if wanted).
    */
   moreOptions?: boolean;
@@ -97,8 +109,8 @@ export function ProPaywall({
   const { close, restore, openUrl } = useActions();
   const { getProduct } = useProducts();
   const { purchase } = usePurchase();
-  const { eligible } = useIntroductoryOffer();
   const { placement, flight } = usePlacementContext();
+  const pass = passProduct(useVariables().device.appVersion);
   // A modal sheet starts below the top inset and the framework knows the bottom; only the sides
   // can be missed (the closed iPhone Duo's camera column).
   useHostSafeArea(["left", "right"]);
@@ -113,21 +125,16 @@ export function ProPaywall({
 
   const annual = getProduct("annual")?.variables;
   const monthly = getProduct("monthly")?.variables;
-  const passPrice = getProduct("pass")?.variables.price;
-  const days = Number(annual?.trialPeriodDays);
-  const trialDays = eligible === true && Number.isFinite(days) && days > 0 ? days : 0;
+  const passPrice = getProduct(pass)?.variables.price;
+  // Yearly has no trial ($49.99): its badge is what it saves over a year of Monthly.
+  const save = savePercent(annual, monthly);
 
   const first = highlight ?? placement;
   const features = [...FEATURES]
     .sort((a, b) => Number(b.placement === first) - Number(a.placement === first))
     .slice(0, 2);
 
-  const annualLegal =
-    trialDays && annual?.price
-      ? t("pro.legalTrial", { days: trialDays, price: annual.price })
-      : annual?.price
-        ? t("pro.legalAnnual", { price: annual.price })
-        : t("pro.legalBare");
+  const annualLegal = annual?.price ? t("pro.legalAnnual", { price: annual.price }) : t("pro.legalBare");
   const subscriptionLegal =
     plan === "annual" || passLeads
       ? annualLegal
@@ -156,7 +163,7 @@ export function ProPaywall({
 
   const buy = (product: "annual" | "monthly" | "pass") => {
     haptics.light();
-    void purchase(product);
+    void purchase(product === "pass" ? pass : product);
   };
   const choose = (p: "annual" | "monthly") => {
     haptics.selection();
@@ -220,7 +227,7 @@ export function ProPaywall({
                 <span className="plan-note">{t("pro.noSubscription")}</span>
               </button>
               <button type="button" role="radio" aria-checked={choice === "annual"} className={`plan${choice === "annual" ? " plan--on" : ""}`} onClick={() => pick("annual")}>
-                {trialDays > 0 && <span className="plan-badge">{t("pro.trialBadge", { days: trialDays })}</span>}
+                {save > 0 && <span className="plan-badge">{t("pro.save", { percent: save })}</span>}
                 <span className="plan-name">{t("pro.yearly")}</span>
                 {annual?.price && <span className="plan-price">{annual.price}</span>}
                 <span className="secondary footnote">{t("pro.perYear")}</span>
@@ -236,9 +243,7 @@ export function ProPaywall({
             <button type="button" className="cta" onClick={() => buy(choice)}>
               {choice === "pass"
                 ? passCta
-                : choice === "annual" && trialDays
-                  ? t("pro.ctaTrial", { days: trialDays })
-                  : t("pro.ctaSubscribe")}
+                : t("pro.ctaSubscribe")}
             </button>
           </>
         ) : passLeads ? (
@@ -252,7 +257,7 @@ export function ProPaywall({
               </button>
             ) : (
             <button type="button" className="alt" onClick={() => buy("annual")}>
-              {trialDays ? t("pro.altTrial", { days: trialDays }) : t("pro.altPro")}
+              {t("pro.altPro")}
             </button>
             )}
           </>
@@ -260,7 +265,7 @@ export function ProPaywall({
           <>
             <div className="plan-grid" role="radiogroup">
               <button type="button" role="radio" aria-checked={plan === "annual"} className={`plan${plan === "annual" ? " plan--on" : ""}`} onClick={() => choose("annual")}>
-                {trialDays > 0 && <span className="plan-badge">{t("pro.trialBadge", { days: trialDays })}</span>}
+                {save > 0 && <span className="plan-badge">{t("pro.save", { percent: save })}</span>}
                 <span className="plan-name">{t("pro.yearly")}</span>
                 {annual?.price && <span className="plan-price">{annual.price}</span>}
                 <span className="secondary footnote">{t("pro.perYear")}</span>
@@ -274,7 +279,7 @@ export function ProPaywall({
               </button>
             </div>
             <button type="button" className="cta" onClick={() => buy(plan)}>
-              {plan === "annual" && trialDays ? t("pro.ctaTrial", { days: trialDays }) : t("pro.ctaSubscribe")}
+              {t("pro.ctaSubscribe")}
             </button>
             {canPass && (
               <button type="button" className="alt" onClick={() => buy("pass")}>

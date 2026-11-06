@@ -1,0 +1,49 @@
+/* The timeline on both flight paywalls: what happens next for this flight, on one line. */
+.near-steps { position: relative; margin: 0 0 12px; padding: 12px 14px; list-style: none; border-radius: 18px; background: var(--card); border: 0.5px solid var(--card-border); }
+:root:not(.dark) .near-steps { border-color: rgba(69, 87, 108, 0.18); background: rgba(255, 255, 255, 0.7); }
+.near-step { position: relative; display: grid; grid-template-columns: 14px 1fr; column-gap: 12px; padding-bottom: 10px; }
+.near-step:last-child { padding-bottom: 0; }
+.near-step:not(:last-child)::before { content: ""; position: absolute; left: 6px; top: 16px; bottom: 0; width: 2px; background: var(--track); }
+.near-dot { grid-row: 1 / span 2; width: 14px; height: 14px; margin-top: 2px; border-radius: 50%; border: 2px solid var(--brand-line); background: var(--sheet); }
+.near-dot--on { background: var(--brand-line); }
+.near-when { display: flex; align-items: center; gap: 6px; font-weight: 700; font-size: 15px; }
+.near-pro { padding: 1px 7px; border-radius: 999px; background: var(--accent); color: var(--on-accent); font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; }
+.near-line { font-size: 14px; line-height: 1.35; color: var(--ink-2); }
+.near-grid { margin-top: 4px; }
+.near-step--pro-short { display: none; }
+/* Room for the close button above the ticket. */
+.near .fp-hero { padding-top: calc(62px + var(--top-gap)); }
+
+/* The trial's one plan: name and monthly equivalent on the left, the yearly price, biggest, on the right. */
+.near-plan { display: flex; align-items: center; justify-content: space-between; margin: 4px 0 12px; cursor: default; }
+.near-plan-name, .near-plan-price { display: flex; flex-direction: column; }
+.near-plan-price { align-items: flex-end; }
+.near-plan .plan-price { margin-top: 0; }
+
+/* iPhone SE and other short screens: the heading and the timeline tighten so the legal lines fit. */
+@media (max-height: 700px) {
+  .near .fp-hero { padding-top: calc(54px + var(--top-gap)); padding-bottom: 64px; }
+  .near .fp-title { font-size: 22px; }
+  .near .fp-sub { display: none; }
+  .near .tk { margin-bottom: 8px; padding: 8px 14px; }
+  .near .tk-pills { display: none; }
+  .near .tk-code { font-size: 30px; }
+  .near .plans-scene { height: 90px; }
+  .near .plans-sheet { padding-top: 14px; }
+  .near-steps { margin-bottom: 10px; padding: 9px 12px; }
+  .near-step { padding-bottom: 6px; }
+  .near-line { font-size: 13px; }
+  /* The trial keeps Today and the day it ends (no trial: Today and until they land). */
+  .near-step--land:not(:last-child) { display: none; }
+  /* The soft page drops "Today: we're tracking" (the title says it), folds its two Pro steps into one, and the
+     plans lose their second line. */
+  .near-step--board, .near-step--air, .near-step--pro, .near-step--tracking { display: none; }
+  .near-step--pro-short { display: grid; }
+  .near .plan-grid .plan-note { display: none; }
+  .near .plan-grid .plan { padding: 11px 12px; }
+  .near .plan-grid .plan--on { padding: 9.5px 10.5px; }
+  .near .plan-grid .plan-price { font-size: 22px; }
+  .near .plan-grid { margin-bottom: 10px; }
+  .near-plan { margin-bottom: 10px; padding: 10px 12.5px; }
+  .near .legal { margin-top: 4px; }
+}

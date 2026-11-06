@@ -8,31 +8,37 @@
     "onboarding": {
       "ios": {
         "paywallId": "281980",
-        "snapshot": "668c399910a8661d8dab988693aed99f2b0a650ebddd260e9407504efb4b6001"
+        "snapshot": "756a9c1308c036c0a7e29b86d4b56bc31d5e48bbb4dd4096a5ebc837301d8768"
       }
     },
     "forecast-moment": {
       "ios": {
         "paywallId": "281983",
-        "snapshot": "5f5d7e7ec68a3549197c837db9a5e5542df90a9826e627e158e04283bbf09d8a"
+        "snapshot": "64a8a91c1a5604f6cba8990281a033891f17bd8b30aac131882423f61e4b825a"
       }
     },
     "pro-features": {
       "ios": {
         "paywallId": "281984",
-        "snapshot": "99eddfa19cd5dc51baf1704e5a0e5fff5924975e20844dd4ea1b89493cb903b3"
+        "snapshot": "e05ad070305ebd3d20cd4944cf03baa74956d898f7f69767bd4d8fedd10c1fa7"
       }
     },
     "pro-features-pass-first": {
       "ios": {
         "paywallId": "281985",
-        "snapshot": "f4ab6f4aa139c4cad5298041db3ec1dd7839706e716c756e34897a9947554e65"
+        "snapshot": "8464ff3c7624fe6a09d88b7ccd81c52d764e402b925612c9661165742e3cf84d"
       }
     },
     "onboarding-soft": {
       "ios": {
         "paywallId": "284375",
-        "snapshot": "875d07ef50f05d7bd03b08c820dbf8e75527dd1e3fa0b7ff8a82b9878d471550"
+        "snapshot": "1eb21b68f40e063ba6706549792faa221dbcef9b6aadf4e7d11b796dc4d4f85c"
+      }
+    },
+    "onboarding-near": {
+      "ios": {
+        "paywallId": "289001",
+        "snapshot": "5e4c3d0d8090c48974ccd33dd4791e5c69d04338a1da81f1064c5272055f2804"
       }
     }
   },

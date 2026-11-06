@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useActions, useTranslation } from "superwall/hooks";
-import { answers, type Source } from "../components/answers";
+import { useActions, useDevice, useTranslation } from "superwall/hooks";
+import { answers, canAddFlight, type Source } from "../components/answers";
 import { useNext } from "../components/next";
 import { Option, Page } from "../components/ui";
 
@@ -12,7 +12,12 @@ const OPTIONS: [Source, "appStore" | "social" | "friend" | "other"][] = [
 ];
 
 export default function SourcePage() {
-  const next = useNext("notifications", 380);
+  // Everyone who can add their next flight from the flow does that next, whenever they fly: a saved
+  // flight is what brings them back when its forecast is ready. 1.0 can't: notifications, then plans.
+  const { appVersion } = useDevice();
+  const toFind = useNext("find", 380);
+  const toNotifications = useNext("notifications", 380);
+  const next = canAddFlight(appVersion) ? toFind : toNotifications;
   const { t } = useTranslation();
   const { setUserAttributes } = useActions();
   const [selected, setSelected] = useState(answers.source);

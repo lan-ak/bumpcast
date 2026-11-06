@@ -37,6 +37,7 @@ export default {
     monthlyEquivalent: "{price}/month",
     cancelAnytime: "Cancel anytime",
     trialBadge: "{days} days free",
+    save: "Save {percent}%",
     thisFlight: "This flight",
     oneTime: "one time",
     noSubscription: "No subscription",

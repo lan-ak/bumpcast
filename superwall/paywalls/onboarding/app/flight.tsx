@@ -1,8 +1,8 @@
 import { useState, type ReactNode } from "react";
-import { useActions, useHaptics, useIntroductoryOffer, useProducts, usePurchase, useTranslation } from "superwall/hooks";
+import { useActions, useHaptics, useProducts, usePurchase, useTranslation } from "superwall/hooks";
 import { flight, unlockText } from "../components/flight";
+import { savePercent } from "../components/savings";
 import { Ticket } from "../components/ticket";
-import { MoreTimeSheet, useMoreTime } from "../components/more-time";
 import { variant } from "../components/variant";
 
 const TERMS_URL = "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/";
@@ -27,11 +27,12 @@ const COVERAGE: { key: string; icon: ReactNode }[] = [
 ];
 
 /**
- * The hard paywall for people flying in the next 3 days: their flight, what we know so far (the
- * grade, when it's ready), and Pro: Yearly with the free trial, Monthly as the fallback. No close
- * button on `onboarding` (buying or restoring is the way on); `onboarding-soft` adds one, for the
- * hard-vs-soft test. Closing the App Store sheet on Yearly offers a 7-day trial instead (once);
- * the flight pass is never sold in onboarding.
+ * The paywall for the flight added in the flow: their flight, what we know so far (the grade, when
+ * it's ready), and Pro: Yearly at $49.99 with no trial, badged with what it saves over a year of
+ * Monthly, and Monthly. (A trial covered the very flight they came for, and nearly everyone
+ * cancelled it within minutes.) No close button on `onboarding` (buying or
+ * restoring is the way on); `onboarding-soft`, the one the campaign shows, adds one. The flight
+ * pass is never sold in onboarding.
  */
 export default function FlightPaywall() {
   const { t } = useTranslation();
@@ -39,17 +40,14 @@ export default function FlightPaywall() {
   const { close, restore, openUrl } = useActions();
   const { getProduct } = useProducts();
   const { purchase } = usePurchase();
-  const { eligible } = useIntroductoryOffer();
   const [choice, setChoice] = useState<"annual" | "monthly">("annual");
   const [restoreFailed, setRestoreFailed] = useState(false);
-  const moreTime = useMoreTime();
   const { added, forecast } = flight;
   const state = forecast?.state ?? "pending";
 
   const annual = getProduct("annual")?.variables;
   const monthly = getProduct("monthly")?.variables;
-  const days = Number(annual?.trialPeriodDays);
-  const trialDays = eligible === true && Number.isFinite(days) && days > 0 ? days : 0;
+  const save = savePercent(annual, monthly);
 
   const unlock = added && unlockText(added);
   const eyebrow = state === "ready" ? t("flight.eyebrowReady") : t("flight.eyebrow");
@@ -71,21 +69,17 @@ export default function FlightPaywall() {
 
   const legal =
     choice === "annual"
-      ? trialDays && annual?.price
-        ? t("pro.legalTrial", { days: trialDays, price: annual.price })
-        : annual?.price
+      ? annual?.price
           ? t("pro.legalAnnual", { price: annual.price })
           : t("pro.legalBare")
       : monthly?.price
         ? t("pro.legalMonthly", { price: monthly.price })
         : t("pro.legalBare");
-  const cta = choice === "annual" && trialDays ? t("pro.ctaTrial", { days: trialDays }) : t("pro.ctaSubscribe");
+  const cta = t("pro.ctaSubscribe");
 
   const buy = async () => {
     haptics.light();
-    const result = await purchase(choice);
-    // Closed the App Store sheet on the yearly plan: the 7-day trial instead.
-    if (result.status === "abandoned" && choice === "annual") moreTime.show();
+    await purchase(choice);
   };
   const pick = (p: "annual" | "monthly") => {
     haptics.selection();
@@ -153,7 +147,7 @@ export default function FlightPaywall() {
 
         <div className="plan-grid" role="radiogroup">
           <button type="button" role="radio" aria-checked={choice === "annual"} className={`plan${choice === "annual" ? " plan--on" : ""}`} onClick={() => pick("annual")}>
-            {trialDays > 0 && <span className="plan-badge">{t("pro.trialBadge", { days: trialDays })}</span>}
+            {save > 0 && <span className="plan-badge">{t("flight.save", { percent: save })}</span>}
             <span className="plan-name">{t("pro.yearly")}</span>
             {annual?.price && <span className="plan-price">{annual.price}</span>}
             <span className="secondary footnote">{t("pro.perYear")}</span>
@@ -174,7 +168,6 @@ export default function FlightPaywall() {
           <button type="button" className="link" onClick={() => openUrl(PRIVACY_URL)}>{t("plans.privacy")}</button>
         </div>
       </div>
-      <MoreTimeSheet open={moreTime.open} onDecline={moreTime.hide} />
     </main>
   );
 }

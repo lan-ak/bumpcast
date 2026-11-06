@@ -1,16 +1,18 @@
 import { useState } from "react";
-import { useActions, useDevice, useHaptics, useTranslation } from "superwall/hooks";
+import { useActions, useHaptics, useTranslation } from "superwall/hooks";
 import { AppIcon } from "../components/art";
-import { canAddFlight, fliesSoon } from "../components/answers";
+import { flight } from "../components/flight";
 import { useNext } from "../components/next";
 import { Page, PrimaryButton } from "../components/ui";
 
 export default function Notifications() {
-  // Flying soon, on an app that can add the flight from here: add it next. Everyone else: the plans.
-  const { appVersion } = useDevice();
+  // Asked after Add flight, so it's about their flight. With one added: its forecast next.
+  // Without: the plans.
   const toPlans = useNext("plans");
-  const toFind = useNext("find");
-  const next = () => (fliesSoon() && canAddFlight(appVersion) ? toFind : toPlans)();
+  const toChecking = useNext("checking", 0, { transition: "fade" });
+  const added = flight.added;
+  const next = added ? toChecking : toPlans;
+  const route = added && `${added.origin} → ${added.destination}`;
   const { t } = useTranslation();
   const haptics = useHaptics();
   const { requestPermission, setUserAttributes } = useActions();
@@ -48,12 +50,12 @@ export default function Notifications() {
               <b>{t("notifications.app")}</b>
               <span className="secondary footnote">{t("notifications.now")}</span>
             </div>
-            {t("notifications.pushTitle")}
+            {route ? t("notifications.pushTitleRoute", { route }) : t("notifications.pushTitle")}
             <div className="secondary">{t("notifications.pushBody")}</div>
           </div>
         </div>
         <div>
-          <h1>{t("notifications.title")}</h1>
+          <h1>{route ? t("notifications.titleRoute", { route }) : t("notifications.title")}</h1>
           <p className="secondary">{t("notifications.body")}</p>
         </div>
       </div>

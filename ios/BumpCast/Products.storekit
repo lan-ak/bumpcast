@@ -39,10 +39,10 @@
     "_applicationInternalID" : "58179",
     "_failTransactionsEnabled" : false,
     "_locale" : "en_US",
-    "_storefront" : "USA",
     "_storeKitErrors" : [
 
-    ]
+    ],
+    "_storefront" : "USA"
   },
   "subscriptionGroups" : [
     {
@@ -106,6 +106,66 @@
           "productID" : "bumpcast_pro_annual",
           "recurringSubscriptionPeriod" : "P1Y",
           "referenceName" : "BumpCast Pro Annual",
+          "subscriptionGroupID" : "21E0A3C4",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "39.99",
+          "familyShareable" : false,
+          "groupNumber" : 3,
+          "internalID" : "685964",
+          "introductoryOffer" : {
+            "internalID" : "3D3999AA",
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P3D"
+          },
+          "localizations" : [
+            {
+              "description" : "Full forecasts, updates and in-flight tools for every flight.",
+              "displayName" : "BumpCast Pro Annual",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "bumpcast_pro_annual_3999_3d",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "BumpCast Pro Annual 39.99 (3-day trial)",
+          "subscriptionGroupID" : "21E0A3C4",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "49.99",
+          "familyShareable" : false,
+          "groupNumber" : 4,
+          "internalID" : "685965",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Full forecasts, updates and in-flight tools for every flight.",
+              "displayName" : "BumpCast Pro Annual",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "bumpcast_pro_annual_4999_3d",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "BumpCast Pro Annual 49.99 (no trial)",
           "subscriptionGroupID" : "21E0A3C4",
           "type" : "RecurringSubscription",
           "winbackOffers" : [

@@ -2,14 +2,13 @@ import { useState, type ReactNode } from "react";
 import {
   useActions,
   useHaptics,
-  useIntroductoryOffer,
   useProducts,
   usePurchase,
   useTranslation,
   type ProductReference,
 } from "superwall/hooks";
 import { answers, type Help } from "../components/answers";
-import { MoreTimeSheet, useMoreTime } from "../components/more-time";
+import { savePercent } from "../components/savings";
 
 const TERMS_URL = "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/";
 const PRIVACY_URL = "https://docs.google.com/document/d/1wgxMmBIa1OiTJesX83nBVIJl1c2EAz-TxvpMndDK7T0/preview";
@@ -35,25 +34,21 @@ export default function Plans() {
   const { close, restore, openUrl } = useActions();
   const { getProduct } = useProducts();
   const { purchase } = usePurchase();
-  const { eligible } = useIntroductoryOffer();
   const [plan, setPlan] = useState<ProductReference>("annual");
   const [restoreFailed, setRestoreFailed] = useState(false);
-  const moreTime = useMoreTime();
 
   const annual = getProduct("annual");
   const monthly = getProduct("monthly");
   const annualPrice = annual?.variables.price;
   const monthlyPrice = monthly?.variables.price;
   const annualPerMonth = annual?.variables.monthlyPrice;
-  const days = Number(annual?.variables.trialPeriodDays);
-  const trialDays = eligible === true && Number.isFinite(days) && days > 0 ? days : 0;
+  // Yearly has no trial: its badge is what it saves over a year of Monthly.
+  const save = savePercent(annual?.variables, monthly?.variables);
 
-  const cta = plan === "annual" && trialDays ? t("plans.ctaTrial", { days: trialDays }) : t("plans.cta");
+  const cta = t("plans.cta");
   const legal =
     plan === "annual"
-      ? trialDays && annualPrice
-        ? t("plans.legalTrial", { days: trialDays, price: annualPrice })
-        : annualPrice
+      ? annualPrice
           ? t("plans.legalAnnual", { price: annualPrice })
           : t("plans.legalBare")
       : monthlyPrice
@@ -109,7 +104,7 @@ export default function Plans() {
 
         <div className="plan-grid" role="radiogroup">
           <button type="button" role="radio" aria-checked={plan === "annual"} className={`plan${plan === "annual" ? " plan--on" : ""}`} onClick={() => choose("annual")}>
-            {trialDays > 0 && <span className="plan-badge">{t("plans.trialBadge", { days: trialDays })}</span>}
+            {save > 0 && <span className="plan-badge">{t("flight.save", { percent: save })}</span>}
             <span className="plan-name">{t("plans.yearly")}</span>
             {annualPrice && <span className="plan-price">{annualPrice}</span>}
             <span className="secondary footnote">{t("plans.perYear")}</span>
@@ -128,9 +123,7 @@ export default function Plans() {
           className="cta"
           onClick={async () => {
             haptics.light();
-            const result = await purchase(plan);
-            // Closed the App Store sheet on the yearly plan: offer the 7-day trial instead.
-            if (result.status === "abandoned" && plan === "annual") moreTime.show();
+            await purchase(plan);
           }}
         >
           {cta}
@@ -141,7 +134,6 @@ export default function Plans() {
           <button type="button" className="link" onClick={() => openUrl(PRIVACY_URL)}>{t("plans.privacy")}</button>
         </div>
       </div>
-      <MoreTimeSheet open={moreTime.open} onDecline={moreTime.hide} />
     </main>
   );
 }

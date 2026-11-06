@@ -7,7 +7,7 @@ import { useIsFocused, useRouter, type RouteName } from "superwall/navigation";
  * the next page again and Back would return to a duplicate. Single-select answers pass a delay
  * so the selection shows before the page moves.
  */
-export function useNext(route: RouteName, delay = 0) {
+export function useNext(route: RouteName, delay = 0, options?: { transition?: "fade" }) {
   const router = useRouter();
   const focused = useIsFocused();
   const live = useRef({ router, focused });
@@ -25,7 +25,7 @@ export function useNext(route: RouteName, delay = 0) {
     if (pending.current || !live.current.focused) return;
     pending.current = true;
     const go = () => {
-      if (live.current.focused) live.current.router.push(route);
+      if (live.current.focused) live.current.router.push(route, options);
       else pending.current = false;
     };
     if (delay > 0) timer.current = setTimeout(go, delay);

@@ -15,7 +15,7 @@ Superwall is the only purchase provider. It runs all purchases, the onboarding f
 | `bumpcast_pro_monthly` | Auto-renewing | $6.99 / month | `pro` |
 | `bumpcast_pro_annual` | Auto-renewing | $39.99 / year, 7-day free trial | `pro` |
 | `bumpcast_pro_annual_3999_3d` | Auto-renewing | $39.99 / year, 3-day free trial | `pro` |
-| `bumpcast_pro_annual_4999_3d` | Auto-renewing | $49.99 / year, 3-day free trial | `pro` |
+| `bumpcast_pro_annual_4999_3d` | Auto-renewing | $49.99 / year, **no trial** (its 3-day trial was removed in all 175 territories on 2026-11-03; backup in `docs/release/backups/2026-11-03-annual-4999-3d-intro-offers.json`). The Yearly plan everywhere in onboarding (Plans and the flight paywall) since 2026-11-03 | `pro` |
 | `bumpcast_pro_annual_5999_3d` | Auto-renewing | $59.99 / year, 3-day free trial | `pro` |
 
 The three 3-day-trial plans were created on 2026-10-25 in the BumpCast Pro group. The app needs no change for another Pro plan: Superwall grants `pro`, and the app's expiry check reads any auto-renewing transaction.
@@ -128,7 +128,7 @@ Onboarding answers (fear level, how often they fly, and so on) are set as attrib
 
 ### Onboarding callbacks (flying in the next 3 days)
 
-People who answer `24h` or `3d` add their flight inside the flow and end on a hard paywall for it (no close button) that sells Pro: Yearly with the trial, Monthly as the fallback. Closing the App Store sheet on Yearly offers a 7-day trial instead (once per flow); the flight pass is never sold in onboarding. The flow asks the app through two custom callbacks, handled in `ios/BumpCast/Services/OnboardingFlight.swift`:
+Since 2026-11-03 everyone (app 1.0.1+) is asked to add their next flight right after the questions, whenever they fly; the notifications ask comes after it and names the route. With a flight added, the flow checks it and ends on the flight paywall; without one ("I'll add it later"), on Plans. On the flight paywall and Plans, everyone sees Yearly at $49.99 with no trial (`bumpcast_pro_annual_4999_3d`, badged "Save N%" against twelve months of Monthly) and Monthly at $6.99: 3-day trials covered the very flight people came for and were cancelled within minutes. The "Need more time?" 7-day trial offer was removed on 2026-11-03 (nobody converted on it); onboarding has no trial anywhere. The flight pass is never sold in onboarding. The flow asks the app through two custom callbacks, handled in `ios/BumpCast/Services/OnboardingFlight.swift`:
 
 | Callback | App does | Returns |
 |---|---|---|
@@ -147,6 +147,8 @@ Flights outside coverage, flights saved offline, and app versions without the ca
      1. **Has a flight** (193400, `params.flight_id != null`): A/B test at 50/50, `pro-features` (281984, subscription is the button, pass is a link) vs `pro-features-pass-first` (281985, pass is the button, Pro trial is a link).
      2. **No flight** (195604, everyone else): `pro-features` at 100%. A pass needs a flight, so the test only runs where one can be sold. Today `pilot_reports_locked`, `flight_limit_reached`, `upgrade_from_settings` and `email_import_locked` send no flight.
    - Edit them under `superwall/paywalls/`, then `SUPERWALL_CHANNEL=next superwall publish`.
+   - **Since 2026-11-03** both campaigns run on duplicated audiences named "[03/11] Claude v1 Review - …" (Forecast moments 199274; Pro features 199275 has a flight, 199276 no flight), with the originals (193399, 193400, 195604) paused for comparison, as in Onboarding (193398 live, 199265 paused). On all three Pro paywalls Yearly is `bumpcast_pro_annual_4999_3d` ($49.99, no trial) with a "Save N%" badge against Monthly; passes unchanged.
+   - **Since 2026-11-05** the pass-first test is over (Lanre's call): it never got traffic because only `live_activity_locked` and `updates_locked` send a flight. Has a flight is now 200212 "[05/11] Claude v1 Review - Has a flight: subscription leads only", `pro-features` at 100%; 199275 is paused at its 50/50. Users on those two placements still see the pass as a link under the subscription button. The pass never shows in the dashboard preview, which sends no `flight_id`.
 3. **Replace the 100% holdout audiences** that Superwall creates with real audiences, for example:
    - `user.notifications_enabled == true`;
    - `params.hours_to_departure < 48`.
@@ -162,7 +164,14 @@ Flights outside coverage, flights saved offline, and app versions without the ca
 
 ## Running experiments
 
-**Onboarding: hard vs soft flight paywall** (Onboarding campaign 113534, 50/50, started 2026-10-23). The two paywalls are the same flow:
+**Onboarding: near-flier trial** (Onboarding campaign 113534, live 2026-11-04 ~23:50 UTC). Audience 199841 "[04/11] Claude v1 Review - All Users: near-flier trial" shows `onboarding-near` (paywall 289001) to everyone. 193398 (soft 100%) is paused, as the baseline. It's the soft flow, page for page, except the flight paywall, which is picked from the flight's real departure, not the "When is your next flight?" answer (4 of 7 people flying within 24 h on Nov 4 answered "Further out"):
+- **Leaves within 24 h (or departed less than 12 h ago):** a hard page, with no close button and Restore only. One plan: Yearly `bumpcast_pro_annual_3999_3d`, $39.99 with a 3-day free trial, the biggest price on the page (guideline 3.1.2). It's laid out as a timeline: Today / Until you land / the day the trial ends and its price. The page saves the flight in the user attribute `onboarding_hard_flight`, so quitting the app doesn't get past it: the app marks onboarding done only on dismiss, so the flow runs again, and its index skips the questions and goes straight back to the trial, until 12 h after departure. Gaps that need an app update: an offline launch falls back to the native questions, and so does deleting the flight. It also sets `onboarding_near_offer = "trial"`. A relaunch whose forecast check fails still shows the trial (onboarding-near's Plans route). A failed purchase, or one "abandoned" in under 1.5 s (the phone blocking purchases), shows a "check Screen Time" note, but there is still no way past the page (Lanre's call, Nov 4: keep it hard).
+- **Any later flight:** a closable timeline page (sets `onboarding_near_offer = "timeline"`) (Now or Today / first forecast / Pro steps) with Yearly $49.99 (no trial) and Monthly.
+- **No flight, out of coverage, or the check failed:** Plans, closable, unchanged.
+
+**Forecast moments: one paywall per session** (campaign 113535, 2026-11-04). The top audience 199842 is a 100% holdout when `params.event_name` is forecast_ready_opened or update_opened AND `device.minutesSinceLastPaywallView < 30`. Next is 199843 "[04/11] Claude v1 Review - All Users" (forecast-moment 100%); 199274 is paused. `first_grade_viewed` isn't capped: it fires once ever (the app sets `firstGrade.registered` before asking), so a skip would lose it, and the app already holds it back right after onboarding. The gated `timeline_locked` isn't capped: a lock with no paywall says "BumpCast Pro isn't available right now".
+
+**Onboarding: hard vs soft flight paywall** (Onboarding campaign 113534, 50/50, started 2026-10-23). **Ended 2026-11-03: soft at 100%, hard at 0%.** Too few people reached the flight paywall to read it (12 in a week), and the split was uneven (hard got far more people flying within 3 days). Soft had buyers too: 4 trials in onboarding (all cancelled) plus a Monthly and a pass bought later. The two paywalls are the same flow:
 - `onboarding` (281980) is **hard**: the flight paywall has no close button.
 - `onboarding-soft` (284375) is **soft**: it has one.
 
