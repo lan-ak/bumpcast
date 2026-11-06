@@ -86,3 +86,16 @@ The Tracker page turned 0 of 62 taps into installs across six ads, so Lanre paus
 ## Nov 2: capped at $300, ends Nov 5
 
 Lanre capped the campaign at **$300** (CA$420, the account limit as it already is) and chose to spend the rest now. The Test period ends Nov 5 with `total` 300, so the review spreads what's left over Nov 3–5 and pauses everything from Nov 6. Thanksgiving is removed from `periods` (kept as `dropped_thanksgiving` for reference) and the news reserve is 0. The tests still check the rules against the $400 plan with Thanksgiving.
+
+## Nov 3: ends Nov 4
+
+Lanre asked to spend faster at the same $300 total. The Test period now ends Nov 4 (`to` in config.json), so what's left goes out over Nov 3–4 (about $26.57/day per page) and the review pauses everything from Nov 5.
+
+## Nov 5: weekend rerun, $150 on the Turbulence page
+
+The test ended Nov 4 at $299.85. Ad 02 was the only ad that paid for itself (4 paying users from 20 installs, $96.87 proceeds at 85% on $93.61, 1.03×). Lanre approved a weekend rerun on top: the total is now **$450** (CA$630).
+
+- **Weekend** period, Nov 6–8: only the Turbulence page, only ads 02 and 10 (`lineup`), at **$50/day** (CA$70). Standard joins Tracker in `off_pages` (its ad set is paused). Friday's 8am review turns the two ads back on, sets the budget and records the page's numbers as the `baseline` that the check below counts from. Nothing else in the queue launches, and no ads are drafted.
+- **Go-on check** (`stop`), each morning: once the run has spent $20, it pauses the page if installs cost more than $6 each. From Sunday's review, it also pauses if nobody has paid during the run. An ad paused during the run stays off. The usual rules still apply to 02 and 10 on their lifetime numbers.
+- The Turbulence ad set ends **Sunday Nov 8 at 11:59pm ET** (`end_time` in Meta), and Monday's review pauses the ads. A fixed daily budget is never set above what's left of the total.
+- Meta's spending limit is CA$630 (Lanre raised it Nov 5; the system user can't touch billing).

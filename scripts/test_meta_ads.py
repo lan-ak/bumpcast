@@ -257,5 +257,70 @@ class Rules(unittest.TestCase):
         self.assertIn("10-turbulence", by(changes, "launch"))
 
 
+class WeekendRerun(unittest.TestCase):
+    """Nov 6-8: Turbulence ads 02 and 10 back on at $50/day, checked each morning."""
+
+    def setUp(self):
+        self.c = json.loads((Path(__file__).resolve().parents[1] / "docs/release/meta/config.json").read_text())
+        self.weekend = next(p for p in self.c["budget"]["periods"] if p["name"] == "Weekend")
+        self.weekend.pop("baseline", None)
+
+    def paused(self, key, spend, installs, paid=0, on="2026-11-05", status="PAUSED"):
+        return dict(ad(key, status, spend=spend, impressions=1000, clicks=30, installs=installs, launched="2026-10-27"),
+                    paused=on if status == "PAUSED" else None, paid=paid)
+
+    def test_first_day_turns_on_the_lineup_and_records_the_baseline(self):
+        rows = [self.paused("02-turbulence", 93.61, 20, 4), self.paused("10-turbulence", 31.76, 5),
+                self.paused("01-turbulence", 4.94, 1), dict(ad("09-turbulence"), paused=None),
+                self.paused("08-standard", 119.09, 20)]
+        changes, notes = meta_ads.decide(self.c, D("2026-11-06"), rows, 299.85)
+        self.assertEqual(by(changes, "launch"), ["02-turbulence", "10-turbulence"])
+        self.assertEqual(by(changes, "pause"), [])
+        self.assertEqual({c["set"]: c["daily"] for c in changes if c["do"] == "budget"}, {"turbulence": 50})
+        base = next(c for c in changes if c["do"] == "record_baseline")["baseline"]
+        self.assertEqual(base["turbulence"], {"spend": 130.31, "installs": 26, "paid": 4})
+        self.assertFalse(any("Bench low" in n for n in notes))
+
+    def test_goes_on_while_installs_stay_cheap(self):
+        self.weekend["baseline"] = {"turbulence": {"spend": 125.37, "installs": 25, "paid": 4}}
+        rows = [self.paused("02-turbulence", 93.61 + 35, 20 + 8, 4, status="ACTIVE"),
+                self.paused("10-turbulence", 31.76 + 15, 5 + 2, status="ACTIVE")]
+        changes, _ = meta_ads.decide(self.c, D("2026-11-07"), rows, 349.85)
+        self.assertEqual(by(changes, "pause"), [])
+        self.assertEqual(by(changes, "launch"), [])
+
+    def test_stops_when_installs_cost_too_much(self):
+        self.weekend["baseline"] = {"turbulence": {"spend": 125.37, "installs": 25, "paid": 4}}
+        rows = [self.paused("02-turbulence", 93.61 + 35, 20 + 4, 4, status="ACTIVE"),
+                self.paused("10-turbulence", 31.76 + 15, 5 + 2, status="ACTIVE")]
+        changes, _ = meta_ads.decide(self.c, D("2026-11-07"), rows, 349.85)
+        self.assertEqual(by(changes, "pause"), ["02-turbulence", "10-turbulence"])
+        self.assertIn("$8.33 per install", changes[0]["why"])
+        self.assertEqual(by(changes, "budget"), [])
+
+    def test_stops_on_sunday_with_nobody_paying(self):
+        self.weekend["baseline"] = {"turbulence": {"spend": 125.37, "installs": 25, "paid": 4}}
+        rows = [self.paused("02-turbulence", 93.61 + 70, 20 + 16, 4, status="ACTIVE"),
+                self.paused("10-turbulence", 31.76, 5)]
+        changes, _ = meta_ads.decide(self.c, D("2026-11-08"), rows, 369.85)
+        self.assertEqual(by(changes, "pause"), ["02-turbulence"])
+        self.assertIn("no paying users", changes[0]["why"])
+
+    def test_an_ad_stopped_during_the_run_stays_off(self):
+        self.weekend["baseline"] = {"turbulence": {"spend": 125.37, "installs": 25, "paid": 4}}
+        rows = [self.paused("02-turbulence", 93.61 + 35, 20 + 8, 5, status="ACTIVE"),
+                self.paused("10-turbulence", 31.76 + 15, 5, on="2026-11-07")]
+        changes, _ = meta_ads.decide(self.c, D("2026-11-08"), rows, 379.85)
+        self.assertEqual(by(changes, "launch"), [])
+
+    def test_never_budgets_past_the_total(self):
+        self.assertEqual(meta_ads.test_daily(self.c, self.weekend, D("2026-11-08"), 430), 20)
+
+    def test_monday_pauses_everything(self):
+        rows = [self.paused("02-turbulence", 200, 40, 6, status="ACTIVE")]
+        changes, _ = meta_ads.decide(self.c, D("2026-11-09"), rows, 440)
+        self.assertEqual(by(changes, "pause"), ["02-turbulence"])
+
+
 if __name__ == "__main__":
     unittest.main()

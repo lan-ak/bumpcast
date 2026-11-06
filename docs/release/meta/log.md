@@ -182,3 +182,165 @@ Spent $159.17 of $400 so far.
 - Lanre: "can i call it at $420?", then "Spend it all now". The plan total goes from $400 back to **$300** (CA$420, Meta's account limit, which stays as it is). Thanksgiving ($132) and the $15 news reserve are dropped.
 - Everything left goes to the test on Turbulence and Standard, spread over Nov 3–5: about $16.50/day per page from about $201 spent at the end of today. On Nov 6 the review pauses every ad ("the campaign has ended"); if $300 is reached first, it pauses then.
 - The ACCOUNT LIMIT warning stops, since the limit now matches the plan.
+
+## Tue Nov 3
+
+Spent $192.34 of $300 so far.
+
+| Ad | Spend | Shown | Tap rate | Installs | Per install | Trials | Paid | Live |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| 01-standard | $0.16 | 10 | 0.00% | 0 | – | 0 | 0 | yes |
+| 08-standard | $67.23 | 2,589 | 3.05% | 8 | $8.40 | 0 | 0 | yes |
+| 11-standard | $0.03 | 2 | 0.00% | 0 | – | 0 | 0 | yes |
+| 16-standard | $1.65 | 75 | 1.33% | 0 | – | 0 | 0 | no |
+| 01-tracker | $14.35 | 559 | 4.83% | 0 | – | 0 | 0 | no |
+| 04-tracker | $18.20 | 582 | 1.89% | 0 | – | 0 | 0 | no |
+| 05-tracker | $3.81 | 199 | 6.03% | 0 | – | 0 | 0 | no |
+| 12-tracker | $0.53 | 23 | 4.35% | 0 | – | 0 | 0 | yes |
+| 13-tracker | $5.63 | 208 | 2.40% | 0 | – | 0 | 0 | yes |
+| 14-tracker | $5.86 | 179 | 3.35% | 0 | – | 0 | 0 | yes |
+| 01-turbulence | $4.94 | 208 | 2.40% | 1 | $4.94 | 1 | 0 | yes |
+| 02-turbulence | $43.08 | 2,239 | 4.60% | 8 | $5.38 | 1 | 1 | yes |
+| 07-turbulence | $0.21 | 15 | 6.67% | 0 | – | 0 | 0 | no |
+| 10-turbulence | $26.66 | 1,057 | 1.61% | 5 | $5.33 | 0 | 0 | yes |
+
+- Winners: 01-turbulence: $4.94 per install (1 installs from $4.94, 1 trials, 2.4% taps); 10-turbulence: $5.33 per install (5 installs from $26.66, 1.6% taps).
+- Losers: 04-tracker: no installs from $18.20 (1.9% taps); 13-tracker: no installs from $5.63 (2.4% taps).
+- Taps to installs: turbulence 14/126 (11.1%), tracker 0/62 (0.0%), standard 8/80 (10.0%); overall 22/268 (8.2%).
+- No ads paused or launched.
+- Budgets: turbulence budget $17.94/day (Test). standard budget $17.94/day (Test).
+- News check: no major US-reported turbulence incident in the last 24 hours (search turned up only older stories); the news reserve is $0 since the Nov 2 cap anyway.
+
+## Tue Nov 3
+
+Spent $193.73 of $300 so far.
+
+| Ad | Spend | Shown | Tap rate | Installs | Per install | Trials | Paid | Live |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| 01-standard | $0.16 | 10 | 0.00% | 0 | – | 0 | 0 | yes |
+| 08-standard | $68.00 | 2,630 | 3.04% | 8 | $8.50 | 1 | 0 | yes |
+| 11-standard | $0.03 | 2 | 0.00% | 0 | – | 0 | 0 | yes |
+| 16-standard | $1.65 | 75 | 1.33% | 0 | – | 0 | 0 | no |
+| 01-tracker | $14.35 | 559 | 4.83% | 0 | – | 0 | 0 | no |
+| 04-tracker | $18.20 | 582 | 1.89% | 0 | – | 0 | 0 | no |
+| 05-tracker | $3.81 | 199 | 6.03% | 0 | – | 0 | 0 | no |
+| 12-tracker | $0.53 | 23 | 4.35% | 0 | – | 0 | 0 | yes |
+| 13-tracker | $5.63 | 208 | 2.40% | 0 | – | 0 | 0 | yes |
+| 14-tracker | $5.86 | 179 | 3.35% | 0 | – | 0 | 0 | yes |
+| 01-turbulence | $4.94 | 208 | 2.40% | 1 | $4.94 | 1 | 0 | yes |
+| 02-turbulence | $43.56 | 2,264 | 4.55% | 8 | $5.45 | 1 | 1 | yes |
+| 07-turbulence | $0.21 | 15 | 6.67% | 0 | – | 0 | 0 | no |
+| 10-turbulence | $26.79 | 1,066 | 1.59% | 5 | $5.36 | 0 | 0 | yes |
+
+- Winners: 01-turbulence: $4.94 per install (1 installs from $4.94, 1 trials, 2.4% taps); 10-turbulence: $5.36 per install (5 installs from $26.79, 1.6% taps).
+- Losers: 04-tracker: no installs from $18.20 (1.9% taps); 13-tracker: no installs from $5.63 (2.4% taps).
+- Taps to installs: turbulence 14/126 (11.1%), tracker 0/62 (0.0%), standard 8/81 (9.9%); overall 22/269 (8.2%).
+- No ads paused or launched.
+- Budgets: turbulence budget $26.57/day (Test). standard budget $26.57/day (Test).
+
+## Faster spend-out, Tue Nov 3
+
+- Lanre: "raise then but not overall, just spend per day so it finishes quicker", after 22 of 268 taps installed (8.2%; Turbulence 11.1%, Standard 10.0%). The total stays $300 (CA$420). The test now ends **Nov 4** instead of Nov 5: Turbulence and Standard go from $17.94 to **$26.57/day** each (CA$37.20), confirmed in Meta. Tomorrow's review spreads whatever is left over Nov 4, and everything pauses Nov 5.
+- Tracker checked: its ad set is PAUSED in Meta with $0 spent today. Ads 12, 13 and 14 show "Live yes" only because the ads themselves are still on inside the paused ad set, so nothing delivers.
+- Creative refresh checked: the live ads have been seen 1.0–1.5 times per person on average (the pause rule is 3.5). 08-standard's tap rate slipped from 2.8% to 1.9% over Oct 31–Nov 2, which is worth watching but isn't fatigue. With two days left, a new ad would still be in Meta review and learning when the campaign ends, so nothing was drafted.
+
+## Wed Nov 4
+
+Spent $247.84 of $300 so far.
+
+| Ad | Spend | Shown | Tap rate | Installs | Per install | Trials | Paid | Live |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| 01-standard | $0.16 | 10 | 0.00% | 0 | – | 0 | 0 | yes |
+| 08-standard | $94.34 | 3,797 | 2.61% | 16 | $5.90 | 1 | 0 | yes |
+| 11-standard | $0.03 | 2 | 0.00% | 0 | – | 0 | 0 | yes |
+| 16-standard | $1.65 | 75 | 1.33% | 0 | – | 0 | 0 | no |
+| 01-tracker | $14.35 | 559 | 4.83% | 0 | – | 0 | 0 | no |
+| 04-tracker | $18.20 | 582 | 1.89% | 0 | – | 0 | 0 | no |
+| 05-tracker | $3.81 | 199 | 6.03% | 0 | – | 0 | 0 | no |
+| 12-tracker | $0.53 | 23 | 4.35% | 0 | – | 0 | 0 | yes |
+| 13-tracker | $5.63 | 208 | 2.40% | 0 | – | 0 | 0 | yes |
+| 14-tracker | $5.86 | 179 | 3.35% | 0 | – | 0 | 0 | yes |
+| 01-turbulence | $4.94 | 208 | 2.40% | 1 | $4.94 | 1 | 0 | yes |
+| 02-turbulence | $67.98 | 3,507 | 3.71% | 14 | $4.86 | 1 | 2 | yes |
+| 07-turbulence | $0.21 | 15 | 6.67% | 0 | – | 0 | 0 | no |
+| 10-turbulence | $30.14 | 1,243 | 1.53% | 5 | $6.03 | 0 | 0 | yes |
+
+- Winners: 02-turbulence: $4.86 per install (14 installs from $67.98, 1 trials, 2 paid, 3.7% taps); 01-turbulence: $4.94 per install (1 installs from $4.94, 1 trials, 2.4% taps).
+- Losers: 04-tracker: no installs from $18.20 (1.9% taps); 13-tracker: no installs from $5.63 (2.4% taps).
+- Taps to installs: turbulence 20/155 (12.9%), tracker 0/62 (0.0%), standard 16/100 (16.0%); overall 36/317 (11.4%).
+- Paused 11-standard: Meta showed it only 2 times in 4 days.
+- Launched 17-standard: next approved ad for the standard page.
+- Budgets: turbulence budget $26.08/day (Test). standard budget $26.08/day (Test).
+- News check: no major US-reported turbulence incident in the last 24 hours (only older stories); the news reserve is $0 since the Nov 2 cap anyway.
+
+## Thu Nov 5
+
+Spent $299.85 of $300 so far.
+
+| Ad | Spend | Shown | Tap rate | Installs | Per install | Trials | Paid | Live |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| 01-standard | $0.17 | 12 | 0.00% | 0 | – | 0 | 0 | yes |
+| 08-standard | $119.09 | 5,100 | 2.39% | 20 | $5.95 | 1 | 0 | yes |
+| 11-standard | $0.03 | 2 | 0.00% | 0 | – | 0 | 0 | no |
+| 16-standard | $1.65 | 75 | 1.33% | 0 | – | 0 | 0 | no |
+| 17-standard | $0.00 | 1 | 0.00% | 0 | – | 0 | 0 | yes |
+| 01-tracker | $14.35 | 559 | 4.83% | 0 | – | 0 | 0 | no |
+| 04-tracker | $18.20 | 582 | 1.89% | 0 | – | 0 | 0 | no |
+| 05-tracker | $3.81 | 199 | 6.03% | 0 | – | 0 | 0 | no |
+| 12-tracker | $0.53 | 23 | 4.35% | 0 | – | 0 | 0 | yes |
+| 13-tracker | $5.63 | 208 | 2.40% | 0 | – | 0 | 0 | yes |
+| 14-tracker | $5.86 | 179 | 3.35% | 0 | – | 0 | 0 | yes |
+| 01-turbulence | $4.94 | 208 | 2.40% | 1 | $4.94 | 1 | 0 | yes |
+| 02-turbulence | $93.61 | 5,071 | 2.92% | 20 | $4.68 | 1 | 4 | yes |
+| 07-turbulence | $0.21 | 15 | 6.67% | 0 | – | 0 | 0 | no |
+| 10-turbulence | $31.76 | 1,314 | 1.52% | 5 | $6.35 | 0 | 0 | yes |
+
+- Winners: 02-turbulence: $4.68 per install (20 installs from $93.61, 1 trials, 4 paid, 2.9% taps); 01-turbulence: $4.94 per install (1 installs from $4.94, 1 trials, 2.4% taps).
+- Losers: 04-tracker: no installs from $18.20 (1.9% taps); 13-tracker: no installs from $5.63 (2.4% taps).
+- Taps to installs: turbulence 26/174 (14.9%), tracker 0/62 (0.0%), standard 20/123 (16.3%); overall 46/359 (12.8%).
+- Paused 01-turbulence: the campaign has ended.
+- Paused 02-turbulence: the campaign has ended.
+- Paused 10-turbulence: the campaign has ended.
+- Paused 12-tracker: the campaign has ended.
+- Paused 13-tracker: the campaign has ended.
+- Paused 14-tracker: the campaign has ended.
+- Paused 01-standard: the campaign has ended.
+- Paused 08-standard: the campaign has ended.
+- Paused 17-standard: the campaign has ended.
+
+## Weekend rerun set up, Thu Nov 5
+
+- Lanre approved a ~$150 weekend run ("Do it"): Turbulence ads 02 and 10, $50/day Fri Nov 6–Sun Nov 8. The total is now $450 (CA$630).
+- Done in Meta today: the Standard ad set is paused (added to `off_pages`), and the Turbulence ad set ends Nov 8 at 11:59pm ET. The ads stay paused until Friday's review turns them on.
+- Not done: raising the account spending limit to CA$630. The system user isn't allowed to ("You do not have permissions to update the ad account"), so Lanre has to do it in Billing & payments before Friday morning.
+- The go-on check pauses the run if installs cost more than $6 each after $20 of spend, or if nobody has paid by Sunday's review. Rules and tests are in `scripts/meta_ads.py` and `scripts/test_meta_ads.py` (30 tests pass).
+- Lanre raised the account spending limit to CA$630 later on Nov 5 (confirmed in Meta: CA$419.79 spent, CA$210.21 left). The weekend run can deliver from Friday's review.
+
+## Fri Nov 6
+
+Spent $299.87 of $450 so far.
+
+| Ad | Spend | Shown | Tap rate | Installs | Per install | Trials | Paid | Live |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| 01-standard | $0.17 | 12 | 0.00% | 0 | – | 0 | 0 | no |
+| 08-standard | $119.10 | 5,103 | 2.39% | 20 | $5.96 | 1 | 0 | no |
+| 11-standard | $0.03 | 2 | 0.00% | 0 | – | 0 | 0 | no |
+| 16-standard | $1.65 | 75 | 1.33% | 0 | – | 0 | 0 | no |
+| 01-tracker | $14.35 | 559 | 4.83% | 0 | – | 0 | 0 | no |
+| 04-tracker | $18.20 | 582 | 1.89% | 0 | – | 0 | 0 | no |
+| 05-tracker | $3.81 | 199 | 6.03% | 0 | – | 0 | 0 | no |
+| 12-tracker | $0.53 | 23 | 4.35% | 0 | – | 0 | 0 | no |
+| 13-tracker | $5.63 | 208 | 2.40% | 0 | – | 0 | 0 | no |
+| 14-tracker | $5.86 | 179 | 3.35% | 0 | – | 0 | 0 | no |
+| 01-turbulence | $4.94 | 208 | 2.40% | 1 | $4.94 | 1 | 0 | no |
+| 02-turbulence | $93.63 | 5,073 | 2.92% | 20 | $4.68 | 1 | 4 | no |
+| 07-turbulence | $0.21 | 15 | 6.67% | 0 | – | 0 | 0 | no |
+| 10-turbulence | $31.76 | 1,314 | 1.52% | 5 | $6.35 | 0 | 0 | no |
+
+- Winners: 02-turbulence: $4.68 per install (20 installs from $93.63, 1 trials, 4 paid, 2.9% taps); 01-turbulence: $4.94 per install (1 installs from $4.94, 1 trials, 2.4% taps).
+- Losers: 04-tracker: no installs from $18.20 (1.9% taps); 13-tracker: no installs from $5.63 (2.4% taps).
+- Taps to installs: turbulence 26/174 (14.9%), tracker 0/62 (0.0%), standard 20/123 (16.3%); overall 46/359 (12.8%).
+- Weekend starts: counting from turbulence $130.54, 26 installs, 4 paid.
+- Launched 02-turbulence: back on for the weekend run.
+- Launched 10-turbulence: back on for the weekend run.
+- Budgets: turbulence budget $50.00/day (Weekend).

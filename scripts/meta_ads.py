@@ -94,7 +94,30 @@ def test_daily(cfg, period, today, spent):
     if period.get("total"):
         days_left = (dt.date.fromisoformat(period["to"]) - today).days + 1
         return max(period.get("min_per_set", 1.0), round((period["total"] - spent) / days_left / len(live_pages(cfg)), 2))
-    return period["daily_per_set"]
+    # A fixed daily budget never runs past the campaign's total.
+    return min(period["daily_per_set"], round(max(0.0, cfg["budget"]["total"] - spent) / len(live_pages(cfg)), 2))
+
+
+def since_baseline(period, page, rows):
+    """A page's spend, installs and paying users since the period's baseline (recorded on its first day)."""
+    base = period.get("baseline", {}).get(page, {})
+    return {k: sum(r[k] for r in rows if r["page"] == page) - base.get(k, 0) for k in ("spend", "installs", "paid")}
+
+
+def stop_reason(period, today, page, rows):
+    """A rerun's go-on check ("stop" in the period): why the page stops today, or None."""
+    stop = period.get("stop")
+    if not stop or page not in period.get("baseline", {}):
+        return None
+    s = since_baseline(period, page, rows)
+    if s["spend"] >= stop["min_spend"]:
+        cpi = s["spend"] / s["installs"] if s["installs"] else None
+        if cpi is None or cpi > stop["max_cost_per_install"]:
+            got = f"${cpi:.2f} per install" if cpi else "no installs"
+            return f"{period['name'].lower()} run: {got} from ${s['spend']:.2f} (the limit is ${stop['max_cost_per_install']:.2f})"
+    if today >= dt.date.fromisoformat(stop["paid_by"]) and s["paid"] <= 0:
+        return f"{period['name'].lower()} run: no paying users from ${s['spend']:.2f}"
+    return None
 
 
 def cost_per_install(spend, installs):
@@ -156,6 +179,13 @@ def decide(cfg, today, ads, spent_total, news=False, paywall_opens=None, shown_y
         notes.append("Nothing runs today.")
         return changes, notes
 
+    lineup = period.get("lineup")
+    if lineup and "baseline" not in period:
+        # The rerun's first day: remember where each page stood, so the go-on check counts only the rerun.
+        base = {page: {k: round(sum(a[k] for a in ads if a["page"] == page), 2) for k in ("spend", "installs", "paid")}
+                for page in lineup}
+        changes.append({"do": "record_baseline", "period": period["name"], "baseline": base,
+                        "why": f"{period['name']} starts"})
     thanksgiving = period["name"] == "Thanksgiving"
     holiday_ok = today >= dt.date.fromisoformat(rules["holiday_from"])
     split = None
@@ -176,6 +206,17 @@ def decide(cfg, today, ads, spent_total, news=False, paywall_opens=None, shown_y
 
         if split is not None and page not in split:
             changes.append({"do": "pause_set", "set": page, "why": "another page installs for at least {:.0%} less".format(cfg["page_rule"]["margin"])})
+            continue
+
+        if lineup and page in period.get("baseline", {}):
+            run = since_baseline(period, page, ads)
+            cpi = f", ${run['spend'] / run['installs']:.2f} each" if run["installs"] else ""
+            notes.append(f"{period['name']} run on {page} so far: ${run['spend']:.2f}, {run['installs']} installs{cpi}, "
+                         f"{run['paid']} paid.")
+        stop = lineup and stop_reason(period, today, page, ads)
+        if stop:
+            for a in live:
+                changes.append({"do": "pause", "ad": a["key"], "why": stop})
             continue
 
         pauses = []
@@ -213,6 +254,12 @@ def decide(cfg, today, ads, spent_total, news=False, paywall_opens=None, shown_y
         ready = [by_n[n] for n in queue if n in by_n and by_n[n]["approved"] and by_n[n]["status"] != "ACTIVE"
                  and not by_n[n]["launched"]]
         unbuilt = [n for n in queue if cfg["creatives"][n]["approved"] and n not in by_n]
+        if lineup:
+            # A rerun turns its chosen ads back on, and only those; one a rule pauses during the rerun stays off.
+            queue = lineup.get(page, [])
+            ready = [by_n[n] for n in queue if n in by_n and by_n[n]["status"] != "ACTIVE"
+                     and not (by_n[n].get("paused") and by_n[n]["paused"] >= period["from"])]
+            unbuilt = []
 
         staying = len(live) - len(pauses)
         launches = ready[:max(0, period["live_per_set"] - staying)]
@@ -222,11 +269,12 @@ def decide(cfg, today, ads, spent_total, news=False, paywall_opens=None, shown_y
         for a, why in pauses:
             changes.append({"do": "pause", "ad": a["key"], "why": why})
         for a in launches:
-            changes.append({"do": "launch", "ad": a["key"], "why": "next approved ad for the {} page".format(page)})
+            why = f"back on for the {period['name'].lower()} run" if lineup else "next approved ad for the {} page".format(page)
+            changes.append({"do": "launch", "ad": a["key"], "why": why})
         if unbuilt:
             notes.append(f"{page}: approved but not built in Meta yet: {', '.join(unbuilt)} (run build).")
         left = len(ready) - len(launches)
-        if left < 2:
+        if left < 2 and not lineup:
             notes.append(f"Bench low: {page} has {left} approved ad(s) left to launch. Draft 3 new ones.")
 
         daily = test_daily(cfg, period, today, spent_total) if split is None else period["daily_total"] * split[page]
@@ -337,7 +385,7 @@ def gather(cfg, meta, today):
         rows.append({
             "key": key, "n": n, "page": page, "id": ad["id"],
             "approved": cfg["creatives"][n]["approved"], "holiday": cfg["creatives"][n].get("holiday", False),
-            "status": status.get(ad["id"], {}).get("status", "PAUSED"), "launched": launched,
+            "status": status.get(ad["id"], {}).get("status", "PAUSED"), "launched": launched, "paused": ad.get("paused"),
             "days_live": (today - dt.date.fromisoformat(launched)).days if launched and not ad.get("paused") else 0,
             "spend": to_plan(cfg, i.get("spend", 0)), "impressions": int(i.get("impressions", 0)),
             "clicks": int(i.get("inline_link_clicks", 0)), "frequency": float(i.get("frequency", 0)),
@@ -360,6 +408,8 @@ def apply(cfg, meta, changes, today):
             meta.post(cfg["ad_sets"][c["set"]]["id"], daily_budget=to_account(cfg, c["daily"]), status="ACTIVE")
         elif c["do"] == "pause_set":
             meta.post(cfg["ad_sets"][c["set"]]["id"], status="PAUSED")
+        elif c["do"] == "record_baseline":
+            next(p for p in cfg["budget"]["periods"] if p["name"] == c["period"])["baseline"] = c["baseline"]
         elif c["do"] == "record_split":
             cfg["page_rule"]["split"] = c["split"]
         elif c["do"] == "optimise":
@@ -674,6 +724,9 @@ def describe(c):
         return f"Launched {c['ad']}: {c['why']}."
     if c["do"] == "pause_set":
         return f"Paused the {c['set']} ad set: {c['why']}."
+    if c["do"] == "record_baseline":
+        return f"{c['period']} starts: counting from " + ", ".join(
+            f"{p} ${b['spend']:.2f}, {b['installs']} installs, {b['paid']} paid" for p, b in c["baseline"].items()) + "."
     if c["do"] == "record_spend_call":
         return f"Spend call made: {c['verdict']}."
     if c["do"] == "optimise":

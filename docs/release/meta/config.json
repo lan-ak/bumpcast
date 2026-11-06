@@ -69,18 +69,44 @@
     "placements_note": "Lanre, Oct 31: Reels dropped. Through Oct 30, Instagram Reels took 88% of taps and ~90% of spend, and taps installed at 1.9% overall."
   },
   "budget": {
-    "total": 300,
+    "total": 450,
     "periods": [
       {
         "name": "Test",
         "from": "2026-10-27",
-        "to": "2026-11-05",
+        "to": "2026-11-04",
         "daily_per_set": 2.3,
         "live_per_set": 3,
         "total": 300,
         "boost_per_set": 14.0,
         "min_per_set": 1.0,
-        "boost_note": "Lanre, Oct 30: $7, then $14/day per page until the spend call is made; then the rest of the $253 test budget is spread evenly to Nov 18. Thanksgiving's $132 is unchanged. Lanre, Nov 2: capped at $300 and 'spend it all now': the test gets everything left, spread over Nov 3–5, then the campaign ends."
+        "boost_note": "Lanre, Oct 30: $7, then $14/day per page until the spend call is made; then the rest of the $253 test budget is spread evenly to Nov 18. Thanksgiving's $132 is unchanged. Lanre, Nov 2: capped at $300 and 'spend it all now': the test gets everything left, spread over Nov 3–5, then the campaign ends. Lanre, Nov 3: 'raise then but not overall, just spend per day so it finishes quicker': the test ends Nov 4, so what's left is spread over Nov 3–4 at the same $300 total."
+      },
+      {
+        "name": "Weekend",
+        "from": "2026-11-06",
+        "to": "2026-11-08",
+        "daily_per_set": 50,
+        "live_per_set": 2,
+        "lineup": {
+          "turbulence": [
+            "02",
+            "10"
+          ]
+        },
+        "stop": {
+          "min_spend": 20,
+          "max_cost_per_install": 6.0,
+          "paid_by": "2026-11-08"
+        },
+        "note": "Lanre, Nov 5: 'Do it' to a ~$150 weekend run, Turbulence page only, ads 02 and 10 at $50/day Fri-Sun. It goes on each morning only while the run costs $6 or less per install (once it has spent $20), and from Sunday's review only if someone paid during it. The first day's review records the baseline the check counts from.",
+        "baseline": {
+          "turbulence": {
+            "spend": 130.54,
+            "installs": 26,
+            "paid": 4
+          }
+        }
       }
     ],
     "news_reserve": {
@@ -91,7 +117,7 @@
     },
     "news_reserve_used": [],
     "note": "Live Oct 27 (Lanre: 'go live tonight'). The approved $153 test budget spread over Oct 27–Nov 18: $2.30/day per page.",
-    "total_note": "Lanre, Oct 30: raised from $300 to $400 for more traffic (CA$560 account limit). Thanksgiving keeps $132, news reserve $15, the test gets the rest ($253). Lanre, Nov 2: capped back at $300 (CA$420, Meta's account limit) and 'spend it all now': Thanksgiving ($132) and the news reserve dropped; everything left goes to the test, ending Nov 5.",
+    "total_note": "Lanre, Oct 30: raised from $300 to $400 for more traffic (CA$560 account limit). Thanksgiving keeps $132, news reserve $15, the test gets the rest ($253). Lanre, Nov 2: capped back at $300 (CA$420, Meta's account limit) and 'spend it all now': Thanksgiving ($132) and the news reserve dropped; everything left goes to the test, ending Nov 5. Lanre, Nov 5: a $150 weekend rerun on top (total $450, CA$630).",
     "dropped_thanksgiving": {
       "name": "Thanksgiving",
       "from": "2026-11-19",
@@ -322,12 +348,14 @@
     "01-turbulence": {
       "id": "120250922014180238",
       "launched": "2026-10-27",
-      "paused": null
+      "paused": "2026-11-05",
+      "reason": "the campaign has ended"
     },
     "02-turbulence": {
       "id": "120250922014520238",
-      "launched": "2026-10-27",
-      "paused": null
+      "launched": "2026-11-06",
+      "paused": null,
+      "reason": "the campaign has ended"
     },
     "07-turbulence": {
       "id": "120250922014670238",
@@ -337,8 +365,9 @@
     },
     "10-turbulence": {
       "id": "120250922015280238",
-      "launched": "2026-10-31",
-      "paused": null
+      "launched": "2026-11-06",
+      "paused": null,
+      "reason": "the campaign has ended"
     },
     "09-turbulence": {
       "id": "120250922015480238",
@@ -371,17 +400,20 @@
     "12-tracker": {
       "id": "120250922021690238",
       "launched": "2026-10-31",
-      "paused": null
+      "paused": "2026-11-05",
+      "reason": "the campaign has ended"
     },
     "13-tracker": {
       "id": "120250922022160238",
       "launched": "2026-10-31",
-      "paused": null
+      "paused": "2026-11-05",
+      "reason": "the campaign has ended"
     },
     "14-tracker": {
       "id": "120250922023050238",
       "launched": "2026-11-01",
-      "paused": null
+      "paused": "2026-11-05",
+      "reason": "the campaign has ended"
     },
     "15-tracker": {
       "id": "120250922024670238",
@@ -396,7 +428,8 @@
     "01-standard": {
       "id": "120250922138430238",
       "launched": "2026-10-27",
-      "paused": null
+      "paused": "2026-11-05",
+      "reason": "the campaign has ended"
     },
     "16-standard": {
       "id": "120250922139760238",
@@ -407,12 +440,14 @@
     "08-standard": {
       "id": "120250922141630238",
       "launched": "2026-10-27",
-      "paused": null
+      "paused": "2026-11-05",
+      "reason": "the campaign has ended"
     },
     "11-standard": {
       "id": "120250922142380238",
       "launched": "2026-10-31",
-      "paused": null
+      "paused": "2026-11-04",
+      "reason": "Meta showed it only 2 times in 4 days"
     },
     "03-standard": {
       "id": "120250922143210238",
@@ -421,8 +456,9 @@
     },
     "17-standard": {
       "id": "120250922143820238",
-      "launched": null,
-      "paused": null
+      "launched": "2026-11-04",
+      "paused": "2026-11-05",
+      "reason": "the campaign has ended"
     },
     "18-standard": {
       "id": "120250922144450238",
@@ -540,6 +576,7 @@
     "verdict": "hold"
   },
   "off_pages": {
-    "tracker": "Lanre, Nov 2: paused after 0 of 62 taps installed across six ads ($47.67 spent); its share of the test budget goes to the Turbulence and Standard pages."
+    "tracker": "Lanre, Nov 2: paused after 0 of 62 taps installed across six ads ($47.67 spent); its share of the test budget goes to the Turbulence and Standard pages.",
+    "standard": "Lanre, Nov 5: off for the weekend rerun; 08 brought 20 installs and no paying users."
   }
 }
