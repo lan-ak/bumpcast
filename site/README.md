@@ -23,6 +23,7 @@ Preview locally: the `site` entry in `.claude/launch.json` (`python3 -m http.ser
 | `/picker.js` | The "Find your route" picker on `/routes/` and the home page: From and To, then that route's page (either direction), or, for a pair without a page, a note that the app forecasts any covered flight. Hidden without JavaScript; the links and table still reach every route |
 | `/robots.txt` | Lets every crawler in, search engines and AI alike, and points to the sitemap and `llms.txt` |
 | `/sitemap.xml` | Generated: every page, for Google Search Console and Bing |
+| `/<key>.txt` | IndexNow key (not a secret): lets `scripts/indexnow.py` tell Bing and other IndexNow engines about new pages |
 | `/404.html` | Host not-found page (root-relative links, so it works at any depth) |
 
 ## Learn and Routes pages
@@ -86,6 +87,8 @@ scripts/publish_site.sh
 ```
 
 It copies `site/` (minus this README) into a temporary checkout of `gh-pages`, commits and pushes. Pages redeploys in about a minute.
+
+Then tell the search engines: `python3 scripts/indexnow.py` notifies Bing (and other IndexNow engines) of every page in the sitemap. Google reads the sitemap from `robots.txt`; to speed it up, resubmit it in Search Console.
 
 ### Still to do
 
