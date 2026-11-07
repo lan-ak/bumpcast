@@ -465,13 +465,13 @@ def join(items: list[str]) -> str:
     return ", ".join(items[:-1]) + " and " + items[-1]
 
 
+# BumpCast appears as the publisher's brand. Not as a MobileApplication: Google checks those as
+# Software apps and reports an error without a price and App Store ratings, which we can't vouch for.
 ORG = {"@type": "Organization", "@id": f"{SITE_URL}/#org", "name": "Akinyemi & Co Ltd", "url": f"{SITE_URL}/",
-       "logo": ICON_URL, "email": "support@akinyemi.ca"}
+       "logo": ICON_URL, "email": "support@akinyemi.ca",
+       "brand": {"@type": "Brand", "name": "BumpCast", "url": f"{SITE_URL}/", "logo": ICON_URL}}
 WEBSITE = {"@type": "WebSite", "@id": f"{SITE_URL}/#website", "name": "BumpCast", "url": f"{SITE_URL}/",
            "inLanguage": "en", "publisher": {"@id": ORG["@id"]}}
-APP = {"@type": "MobileApplication", "@id": f"{SITE_URL}/#app", "name": "BumpCast", "operatingSystem": "iOS",
-       "applicationCategory": "TravelApplication", "url": f"{SITE_URL}/", "installUrl": APP_URL,
-       "publisher": {"@id": ORG["@id"]}}
 
 
 def head(*, title: str, description: str, url: str, og_type: str, og_title: str, markdown: str, data: dict,
@@ -587,12 +587,12 @@ def article_html(e: Explainer, by_id: dict[str, Explainer], route_chips: dict[st
          "description": w.summary, "url": e.url, "mainEntityOfPage": e.url, "inLanguage": "en",
          "articleSection": GROUPS[e.group], "datePublished": PUBLISHED, "dateModified": UPDATED, "image": ICON_URL,
          "author": {"@id": ORG["@id"]}, "publisher": {"@id": ORG["@id"]},
-         "isPartOf": {"@id": f"{SITE_URL}/learn/#collection"}, "mentions": {"@id": APP["@id"]},
+         "isPartOf": {"@id": f"{SITE_URL}/learn/#collection"},
          **({"citation": [source_ld(k) for k in e.sources()]} if e.more else {})},
         {"@type": "FAQPage", "@id": f"{e.url}#faq", "url": e.url, "mainEntity": [
             {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in qa]},
         breadcrumb_ld(("Home", f"{SITE_URL}/"), ("Learn", f"{SITE_URL}/learn/"), (e.title, None)),
-        ORG, APP]}
+        ORG]}
     sections = "\n".join(
         f'  <section aria-labelledby="{anchor}"><h2 id="{anchor}">{text(q)}</h2><p>{text(a)}</p></section>'
         for anchor, q, a in e.sections())
@@ -1200,12 +1200,12 @@ def route_html(route: Route, routes: list[Route], by_id: dict[str, Explainer], d
          "url": route.url, "mainEntityOfPage": route.url, "inLanguage": "en", "dateModified": generated,
          "datePublished": generated, "image": ICON_URL, "author": {"@id": ORG["@id"]},
          "publisher": {"@id": ORG["@id"]}, "isPartOf": {"@id": f"{SITE_URL}/routes/#collection"},
-         "about": {"@id": f"{route.url}#data"}, "mentions": {"@id": APP["@id"]}},
+         "about": {"@id": f"{route.url}#data"}},
         dataset,
         {"@type": "FAQPage", "@id": f"{route.url}#faq", "url": route.url, "mainEntity": [
             {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faq]},
         breadcrumb_ld(("Home", f"{SITE_URL}/"), ("Routes", f"{SITE_URL}/routes/"), (route.name, None)),
-        ORG, APP]}
+        ORG]}
     campaign = f"web-route-{route.A.lower()}-{route.B.lower()}"
     return (head(title=page_title(title), description=route.description(), url=route.url, og_type="article",
                  og_title=f"{route.name} turbulence", markdown=f"{route.file}.md", data=ld, section="routes",
