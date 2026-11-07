@@ -70,7 +70,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between EWR and MCO?
 
-Moderate bumps were reported most often over Virginia, near Norfolk, about 35 min after leaving EWR (1 h 25 min after leaving MCO): 584 of 876 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms. The next most were near EWR, where flights climb out or come in to land, about 5 min after leaving EWR (2 h after leaving MCO): 356 of 732 reports there. Close to the ground, wind over buildings and land stirs the air, and gusty days at EWR add to it.
+Pilots reported moderate bumps most often over Virginia, near Norfolk (about 35 min after leaving EWR (1 h 25 min after leaving MCO)), and next most near EWR, where flights climb out or come in to land (about 5 min after leaving EWR (2 h after leaving MCO)).
 
 ### When is the smoothest time of year to fly EWR to MCO?
 

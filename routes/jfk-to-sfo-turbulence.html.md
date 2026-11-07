@@ -70,7 +70,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between JFK and SFO?
 
-Moderate bumps were reported most often near Cleveland, about 1 h after leaving JFK (4 h 15 min after leaving SFO): 1,110 of 1,515 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms. The next most were near JFK, where flights climb out or come in to land, about 10 min after leaving JFK (5 h 5 min after leaving SFO): 793 of 1,849 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Pilots reported moderate bumps most often near Cleveland (about 1 h after leaving JFK (4 h 15 min after leaving SFO)), and next most near JFK, where flights climb out or come in to land (about 10 min after leaving JFK (5 h 5 min after leaving SFO)).
 
 ### When is the smoothest time of year to fly JFK to SFO?
 

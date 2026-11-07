@@ -631,7 +631,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between JFK and LAX?
 
-Moderate bumps were reported most often over Colorado, near Colorado Springs, about 3 h 20 min after leaving JFK (1 h 40 min after leaving LAX): 1,072 of 2,964 reports there. The ground below is high, and wind over mountains makes waves that reach cruising height. The next most were over Pennsylvania, near Pittsburgh, about 40 min after leaving JFK (4 h 20 min after leaving LAX): 1,056 of 1,571 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Pilots reported moderate bumps most often over Colorado, near Colorado Springs (about 3 h 20 min after leaving JFK (1 h 40 min after leaving LAX)), and next most over Pennsylvania, near Pittsburgh (about 40 min after leaving JFK (4 h 20 min after leaving LAX)).
 
 #### When is the smoothest time of year to fly JFK to LAX?
 
@@ -728,7 +728,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between LAX and SFO?
 
-Moderate bumps were reported most often near LAX, where flights climb out or come in to land, about 5 min after leaving LAX (55 min after leaving SFO): 73 of 158 reports there. Close to the ground, wind over buildings and land stirs the air.
+Pilots reported moderate bumps most often near LAX, where flights climb out or come in to land (about 5 min after leaving LAX (55 min after leaving SFO)).
 
 #### When is the smoothest time of year to fly LAX to SFO?
 
@@ -827,7 +827,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between JFK and SFO?
 
-Moderate bumps were reported most often near Cleveland, about 1 h after leaving JFK (4 h 15 min after leaving SFO): 1,110 of 1,515 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms. The next most were near JFK, where flights climb out or come in to land, about 10 min after leaving JFK (5 h 5 min after leaving SFO): 793 of 1,849 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Pilots reported moderate bumps most often near Cleveland (about 1 h after leaving JFK (4 h 15 min after leaving SFO)), and next most near JFK, where flights climb out or come in to land (about 10 min after leaving JFK (5 h 5 min after leaving SFO)).
 
 #### When is the smoothest time of year to fly JFK to SFO?
 
@@ -926,7 +926,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between EWR and SFO?
 
-Moderate bumps were reported most often over Pennsylvania, near Pittsburgh, about 45 min after leaving EWR (4 h 30 min after leaving SFO): 1,029 of 1,458 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms. The next most were over Nebraska, near Omaha, about 2 h 30 min after leaving EWR (2 h 45 min after leaving SFO): 724 of 2,916 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Pilots reported moderate bumps most often over Pennsylvania, near Pittsburgh (about 45 min after leaving EWR (4 h 30 min after leaving SFO)), and next most over Nebraska, near Omaha (about 2 h 30 min after leaving EWR (2 h 45 min after leaving SFO)).
 
 #### When is the smoothest time of year to fly EWR to SFO?
 
@@ -1025,7 +1025,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between ATL and MCO?
 
-Moderate bumps were reported most often over Georgia, about 20 min after leaving ATL (40 min after leaving MCO): 135 of 554 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms. The next most were over Florida, near Jacksonville, about 35 min after leaving ATL (25 min after leaving MCO): 127 of 752 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Pilots reported moderate bumps most often over Georgia (about 20 min after leaving ATL (40 min after leaving MCO)), and next most over Florida, near Jacksonville (about 35 min after leaving ATL (25 min after leaving MCO)).
 
 #### When is the smoothest time of year to fly ATL to MCO?
 
@@ -1124,7 +1124,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between LAS and LAX?
 
-Moderate bumps were reported most often over Nevada, near Las Vegas, about 5 min after leaving LAS (40 min after leaving LAX): 80 of 207 reports there. Close to the ground, wind over buildings and land stirs the air, and gusty days at LAS add to it. The next most were over California, near Ontario, about 35 min after leaving LAS (10 min after leaving LAX): 76 of 93 reports there. Close to the ground, wind over buildings and land stirs the air.
+Pilots reported moderate bumps most often over Nevada, near Las Vegas (about 5 min after leaving LAS (40 min after leaving LAX)), and next most over California, near Ontario (about 35 min after leaving LAS (10 min after leaving LAX)).
 
 #### When is the smoothest time of year to fly LAS to LAX?
 
@@ -1223,7 +1223,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between LGA and ORD?
 
-Moderate bumps were reported most often over Pennsylvania, near Pittsburgh, about 45 min after leaving LGA (55 min after leaving ORD): 451 of 643 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms. The next most were over Michigan, near Grand Rapids, about 1 h 20 min after leaving LGA (20 min after leaving ORD): 437 of 2,036 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Pilots reported moderate bumps most often over Pennsylvania, near Pittsburgh (about 45 min after leaving LGA (55 min after leaving ORD)), and next most over Michigan, near Grand Rapids (about 1 h 20 min after leaving LGA (20 min after leaving ORD)).
 
 #### When is the smoothest time of year to fly LGA to ORD?
 
@@ -1322,7 +1322,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between ATL and LGA?
 
-Moderate bumps were reported most often over North Carolina, near Charlotte, about 30 min after leaving ATL (1 h 10 min after leaving LGA): 331 of 1,993 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms. The next most were over Virginia, near Greensboro, about 45 min after leaving ATL (1 h after leaving LGA): 270 of 883 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Pilots reported moderate bumps most often over North Carolina, near Charlotte (about 30 min after leaving ATL (1 h 10 min after leaving LGA)), and next most over Virginia, near Greensboro (about 45 min after leaving ATL (1 h after leaving LGA)).
 
 #### When is the smoothest time of year to fly ATL to LGA?
 
@@ -1419,7 +1419,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between DEN and PHX?
 
-Moderate bumps were reported most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN (1 h 20 min after leaving PHX): 925 of 3,697 reports there. Close to the ground, wind over the mountains stirs the air, and gusty days at DEN add to it.
+Pilots reported moderate bumps most often near DEN, where flights climb out or come in to land (about 5 min after leaving DEN (1 h 20 min after leaving PHX)).
 
 #### When is the smoothest time of year to fly DEN to PHX?
 
@@ -1518,7 +1518,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between LAX and SEA?
 
-Moderate bumps were reported most often near LAX, where flights climb out or come in to land, about 5 min after leaving LAX (2 h after leaving SEA): 181 of 305 reports there. Close to the ground, wind over buildings and land stirs the air. The next most were over California, about 1 h 10 min after leaving LAX (55 min after leaving SEA): 128 of 209 reports there. The ground below is high, and wind over mountains makes waves that reach cruising height.
+Pilots reported moderate bumps most often near LAX, where flights climb out or come in to land (about 5 min after leaving LAX (2 h after leaving SEA)), and next most over California (about 1 h 10 min after leaving LAX (55 min after leaving SEA)).
 
 #### When is the smoothest time of year to fly LAX to SEA?
 
@@ -1617,7 +1617,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between BOS and DCA?
 
-Moderate bumps were reported most often near New York, about 25 min after leaving BOS (35 min after leaving DCA): 230 of 988 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms. The next most were over Connecticut, near Hartford, about 15 min after leaving BOS (50 min after leaving DCA): 172 of 548 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Pilots reported moderate bumps most often near New York (about 25 min after leaving BOS (35 min after leaving DCA)), and next most over Connecticut, near Hartford (about 15 min after leaving BOS (50 min after leaving DCA)).
 
 #### When is the smoothest time of year to fly BOS to DCA?
 
@@ -1714,7 +1714,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between BOS and LGA?
 
-Moderate bumps were reported most often over Connecticut, near Hartford, about 15 min after leaving BOS (20 min after leaving LGA): 145 of 440 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Pilots reported moderate bumps most often over Connecticut, near Hartford (about 15 min after leaving BOS (20 min after leaving LGA)).
 
 #### When is the smoothest time of year to fly BOS to LGA?
 
@@ -1811,7 +1811,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between LAX and ORD?
 
-Moderate bumps were reported most often over Colorado, near Colorado Springs, about 1 h 45 min after leaving LAX (1 h 55 min after leaving ORD): 863 of 2,423 reports there. The ground below is high, and wind over mountains makes waves that reach cruising height.
+Pilots reported moderate bumps most often over Colorado, near Colorado Springs (about 1 h 45 min after leaving LAX (1 h 55 min after leaving ORD)).
 
 #### When is the smoothest time of year to fly LAX to ORD?
 
@@ -1910,7 +1910,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between ATL and DFW?
 
-Moderate bumps were reported most often over Alabama, near Birmingham, about 20 min after leaving ATL (1 h 20 min after leaving DFW): 312 of 1,234 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms. The next most were over Mississippi, about 35 min after leaving ATL (1 h 5 min after leaving DFW): 235 of 436 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Pilots reported moderate bumps most often over Alabama, near Birmingham (about 20 min after leaving ATL (1 h 20 min after leaving DFW)), and next most over Mississippi (about 35 min after leaving ATL (1 h 5 min after leaving DFW)).
 
 #### When is the smoothest time of year to fly ATL to DFW?
 
@@ -2007,7 +2007,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between DEN and LAS?
 
-Moderate bumps were reported most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN (1 h 25 min after leaving LAS): 1,190 of 3,978 reports there. Close to the ground, wind over the mountains stirs the air, and gusty days at DEN add to it.
+Pilots reported moderate bumps most often near DEN, where flights climb out or come in to land (about 5 min after leaving DEN (1 h 25 min after leaving LAS)).
 
 #### When is the smoothest time of year to fly DEN to LAS?
 
@@ -2104,7 +2104,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between DEN and LAX?
 
-Moderate bumps were reported most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN (1 h 50 min after leaving LAX): 1,686 of 5,113 reports there. Close to the ground, wind over the mountains stirs the air, and gusty days at DEN add to it.
+Pilots reported moderate bumps most often near DEN, where flights climb out or come in to land (about 5 min after leaving DEN (1 h 50 min after leaving LAX)).
 
 #### When is the smoothest time of year to fly DEN to LAX?
 
@@ -2203,7 +2203,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between SEA and SFO?
 
-Moderate bumps were reported most often near SEA, where flights climb out or come in to land, about 5 min after leaving SEA (1 h 30 min after leaving SFO): 152 of 506 reports there. Close to the ground, wind over buildings and land stirs the air. The next most were over Oregon, near Portland, about 30 min after leaving SEA (1 h after leaving SFO): 107 of 200 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Pilots reported moderate bumps most often near SEA, where flights climb out or come in to land (about 5 min after leaving SEA (1 h 30 min after leaving SFO)), and next most over Oregon, near Portland (about 30 min after leaving SEA (1 h after leaving SFO)).
 
 #### When is the smoothest time of year to fly SEA to SFO?
 
@@ -2302,7 +2302,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between EWR and MCO?
 
-Moderate bumps were reported most often over Virginia, near Norfolk, about 35 min after leaving EWR (1 h 25 min after leaving MCO): 584 of 876 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms. The next most were near EWR, where flights climb out or come in to land, about 5 min after leaving EWR (2 h after leaving MCO): 356 of 732 reports there. Close to the ground, wind over buildings and land stirs the air, and gusty days at EWR add to it.
+Pilots reported moderate bumps most often over Virginia, near Norfolk (about 35 min after leaving EWR (1 h 25 min after leaving MCO)), and next most near EWR, where flights climb out or come in to land (about 5 min after leaving EWR (2 h after leaving MCO)).
 
 #### When is the smoothest time of year to fly EWR to MCO?
 
@@ -2399,7 +2399,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between DEN and ORD?
 
-Moderate bumps were reported most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN (1 h 55 min after leaving ORD): 964 of 3,952 reports there. Close to the ground, wind over the mountains stirs the air, and gusty days at DEN add to it.
+Pilots reported moderate bumps most often near DEN, where flights climb out or come in to land (about 5 min after leaving DEN (1 h 55 min after leaving ORD)).
 
 #### When is the smoothest time of year to fly DEN to ORD?
 
@@ -2498,7 +2498,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between DFW and LAX?
 
-Moderate bumps were reported most often near DFW, where flights climb out or come in to land, about 5 min after leaving DFW (2 h 30 min after leaving LAX): 314 of 1,038 reports there. Close to the ground, wind over buildings and land stirs the air, and gusty days at DFW add to it. The next most were over Texas, about 45 min after leaving DFW (1 h 50 min after leaving LAX): 217 of 633 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Pilots reported moderate bumps most often near DFW, where flights climb out or come in to land (about 5 min after leaving DFW (2 h 30 min after leaving LAX)), and next most over Texas (about 45 min after leaving DFW (1 h 50 min after leaving LAX)).
 
 #### When is the smoothest time of year to fly DFW to LAX?
 
@@ -2597,7 +2597,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between JFK and MIA?
 
-Moderate bumps were reported most often over North Carolina, near Norfolk, about 40 min after leaving JFK (1 h 40 min after leaving MIA): 492 of 738 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms. The next most were near JFK, where flights climb out or come in to land, about 5 min after leaving JFK (2 h 15 min after leaving MIA): 364 of 784 reports there. Close to the ground, wind over buildings and land stirs the air, and gusty days at JFK add to it.
+Pilots reported moderate bumps most often over North Carolina, near Norfolk (about 40 min after leaving JFK (1 h 40 min after leaving MIA)), and next most near JFK, where flights climb out or come in to land (about 5 min after leaving JFK (2 h 15 min after leaving MIA)).
 
 #### When is the smoothest time of year to fly JFK to MIA?
 
@@ -2696,7 +2696,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between LAS and SFO?
 
-Moderate bumps were reported most often over California, near San Jose, about 50 min after leaving LAS (15 min after leaving SFO): 79 of 130 reports there. Close to the ground, wind over buildings and land stirs the air, and gusty days at SFO add to it. The next most were near LAS, where flights climb out or come in to land, about 5 min after leaving LAS (1 h 5 min after leaving SFO): 48 of 179 reports there. Close to the ground, wind over buildings and land stirs the air, and gusty days at LAS add to it.
+Pilots reported moderate bumps most often over California, near San Jose (about 50 min after leaving LAS (15 min after leaving SFO)), and next most near LAS, where flights climb out or come in to land (about 5 min after leaving LAS (1 h 5 min after leaving SFO)).
 
 #### When is the smoothest time of year to fly LAS to SFO?
 
@@ -2795,7 +2795,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between DFW and ORD?
 
-Moderate bumps were reported most often near ORD, where flights climb out or come in to land, about 1 h 45 min after leaving DFW (5 min after leaving ORD): 291 of 2,116 reports there. Close to the ground, wind over buildings and land stirs the air, and gusty days at ORD add to it. The next most were over Arkansas, about 40 min after leaving DFW (1 h 5 min after leaving ORD): 252 of 621 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Pilots reported moderate bumps most often near ORD, where flights climb out or come in to land (about 1 h 45 min after leaving DFW (5 min after leaving ORD)), and next most over Arkansas (about 40 min after leaving DFW (1 h 5 min after leaving ORD)).
 
 #### When is the smoothest time of year to fly DFW to ORD?
 
@@ -2894,7 +2894,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between ATL and ORD?
 
-Moderate bumps were reported most often over Indiana, near Indianapolis, about 1 h after leaving ATL (25 min after leaving ORD): 388 of 1,692 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms. The next most were over Kentucky, near Louisville, about 45 min after leaving ATL (40 min after leaving ORD): 302 of 1,579 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Pilots reported moderate bumps most often over Indiana, near Indianapolis (about 1 h after leaving ATL (25 min after leaving ORD)), and next most over Kentucky, near Louisville (about 45 min after leaving ATL (40 min after leaving ORD)).
 
 #### When is the smoothest time of year to fly ATL to ORD?
 
@@ -2991,7 +2991,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between LAX and PHX?
 
-Moderate bumps were reported most often over California, near Santa Ana, about 5 min after leaving LAX (55 min after leaving PHX): 53 of 74 reports there. Close to the ground, wind over buildings and land stirs the air.
+Pilots reported moderate bumps most often over California, near Santa Ana (about 5 min after leaving LAX (55 min after leaving PHX)).
 
 #### When is the smoothest time of year to fly LAX to PHX?
 
@@ -3090,7 +3090,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between ATL and BOS?
 
-Moderate bumps were reported most often over Virginia, near Greensboro, about 40 min after leaving ATL (1 h 20 min after leaving BOS): 486 of 1,994 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms. The next most were over Connecticut, near Hartford, about 1 h 45 min after leaving ATL (20 min after leaving BOS): 373 of 1,310 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Pilots reported moderate bumps most often over Virginia, near Greensboro (about 40 min after leaving ATL (1 h 20 min after leaving BOS)), and next most over Connecticut, near Hartford (about 1 h 45 min after leaving ATL (20 min after leaving BOS)).
 
 #### When is the smoothest time of year to fly ATL to BOS?
 
@@ -3187,7 +3187,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between DEN and SFO?
 
-Moderate bumps were reported most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN (2 h after leaving SFO): 2,098 of 5,803 reports there. Close to the ground, wind over the mountains stirs the air, and gusty days at DEN add to it.
+Pilots reported moderate bumps most often near DEN, where flights climb out or come in to land (about 5 min after leaving DEN (2 h after leaving SFO)).
 
 #### When is the smoothest time of year to fly DEN to SFO?
 
@@ -3284,7 +3284,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between DEN and SEA?
 
-Moderate bumps were reported most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN (2 h 10 min after leaving SEA): 1,388 of 4,792 reports there. Close to the ground, wind over the mountains stirs the air, and gusty days at DEN add to it.
+Pilots reported moderate bumps most often near DEN, where flights climb out or come in to land (about 5 min after leaving DEN (2 h 10 min after leaving SEA)).
 
 #### When is the smoothest time of year to fly DEN to SEA?
 
@@ -3383,7 +3383,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between LAX and SLC?
 
-Moderate bumps were reported most often over California, near Burbank, about 10 min after leaving LAX (1 h 15 min after leaving SLC): 146 of 180 reports there. Close to the ground, wind over buildings and land stirs the air. The next most were near SLC, where flights climb out or come in to land, about 1 h 20 min after leaving LAX (5 min after leaving SLC): 109 of 307 reports there. Close to the ground, wind over the mountains stirs the air, and gusty days at SLC add to it.
+Pilots reported moderate bumps most often over California, near Burbank (about 10 min after leaving LAX (1 h 15 min after leaving SLC)), and next most near SLC, where flights climb out or come in to land (about 1 h 20 min after leaving LAX (5 min after leaving SLC)).
 
 #### When is the smoothest time of year to fly LAX to SLC?
 
@@ -3482,7 +3482,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between MSP and ORD?
 
-Moderate bumps were reported most often over Wisconsin, about 30 min after leaving MSP (25 min after leaving ORD): 172 of 837 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms. The next most were near ORD, where flights climb out or come in to land, about 55 min after leaving MSP (5 min after leaving ORD): 104 of 904 reports there. Close to the ground, wind over buildings and land stirs the air, and gusty days at ORD add to it.
+Pilots reported moderate bumps most often over Wisconsin (about 30 min after leaving MSP (25 min after leaving ORD)), and next most near ORD, where flights climb out or come in to land (about 55 min after leaving MSP (5 min after leaving ORD)).
 
 #### When is the smoothest time of year to fly MSP to ORD?
 
@@ -3579,7 +3579,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between DEN and DFW?
 
-Moderate bumps were reported most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN (1 h 25 min after leaving DFW): 869 of 3,733 reports there. Close to the ground, wind over the mountains stirs the air, and gusty days at DEN add to it.
+Pilots reported moderate bumps most often near DEN, where flights climb out or come in to land (about 5 min after leaving DEN (1 h 25 min after leaving DFW)).
 
 #### When is the smoothest time of year to fly DEN to DFW?
 
@@ -3678,7 +3678,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between BOS and ORD?
 
-Moderate bumps were reported most often over New York, near Syracuse, about 40 min after leaving BOS (1 h 15 min after leaving ORD): 490 of 1,601 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms. The next most were over Michigan, near Detroit, about 1 h 20 min after leaving BOS (35 min after leaving ORD): 423 of 712 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Pilots reported moderate bumps most often over New York, near Syracuse (about 40 min after leaving BOS (1 h 15 min after leaving ORD)), and next most over Michigan, near Detroit (about 1 h 20 min after leaving BOS (35 min after leaving ORD)).
 
 #### When is the smoothest time of year to fly BOS to ORD?
 
@@ -3775,7 +3775,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between YUL and YYZ?
 
-Moderate bumps were reported most often over Ontario, near Ottawa, about 20 min after leaving YUL (30 min after leaving YYZ): 34 of 128 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Pilots reported moderate bumps most often over Ontario, near Ottawa (about 20 min after leaving YUL (30 min after leaving YYZ)).
 
 #### When is the smoothest time of year to fly YUL to YYZ?
 
@@ -3872,7 +3872,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between YVR and YYZ?
 
-Moderate bumps were reported most often over Michigan, about 3 h 40 min after leaving YVR (35 min after leaving YYZ): 164 of 600 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Pilots reported moderate bumps most often over Michigan (about 3 h 40 min after leaving YVR (35 min after leaving YYZ)).
 
 #### When is the smoothest time of year to fly YVR to YYZ?
 
@@ -3971,7 +3971,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between YYC and YYZ?
 
-Moderate bumps were reported most often over Michigan, about 3 h after leaving YYC (30 min after leaving YYZ): 80 of 271 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms. The next most were over Minnesota, about 2 h 10 min after leaving YYC (1 h 20 min after leaving YYZ): 68 of 335 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Pilots reported moderate bumps most often over Michigan (about 3 h after leaving YYC (30 min after leaving YYZ)), and next most over Minnesota (about 2 h 10 min after leaving YYC (1 h 20 min after leaving YYZ)).
 
 #### When is the smoothest time of year to fly YYC to YYZ?
 
@@ -4068,7 +4068,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between LGA and YYZ?
 
-Moderate bumps were reported most often over New York, near Rochester, about 30 min after leaving LGA (25 min after leaving YYZ): 354 of 1,267 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Pilots reported moderate bumps most often over New York, near Rochester (about 30 min after leaving LGA (25 min after leaving YYZ)).
 
 #### When is the smoothest time of year to fly LGA to YYZ?
 

@@ -70,7 +70,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between LAS and LAX?
 
-Moderate bumps were reported most often over Nevada, near Las Vegas, about 5 min after leaving LAS (40 min after leaving LAX): 80 of 207 reports there. Close to the ground, wind over buildings and land stirs the air, and gusty days at LAS add to it. The next most were over California, near Ontario, about 35 min after leaving LAS (10 min after leaving LAX): 76 of 93 reports there. Close to the ground, wind over buildings and land stirs the air.
+Pilots reported moderate bumps most often over Nevada, near Las Vegas (about 5 min after leaving LAS (40 min after leaving LAX)), and next most over California, near Ontario (about 35 min after leaving LAS (10 min after leaving LAX)).
 
 ### When is the smoothest time of year to fly LAS to LAX?
 

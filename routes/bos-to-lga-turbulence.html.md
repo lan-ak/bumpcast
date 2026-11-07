@@ -68,7 +68,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between BOS and LGA?
 
-Moderate bumps were reported most often over Connecticut, near Hartford, about 15 min after leaving BOS (20 min after leaving LGA): 145 of 440 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Pilots reported moderate bumps most often over Connecticut, near Hartford (about 15 min after leaving BOS (20 min after leaving LGA)).
 
 ### When is the smoothest time of year to fly BOS to LGA?
 

@@ -70,7 +70,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between LAX and SEA?
 
-Moderate bumps were reported most often near LAX, where flights climb out or come in to land, about 5 min after leaving LAX (2 h after leaving SEA): 181 of 305 reports there. Close to the ground, wind over buildings and land stirs the air. The next most were over California, about 1 h 10 min after leaving LAX (55 min after leaving SEA): 128 of 209 reports there. The ground below is high, and wind over mountains makes waves that reach cruising height.
+Pilots reported moderate bumps most often near LAX, where flights climb out or come in to land (about 5 min after leaving LAX (2 h after leaving SEA)), and next most over California (about 1 h 10 min after leaving LAX (55 min after leaving SEA)).
 
 ### When is the smoothest time of year to fly LAX to SEA?
 

@@ -70,7 +70,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between ATL and MCO?
 
-Moderate bumps were reported most often over Georgia, about 20 min after leaving ATL (40 min after leaving MCO): 135 of 554 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms. The next most were over Florida, near Jacksonville, about 35 min after leaving ATL (25 min after leaving MCO): 127 of 752 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Pilots reported moderate bumps most often over Georgia (about 20 min after leaving ATL (40 min after leaving MCO)), and next most over Florida, near Jacksonville (about 35 min after leaving ATL (25 min after leaving MCO)).
 
 ### When is the smoothest time of year to fly ATL to MCO?
 

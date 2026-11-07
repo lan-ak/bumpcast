@@ -70,7 +70,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between ATL and ORD?
 
-Moderate bumps were reported most often over Indiana, near Indianapolis, about 1 h after leaving ATL (25 min after leaving ORD): 388 of 1,692 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms. The next most were over Kentucky, near Louisville, about 45 min after leaving ATL (40 min after leaving ORD): 302 of 1,579 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Pilots reported moderate bumps most often over Indiana, near Indianapolis (about 1 h after leaving ATL (25 min after leaving ORD)), and next most over Kentucky, near Louisville (about 45 min after leaving ATL (40 min after leaving ORD)).
 
 ### When is the smoothest time of year to fly ATL to ORD?
 

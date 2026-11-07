@@ -70,7 +70,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between SEA and SFO?
 
-Moderate bumps were reported most often near SEA, where flights climb out or come in to land, about 5 min after leaving SEA (1 h 30 min after leaving SFO): 152 of 506 reports there. Close to the ground, wind over buildings and land stirs the air. The next most were over Oregon, near Portland, about 30 min after leaving SEA (1 h after leaving SFO): 107 of 200 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Pilots reported moderate bumps most often near SEA, where flights climb out or come in to land (about 5 min after leaving SEA (1 h 30 min after leaving SFO)), and next most over Oregon, near Portland (about 30 min after leaving SEA (1 h after leaving SFO)).
 
 ### When is the smoothest time of year to fly SEA to SFO?
 

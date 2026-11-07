@@ -68,7 +68,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between LAX and ORD?
 
-Moderate bumps were reported most often over Colorado, near Colorado Springs, about 1 h 45 min after leaving LAX (1 h 55 min after leaving ORD): 863 of 2,423 reports there. The ground below is high, and wind over mountains makes waves that reach cruising height.
+Pilots reported moderate bumps most often over Colorado, near Colorado Springs (about 1 h 45 min after leaving LAX (1 h 55 min after leaving ORD)).
 
 ### When is the smoothest time of year to fly LAX to ORD?
 

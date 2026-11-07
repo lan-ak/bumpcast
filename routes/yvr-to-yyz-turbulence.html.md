@@ -68,7 +68,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between YVR and YYZ?
 
-Moderate bumps were reported most often over Michigan, about 3 h 40 min after leaving YVR (35 min after leaving YYZ): 164 of 600 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Pilots reported moderate bumps most often over Michigan (about 3 h 40 min after leaving YVR (35 min after leaving YYZ)).
 
 ### When is the smoothest time of year to fly YVR to YYZ?
 

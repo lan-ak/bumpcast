@@ -70,7 +70,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between LAX and SLC?
 
-Moderate bumps were reported most often over California, near Burbank, about 10 min after leaving LAX (1 h 15 min after leaving SLC): 146 of 180 reports there. Close to the ground, wind over buildings and land stirs the air. The next most were near SLC, where flights climb out or come in to land, about 1 h 20 min after leaving LAX (5 min after leaving SLC): 109 of 307 reports there. Close to the ground, wind over the mountains stirs the air, and gusty days at SLC add to it.
+Pilots reported moderate bumps most often over California, near Burbank (about 10 min after leaving LAX (1 h 15 min after leaving SLC)), and next most near SLC, where flights climb out or come in to land (about 1 h 20 min after leaving LAX (5 min after leaving SLC)).
 
 ### When is the smoothest time of year to fly LAX to SLC?
 
