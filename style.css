@@ -352,3 +352,12 @@ section[id] { scroll-margin-top: 96px; }
   .route-table td:first-child { grid-column: 1 / -1; }
   .route-table td[data-label]::before { content: attr(data-label); display: block; font: 500 .68rem/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink2); margin-bottom: 2px; }
 }
+
+/* ---------- Apple's official "Download on the App Store" badge (app-store-badge.svg), unmodified.
+   Apple prefers the black badge everywhere, at least 40 px tall, with clear space of a quarter of its
+   height around it (12 px at 48 px). */
+.store-badge { display: inline-block; line-height: 0; border-radius: 9px; }
+.store-badge img { display: block; width: auto; height: 48px; }
+.store-badge:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+.hero .store-badge img { height: 56px; }
+.picker-miss .store-badge { margin-top: 4px; }
