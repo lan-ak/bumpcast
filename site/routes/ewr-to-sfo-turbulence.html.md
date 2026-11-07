@@ -70,7 +70,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between EWR and SFO?
 
-Moderate bumps were reported most often over Pennsylvania, near Pittsburgh, about 45 min after leaving EWR (4 h 30 min after leaving SFO): 1,029 of 1,458 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms. The next most were over Nebraska, near Omaha, about 2 h 30 min after leaving EWR (2 h 45 min after leaving SFO): 724 of 2,916 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Pilots reported moderate bumps most often over Pennsylvania, near Pittsburgh (about 45 min after leaving EWR (4 h 30 min after leaving SFO)), and next most over Nebraska, near Omaha (about 2 h 30 min after leaving EWR (2 h 45 min after leaving SFO)).
 
 ### When is the smoothest time of year to fly EWR to SFO?
 

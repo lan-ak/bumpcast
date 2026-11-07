@@ -70,7 +70,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between DFW and ORD?
 
-Moderate bumps were reported most often near ORD, where flights climb out or come in to land, about 1 h 45 min after leaving DFW (5 min after leaving ORD): 291 of 2,116 reports there. Close to the ground, wind over buildings and land stirs the air, and gusty days at ORD add to it. The next most were over Arkansas, about 40 min after leaving DFW (1 h 5 min after leaving ORD): 252 of 621 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Pilots reported moderate bumps most often near ORD, where flights climb out or come in to land (about 1 h 45 min after leaving DFW (5 min after leaving ORD)), and next most over Arkansas (about 40 min after leaving DFW (1 h 5 min after leaving ORD)).
 
 ### When is the smoothest time of year to fly DFW to ORD?
 

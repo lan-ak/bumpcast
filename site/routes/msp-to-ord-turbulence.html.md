@@ -70,7 +70,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between MSP and ORD?
 
-Moderate bumps were reported most often over Wisconsin, about 30 min after leaving MSP (25 min after leaving ORD): 172 of 837 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms. The next most were near ORD, where flights climb out or come in to land, about 55 min after leaving MSP (5 min after leaving ORD): 104 of 904 reports there. Close to the ground, wind over buildings and land stirs the air, and gusty days at ORD add to it.
+Pilots reported moderate bumps most often over Wisconsin (about 30 min after leaving MSP (25 min after leaving ORD)), and next most near ORD, where flights climb out or come in to land (about 55 min after leaving MSP (5 min after leaving ORD)).
 
 ### When is the smoothest time of year to fly MSP to ORD?
 

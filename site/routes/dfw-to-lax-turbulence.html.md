@@ -70,7 +70,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between DFW and LAX?
 
-Moderate bumps were reported most often near DFW, where flights climb out or come in to land, about 5 min after leaving DFW (2 h 30 min after leaving LAX): 314 of 1,038 reports there. Close to the ground, wind over buildings and land stirs the air, and gusty days at DFW add to it. The next most were over Texas, about 45 min after leaving DFW (1 h 50 min after leaving LAX): 217 of 633 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Pilots reported moderate bumps most often near DFW, where flights climb out or come in to land (about 5 min after leaving DFW (2 h 30 min after leaving LAX)), and next most over Texas (about 45 min after leaving DFW (1 h 50 min after leaving LAX)).
 
 ### When is the smoothest time of year to fly DFW to LAX?
 

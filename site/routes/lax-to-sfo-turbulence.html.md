@@ -68,7 +68,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between LAX and SFO?
 
-Moderate bumps were reported most often near LAX, where flights climb out or come in to land, about 5 min after leaving LAX (55 min after leaving SFO): 73 of 158 reports there. Close to the ground, wind over buildings and land stirs the air.
+Pilots reported moderate bumps most often near LAX, where flights climb out or come in to land (about 5 min after leaving LAX (55 min after leaving SFO)).
 
 ### When is the smoothest time of year to fly LAX to SFO?
 

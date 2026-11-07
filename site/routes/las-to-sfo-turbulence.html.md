@@ -70,7 +70,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between LAS and SFO?
 
-Moderate bumps were reported most often over California, near San Jose, about 50 min after leaving LAS (15 min after leaving SFO): 79 of 130 reports there. Close to the ground, wind over buildings and land stirs the air, and gusty days at SFO add to it. The next most were near LAS, where flights climb out or come in to land, about 5 min after leaving LAS (1 h 5 min after leaving SFO): 48 of 179 reports there. Close to the ground, wind over buildings and land stirs the air, and gusty days at LAS add to it.
+Pilots reported moderate bumps most often over California, near San Jose (about 50 min after leaving LAS (15 min after leaving SFO)), and next most near LAS, where flights climb out or come in to land (about 5 min after leaving LAS (1 h 5 min after leaving SFO)).
 
 ### When is the smoothest time of year to fly LAS to SFO?
 

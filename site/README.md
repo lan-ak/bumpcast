@@ -20,6 +20,7 @@ Preview locally: the `site` entry in `.claude/launch.json` (`python3 -m http.ser
 | `/routes/` | Generated: turbulence by route, one page per popular route, from a year of pilot reports. See below |
 | `/learn/*.html.md`, `/routes/*.html.md` | Generated: a clean Markdown copy of each page for AI agents (llms.txt convention: the page's URL plus `.md`) |
 | `/charts.js` | Tooltips for the route charts (the numbers are also in a table under each chart) |
+| `/picker.js` | The "Find your route" picker on `/routes/` and the home page: From and To, then that route's page (either direction), or, for a pair without a page, a note that the app forecasts any covered flight. Hidden without JavaScript; the links and table still reach every route |
 | `/robots.txt` | Lets every crawler in, search engines and AI alike, and points to the sitemap and `llms.txt` |
 | `/sitemap.xml` | Generated: every page, for Google Search Console and Bing |
 | `/404.html` | Host not-found page (root-relative links, so it works at any depth) |
@@ -54,6 +55,8 @@ Where and when pilots reported bumps on popular routes, from a year of airliner 
 
 - **Add a route:** add the pair to `ROUTES` in `route_data.py` and refresh. A route needs at least 400 reports near it (`MIN_REPORTS`) for a page; Vancouver–Calgary doesn't have them.
 - **Why the pages don't rank routes or quote shares as odds:** how often smooth air gets reported depends on the control center (in the past year, 4% of cruise reports at Washington Center but 45% at Miami Center). So each page compares places and months within its route, leads with counts and places, and says so in "How we made this page".
+- **Find your route:** a From/To picker on `/routes/` and the home page (`picker_html` in the script, `picker.js`). A pair without a page gets the app pitch, with the `web-picker` campaign.
+- **Phones:** each chart is drawn twice, wide and compact, and CSS shows the one that fits; the routes table becomes one block per route.
 - **Gusty** means gusts of 25 kt or more in an hourly airport report, the app's own threshold (`worker/src/smooth_worker/airfield.py`).
 
 ### App Store links (counting downloads by page)

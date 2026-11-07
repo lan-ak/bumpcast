@@ -70,7 +70,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between JFK and LAX?
 
-Moderate bumps were reported most often over Colorado, near Colorado Springs, about 3 h 20 min after leaving JFK (1 h 40 min after leaving LAX): 1,072 of 2,964 reports there. The ground below is high, and wind over mountains makes waves that reach cruising height. The next most were over Pennsylvania, near Pittsburgh, about 40 min after leaving JFK (4 h 20 min after leaving LAX): 1,056 of 1,571 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Pilots reported moderate bumps most often over Colorado, near Colorado Springs (about 3 h 20 min after leaving JFK (1 h 40 min after leaving LAX)), and next most over Pennsylvania, near Pittsburgh (about 40 min after leaving JFK (4 h 20 min after leaving LAX)).
 
 ### When is the smoothest time of year to fly JFK to LAX?
 

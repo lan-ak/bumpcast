@@ -68,7 +68,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between DEN and ORD?
 
-Moderate bumps were reported most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN (1 h 55 min after leaving ORD): 964 of 3,952 reports there. Close to the ground, wind over the mountains stirs the air, and gusty days at DEN add to it.
+Pilots reported moderate bumps most often near DEN, where flights climb out or come in to land (about 5 min after leaving DEN (1 h 55 min after leaving ORD)).
 
 ### When is the smoothest time of year to fly DEN to ORD?
 

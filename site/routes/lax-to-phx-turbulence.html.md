@@ -68,7 +68,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between LAX and PHX?
 
-Moderate bumps were reported most often over California, near Santa Ana, about 5 min after leaving LAX (55 min after leaving PHX): 53 of 74 reports there. Close to the ground, wind over buildings and land stirs the air.
+Pilots reported moderate bumps most often over California, near Santa Ana (about 5 min after leaving LAX (55 min after leaving PHX)).
 
 ### When is the smoothest time of year to fly LAX to PHX?
 

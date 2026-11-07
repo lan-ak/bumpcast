@@ -70,7 +70,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between YYC and YYZ?
 
-Moderate bumps were reported most often over Michigan, about 3 h after leaving YYC (30 min after leaving YYZ): 80 of 271 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms. The next most were over Minnesota, about 2 h 10 min after leaving YYC (1 h 20 min after leaving YYZ): 68 of 335 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Pilots reported moderate bumps most often over Michigan (about 3 h after leaving YYC (30 min after leaving YYZ)), and next most over Minnesota (about 2 h 10 min after leaving YYC (1 h 20 min after leaving YYZ)).
 
 ### When is the smoothest time of year to fly YYC to YYZ?
 

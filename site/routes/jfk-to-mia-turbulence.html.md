@@ -70,7 +70,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between JFK and MIA?
 
-Moderate bumps were reported most often over North Carolina, near Norfolk, about 40 min after leaving JFK (1 h 40 min after leaving MIA): 492 of 738 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms. The next most were near JFK, where flights climb out or come in to land, about 5 min after leaving JFK (2 h 15 min after leaving MIA): 364 of 784 reports there. Close to the ground, wind over buildings and land stirs the air, and gusty days at JFK add to it.
+Pilots reported moderate bumps most often over North Carolina, near Norfolk (about 40 min after leaving JFK (1 h 40 min after leaving MIA)), and next most near JFK, where flights climb out or come in to land (about 5 min after leaving JFK (2 h 15 min after leaving MIA)).
 
 ### When is the smoothest time of year to fly JFK to MIA?
 

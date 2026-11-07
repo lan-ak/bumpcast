@@ -68,7 +68,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between DEN and LAX?
 
-Moderate bumps were reported most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN (1 h 50 min after leaving LAX): 1,686 of 5,113 reports there. Close to the ground, wind over the mountains stirs the air, and gusty days at DEN add to it.
+Pilots reported moderate bumps most often near DEN, where flights climb out or come in to land (about 5 min after leaving DEN (1 h 50 min after leaving LAX)).
 
 ### When is the smoothest time of year to fly DEN to LAX?
 

@@ -70,7 +70,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between BOS and DCA?
 
-Moderate bumps were reported most often near New York, about 25 min after leaving BOS (35 min after leaving DCA): 230 of 988 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms. The next most were over Connecticut, near Hartford, about 15 min after leaving BOS (50 min after leaving DCA): 172 of 548 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Pilots reported moderate bumps most often near New York (about 25 min after leaving BOS (35 min after leaving DCA)), and next most over Connecticut, near Hartford (about 15 min after leaving BOS (50 min after leaving DCA)).
 
 ### When is the smoothest time of year to fly BOS to DCA?
 

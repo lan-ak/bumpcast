@@ -684,7 +684,6 @@ def hub_html(explainers: list[Explainer], has_routes: bool) -> str:
 <main class="learn">
 {crumbs(("Home", "../"), ("Learn", None))}
 <header class="learn-head">
-  <p class="eyebrow">Learn</p>
   <h1>{text(HUB_TITLE)}</h1>
   <p class="lede">{text(HUB_SUMMARY)}</p>
 </header>
@@ -935,8 +934,10 @@ class Route:
                 "so the share of flights with strong bumps is lower still. On the day, the weather decides: BumpCast "
                 "forecasts your exact flight from 48 hours before departure.")]
         if spots:
+            places = [f"{self.place(s)} ({self.when(s)})" for s in spots]
             out.append((f"Where is it bumpiest between {self.A} and {self.B}?",
-                        " ".join(sentence for sentence, _ in self.hotspot_sentences())))
+                        f"Pilots reported moderate bumps most often {places[0]}"
+                        + (f", and next most {places[1]}" if len(places) > 1 else "") + "."))
         out.append((f"When is the smoothest time of year to fly {self.name}?",
                     (f"In the past year, moderate bumps made up a smaller share of reports in {join(calmer)}"
                      + (f" and a bigger share in {join(bumpier)}" if bumpier else "") + ". "
@@ -962,7 +963,9 @@ class Route:
 # Charts: one series each, in the accent color, with a tooltip on every bar (charts.js) and the
 # numbers in a table below. Text uses the text colors, never the bar color.
 
-CHART_W, LEFT, RIGHT = 640, 48, 12
+# Each chart is drawn twice from the same code: wide (desktop) and compact (phones), and CSS
+# shows one, so text stays readable without scrolling sideways.
+SIZES = {"wide": (640, 48, 12), "compact": (360, 48, 6)}  # viewBox width, left and right margins
 
 
 def bar_path(x: float, y: float, w: float, base: float, r: float = 4) -> str:
@@ -978,32 +981,33 @@ def bar_path(x: float, y: float, w: float, base: float, r: float = 4) -> str:
             f"Q{x + w:.1f} {y:.1f} {x + w:.1f} {y - r:.1f}V{base:.1f}Z")
 
 
-def along_chart(route: Route) -> str:
+def along_svg(route: Route, size: str) -> str:
+    width, left, right = SIZES[size]
     along = route.r["along"]
     n = len(along)
-    pw = CHART_W - LEFT - RIGHT
+    pw = width - left - right
     band = pw / n
-    bw = min(24, band - 4)
+    bw = min(24, band - 3)
     top, base = 16, 150
     p_top, p_base = 176, 236
     vmax = nice_max(max(bumpy(s["counts"]) for s in along))
     y = lambda v: base - (base - top) * v / vmax  # noqa: E731
-    out = [f'<line class="grid" x1="{LEFT}" x2="{CHART_W - RIGHT}" y1="{y(t):.1f}" y2="{y(t):.1f}"/>'
-           f'<text class="tick" x="{LEFT - 8}" y="{y(t) + 4:.1f}" text-anchor="end">{t:,.0f}</text>'
+    out = [f'<line class="grid" x1="{left}" x2="{width - right}" y1="{y(t):.1f}" y2="{y(t):.1f}"/>'
+           f'<text class="tick" x="{left - 6}" y="{y(t) + 4:.1f}" text-anchor="end">{t:,.0f}</text>'
            for t in (0, vmax / 2, vmax)]
     # Flight height (top) over the ground (bottom), on one height scale.
     h = lambda ft: p_base - (p_base - p_top) * ft / 45000  # noqa: E731
-    xs = [LEFT] + [LEFT + band * (i + 0.5) for i in range(n)] + [LEFT + pw]
+    xs = [left] + [left + band * (i + 0.5) for i in range(n)] + [left + pw]
     ground = [route.a["elev_ft"]] + [s["ground_ft"] for s in along] + [route.b["elev_ft"]]
     flight = [route.a["elev_ft"]] + [s["alt_ft"] for s in along] + [route.b["elev_ft"]]
     ground_pts = " ".join(f"{x:.1f},{h(g):.1f}" for x, g in zip(xs, ground))
-    out.append(f'<polygon class="ground" points="{LEFT},{p_base} {ground_pts} {LEFT + pw},{p_base}"/>')
-    out.append(f'<line class="grid" x1="{LEFT}" x2="{CHART_W - RIGHT}" y1="{p_base}" y2="{p_base}"/>')
+    out.append(f'<polygon class="ground" points="{left},{p_base} {ground_pts} {left + pw},{p_base}"/>')
+    out.append(f'<line class="grid" x1="{left}" x2="{width - right}" y1="{p_base}" y2="{p_base}"/>')
     out.append('<polyline class="alt" points="' + " ".join(f"{x:.1f},{h(a):.1f}" for x, a in zip(xs, flight)) + '"/>')
-    out.append(f'<text class="tick" x="{LEFT - 8}" y="{h(route.r["cruise_ft"]) + 4:.1f}" text-anchor="end">'
+    out.append(f'<text class="tick" x="{left - 6}" y="{h(route.r["cruise_ft"]) + 4:.1f}" text-anchor="end">'
                f'{route.r["cruise_ft"] // 1000}k ft</text>')
     for i, s in enumerate(along):
-        x = LEFT + band * i
+        x = left + band * i
         v = bumpy(s["counts"])
         tip = (f"{route.place(s)[0].upper()}{route.place(s)[1:]}, {route.when(s)}. {total(s['counts']):,} reports, "
                f"{v:,} moderate or stronger.")
@@ -1012,7 +1016,7 @@ def along_chart(route: Route) -> str:
                    + (f'<path class="bar" d="{bar_path(x + (band - bw) / 2, y(v), bw, base)}"/>' if v else "")
                    + "</g>")
     # Place names under the chart: the two airports, and the longest runs of one state or province.
-    labels = [(LEFT, route.A, "start"), (LEFT + pw, route.B, "end")]
+    labels = [(left, route.A, "start"), (left + pw, route.B, "end")]
 
     def extent(x: float, t: str, anchor: str) -> tuple[float, float]:
         w = 7.0 * len(t)  # about 7 px a character at the chart's 12 px
@@ -1025,38 +1029,45 @@ def along_chart(route: Route) -> str:
                 runs.append((i - start, start, along[start]["region_name"]))
             start = i
     for length, first, name in sorted(runs, key=lambda r: (-r[0], r[1])):
-        cx = LEFT + band * (first + length / 2)
+        cx = left + band * (first + length / 2)
         lo, hi = extent(cx, name, "middle")
         clear = all(hi + 12 < a or lo - 12 > b for a, b in (extent(*l) for l in labels))
-        if length >= 2 and clear and lo >= LEFT and hi <= LEFT + pw:
+        if length >= 2 and clear and lo >= left and hi <= left + pw:
             labels.append((cx, name, "middle"))
     out += [f'<text class="place" x="{x:.1f}" y="256" text-anchor="{a}">{text(t)}</text>' for x, t, a in labels]
     desc = (f"Bars show how many reports of moderate or stronger turbulence came from each of {n} stretches between "
             f"{route.A} and {route.B}. Below, the height a flight would be at, over the ground.")
-    return (f'<figure class="chart"><div class="chart-scroll"><svg viewBox="0 0 {CHART_W} 266" role="img" '
-            f'aria-labelledby="along-t along-d"><title id="along-t">Reports of moderate or stronger turbulence along '
-            f'the route</title><desc id="along-d">{text(desc)}</desc>{"".join(out)}</svg></div>'
+    ident = f"along-{size}"
+    return (f'<svg class="{size}" viewBox="0 0 {width} 266" role="img" aria-labelledby="{ident}-t {ident}-d">'
+            f'<title id="{ident}-t">Reports of moderate or stronger turbulence along the route</title>'
+            f'<desc id="{ident}-d">{text(desc)}</desc>{"".join(out)}</svg>')
+
+
+def along_chart(route: Route) -> str:
+    return (f'<figure class="chart">{along_svg(route, "wide")}{along_svg(route, "compact")}'
             f'<figcaption>Moderate-or-stronger reports by stretch of the route, {route.A} on the left. Below: the '
             f'height of a typical flight, over the ground.</figcaption></figure>')
 
 
-def months_chart(rows: list[tuple[str, dict, float | None]], label: str, ident: str) -> str:
+def months_svg(rows: list[tuple[str, dict, float | None]], label: str, ident: str, size: str) -> str:
+    width, left, right = SIZES[size]
     n = len(rows)
-    pw = CHART_W - LEFT - RIGHT
+    pw = width - left - right
     band = pw / n
     bw = min(24, band - 8)
     top, bottom = 16, 176
     values = [i for _, _, i in rows if i is not None]
-    span = max(1.0, math.ceil(max(abs(v - 1) for v in values) * 4) / 4) if values else 1.0
+    span = max(0.5, math.ceil(max(abs(v - 1) for v in values) * 4) / 4) if values else 0.5
+    step = 0.25 if span <= 0.5 else 0.5
     y = lambda v: top + (bottom - top) * (1 + span - v) / (2 * span)  # noqa: E731
     out = []
-    for t in (1 - span, 1 - span / 2, 1 + span / 2, 1 + span):
-        out.append(f'<line class="grid" x1="{LEFT}" x2="{CHART_W - RIGHT}" y1="{y(t):.1f}" y2="{y(t):.1f}"/>'
-                   f'<text class="tick" x="{LEFT - 8}" y="{y(t) + 4:.1f}" text-anchor="end">{t:g}×</text>')
-    out.append(f'<line class="base" x1="{LEFT}" x2="{CHART_W - RIGHT}" y1="{y(1):.1f}" y2="{y(1):.1f}"/>'
-               f'<text class="tick" x="{LEFT - 8}" y="{y(1) + 4:.1f}" text-anchor="end">1×</text>')
+    for k in range(-int(span / step), int(span / step) + 1):
+        t = 1 + k * step
+        cls = "base" if k == 0 else "grid"
+        out.append(f'<line class="{cls}" x1="{left}" x2="{width - right}" y1="{y(t):.1f}" y2="{y(t):.1f}"/>'
+                   f'<text class="tick" x="{left - 6}" y="{y(t) + 4:.1f}" text-anchor="end">{t:g}×</text>')
     for j, (key, c, index) in enumerate(rows):
-        x = LEFT + band * j
+        x = left + band * j
         if index is None:
             tip = f"{month_year(key)}: too few reports ({total(c):,}) to compare."
             bar = f'<text class="tick" x="{x + band / 2:.1f}" y="{y(1) - 6:.1f}" text-anchor="middle">–</text>'
@@ -1066,13 +1077,18 @@ def months_chart(rows: list[tuple[str, dict, float | None]], label: str, ident: 
             bar = f'<path class="bar" d="{bar_path(x + (band - bw) / 2, y(index), bw, y(1))}"/>'
         out.append(f'<g class="band" data-tip="{attr(tip)}"><rect class="hit" x="{x:.1f}" y="{top}" width="{band:.1f}" '
                    f'height="{bottom - top}"/>{bar}</g>')
+        name = month_name(key, short=True)
         out.append(f'<text class="place" x="{x + band / 2:.1f}" y="{bottom + 18}" text-anchor="middle">'
-                   f'{month_name(key, short=True)}</text>')
+                   f'{name if size == "wide" else name[0]}</text>')
         if j == 0 or key.endswith("-01"):
             out.append(f'<text class="tick" x="{x + band / 2:.1f}" y="{bottom + 34}" text-anchor="middle">{key[:4]}</text>')
-    return (f'<figure class="chart"><div class="chart-scroll"><svg viewBox="0 0 {CHART_W} 216" role="img" '
-            f'aria-labelledby="{ident}-t"><title id="{ident}-t">Share of moderate-or-stronger reports by month, '
-            f'compared with {text(label)}</title>{"".join(out)}</svg></div>'
+    return (f'<svg class="{size}" viewBox="0 0 {width} 216" role="img" aria-labelledby="{ident}-{size}-t">'
+            f'<title id="{ident}-{size}-t">Share of moderate-or-stronger reports by month, compared with '
+            f'{text(label)}</title>{"".join(out)}</svg>')
+
+
+def months_chart(rows: list[tuple[str, dict, float | None]], label: str, ident: str) -> str:
+    return (f'<figure class="chart">{months_svg(rows, label, ident, "wide")}{months_svg(rows, label, ident, "compact")}'
             f'<figcaption>Each month\'s share of moderate-or-stronger reports, as a multiple of {text(label)}. '
             f'Above 1× is bumpier than usual; below is calmer.</figcaption></figure>')
 
@@ -1283,10 +1299,11 @@ def routes_hub_html(routes: list[Route], data: dict) -> str:
         spots = r.hotspots()
         bumpier, _ = r.season()
         rows.append(f'<tr><td><a href="{r.file}">{text(r.pair)}</a><span class="muted">{text(r.a["city"])} – '
-                    f'{text(r.b["city"])}</span></td><td>{duration(r.minutes)}</td>'
-                    f'<td>{r.n:,}</td><td>{text(r.short_place(spots[0]) if spots else "–")}</td>'
-                    f'<td>{text(join([m[:3] for m in bumpier]) or "–")}</td>'
-                    f'<td>{r.gusts(r.A)[0]} / {r.gusts(r.B)[0]}</td></tr>')
+                    f'{text(r.b["city"])}</span></td><td data-label="In the air">{duration(r.minutes)}</td>'
+                    f'<td data-label="Reports">{r.n:,}</td>'
+                    f'<td data-label="Moderate bumps most often">{text(r.short_place(spots[0]) if spots else "–")}</td>'
+                    f'<td data-label="Bumpier months">{text(join([m[:3] for m in bumpier]) or "–")}</td>'
+                    f'<td data-label="Gusty days ({r.A} / {r.B})">{r.gusts(r.A)[0]} / {r.gusts(r.B)[0]}</td></tr>')
     findings = [
         f"<li><b>Severe turbulence is rare.</b> Of {nat['cruise_n']:,} airliner reports at cruising height over the "
         f"US and southern Canada, {nat['cruise_severe']:,} were severe ({share(nat['cruise_severe'], nat['cruise_n'])}),"
@@ -1316,15 +1333,15 @@ def routes_hub_html(routes: list[Route], data: dict) -> str:
         WEBSITE, ORG]}
     return (head(title=page_title(ROUTES_SEO_TITLE), description=description, url=url, og_type="website",
                  og_title=ROUTES_SEO_TITLE, markdown="index.html.md", data=ld, section="routes", hub=True,
-                 campaign="web-routes", scripts=("charts.js",))
+                 campaign="web-routes", scripts=("charts.js", "picker.js"))
             + f"""
 <main class="learn route">
 {crumbs(("Home", "../"), ("Routes", None))}
 <header class="learn-head">
-  <p class="eyebrow">Routes</p>
   <h1>{text(ROUTES_TITLE)}</h1>
   <p class="lede">{text(summary)}</p>
 </header>
+{picker_html(routes, "")}
 <section aria-labelledby="find-h">
   <h2 id="find-h">What a year of pilot reports shows</h2>
   <ul class="ticks">{"".join(f for f in findings if f)}</ul>
@@ -1390,6 +1407,35 @@ def data_details(explainers: list[Explainer], routes: list[Route], data: dict | 
         ("bumpcast-routes",)))
 
 
+# ---------- Route picker: choose two airports, go to that route's page (picker.js)
+
+def picker_html(routes: list[Route], base: str, heading: str = "h2") -> str:
+    """A From/To picker over the route pages, linking to `base` + page. Hidden until picker.js
+    runs; without it, the links and the table on the same page still reach every route."""
+    cities = {}
+    for r in routes:
+        for ap in (r.a, r.b):
+            cities[ap["iata"]] = ap["city"]
+    options = "".join(f'<option value="{c}">{text(city)} ({c})</option>'
+                      for c, city in sorted(cities.items(), key=lambda kv: (kv[1], kv[0])))
+    data = json.dumps({"pairs": {f"{r.A}-{r.B}": base + r.file for r in routes}}).replace("</", "<\\/")
+    return f"""<form class="picker" data-picker hidden aria-labelledby="pick-h">
+  <{heading} id="pick-h">Find your route</{heading}>
+  <div class="picker-row">
+    <label><span>From</span><span class="select"><select name="from" required><option value="">Choose an airport</option>{options}</select></span></label>
+    <span class="picker-arrow" aria-hidden="true">→</span>
+    <label><span>To</span><span class="select"><select name="to" required><option value="">Choose an airport</option>{options}</select></span></label>
+    <button class="button" type="submit">See the route</button>
+  </div>
+  <p class="picker-note muted small">Each route page covers both directions.</p>
+  <div class="picker-miss" role="status" hidden>
+    <p><b data-pair></b> doesn't have a route page yet. BumpCast still forecasts the turbulence on your exact flight, anywhere in the continental US and southern Canada, from 48 hours before departure.</p>
+    <a class="button" href="{attr(app_link("web-picker"))}">Get the app</a>
+  </div>
+  <script type="application/json" data-routes>{data}</script>
+</form>"""
+
+
 # ---------- Home page
 
 HOME_START = "<!-- learn:start (generated by scripts/build_site.py) -->"
@@ -1425,10 +1471,11 @@ def home_section(explainers: list[Explainer], routes: list[Route]) -> str:
     <p class="eyebrow">Routes</p>
     <h2 id="routes-h">{text(ROUTES_TITLE)}</h2>
     <p class="muted">Where and when pilots reported bumps on {len(routes)} popular routes, from a year of reports, with gusty days at each airport.</p>
-    <p><a href="routes/">See every route</a></p>
+    {picker_html(routes, "routes/", heading="h3")}
   </div>
-  <div><ul class="links two-col">{links}</ul></div>
-</section>"""
+  <div><h3>Popular routes</h3><ul class="links two-col">{links}</ul><p><a href="routes/">See every route</a></p></div>
+</section>
+<script src="picker.js" defer></script>"""
     return f"{HOME_START}\n{learn}{routes_html}\n{HOME_END}"
 
 

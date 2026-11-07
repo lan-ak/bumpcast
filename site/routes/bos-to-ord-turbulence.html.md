@@ -70,7 +70,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between BOS and ORD?
 
-Moderate bumps were reported most often over New York, near Syracuse, about 40 min after leaving BOS (1 h 15 min after leaving ORD): 490 of 1,601 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms. The next most were over Michigan, near Detroit, about 1 h 20 min after leaving BOS (35 min after leaving ORD): 423 of 712 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Pilots reported moderate bumps most often over New York, near Syracuse (about 40 min after leaving BOS (1 h 15 min after leaving ORD)), and next most over Michigan, near Detroit (about 1 h 20 min after leaving BOS (35 min after leaving ORD)).
 
 ### When is the smoothest time of year to fly BOS to ORD?
 
