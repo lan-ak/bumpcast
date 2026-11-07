@@ -1,16 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://bumpcast.app/</loc></url>
-  <url><loc>https://bumpcast.app/learn/</loc><lastmod>2026-11-06</lastmod></url>
-  <url><loc>https://bumpcast.app/learn/clear-air-turbulence.html</loc><lastmod>2026-11-06</lastmod></url>
-  <url><loc>https://bumpcast.app/learn/mountain-wave-turbulence.html</loc><lastmod>2026-11-06</lastmod></url>
-  <url><loc>https://bumpcast.app/learn/turbulence-near-clouds.html</loc><lastmod>2026-11-06</lastmod></url>
-  <url><loc>https://bumpcast.app/learn/turbulence-on-takeoff-and-landing.html</loc><lastmod>2026-11-06</lastmod></url>
-  <url><loc>https://bumpcast.app/learn/gusty-takeoffs-and-landings.html</loc><lastmod>2026-11-06</lastmod></url>
-  <url><loc>https://bumpcast.app/learn/planes-are-built-for-turbulence.html</loc><lastmod>2026-11-06</lastmod></url>
-  <url><loc>https://bumpcast.app/learn/why-the-seatbelt-matters.html</loc><lastmod>2026-11-06</lastmod></url>
-  <url><loc>https://bumpcast.app/learn/turbulence-levels.html</loc><lastmod>2026-11-06</lastmod></url>
-  <url><loc>https://bumpcast.app/learn/how-bumpcast-forecasts-turbulence.html</loc><lastmod>2026-11-06</lastmod></url>
+  <url><loc>https://bumpcast.app/learn/</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/learn/clear-air-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/learn/mountain-wave-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/learn/turbulence-near-clouds.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/learn/turbulence-on-takeoff-and-landing.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/learn/gusty-takeoffs-and-landings.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/learn/planes-are-built-for-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/learn/why-the-seatbelt-matters.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/learn/turbulence-levels.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/learn/how-bumpcast-forecasts-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/routes/</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/routes/jfk-to-lax-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/routes/lax-to-sfo-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/routes/jfk-to-sfo-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/routes/ewr-to-sfo-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/routes/atl-to-mco-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/routes/las-to-lax-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/routes/lga-to-ord-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/routes/atl-to-lga-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/routes/den-to-phx-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/routes/lax-to-sea-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/routes/bos-to-dca-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/routes/bos-to-lga-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/routes/lax-to-ord-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/routes/atl-to-dfw-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/routes/den-to-las-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/routes/den-to-lax-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/routes/sea-to-sfo-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/routes/ewr-to-mco-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/routes/den-to-ord-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/routes/dfw-to-lax-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/routes/jfk-to-mia-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/routes/las-to-sfo-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/routes/dfw-to-ord-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/routes/atl-to-ord-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/routes/lax-to-phx-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/routes/atl-to-bos-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/routes/den-to-sfo-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/routes/den-to-sea-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/routes/lax-to-slc-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/routes/msp-to-ord-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/routes/den-to-dfw-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/routes/bos-to-ord-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/routes/yul-to-yyz-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/routes/yvr-to-yyz-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/routes/yyc-to-yyz-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://bumpcast.app/routes/lga-to-yyz-turbulence.html</loc><lastmod>2026-11-07</lastmod></url>
   <url><loc>https://bumpcast.app/email.html</loc></url>
   <url><loc>https://bumpcast.app/privacy.html</loc></url>
   <url><loc>https://bumpcast.app/support.html</loc></url>

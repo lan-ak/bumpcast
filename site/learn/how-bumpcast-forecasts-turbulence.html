@@ -7,7 +7,7 @@
 <meta name="description" content="BumpCast gives an advance turbulence forecast up to two days before your flight, then confirms it about 18 hours before departure and updates it every hour until you fly.">
 <link rel="canonical" href="https://bumpcast.app/learn/how-bumpcast-forecasts-turbulence.html">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
-<meta name="apple-itunes-app" content="app-id=6824269447">
+<meta name="apple-itunes-app" content="app-id=6824269447, app-argument=bumpcast://learn/forecast">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="BumpCast">
 <meta property="og:title" content="How BumpCast forecasts">
@@ -16,7 +16,7 @@
 <meta property="og:image" content="https://bumpcast.app/icon.png">
 <meta name="twitter:card" content="summary">
 <meta property="article:published_time" content="2026-11-06">
-<meta property="article:modified_time" content="2026-11-06">
+<meta property="article:modified_time" content="2026-11-07">
 <link rel="alternate" type="text/markdown" href="how-bumpcast-forecasts-turbulence.html.md" title="Markdown">
 <link rel="icon" href="../favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
@@ -37,7 +37,7 @@
    "inLanguage": "en",
    "articleSection": "Good to know",
    "datePublished": "2026-11-06",
-   "dateModified": "2026-11-06",
+   "dateModified": "2026-11-07",
    "image": "https://bumpcast.app/icon.png",
    "author": {
     "@id": "https://bumpcast.app/#org"
@@ -50,7 +50,18 @@
    },
    "mentions": {
     "@id": "https://bumpcast.app/#app"
-   }
+   },
+   "citation": [
+    {
+     "@type": "CreativeWork",
+     "name": "Aviation Weather Handbook (FAA-H-8083-28B), 2026",
+     "url": "https://www.faa.gov/sites/faa.gov/files/FAA-H-8083-28B.pdf",
+     "publisher": {
+      "@type": "Organization",
+      "name": "Federal Aviation Administration"
+     }
+    }
+   ]
   },
   {
    "@type": "FAQPage",
@@ -79,6 +90,22 @@
      "acceptedAnswer": {
       "@type": "Answer",
       "text": "We assume a direct route and a typical climb, cruise and descent, so treat it as a guide, not a guarantee."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Where does BumpCast's forecast come from?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "From about 18 hours before departure, the US National Weather Service's Graphical Turbulence Guidance (GTG): an automated forecast, made every hour, out to 18 hours ahead and from 1,000 to 45,000 feet. Before that, the advance forecast is BumpCast's own, from the winds in two global weather models (NOAA's GFS and ECMWF's), and on its own it never calls anything stronger than light that far out."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "What can't a turbulence forecast see?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Mostly the bumps in and around thunderstorms. The national forecast covers clear-air and mountain-wave turbulence but doesn't specifically predict turbulence from storms or small local terrain. So BumpCast also raises your forecast wherever an official turbulence warning (a SIGMET) or a recent pilot report covers your route, and pilots steer around storms on the day."
      }
     }
    ]
@@ -132,7 +159,7 @@
 <body>
 <header class="nav"><div class="nav-inner">
   <a class="brand" href="../"><img src="../icon.png" alt="" width="30" height="30">BumpCast</a>
-  <nav aria-label="Site"><a href="./">Learn</a><a class="hide-sm" href="../support.html">Support</a><a class="hide-sm" href="../privacy.html">Privacy</a><a class="pill" href="https://apps.apple.com/app/id6824269447">Get the app</a></nav>
+  <nav aria-label="Site"><a href="./">Learn</a><a class="hide-sm" href="../routes/">Routes</a><a class="hide-sm" href="../support.html">Support</a><a class="hide-sm" href="../privacy.html">Privacy</a><a class="pill" href="https://apps.apple.com/app/id6824269447">Get the app</a></nav>
 </div></header>
 
 <main class="learn read">
@@ -148,7 +175,13 @@
   <section aria-labelledby="crew"><h2 id="crew">Does the crew have its own forecast?</h2><p>Your crew has their own forecasts and live reports, and adjusts on the day.</p></section>
   <section aria-labelledby="feel"><h2 id="feel">How exact is the forecast?</h2><p>We assume a direct route and a typical climb, cruise and descent, so treat it as a guide, not a guarantee.</p></section>
   <aside class="good" aria-labelledby="good-h"><h2 id="good-h">Good to know</h2><p>We'll notify you when your forecast is confirmed and if anything changes.</p></aside>
-  <p class="updated muted small">Updated <time datetime="2026-11-06">November 6, 2026</time> · From the Learn library in the BumpCast app · <a href="how-bumpcast-forecasts-turbulence.html.md">Markdown</a></p>
+  <div class="detail">
+  <p class="eyebrow">In more detail</p>
+  <section aria-labelledby="more-1"><h2 id="more-1">Where does BumpCast's forecast come from?</h2><p>From about 18 hours before departure, the US National Weather Service's Graphical Turbulence Guidance (GTG): an automated forecast, made every hour, out to 18 hours ahead and from 1,000 to 45,000 feet. Before that, the advance forecast is BumpCast's own, from the winds in two global weather models (NOAA's GFS and ECMWF's), and on its own it never calls anything stronger than light that far out.</p><p class="cite">Source: <a href="https://www.faa.gov/sites/faa.gov/files/FAA-H-8083-28B.pdf">Aviation Weather Handbook (FAA-H-8083-28B), 2026</a></p></section>
+  <section aria-labelledby="more-2"><h2 id="more-2">What can't a turbulence forecast see?</h2><p>Mostly the bumps in and around thunderstorms. The national forecast covers clear-air and mountain-wave turbulence but doesn't specifically predict turbulence from storms or small local terrain. So BumpCast also raises your forecast wherever an official turbulence warning (a SIGMET) or a recent pilot report covers your route, and pilots steer around storms on the day.</p><p class="cite">Source: <a href="https://www.faa.gov/sites/faa.gov/files/FAA-H-8083-28B.pdf">Aviation Weather Handbook (FAA-H-8083-28B), 2026</a></p></section>
+  <section class="sources" aria-labelledby="sources-h"><h2 id="sources-h">Sources</h2><ol><li><a href="https://www.faa.gov/sites/faa.gov/files/FAA-H-8083-28B.pdf">Aviation Weather Handbook (FAA-H-8083-28B), 2026</a>, Federal Aviation Administration</li></ol></section>
+  </div>
+  <p class="updated muted small">Updated <time datetime="2026-11-07">November 7, 2026</time> · From the Learn library in the BumpCast app · <a href="how-bumpcast-forecasts-turbulence.html.md">Markdown</a></p>
   <section class="more" aria-labelledby="more-h"><h2 id="more-h">More to know</h2><ul class="chips"><li><a href="planes-are-built-for-turbulence.html" title="Why turbulence is a comfort issue">Planes are built for it</a></li><li><a href="why-the-seatbelt-matters.html" title="The one thing that keeps you safe">Why the seatbelt matters</a></li><li><a href="turbulence-levels.html" title="What each one feels like">Light, moderate, strong</a></li></ul></section>
 </article>
 <aside class="app-cta" aria-labelledby="cta-h">
@@ -162,7 +195,7 @@
 </main>
 
 <footer>
-  <nav aria-label="Footer"><a href="../">Home</a><a href="./">Learn</a><a href="../support.html">Support</a><a href="../privacy.html">Privacy Policy</a><a href="../email.html">Email access</a><a href="../terms.html">Terms of Use</a></nav>
+  <nav aria-label="Footer"><a href="../">Home</a><a href="./">Learn</a><a href="../routes/">Routes</a><a href="../support.html">Support</a><a href="../privacy.html">Privacy Policy</a><a href="../email.html">Email access</a><a href="../terms.html">Terms of Use</a></nav>
   <p>© 2026 Akinyemi &amp; Co Ltd · <a href="mailto:support@akinyemi.ca">support@akinyemi.ca</a></p>
 </footer>
 </body>

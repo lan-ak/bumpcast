@@ -67,7 +67,7 @@ BumpCast is an alternative to the top 10 flight tracking apps in the world: Flig
 
 ## Learn: turbulence explained
 
-The app's Learn library, published at https://bumpcast.app/learn/. Short, factual explainers: why flights get bumpy, what the crew is doing, and what you'll feel. Each link is the Markdown copy of the page (drop the .md for the web page). All of them in full: https://bumpcast.app/llms-full.txt
+The app's Learn library, published at https://bumpcast.app/learn/. Short, factual explainers: why flights get bumpy, what the crew is doing, and what you'll feel, with sourced detail (FAA, NTSB, US regulations). Each link is the Markdown copy of the page (drop the .md for the web page). All of them in full: https://bumpcast.app/llms-full.txt
 
 ### Why it gets bumpy
 
@@ -83,6 +83,47 @@ The app's Learn library, published at https://bumpcast.app/learn/. Short, factua
 - [Why the seatbelt matters](https://bumpcast.app/learn/why-the-seatbelt-matters.html.md): Almost all turbulence injuries happen to people who aren't buckled in. Keep your seatbelt loosely fastened whenever you're seated, even with the sign off.
 - [Light, moderate, strong](https://bumpcast.app/learn/turbulence-levels.html.md): Light chop is small rhythmic bumps, moderate is noticeable jolts, and strong is hard jolts that push you against your belt. Most flights see light chop at most.
 - [How BumpCast forecasts](https://bumpcast.app/learn/how-bumpcast-forecasts-turbulence.html.md): BumpCast gives an advance turbulence forecast up to two days before your flight, then confirms it about 18 hours before departure and updates it every hour until you fly.
+
+## Routes: turbulence by route
+
+Where and when pilots reported bumps on 36 popular routes in the US and Canada, from a year of airline pilot reports (November 2025 to October 2026), with gusty days at each airport. Published at https://bumpcast.app/routes/ (Markdown: https://bumpcast.app/routes/index.html.md).
+
+- [JFK to LAX turbulence](https://bumpcast.app/routes/jfk-to-lax-turbulence.html.md): Where and when it's bumpy on JFK–LAX flights, from 35,528 pilot reports: moderate bumps most often over Colorado.
+- [LAX to SFO turbulence](https://bumpcast.app/routes/lax-to-sfo-turbulence.html.md): Where and when it's bumpy on LAX–SFO flights, from 823 pilot reports: moderate bumps most often near LAX, more in Dec and Mar.
+- [JFK to SFO turbulence](https://bumpcast.app/routes/jfk-to-sfo-turbulence.html.md): Where and when it's bumpy on JFK–SFO flights, from 32,267 pilot reports: moderate bumps most often near Cleveland.
+- [EWR to SFO turbulence](https://bumpcast.app/routes/ewr-to-sfo-turbulence.html.md): Where and when it's bumpy on EWR–SFO flights, from 31,734 pilot reports: moderate bumps most often over Pennsylvania.
+- [ATL to MCO turbulence](https://bumpcast.app/routes/atl-to-mco-turbulence.html.md): Where and when it's bumpy on ATL–MCO flights, from 7,070 pilot reports: moderate bumps most often over Georgia, more in Dec, Feb and Apr.
+- [LAS to LAX turbulence](https://bumpcast.app/routes/las-to-lax-turbulence.html.md): Where and when it's bumpy on LAS–LAX flights, from 1,071 pilot reports: moderate bumps most often over Nevada, more in Jan, Feb and Mar.
+- [LGA to ORD turbulence](https://bumpcast.app/routes/lga-to-ord-turbulence.html.md): Where and when it's bumpy on LGA–ORD flights, from 11,961 pilot reports: moderate bumps most often over Pennsylvania, more in Apr.
+- [ATL to LGA turbulence](https://bumpcast.app/routes/atl-to-lga-turbulence.html.md): Where and when it's bumpy on ATL–LGA flights, from 12,454 pilot reports: moderate bumps most often over North Carolina, more in May and Jun.
+- [DEN to PHX turbulence](https://bumpcast.app/routes/den-to-phx-turbulence.html.md): Where and when it's bumpy on DEN–PHX flights, from 12,775 pilot reports: moderate bumps most often near DEN, more in Dec and Jun.
+- [LAX to SEA turbulence](https://bumpcast.app/routes/lax-to-sea-turbulence.html.md): Where and when it's bumpy on LAX–SEA flights, from 2,883 pilot reports: moderate bumps most often near LAX, more in Dec.
+- [BOS to DCA turbulence](https://bumpcast.app/routes/bos-to-dca-turbulence.html.md): Where and when it's bumpy on BOS–DCA flights, from 6,451 pilot reports: moderate bumps most often over New York, more in Dec and Oct.
+- [BOS to LGA turbulence](https://bumpcast.app/routes/bos-to-lga-turbulence.html.md): Where and when it's bumpy on BOS–LGA flights, from 2,695 pilot reports: moderate bumps most often over Connecticut, more in Nov and Oct.
+- [LAX to ORD turbulence](https://bumpcast.app/routes/lax-to-ord-turbulence.html.md): Where and when it's bumpy on LAX–ORD flights, from 26,088 pilot reports: moderate bumps most often over Colorado, more in May, Jun and Oct.
+- [ATL to DFW turbulence](https://bumpcast.app/routes/atl-to-dfw-turbulence.html.md): Where and when it's bumpy on ATL–DFW flights, from 10,903 pilot reports: moderate bumps most often over Alabama, more in Apr and May.
+- [DEN to LAS turbulence](https://bumpcast.app/routes/den-to-las-turbulence.html.md): Where and when it's bumpy on DEN–LAS flights, from 14,632 pilot reports: moderate bumps most often near DEN, more in Dec and Jun.
+- [DEN to LAX turbulence](https://bumpcast.app/routes/den-to-lax-turbulence.html.md): Where and when it's bumpy on DEN–LAX flights, from 14,934 pilot reports: moderate bumps most often near DEN, more in Dec and Jun.
+- [SEA to SFO turbulence](https://bumpcast.app/routes/sea-to-sfo-turbulence.html.md): Where and when it's bumpy on SEA–SFO flights, from 2,463 pilot reports: moderate bumps most often near SEA, more in Nov and Dec.
+- [EWR to MCO turbulence](https://bumpcast.app/routes/ewr-to-mco-turbulence.html.md): Where and when it's bumpy on EWR–MCO flights, from 8,542 pilot reports: moderate bumps most often over Virginia, more in Nov, Dec and Feb.
+- [DEN to ORD turbulence](https://bumpcast.app/routes/den-to-ord-turbulence.html.md): Where and when it's bumpy on DEN–ORD flights, from 20,138 pilot reports: moderate bumps most often near DEN, more in May and Jun.
+- [DFW to LAX turbulence](https://bumpcast.app/routes/dfw-to-lax-turbulence.html.md): Where and when it's bumpy on DFW–LAX flights, from 8,044 pilot reports: moderate bumps most often near DFW, more in Jan, Feb and Mar.
+- [JFK to MIA turbulence](https://bumpcast.app/routes/jfk-to-mia-turbulence.html.md): Where and when it's bumpy on JFK–MIA flights, from 11,798 pilot reports: moderate bumps most often over North Carolina, more in Nov, Dec and Feb.
+- [LAS to SFO turbulence](https://bumpcast.app/routes/las-to-sfo-turbulence.html.md): Where and when it's bumpy on LAS–SFO flights, from 952 pilot reports: moderate bumps most often over California, more in Dec.
+- [DFW to ORD turbulence](https://bumpcast.app/routes/dfw-to-ord-turbulence.html.md): Where and when it's bumpy on DFW–ORD flights, from 11,184 pilot reports: moderate bumps most often near ORD, more in Mar, Apr and May.
+- [ATL to ORD turbulence](https://bumpcast.app/routes/atl-to-ord-turbulence.html.md): Where and when it's bumpy on ATL–ORD flights, from 17,699 pilot reports: moderate bumps most often over Indiana, more in Mar and May.
+- [LAX to PHX turbulence](https://bumpcast.app/routes/lax-to-phx-turbulence.html.md): Where and when it's bumpy on LAX–PHX flights, from 629 pilot reports: moderate bumps most often over California, more in Jan, Mar and May.
+- [ATL to BOS turbulence](https://bumpcast.app/routes/atl-to-bos-turbulence.html.md): Where and when it's bumpy on ATL–BOS flights, from 15,695 pilot reports: moderate bumps most often over Virginia, more in Jun.
+- [DEN to SFO turbulence](https://bumpcast.app/routes/den-to-sfo-turbulence.html.md): Where and when it's bumpy on DEN–SFO flights, from 15,177 pilot reports: moderate bumps most often near DEN, more in Dec and Jun.
+- [DEN to SEA turbulence](https://bumpcast.app/routes/den-to-sea-turbulence.html.md): Where and when it's bumpy on DEN–SEA flights, from 11,594 pilot reports: moderate bumps most often near DEN, more in Dec.
+- [LAX to SLC turbulence](https://bumpcast.app/routes/lax-to-slc-turbulence.html.md): Where and when it's bumpy on LAX–SLC flights, from 1,765 pilot reports: moderate bumps most often over California, more in Mar.
+- [MSP to ORD turbulence](https://bumpcast.app/routes/msp-to-ord-turbulence.html.md): Where and when it's bumpy on MSP–ORD flights, from 5,323 pilot reports: moderate bumps most often over Wisconsin, more in Apr, May and Jun.
+- [DEN to DFW turbulence](https://bumpcast.app/routes/den-to-dfw-turbulence.html.md): Where and when it's bumpy on DEN–DFW flights, from 13,137 pilot reports: moderate bumps most often near DEN, more in Dec.
+- [BOS to ORD turbulence](https://bumpcast.app/routes/bos-to-ord-turbulence.html.md): Where and when it's bumpy on BOS–ORD flights, from 16,938 pilot reports: moderate bumps most often over New York.
+- [YUL to YYZ turbulence](https://bumpcast.app/routes/yul-to-yyz-turbulence.html.md): Where and when it's bumpy on YUL–YYZ flights, from 447 pilot reports: moderate bumps most often over Ontario, more in Dec, May and Oct.
+- [YVR to YYZ turbulence](https://bumpcast.app/routes/yvr-to-yyz-turbulence.html.md): Where and when it's bumpy on YVR–YYZ flights, from 3,769 pilot reports: moderate bumps most often over Michigan, more in Jun and Aug.
+- [YYC to YYZ turbulence](https://bumpcast.app/routes/yyc-to-yyz-turbulence.html.md): Where and when it's bumpy on YYC–YYZ flights, from 2,203 pilot reports: moderate bumps most often over Michigan, more in Apr, Jun and Aug.
+- [LGA to YYZ turbulence](https://bumpcast.app/routes/lga-to-yyz-turbulence.html.md): Where and when it's bumpy on LGA–YYZ flights, from 4,788 pilot reports: moderate bumps most often over New York, more in Dec and Oct.
 
 ## Pages
 

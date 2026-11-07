@@ -17,4 +17,4 @@
 - [Light, moderate, strong](https://bumpcast.app/learn/turbulence-levels.html.md): Light chop is small rhythmic bumps, moderate is noticeable jolts, and strong is hard jolts that push you against your belt. Most flights see light chop at most.
 - [How BumpCast forecasts](https://bumpcast.app/learn/how-bumpcast-forecasts-turbulence.html.md): BumpCast gives an advance turbulence forecast up to two days before your flight, then confirms it about 18 hours before departure and updates it every hour until you fly.
 
-Source: https://bumpcast.app/learn/ (updated 2026-11-06). Every explainer in one file: https://bumpcast.app/llms-full.txt
+Source: https://bumpcast.app/learn/ (updated 2026-11-07). Every explainer in one file: https://bumpcast.app/llms-full.txt
