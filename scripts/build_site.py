@@ -535,6 +535,23 @@ def foot(section: str) -> str:
 """
 
 
+def badge_size() -> tuple[float, float]:
+    """The official badge's proportions, from its viewBox."""
+    m = re.search(r'viewBox="0 0 ([\d.]+) ([\d.]+)"', (SITE / "app-store-badge.svg").read_text())
+    if not m:
+        fail("site/app-store-badge.svg needs a viewBox")
+    return float(m.group(1)), float(m.group(2))
+
+
+def store_badge(href: str, prefix: str = "../", height: int = 48) -> str:
+    """Apple's official "Download on the App Store" badge (site/app-store-badge.svg, unmodified,
+    from developer.apple.com). Apple prefers the black badge everywhere; keep it at least 40 px
+    tall, with clear space of a quarter of its height around it."""
+    w, h = badge_size()
+    return (f'<a class="store-badge" href="{attr(href)}"><img src="{prefix}app-store-badge.svg" '
+            f'width="{round(height * w / h)}" height="{height}" alt="Download on the App Store"></a>')
+
+
 def cta(campaign: str, heading: str = "Know when the bumps will come.",
         body: str = ("Live flight status and a calm turbulence forecast for your exact route: when the bumps will "
                      "come, how strong they'll be, and when they'll end.")) -> str:
@@ -544,7 +561,7 @@ def cta(campaign: str, heading: str = "Know when the bumps will come.",
     <h2 id="cta-h">{text(heading)}</h2>
     <p class="muted">{text(body)} Covers the continental United States and southern Canada.</p>
   </div>
-  <div class="actions"><a class="button" href="{attr(app_link(campaign))}">Download on the App Store</a><span class="muted small">Free · No ads · No account</span></div>
+  <div class="actions">{store_badge(app_link(campaign))}<span class="muted small">Free · No ads · No account</span></div>
 </aside>
 """
 
@@ -1430,7 +1447,7 @@ def picker_html(routes: list[Route], base: str, heading: str = "h2") -> str:
   <p class="picker-note muted small">Each route page covers both directions.</p>
   <div class="picker-miss" role="status" hidden>
     <p><b data-pair></b> doesn't have a route page yet. BumpCast still forecasts the turbulence on your exact flight, anywhere in the continental US and southern Canada, from 48 hours before departure.</p>
-    <a class="button" href="{attr(app_link("web-picker"))}">Get the app</a>
+    {store_badge(app_link("web-picker"), prefix="../" if base == "" else "")}
   </div>
   <script type="application/json" data-routes>{data}</script>
 </form>"""

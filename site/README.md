@@ -23,6 +23,7 @@ Preview locally: the `site` entry in `.claude/launch.json` (`python3 -m http.ser
 | `/picker.js` | The "Find your route" picker on `/routes/` and the home page: From and To, then that route's page (either direction), or, for a pair without a page, a note that the app forecasts any covered flight. Hidden without JavaScript; the links and table still reach every route |
 | `/robots.txt` | Lets every crawler in, search engines and AI alike, and points to the sitemap and `llms.txt` |
 | `/sitemap.xml` | Generated: every page, for Google Search Console and Bing |
+| `/app-store-badge.svg` | Apple's official "Download on the App Store" badge, unmodified (developer.apple.com/assets/elements/badges/download-on-the-app-store.svg). Apple prefers the black badge everywhere: keep it at least 40 px tall, with clear space of a quarter of its height, and don't recolour or edit it |
 | `/<key>.txt` | IndexNow key (not a secret): lets `scripts/indexnow.py` tell Bing and other IndexNow engines about new pages |
 | `/404.html` | Host not-found page (root-relative links, so it works at any depth) |
 
