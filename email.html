@@ -14,7 +14,7 @@
 <body>
 <header class="nav"><div class="nav-inner">
   <a class="brand" href="./"><img src="icon.png" alt="" width="30" height="30">BumpCast</a>
-  <nav aria-label="Site"><a href="learn/">Learn</a><a class="hide-sm" href="routes/">Routes</a><a class="hide-sm" href="support.html">Support</a><a class="hide-sm" href="privacy.html">Privacy</a><a class="pill" href="https://apps.apple.com/app/id6824269447">Get the app</a></nav>
+  <nav aria-label="Site"><a class="hide-sm" href="support.html">Support</a><a href="privacy.html">Privacy</a><a class="pill" href="https://apps.apple.com/app/id6824269447">Get the app</a></nav>
 </div></header>
 
 <main>
@@ -39,11 +39,13 @@
 <table>
   <thead><tr><th scope="col">Data</th><th scope="col">Where it goes</th></tr></thead>
   <tbody>
-    <tr><td>Your emails, including subjects, bodies and attachments</td><td><strong>Nowhere.</strong> They're read on your iPhone and never sent to BumpCast's servers or anyone else.</td></tr>
+    <tr><td>Your emails: BumpCast reads the subject, text, date and ID of likely bookings, and doesn't open attachments</td><td><strong>Nowhere.</strong> They're read on your iPhone and never sent to BumpCast's servers or anyone else.</td></tr>
     <tr><td>Your email sign-in (access token)</td><td>Kept in your iPhone's Keychain. It's used only to talk to Google or Microsoft directly.</td></tr>
     <tr><td>Your email address</td><td>Kept on your iPhone, to show which account is connected.</td></tr>
-    <tr><td>Flight number, date and airports from a booking</td><td>Sent to BumpCast's servers to find the flight and forecast it, the same as a flight you type in.</td></tr>
-    <tr><td>Names, booking references, addresses, loyalty and payment details</td><td><strong>Ignored.</strong> Never saved or sent.</td></tr>
+    <tr><td>Flight number, airline, dates, times and airports from a booking</td><td>Sent to BumpCast's servers to find the flight and forecast it, the same as a flight you type in. Our flight schedule provider receives what's needed to look the flight up, with no information about you, and Apple delivers notifications about the flight.</td></tr>
+    <tr><td>Anything from your email, including flights found there and how many</td><td><strong>Never sent to Superwall or Mixpanel,</strong> and never used to choose offers.</td></tr>
+    <tr><td>Names, addresses, loyalty and payment details</td><td><strong>Ignored.</strong> Never saved or sent.</td></tr>
+    <tr><td>Booking references</td><td>Never sent. Your iPhone keeps a scrambled, one-way code of each one, so a later email changes only its own booking.</td></tr>
   </tbody>
 </table>
 </div>
@@ -71,7 +73,7 @@
 </main>
 
 <footer>
-  <nav aria-label="Footer"><a href="./">Home</a><a href="learn/">Learn</a><a href="routes/">Routes</a><a href="support.html">Support</a><a href="privacy.html">Privacy Policy</a><a href="email.html">Email access</a><a href="terms.html">Terms of Use</a></nav>
+  <nav aria-label="Footer"><a href="./">Home</a><a href="support.html">Support</a><a href="privacy.html">Privacy Policy</a><a href="email.html">Email access</a><a href="terms.html">Terms of Use</a></nav>
   <p>© 2026 Akinyemi &amp; Co Ltd · <a href="mailto:support@akinyemi.ca">support@akinyemi.ca</a></p>
 </footer>
 </body>
