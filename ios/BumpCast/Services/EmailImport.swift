@@ -110,6 +110,8 @@ final class EmailImport {
         var firstScanDone = false
         var salt = UUID().uuidString
 
+        func touched(_ id: UUID) -> Bool { imported[id] != nil || changes[id] != nil || cancelled[id] != nil }
+
         mutating func added(_ id: UUID, key: String, hash: String?, at date: Date) {
             imported[id] = date
             hashes[id] = hash
@@ -228,6 +230,17 @@ final class EmailImport {
     static var isReady: Bool {
         #if DEBUG
             !ProcessInfo.processInfo.arguments.contains("-emailImportComingSoon")
+        #else
+            isGoogleReviewBuild
+        #endif
+    }
+
+    /// The TestFlight build for Google's reviewers (GOOGLE_VERIFICATION.md): email import on, and
+    /// no Superwall or Mixpanel, so no paywall stands in the way. Only an archive made with the
+    /// GOOGLE_REVIEW flag has it; it never goes to the App Store.
+    nonisolated static var isGoogleReviewBuild: Bool {
+        #if GOOGLE_REVIEW
+            true
         #else
             false
         #endif
@@ -360,10 +373,8 @@ final class EmailImport {
             needsReconnect = false
             let changedSomething = counts.added + counts.ready + counts.needsYou > 0 || !events.isEmpty
             lastResult = changedSomething ? .found(added: counts.added, ready: counts.ready, needsYou: counts.needsYou) : .nothingNew
-            Analytics.log(.emailScanFinished, [
-                "result": changedSomething ? "found" : "nothing_new", "added": counts.added, "ready": counts.ready,
-                "needs_you": counts.needsYou, "first_scan": first, "backlog": ledger.backlog,
-            ])
+            // Nothing about what was found: that's Gmail data (Limited Use).
+            Analytics.log(.emailScanFinished, ["result": "finished", "first_scan": first])
             if first {
                 summary = Summary(added: events.compactMap { if case .added(let id) = $0 { id } else { nil } })
             } else {
@@ -609,6 +620,10 @@ final class EmailImport {
         ledger.changes[id].flatMap { ledger.isRecent($0.at, now: now) ? $0 : nil }
     }
 
+    /// Came from an email or was changed by one. Its details are then Gmail data, which Google's
+    /// Limited Use rules keep from Superwall and Mixpanel. Kept through a disconnect.
+    func isFromEmail(_ id: UUID) -> Bool { ledger.touched(id) || importedAt(id) != nil }
+
     func importedAt(_ id: UUID) -> Date? {
         if let date = ledger.imported[id] { return date }
         return ledger.imported.first { InFlight.shared.currentID(of: $0.key) == id }?.value
@@ -629,7 +644,7 @@ final class EmailImport {
     }
 
     func discard(_ item: NeedsYouItem) {
-        Analytics.log(.emailFlightDismissed, ["list": "needs_you", "reason": "\(item.reason)"])
+        Analytics.log(.emailFlightDismissed, ["list": "needs_you"])
         ledger.needsYou.removeAll { $0.key == item.key }
         ledger.dismissed.insert(item.key)
     }

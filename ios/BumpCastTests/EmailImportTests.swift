@@ -23,6 +23,18 @@ struct EmailImportTests {
 
     private let candidate = BookingCandidate(number: "B6 23", day: "2026-11-12")
 
+    // MARK: Limited Use
+
+    @Test func aFlightFromEmailCountsAsEmailDataUntilItIsRemoved() {
+        let id = UUID()
+        var ledger = EmailImport.Ledger()
+        #expect(!ledger.touched(id))
+        ledger.added(id, key: "B6 23|2026-11-12", hash: nil, at: .now)
+        #expect(ledger.touched(id))
+        ledger.removed(id, key: "B6 23|2026-11-12")
+        #expect(!ledger.touched(id))
+    }
+
     // MARK: Replace in place
 
     @Test func rebookingOnTheSameRouteReplacesTheFlight() {

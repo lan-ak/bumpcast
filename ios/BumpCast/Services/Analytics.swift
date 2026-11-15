@@ -82,7 +82,7 @@ enum Analytics {
     private static var mixpanel: MixpanelInstance?
 
     static func configure() {
-        guard !Services.isTestHost,
+        guard !Services.isTestHost, !EmailImport.isGoogleReviewBuild,
             let token = Bundle.main.infoDictionary?["MixpanelToken"] as? String, !token.isEmpty
         else { return }
         // Its automatic events: first open, sessions and app updates.
@@ -158,6 +158,10 @@ enum Analytics {
 
     /// A flight's forecast context: its state, grade, confidence and whether it's unlocked.
     static func forecastParams(_ flight: Flight) -> [String: Any] {
+        // Nothing about a flight from email (Limited Use).
+        guard !EmailImport.shared.isFromEmail(flight.id) else {
+            return ["full_access": Paywalls.shared.hasFullAccess(to: flight)]
+        }
         let store = FlightStore.shared
         let forecast = store.forecasts[flight.id]
         let state = ForecastState(flight: flight, forecast: forecast, betaOn: GlobalBeta.shared.isOn)

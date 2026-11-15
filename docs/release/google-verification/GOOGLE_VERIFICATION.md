@@ -41,6 +41,16 @@ No other Google scopes. BumpCast never sends, deletes, modifies or labels email.
 >
 > Gmail data is not used for advertising, profiling, selling, human reading, or training AI/ML models. Our use complies with the Google API Services User Data Policy, including the Limited Use requirements, as stated in our privacy policy.
 
+## Google's checklist reply (Nov 9, 2026)
+
+Google sent its generic checklist. The answer is in `REPLY_TO_GOOGLE.md`. It corrects the CASA note below, which wrongly said no derived content leaves the phone: the extracted flight details do.
+
+**Reviewer build:** a TestFlight build with email import on, and no Superwall or Mixpanel, so nothing blocks the reviewer. Archive it with the release steps, adding:
+
+`--xcodebuild-flag='SWIFT_ACTIVE_COMPILATION_CONDITIONS=$(inherited) GOOGLE_REVIEW'`
+
+Never send that build to the App Store. A public TestFlight link needs Apple's beta review.
+
 ## Security assessment (CASA)
 
 The case for being out of scope: Google requires a security assessment for apps that **store or transmit restricted-scope data on servers**. BumpCast does neither, because Gmail content is read only on the device. Say so in the submission's notes field and ask Google to confirm:

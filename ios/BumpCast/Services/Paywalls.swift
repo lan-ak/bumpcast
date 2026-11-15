@@ -84,7 +84,9 @@ final class Paywalls {
     @ObservationIgnored private var passUpdates: Task<Void, Never>?
 
     func configure() {
-        guard let key = Bundle.main.infoDictionary?["SuperwallAPIKey"] as? String, key.hasPrefix("pk_") else { return }
+        guard !EmailImport.isGoogleReviewBuild,
+            let key = Bundle.main.infoDictionary?["SuperwallAPIKey"] as? String, key.hasPrefix("pk_")
+        else { return }
         // The restore alert Superwall shows when nothing is active (Settings and paywalls alike).
         let options = SuperwallOptions()
         options.paywalls.restoreFailed.title = "Nothing to restore"
@@ -487,17 +489,20 @@ final class Paywalls {
     func updateAttributes() {
         guard isConfigured else { return }
         let store = FlightStore.shared
-        let next = store.nextFlight
+        // Flights from email stay out of everything below (Limited Use).
+        let flights = store.flights.filter { !EmailImport.shared.isFromEmail($0.id) }
+        let upcoming = store.upcomingFlights.filter { !EmailImport.shared.isFromEmail($0.id) }
+        let next = upcoming.first
         let nextForecast = next.flatMap { store.forecasts[$0.id] }
-        let flown = store.flights.filter { InFlight.shared.landing(of: $0, forecast: store.forecasts[$0.id]) <= .now }
+        let flown = flights.filter { InFlight.shared.landing(of: $0, forecast: store.forecasts[$0.id]) <= .now }
         let matched = store.reports.values.filter { $0.matched == true }.count
         var attributes: [String: Any?] = [
-            "flights_saved": store.flights.count,
-            "upcoming_flights": store.upcomingFlights.count,
+            "flights_saved": flights.count,
+            "upcoming_flights": upcoming.count,
             "flights_flown": flown.count,
             "has_flight_pass": !store.passes.isEmpty,
             "notifications_enabled": PushNotifications.shared.isEnabled,
-            "in_flight": store.flights.contains { InFlight.shared.isFlying($0, forecast: store.forecasts[$0.id]) },
+            "in_flight": flights.contains { InFlight.shared.isFlying($0, forecast: store.forecasts[$0.id]) },
             "landing_reports": store.reports.count,
             "landing_reports_matched": matched,
             "waitlist_countries": store.waitlist.sorted().joined(separator: ","),
@@ -518,6 +523,8 @@ final class Paywalls {
 
     private func params(for flight: Flight?) -> [String: Any]? {
         guard let flight else { return nil }
+        // Only the app's own id for a flight from email (Limited Use).
+        guard !EmailImport.shared.isFromEmail(flight.id) else { return ["flight_id": flight.id.uuidString] }
         let forecast = FlightStore.shared.forecasts[flight.id]
         var params: [String: Any] = [
             "flight_id": flight.id.uuidString,
@@ -543,7 +550,7 @@ final class Paywalls {
         var params = self.params(for: flight) ?? [:]
         let push = PushNotifications.shared
         params["notifications"] = push.isEnabled ? "enabled" : push.status == .denied ? "denied" : "not_determined"
-        if let flight {
+        if let flight, !EmailImport.shared.isFromEmail(flight.id) {
             params["notify"] = flight.notify
             let forecast = FlightStore.shared.forecasts[flight.id]
             params["forecast_state"] = ForecastState(flight: flight, forecast: forecast, betaOn: GlobalBeta.shared.isOn)
