@@ -54,7 +54,7 @@ UPDATED = "2026-11-07"  # Bump when the explainers' words (or MORE) change.
 # App Store campaign links, so App Store Connect (Analytics, Acquisition, Campaigns) counts
 # downloads by page. Fill in the provider token from App Store Connect; until then the buttons
 # link to the plain listing. APP_STORE_PPID (optional) sends visitors to a custom product page.
-APP_STORE_PT = ""
+APP_STORE_PT = "127706324"  # Akinyemi & Co Ltd. provider ID (App Store Connect)
 APP_STORE_PPID = ""
 
 

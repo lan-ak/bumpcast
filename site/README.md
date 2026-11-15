@@ -63,7 +63,7 @@ Where and when pilots reported bumps on popular routes, from a year of airliner 
 
 ### App Store links (counting downloads by page)
 
-Every App Store button on these pages carries a campaign name (`web-learn-<id>`, `web-route-jfk-lax`, `web-routes`). To have App Store Connect count downloads by page (Analytics, Acquisition, Campaigns), set `APP_STORE_PT` at the top of `build_site.py` to the provider token from App Store Connect, and optionally `APP_STORE_PPID` to send visitors to the "Turbulence" custom product page. Then rebuild. Until then, the buttons link to the plain listing.
+Every App Store button on these pages carries a campaign name (`web-learn-<id>`, `web-route-jfk-lax`, `web-routes`). App Store Connect counts downloads by campaign (App Analytics → Acquisition → Campaigns). `APP_STORE_PT` in `build_site.py` is the Akinyemi & Co Ltd. provider token, 127706324 (set Nov 15, 2026). The hand-written pages carry their own: `web-home-nav`, `web-home-hero`, `web-home-end`, `web-support`, `web-privacy`, `web-terms`, `web-email`; the route pages' prompt before the questions adds `-mid`. Optionally set `APP_STORE_PPID` to send visitors to the "Turbulence" custom product page, then rebuild.
 
 Look: the app's "Cabin Dawn" mood layer (docs/design/DESIGN_SPEC.md). `sky.js` picks a dawn, day, dusk or night sky from the visitor's clock (dark mode is always night), with glass cards, the wave timeline, water-glass severity glyphs and the breathing orb. No cookies, analytics, third-party scripts or fonts. Fonts are the app's own OFL fonts in `fonts/`. The body font is "BumpCast Text": Atkinson Hyperlegible with a plain zero instead of its slashed one, made by `scripts/make_site_fonts.py` (number-heavy route pages read like code otherwise).
 
