@@ -366,6 +366,21 @@ Where and when pilots reported bumps on 277 popular routes in the US and Canada,
 - [YEG to LAS turbulence](https://bumpcast.app/routes/yeg-to-las-turbulence.html.md): Where and when it's bumpy on YEG–LAS flights, from 2,654 pilot reports: moderate bumps most often over Nevada, more in Dec.
 - [YEG to PHX turbulence](https://bumpcast.app/routes/yeg-to-phx-turbulence.html.md): Where and when it's bumpy on YEG–PHX flights, from 4,211 pilot reports: moderate bumps most often over Utah, more in Dec.
 
+International routes, by month only (a model estimate from a year of ECMWF and GFS weather analyses; how accurate the outlook is: https://bumpcast.app/learn/forecast-accuracy.html.md):
+
+- [JFK to LHR turbulence](https://bumpcast.app/routes/jfk-to-lhr-turbulence.html.md): When it's bumpier on JFK–LHR flights: a model estimate from a year of weather analyses. More bumps in Mar, fewer in Jan and Feb.
+- [ORD to LHR turbulence](https://bumpcast.app/routes/ord-to-lhr-turbulence.html.md): When it's bumpier on ORD–LHR flights: a model estimate from a year of weather analyses. More bumps in Sep, fewer in Jan and Feb.
+- [YYZ to LHR turbulence](https://bumpcast.app/routes/yyz-to-lhr-turbulence.html.md): When it's bumpier on YYZ–LHR flights: a model estimate from a year of weather analyses, by month.
+- [JFK to CDG turbulence](https://bumpcast.app/routes/jfk-to-cdg-turbulence.html.md): When it's bumpier on JFK–CDG flights: a model estimate from a year of weather analyses. More bumps in Mar, fewer in Feb.
+- [LAX to NRT turbulence](https://bumpcast.app/routes/lax-to-nrt-turbulence.html.md): When it's bumpier on LAX–NRT flights: a model estimate from a year of weather analyses, by month.
+- [SFO to HKG turbulence](https://bumpcast.app/routes/sfo-to-hkg-turbulence.html.md): When it's bumpier on SFO–HKG flights: a model estimate from a year of weather analyses. More bumps in Apr and May, fewer in Jan and Aug.
+- [LHR to DXB turbulence](https://bumpcast.app/routes/lhr-to-dxb-turbulence.html.md): When it's bumpier on LHR–DXB flights: a model estimate from a year of weather analyses. More bumps in Jan, Feb and Apr, fewer in Jul, Aug and Sep.
+- [LHR to DOH turbulence](https://bumpcast.app/routes/lhr-to-doh-turbulence.html.md): When it's bumpier on LHR–DOH flights: a model estimate from a year of weather analyses. More bumps in Jan, Feb and Apr, fewer in Jul, Aug and Sep.
+- [SIN to HKG turbulence](https://bumpcast.app/routes/sin-to-hkg-turbulence.html.md): When it's bumpier on SIN–HKG flights: a model estimate from a year of weather analyses. More bumps in Feb, Aug and Sep, fewer in Apr, May and Oct.
+- [SYD to SIN turbulence](https://bumpcast.app/routes/syd-to-sin-turbulence.html.md): When it's bumpier on SYD–SIN flights: a model estimate from a year of weather analyses. More bumps in Jul, Aug and Sep, fewer in Feb, Mar and Apr.
+- [HKG to NRT turbulence](https://bumpcast.app/routes/hkg-to-nrt-turbulence.html.md): When it's bumpier on HKG–NRT flights: a model estimate from a year of weather analyses. More bumps in Jan, Feb and Mar, fewer in Jul, Aug and Sep.
+- [LHR to MAD turbulence](https://bumpcast.app/routes/lhr-to-mad-turbulence.html.md): When it's bumpier on LHR–MAD flights: a model estimate from a year of weather analyses. More bumps in Nov, Dec and Jan, fewer in May, Jun and Aug.
+
 ## Pages
 
 - [Home](https://bumpcast.app/): overview of the app, features and plans
