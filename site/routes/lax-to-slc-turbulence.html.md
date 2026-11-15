@@ -21,22 +21,12 @@ The next most were near SLC, where flights climb out or come in to land, about 1
 | near LAX, where flights climb out or come in to land | 5 min | 1 h 20 min | 200 | 124 |
 | over California, near Burbank | 10 min | 1 h 15 min | 180 | 146 |
 | over California, near Ontario | 15 min | 1 h 10 min | 55 | 41 |
-| over southern California, near San Bernardino | 15 min | 1 h 5 min | 41 | 12 |
-| over northern California, near San Bernardino | 20 min | 1 h | 28 | 4 |
+| over California, near San Bernardino | 15 min to 20 min | 1 h to 1 h 5 min | 69 | 16 |
 | over California, near Las Vegas | 25 min | 55 min | 15 | 5 |
-| over southern Nevada, near Las Vegas | 30 min | 55 min | 20 | 8 |
-| over central Nevada, near Las Vegas | 30 min | 50 min | 134 | 71 |
-| over northern Nevada, near Las Vegas | 35 min | 45 min | 12 | 4 |
-| near Las Vegas | 40 min | 45 min | 11 | 6 |
-| over southern Nevada | 45 min | 40 min | 23 | 14 |
-| over northern Nevada | 45 min | 35 min | 39 | 25 |
-| over or near southern Nevada | 50 min | 30 min | 113 | 79 |
-| over or near northern Nevada | 55 min | 30 min | 135 | 89 |
-| over or near southern Utah | 55 min | 25 min | 168 | 97 |
-| over or near northern Utah | 1 h | 20 min | 89 | 69 |
-| over southern Utah, near Salt Lake City | 1 h 5 min | 20 min | 56 | 41 |
-| over central Utah, near Salt Lake City | 1 h 10 min | 15 min | 23 | 17 |
-| over northern Utah, near Salt Lake City | 1 h 15 min | 10 min | 116 | 71 |
+| over Nevada, near Las Vegas | 30 min to 40 min | 45 min to 55 min | 177 | 89 |
+| over Nevada | 45 min to 55 min | 30 min to 40 min | 310 | 207 |
+| over or near Utah | 55 min to 1 h | 20 min to 25 min | 257 | 166 |
+| over Utah, near Salt Lake City | 1 h 5 min to 1 h 15 min | 10 min to 20 min | 195 | 129 |
 | near SLC, where flights climb out or come in to land | 1 h 20 min | 5 min | 307 | 109 |
 
 ## When in the year

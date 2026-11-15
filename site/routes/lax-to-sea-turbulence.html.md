@@ -14,28 +14,19 @@ Flights between Los Angeles (LAX) and Seattle (SEA) fly about 960 miles, roughly
 
 Moderate bumps were reported most often near LAX, where flights climb out or come in to land, about 5 min after leaving LAX, or 2 h after leaving SEA. There, 181 of 305 reports were moderate or stronger. Close to the ground, wind over buildings and land stirs the air.
 
-The next most were over northern California, about 1 h 10 min after leaving LAX, or 55 min after leaving SEA. There, 128 of 209 reports were moderate or stronger. The ground below is high, and wind over mountains makes waves that reach cruising height.
+The next most were over California, about 1 h 10 min after leaving LAX, or 55 min after leaving SEA. There, 128 of 209 reports were moderate or stronger. The ground below is high, and wind over mountains makes waves that reach cruising height.
 
 | Where | From LAX | From SEA | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near LAX, where flights climb out or come in to land | 5 min | 2 h | 305 | 181 |
 | over California, near Burbank | 15 min | 1 h 50 min | 43 | 19 |
-| over southern California, near Fresno | 20 min | 1 h 45 min | 84 | 42 |
-| over south-central California, near Fresno | 25 min | 1 h 40 min | 60 | 31 |
-| over north-central California, near Fresno | 30 min | 1 h 35 min | 83 | 47 |
-| over northern California, near Fresno | 35 min | 1 h 30 min | 64 | 43 |
-| over southern California, near Reno | 40 min | 1 h 20 min | 92 | 50 |
-| over southern Nevada, near Reno | 50 min | 1 h 15 min | 75 | 42 |
-| over northern Nevada, near Reno | 55 min | 1 h 10 min | 114 | 67 |
-| over northern California, near Reno | 1 h | 1 h 5 min | 70 | 41 |
-| over southern California | 1 h 5 min | 1 h | 145 | 95 |
-| over northern California | 1 h 10 min | 55 min | 209 | 128 |
-| over southern Oregon | 1 h 15 min | 50 min | 231 | 121 |
-| over or near Oregon | 1 h 20 min | 40 min | 123 | 59 |
-| over northern Oregon | 1 h 30 min | 35 min | 204 | 107 |
-| over southern Oregon, near Portland | 1 h 35 min | 30 min | 198 | 111 |
-| over central Oregon, near Portland | 1 h 40 min | 25 min | 131 | 89 |
-| over northern Oregon, near Portland | 1 h 45 min | 20 min | 192 | 123 |
+| over California, near Fresno | 20 min to 35 min | 1 h 30 min to 1 h 45 min | 291 | 163 |
+| over California, near Reno | 40 min | 1 h 20 min | 92 | 50 |
+| over Nevada, near Reno | 50 min to 55 min | 1 h 10 min to 1 h 15 min | 189 | 109 |
+| over California, near Reno, again | 1 h | 1 h 5 min | 70 | 41 |
+| over California | 1 h 5 min to 1 h 10 min | 55 min to 1 h | 354 | 223 |
+| over Oregon | 1 h 15 min to 1 h 30 min | 35 min to 50 min | 558 | 287 |
+| over Oregon, near Portland | 1 h 35 min to 1 h 45 min | 20 min to 30 min | 521 | 323 |
 | over Washington, near Portland | 1 h 50 min | 15 min | 110 | 70 |
 | near SEA, where flights climb out or come in to land | 2 h | 5 min | 350 | 91 |
 
@@ -70,7 +61,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between LAX and SEA?
 
-Pilots reported moderate bumps most often near LAX, where flights climb out or come in to land, about 5 min after leaving LAX, or 2 h after leaving SEA. The next most were over northern California, about 1 h 10 min after leaving LAX, or 55 min after leaving SEA.
+Pilots reported moderate bumps most often near LAX, where flights climb out or come in to land, about 5 min after leaving LAX, or 2 h after leaving SEA. The next most were over California, about 1 h 10 min after leaving LAX, or 55 min after leaving SEA.
 
 ### When is the smoothest time of year to fly LAX to SEA?
 

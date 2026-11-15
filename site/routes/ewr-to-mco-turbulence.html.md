@@ -2,7 +2,7 @@
 
 > Newark (EWR) ⇄ Orlando (MCO), both directions. November 2025 to October 2026.
 
-Flights between Newark (EWR) and Orlando (MCO) fly about 940 miles, roughly 2 hours in the air. In the past year, pilots near this route reported moderate bumps most often over central Virginia, and more often in November, December and February.
+Flights between Newark (EWR) and Orlando (MCO) fly about 940 miles, roughly 2 hours in the air. In the past year, pilots near this route reported moderate bumps most often over Virginia, and more often in November, December and February.
 
 - Distance: 940 miles (1,510 km)
 - In the air: about 2 h 5 min (typical jet, still air)
@@ -12,7 +12,7 @@ Flights between Newark (EWR) and Orlando (MCO) fly about 940 miles, roughly 2 ho
 
 ## Where on the route it gets bumpy
 
-Moderate bumps were reported most often over central Virginia, near Norfolk, about 35 min after leaving EWR, or 1 h 25 min after leaving MCO. There, 584 of 876 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Moderate bumps were reported most often over Virginia, near Norfolk, about 35 min after leaving EWR, or 1 h 25 min after leaving MCO. There, 584 of 876 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
 The next most were near EWR, where flights climb out or come in to land, about 5 min after leaving EWR, or 2 h after leaving MCO. There, 356 of 732 reports were moderate or stronger. Close to the ground, wind over buildings and land stirs the air, and gusty days at EWR add to it.
 
@@ -22,20 +22,14 @@ The next most were near EWR, where flights climb out or come in to land, about 5
 | over New Jersey, near Philadelphia | 15 min | 1 h 50 min | 581 | 274 |
 | over Delaware, near Philadelphia | 20 min | 1 h 45 min | 243 | 176 |
 | over Maryland, near Baltimore | 25 min | 1 h 40 min | 151 | 101 |
-| over northern Virginia, near Norfolk | 30 min | 1 h 30 min | 126 | 76 |
-| over central Virginia, near Norfolk | 35 min | 1 h 25 min | 876 | 584 |
-| over southern Virginia, near Norfolk | 40 min | 1 h 20 min | 150 | 99 |
+| over Virginia, near Norfolk | 30 min to 40 min | 1 h 20 min to 1 h 30 min | 1,152 | 759 |
 | over North Carolina, near Norfolk | 45 min | 1 h 15 min | 225 | 146 |
-| over northern North Carolina, near Raleigh/Durham | 55 min | 1 h 10 min | 286 | 191 |
-| over southern North Carolina, near Raleigh/Durham | 1 h | 1 h 5 min | 139 | 89 |
+| over North Carolina, near Raleigh/Durham | 55 min to 1 h | 1 h 5 min to 1 h 10 min | 425 | 280 |
 | over North Carolina, near Myrtle Beach | 1 h 5 min | 1 h | 411 | 178 |
-| over northern South Carolina, near Myrtle Beach | 1 h 10 min | 55 min | 614 | 153 |
-| over southern South Carolina, near Myrtle Beach | 1 h 15 min | 45 min | 885 | 125 |
-| near Charleston, northern stretch | 1 h 20 min | 40 min | 1,233 | 200 |
-| near Charleston, southern stretch | 1 h 25 min | 35 min | 421 | 63 |
+| over South Carolina, near Myrtle Beach | 1 h 10 min to 1 h 15 min | 45 min to 55 min | 1,499 | 278 |
+| near Charleston | 1 h 20 min to 1 h 25 min | 35 min to 40 min | 1,654 | 263 |
 | near Savannah | 1 h 30 min | 30 min | 179 | 41 |
-| near Jacksonville, northern stretch | 1 h 40 min | 25 min | 318 | 59 |
-| near Jacksonville, southern stretch | 1 h 45 min | 20 min | 420 | 61 |
+| near Jacksonville | 1 h 40 min to 1 h 45 min | 20 min to 25 min | 738 | 120 |
 | over Florida, near Orlando | 1 h 50 min | 15 min | 114 | 21 |
 | near MCO, where flights climb out or come in to land | 2 h | 5 min | 438 | 32 |
 
@@ -70,7 +64,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between EWR and MCO?
 
-Pilots reported moderate bumps most often over central Virginia, near Norfolk, about 35 min after leaving EWR, or 1 h 25 min after leaving MCO. The next most were near EWR, where flights climb out or come in to land, about 5 min after leaving EWR, or 2 h after leaving MCO.
+Pilots reported moderate bumps most often over Virginia, near Norfolk, about 35 min after leaving EWR, or 1 h 25 min after leaving MCO. The next most were near EWR, where flights climb out or come in to land, about 5 min after leaving EWR, or 2 h after leaving MCO.
 
 ### When is the smoothest time of year to fly EWR to MCO?
 

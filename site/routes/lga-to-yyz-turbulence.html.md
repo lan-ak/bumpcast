@@ -2,7 +2,7 @@
 
 > New York (LGA) ⇄ Toronto (YYZ), both directions. November 2025 to October 2026.
 
-Flights between New York (LGA) and Toronto (YYZ) fly about 360 miles, roughly an hour in the air. In the past year, pilots near this route reported moderate bumps most often over eastern New York, and more often in December and October.
+Flights between New York (LGA) and Toronto (YYZ) fly about 360 miles, roughly an hour in the air. In the past year, pilots near this route reported moderate bumps most often over New York, and more often in December and October.
 
 - Distance: 360 miles (570 km)
 - In the air: about 1 h (typical jet, still air)
@@ -12,28 +12,18 @@ Flights between New York (LGA) and Toronto (YYZ) fly about 360 miles, roughly an
 
 ## Where on the route it gets bumpy
 
-Moderate bumps were reported most often over eastern New York, near Rochester, about 30 min after leaving LGA, or 25 min after leaving YYZ. There, 354 of 1,267 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Moderate bumps were reported most often over New York, near Rochester, about 30 min after leaving LGA, or 25 min after leaving YYZ. There, 354 of 1,267 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
 | Where | From LGA | From YYZ | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near LGA, where flights climb out or come in to land | 5 min | 55 min | 361 | 159 |
-| over eastern New Jersey, near Newark | 5 min | 50 min | 303 | 126 |
-| over central New Jersey, near Newark | 10 min | 50 min | 331 | 142 |
-| over western New Jersey, near Newark | 10 min | 45 min | 117 | 52 |
+| over New Jersey, near Newark | 5 min to 10 min | 45 min to 50 min | 751 | 320 |
 | over New York, near Newark | 15 min | 40 min | 153 | 66 |
 | over Pennsylvania, near Newark | 15 min | 40 min | 196 | 83 |
 | over Pennsylvania, near Syracuse | 20 min | 35 min | 581 | 146 |
-| over eastern New York, near Syracuse | 20 min | 35 min | 136 | 47 |
-| over central New York, near Syracuse | 25 min | 30 min | 268 | 111 |
-| over western New York, near Syracuse | 25 min | 30 min | 313 | 115 |
-| over eastern New York, near Rochester | 30 min | 25 min | 1,267 | 354 |
-| over east-central New York, near Rochester | 30 min | 25 min | 222 | 116 |
-| over central New York, near Rochester | 35 min | 20 min | 166 | 99 |
-| over west-central New York, near Rochester | 35 min | 20 min | 196 | 140 |
-| over western New York, near Rochester | 40 min | 15 min | 78 | 38 |
-| over eastern New York, near Buffalo | 40 min | 15 min | 22 | 15 |
-| over central New York, near Buffalo | 45 min | 10 min | 64 | 41 |
-| over western New York, near Buffalo | 45 min | 10 min | 11 | 4 |
+| over New York, near Syracuse | 20 min to 25 min | 30 min to 35 min | 717 | 273 |
+| over New York, near Rochester | 30 min to 40 min | 15 min to 25 min | 1,929 | 747 |
+| over New York, near Buffalo | 40 min to 45 min | 10 min to 15 min | 97 | 60 |
 | over Ontario, near Toronto | 50 min | 5 min | 1 | 0 |
 | near YYZ, where flights climb out or come in to land | 55 min | 5 min | 2 | 0 |
 
@@ -68,7 +58,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between LGA and YYZ?
 
-Pilots reported moderate bumps most often over eastern New York, near Rochester, about 30 min after leaving LGA, or 25 min after leaving YYZ.
+Pilots reported moderate bumps most often over New York, near Rochester, about 30 min after leaving LGA, or 25 min after leaving YYZ.
 
 ### When is the smoothest time of year to fly LGA to YYZ?
 

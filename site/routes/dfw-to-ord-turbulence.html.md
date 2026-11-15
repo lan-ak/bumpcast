@@ -22,21 +22,14 @@ The next most were over Arkansas, about 40 min after leaving DFW, or 1 h 5 min a
 | over Texas, near Dallas | 10 min | 1 h 35 min | 441 | 113 |
 | over Oklahoma, near Dallas | 15 min | 1 h 30 min | 618 | 173 |
 | over Oklahoma | 20 min | 1 h 25 min | 700 | 159 |
-| over western Oklahoma, near Tulsa | 25 min | 1 h 20 min | 714 | 182 |
-| over eastern Oklahoma, near Tulsa | 30 min | 1 h 15 min | 618 | 230 |
+| over Oklahoma, near Tulsa | 25 min to 30 min | 1 h 15 min to 1 h 20 min | 1,332 | 412 |
 | over Arkansas, near Tulsa | 35 min | 1 h 10 min | 398 | 165 |
 | over Arkansas | 40 min | 1 h 5 min | 621 | 252 |
-| over western Missouri | 45 min | 1 h | 271 | 93 |
-| over central Missouri | 50 min | 55 min | 303 | 128 |
-| over eastern Missouri | 55 min | 50 min | 218 | 75 |
-| over western Missouri, near St Louis | 1 h | 45 min | 223 | 108 |
-| over central Missouri, near St Louis | 1 h 5 min | 40 min | 289 | 111 |
-| over eastern Missouri, near St Louis | 1 h 10 min | 35 min | 511 | 184 |
-| over western Illinois, near St Louis | 1 h 15 min | 30 min | 293 | 117 |
-| over eastern Illinois, near St Louis | 1 h 20 min | 25 min | 647 | 200 |
+| over Missouri | 45 min to 55 min | 50 min to 1 h | 792 | 296 |
+| over Missouri, near St Louis | 1 h to 1 h 10 min | 35 min to 45 min | 1,023 | 403 |
+| over Illinois, near St Louis | 1 h 15 min to 1 h 20 min | 25 min to 30 min | 940 | 317 |
 | over Illinois | 1 h 25 min | 20 min | 822 | 250 |
-| over western Illinois, near Chicago | 1 h 30 min | 15 min | 462 | 153 |
-| over eastern Illinois, near Chicago | 1 h 35 min | 10 min | 422 | 151 |
+| over Illinois, near Chicago | 1 h 30 min to 1 h 35 min | 10 min to 15 min | 884 | 304 |
 | near ORD, where flights climb out or come in to land | 1 h 45 min | 5 min | 2,116 | 291 |
 
 ## When in the year

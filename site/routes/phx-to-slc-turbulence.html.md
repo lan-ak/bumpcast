@@ -1,0 +1,84 @@
+# PHX to SLC turbulence
+
+> Phoenix (PHX) ⇄ Salt Lake City (SLC), both directions. November 2025 to October 2026.
+
+Flights between Phoenix (PHX) and Salt Lake City (SLC) fly about 510 miles, roughly 1¼ hours in the air. In the past year, pilots near this route reported moderate bumps most often over Utah, and more often in May, June and September.
+
+- Distance: 510 miles (820 km)
+- In the air: about 1 h 15 min (typical jet, still air)
+- Pilot reports near the route: 2,852
+- Severe reports: 13 (0.5%)
+- Gusty days: PHX 68, SLC 105
+
+## Where on the route it gets bumpy
+
+Moderate bumps were reported most often over Utah, about 40 min after leaving PHX, or 30 min after leaving SLC. There, 119 of 211 reports were moderate or stronger. The ground below is high, and wind over mountains makes waves that reach cruising height.
+
+The next most were over Arizona, near Phoenix, about 10 min after leaving PHX, or 1 h 5 min after leaving SLC. There, 89 of 131 reports were moderate or stronger. Close to the ground, wind over buildings and land stirs the air, and gusty days at PHX add to it.
+
+| Where | From PHX | From SLC | Reports | Moderate or stronger |
+|---|---|---|---|---|
+| near PHX, where flights climb out or come in to land | 5 min | 1 h 15 min | 94 | 55 |
+| over Arizona, near Phoenix | 10 min to 15 min | 55 min to 1 h 5 min | 345 | 214 |
+| over Arizona | 20 min to 30 min | 40 min to 55 min | 813 | 217 |
+| over Utah | 35 min to 55 min | 20 min to 40 min | 1,013 | 442 |
+| over Utah, near Salt Lake City | 55 min to 1 h 5 min | 10 min to 15 min | 362 | 222 |
+| near SLC, where flights climb out or come in to land | 1 h 15 min | 5 min | 225 | 72 |
+
+## When in the year
+
+Moderate bumps made up a bigger share of reports in May, June and September, and a smaller share in February, April and July.
+
+| Month | Reports | Smooth | Light | Light to moderate | Moderate | Severe | Vs. average |
+|---|---|---|---|---|---|---|---|
+| November 2025 | 172 | 19 | 65 | 14 | 74 | 0 | 1.00× |
+| December 2025 | 357 | 34 | 114 | 33 | 172 | 4 | 1.15× |
+| January 2026 | 269 | 47 | 109 | 18 | 95 | 0 | 0.82× |
+| February 2026 | 257 | 38 | 123 | 12 | 82 | 2 | 0.76× |
+| March 2026 | 278 | 32 | 99 | 29 | 118 | 0 | 0.99× |
+| April 2026 | 287 | 32 | 140 | 14 | 101 | 0 | 0.82× |
+| May 2026 | 236 | 24 | 57 | 26 | 128 | 1 | 1.28× |
+| June 2026 | 132 | 12 | 40 | 11 | 69 | 0 | 1.22× |
+| July 2026 | 128 | 31 | 41 | 15 | 39 | 2 | 0.75× |
+| August 2026 | 201 | 45 | 61 | 22 | 73 | 0 | 0.85× |
+| September 2026 | 218 | 19 | 55 | 22 | 119 | 3 | 1.31× |
+| October 2026 | 317 | 26 | 116 | 35 | 139 | 1 | 1.03× |
+
+## Takeoff and landing
+
+PHX had gusts of 25 knots or more on 68 days in the past year, most often in June (13 days). SLC had gusts of 25 knots or more on 105 days in the past year, most often in July (14 days).
+
+## Questions
+
+### Is PHX to SLC a bumpy flight?
+
+Most flights see light chop at most. From November 2025 to October 2026, pilots near the PHX–SLC route filed 2,852 turbulence reports, and severe reports were rare: 13 of 2,852 (0.5%). Pilots report bumpy air more readily than smooth, so the share of flights with strong bumps is lower still. On the day, the weather decides: BumpCast forecasts your exact flight from 48 hours before departure.
+
+### Where is it bumpiest between PHX and SLC?
+
+Pilots reported moderate bumps most often over Utah, about 40 min after leaving PHX, or 30 min after leaving SLC. The next most were over Arizona, near Phoenix, about 10 min after leaving PHX, or 1 h 5 min after leaving SLC.
+
+### When is the smoothest time of year to fly PHX to SLC?
+
+In the past year, moderate bumps made up a smaller share of reports in February, April and July and a bigger share in May, June and September. Any month can have a smooth or a bumpy day, so the forecast for your flight matters more.
+
+### Is SLC to PHX the same?
+
+Yes. It's the same air, so bumps are reported in the same places, just at different times into the flight.
+
+### Are takeoffs and landings bumpy at PHX and SLC?
+
+On windy days they can be, for a few minutes. PHX had gusts of 25 knots or more on 68 days in the past year, most often in June (13 days). SLC had gusts of 25 knots or more on 105 days in the past year, most often in July (14 days).
+
+### Can I get a turbulence forecast for my PHX to SLC flight?
+
+Yes. BumpCast forecasts the turbulence on your exact PHX–SLC flight from 48 hours before departure: when the bumps will come, how strong they'll be and when they'll end, and whether takeoff and landing look gusty. It's free to download on the App Store for iPhone.
+
+## How this page was made
+
+- Period: November 2025 to October 2026. Pilot reports (PIREPs) and airport weather reports (METARs) from the US National Weather Service, via the Iowa Environmental Mesonet archive: https://mesonet.agron.iastate.edu/request/gis/pireps.php
+- Reports from airliners within 60 nautical miles of the direct path, near the height a flight would be there (BumpCast's flight model). Each report counts at the strongest turbulence it names; "moderate to severe" counts as severe.
+- Gusty days: days with at least one hourly report of gusts of 25 knots or more.
+- Reporting habits differ: smooth air made up 4% of cruise reports at Washington Center but 45% at Miami Center. These numbers show where and when bumps were reported, compared within a route. They aren't the odds for a given flight, and routes aren't ranked against each other.
+
+Source: https://bumpcast.app/routes/phx-to-slc-turbulence.html (data November 2025 to October 2026). From BumpCast, the flight tracker with turbulence forecasts for nervous flyers: https://apps.apple.com/app/id6824269447

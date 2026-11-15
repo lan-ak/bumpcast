@@ -2,7 +2,7 @@
 
 > Boston (BOS) ⇄ Chicago (ORD), both directions. November 2025 to October 2026.
 
-Flights between Boston (BOS) and Chicago (ORD) fly about 860 miles, roughly 2 hours in the air. In the past year, pilots near this route reported moderate bumps most often over western New York.
+Flights between Boston (BOS) and Chicago (ORD) fly about 860 miles, roughly 2 hours in the air. In the past year, pilots near this route reported moderate bumps most often over New York.
 
 - Distance: 860 miles (1,390 km)
 - In the air: about 2 h (typical jet, still air)
@@ -12,30 +12,23 @@ Flights between Boston (BOS) and Chicago (ORD) fly about 860 miles, roughly 2 ho
 
 ## Where on the route it gets bumpy
 
-Moderate bumps were reported most often over western New York, near Syracuse, about 40 min after leaving BOS, or 1 h 15 min after leaving ORD. There, 490 of 1,601 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Moderate bumps were reported most often over New York, near Syracuse, about 40 min after leaving BOS, or 1 h 15 min after leaving ORD. There, 490 of 1,601 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
-The next most were over eastern New York, near Albany, about 25 min after leaving BOS, or 1 h 30 min after leaving ORD. There, 469 of 1,920 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+The next most were over Michigan, near Detroit, about 1 h 20 min after leaving BOS, or 35 min after leaving ORD. There, 423 of 712 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
 | Where | From BOS | From ORD | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near BOS, where flights climb out or come in to land | 5 min | 1 h 50 min | 504 | 184 |
 | over Massachusetts, near Hartford | 10 min | 1 h 45 min | 854 | 239 |
 | over Massachusetts, near Albany | 20 min | 1 h 35 min | 1,430 | 313 |
-| over eastern New York, near Albany | 25 min | 1 h 30 min | 1,920 | 469 |
-| over western New York, near Albany | 30 min | 1 h 25 min | 692 | 189 |
-| over eastern New York, near Syracuse | 35 min | 1 h 20 min | 1,344 | 362 |
-| over western New York, near Syracuse | 40 min | 1 h 15 min | 1,601 | 490 |
+| over New York, near Albany | 25 min to 30 min | 1 h 25 min to 1 h 30 min | 2,612 | 658 |
+| over New York, near Syracuse | 35 min to 40 min | 1 h 15 min to 1 h 20 min | 2,945 | 852 |
 | over New York, near Rochester | 45 min | 1 h 10 min | 576 | 342 |
-| over eastern New York, near Buffalo | 50 min | 1 h 5 min | 356 | 246 |
-| over western New York, near Buffalo | 55 min | 1 h | 427 | 291 |
-| near Hamilton, eastern stretch | 1 h | 55 min | 254 | 175 |
-| near Hamilton, western stretch | 1 h 5 min | 50 min | 110 | 83 |
-| near Windsor, eastern stretch | 1 h 10 min | 45 min | 199 | 141 |
-| near Windsor, western stretch | 1 h 15 min | 40 min | 385 | 253 |
-| over eastern Michigan, near Detroit | 1 h 20 min | 35 min | 712 | 423 |
-| over western Michigan, near Detroit | 1 h 25 min | 30 min | 498 | 295 |
-| over eastern Michigan, near Grand Rapids | 1 h 30 min | 25 min | 394 | 158 |
-| over western Michigan, near Grand Rapids | 1 h 35 min | 20 min | 1,671 | 391 |
+| over New York, near Buffalo | 50 min to 55 min | 1 h to 1 h 5 min | 783 | 537 |
+| near Hamilton | 1 h to 1 h 5 min | 50 min to 55 min | 364 | 258 |
+| near Windsor | 1 h 10 min to 1 h 15 min | 40 min to 45 min | 584 | 394 |
+| over Michigan, near Detroit | 1 h 20 min to 1 h 25 min | 30 min to 35 min | 1,210 | 718 |
+| over Michigan, near Grand Rapids | 1 h 30 min to 1 h 35 min | 20 min to 25 min | 2,065 | 549 |
 | over Michigan, near Chicago | 1 h 45 min | 10 min | 1,114 | 267 |
 | near ORD, where flights climb out or come in to land | 1 h 50 min | 5 min | 1,897 | 280 |
 
@@ -70,7 +63,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between BOS and ORD?
 
-Pilots reported moderate bumps most often over western New York, near Syracuse, about 40 min after leaving BOS, or 1 h 15 min after leaving ORD. The next most were over eastern New York, near Albany, about 25 min after leaving BOS, or 1 h 30 min after leaving ORD.
+Pilots reported moderate bumps most often over New York, near Syracuse, about 40 min after leaving BOS, or 1 h 15 min after leaving ORD. The next most were over Michigan, near Detroit, about 1 h 20 min after leaving BOS, or 35 min after leaving ORD.
 
 ### When is the smoothest time of year to fly BOS to ORD?
 

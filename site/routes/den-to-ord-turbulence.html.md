@@ -19,20 +19,11 @@ Moderate bumps were reported most often near DEN, where flights climb out or com
 | near DEN, where flights climb out or come in to land | 5 min | 1 h 55 min | 3,952 | 964 |
 | over Colorado, near Denver | 10 min | 1 h 45 min | 979 | 271 |
 | over Colorado | 20 min | 1 h 40 min | 795 | 241 |
-| over western Nebraska | 25 min | 1 h 35 min | 572 | 185 |
-| over west-central Nebraska | 30 min | 1 h 25 min | 1,143 | 244 |
-| over central Nebraska | 35 min | 1 h 20 min | 778 | 184 |
-| over east-central Nebraska | 40 min | 1 h 15 min | 592 | 158 |
-| over eastern Nebraska | 45 min | 1 h 10 min | 962 | 289 |
-| over western Nebraska, near Omaha | 50 min | 1 h 5 min | 211 | 86 |
-| over central Nebraska, near Omaha | 55 min | 1 h | 982 | 319 |
-| over eastern Nebraska, near Omaha | 1 h | 55 min | 742 | 256 |
+| over Nebraska | 25 min to 45 min | 1 h 10 min to 1 h 35 min | 4,047 | 1,060 |
+| over Nebraska, near Omaha | 50 min to 1 h | 55 min to 1 h 5 min | 1,935 | 661 |
 | over Iowa, near Omaha | 1 h 5 min | 50 min | 433 | 127 |
-| over western Iowa, near Des Moines | 1 h 10 min | 45 min | 677 | 219 |
-| over central Iowa, near Des Moines | 1 h 15 min | 40 min | 850 | 253 |
-| over eastern Iowa, near Des Moines | 1 h 20 min | 35 min | 942 | 235 |
-| over western Iowa | 1 h 30 min | 30 min | 1,183 | 237 |
-| over eastern Iowa | 1 h 35 min | 25 min | 1,538 | 376 |
+| over Iowa, near Des Moines | 1 h 10 min to 1 h 20 min | 35 min to 45 min | 2,469 | 707 |
+| over Iowa | 1 h 30 min to 1 h 35 min | 25 min to 30 min | 2,721 | 613 |
 | over Illinois | 1 h 40 min | 20 min | 328 | 110 |
 | over Illinois, near Chicago | 1 h 45 min | 10 min | 553 | 171 |
 | near ORD, where flights climb out or come in to land | 1 h 55 min | 5 min | 1,926 | 313 |

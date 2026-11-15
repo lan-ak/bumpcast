@@ -810,7 +810,8 @@ class Route:
             if len(group) < 2:
                 continue
             group.sort(key=lambda s: s["from"])
-            labels = names.get(len(group)) or [f"part {i} of {len(group)}" for i in range(1, len(group) + 1)]
+            five = names[5]
+            labels = names.get(len(group)) or [five[round(i * 4 / (len(group) - 1))] for i in range(len(group))]
             for s, label in zip(group, labels):
                 out[s["from"]] = label
         return out
@@ -827,8 +828,8 @@ class Route:
         if s["to"] >= 0.999:
             return f"near {self.B}, where flights climb out or come in to land"
         name, near = s["region_name"], s["near"]
-        region = f"{side} {name}" if side and name and not side.startswith("part") else name
-        tail = f" ({side})" if side and side.startswith("part") else ""
+        region = f"{side} {name}" if side and name else name
+        tail = ""
         if s["offshore"] or self.far_side(s) or not name:  # no station within 40 nm (remote land or water), or over the border
             if near:
                 return f"near {near}" + (f", {side} stretch" if side and not tail else tail)
@@ -838,7 +839,9 @@ class Route:
         return f"over {region}{tail}"
 
     def place(self, s: dict) -> str:
-        return self._place(s, self.side.get(s["from"]))
+        # Stretches keep their plain name; the table merges neighbours that share one
+        # (stretch_rows). Relative words like "western" read as real regions, so none are added.
+        return self._place(s, None)
 
     def short_place(self, s: dict) -> str:
         if s["from"] == 0:
@@ -959,6 +962,20 @@ class Route:
                  ) if spots else " In the past year, pilots near this route rarely reported moderate bumps."
         return (f"Flights between {self.a['city']} ({self.A}) and {self.b['city']} ({self.B}) fly about "
                 f"{self.miles:,} miles, roughly {rough_duration(self.minutes)} in the air.{where}")
+
+    def thin_provinces(self) -> list[str]:
+        """Provinces where this route's stretches have hardly any reports: pilot reports over most
+        of Canada aren't filed through the US system this archive comes from. Only when that's a
+        real part of the route (a quarter of its stretches or more)."""
+        inner = [s for s in self.r["along"] if 0 < s["from"] and s["to"] < 0.999]
+        thin = [s for s in inner if s["region_name"] in PROVINCE_NAMES and total(s["counts"]) < 15]
+        if len(thin) < 0.25 * len(inner):
+            return []
+        out = []
+        for s in thin:
+            if s["region_name"] not in out:
+                out.append(s["region_name"])
+        return out
 
     def grade(self) -> tuple[str, str, str]:
         """(level, headline, sentence) for the summary card: the level pilots reported most near the
@@ -1164,10 +1181,61 @@ def months_chart(rows: list[tuple[str, dict, float | None]], label: str, ident: 
             f'Above 1× is bumpier than usual; below is calmer.</figcaption></figure>')
 
 
+def stretch_rows(route: Route) -> list[tuple[str, str, str, int, int]]:
+    """The stretch table's rows: neighbouring stretches with the same name merged into one, with
+    the time range from each end ("1 h 5 min to 1 h 35 min") and their reports added up."""
+    def key(s: dict):
+        # The airport ends stay their own rows; elsewhere the state or province and nearest city,
+        # so "over or near Idaho" (few stations below) joins the "over Idaho" beside it.
+        if s["from"] == 0 or s["to"] >= 0.999:
+            return route.place(s)
+        return (s["region_name"], s["near"])
+
+    groups: list[list[dict]] = []
+    for s in route.r["along"]:
+        if groups and key(groups[-1][-1]) == key(s):
+            groups[-1].append(s)
+        else:
+            groups.append([s])
+
+    def name_of(g: list[dict]) -> str:
+        """The group's name from a stretch with stations below it, if it has one."""
+        solid = [x for x in g if not x["offshore"]]
+        return route.place((solid or g)[0])
+
+    def span(a: int, b: int) -> str:
+        lo, hi = duration(min(a, b)), duration(max(a, b))
+        return lo if lo == hi else f"{lo} to {hi}"
+
+    rows, seen, region = [], set(), None
+    for g in groups:
+        name = name_of(g)
+        # "again" only when the route crossed into another state or province in between.
+        back = name in seen and g[0]["region_name"] != region
+        label = f"{name}, again" if back else name
+        seen.add(name)
+        region = g[0]["region_name"]
+        rows.append((label, span(g[0]["minute_ab"], g[-1]["minute_ab"]), span(g[0]["minute_ba"], g[-1]["minute_ba"]),
+                     sum(total(x["counts"]) for x in g), sum(bumpy(x["counts"]) for x in g)))
+    # Two rows still sharing a name have a city row between them in the same state ("over Colorado",
+    # "near Colorado Springs", "over Colorado"): name them by the city, from the first airport's side.
+    labels = [row[0] for row in rows]
+    for i, label in enumerate(labels):
+        if labels.count(label) < 2:
+            continue
+        region = groups[i][0]["region_name"]
+        for j, word in ((i + 1, "before"), (i - 1, "past")):
+            if 0 <= j < len(groups) and groups[j][0]["region_name"] == region and ", near " in labels[j]:
+                city = labels[j].split(", near ")[1]
+                rows[i] = (f"{label}, {word} {city}",) + rows[i][1:]
+                break
+    return rows
+
+
 def route_tables(route: Route) -> tuple[str, str]:
     rows = "".join(
-        f"<tr><td>{text(route.place(s))}</td><td>{duration(s['minute_ab'])}</td><td>{duration(s['minute_ba'])}</td>"
-        f"<td>{total(s['counts']):,}</td><td>{bumpy(s['counts']):,}</td></tr>" for s in route.r["along"])
+        f"<tr><td>{text(place)}</td><td>{ab}</td><td>{ba}</td><td>{n:,}</td><td>{m:,}</td></tr>"
+        for place, ab, ba, n, m in stretch_rows(route))
     along = (f'<details class="data"><summary>Show the numbers by stretch</summary><div class="table-wrap"><table>'
              f'<thead><tr><th>Where</th><th>From {route.A}</th><th>From {route.B}</th><th>Reports</th>'
              f'<th>Moderate or stronger</th></tr></thead><tbody>{rows}</tbody></table></div></details>')
@@ -1291,6 +1359,8 @@ def route_html(route: Route, routes: list[Route], by_id: dict[str, Explainer], d
         where = f"<p>{text(intro)}</p>\n  <ul class=\"segments\">{''.join(rows)}</ul>"
     else:
         where = f"<p>Moderate bumps were rarely reported near this route: {bumpy(route.r['reports']):,} in the year.</p>"
+    if route.thin_provinces():
+        where += (f"\n  <p class=\"muted\">{text(THIN_NOTE.format(places=join(route.thin_provinces())))}</p>")
     gust_tiles = "".join(
         f'<li><b>{route.gusts(code)[0]} day{"" if route.gusts(code)[0] == 1 else "s"}</b><span>Gusty at {code}'
         f'{text(f" · most in {route.gusts(code)[1]}" if route.gusts(code)[0] else " · none in the year")}</span></li>'
@@ -1394,6 +1464,9 @@ def route_html(route: Route, routes: list[Route], by_id: dict[str, Explainer], d
 
 """ + foot("routes"))
 
+
+THIN_NOTE = ("Few pilot reports are filed over {places} in the archive these pages use, so those stretches have "
+             "little data. Few reports there doesn't mean smooth air.")
 
 # How route pages name an explainer in a sentence ("More on mountain waves").
 TOPIC_NAMES = {"clear-air": "clear-air turbulence", "mountain-wave": "mountain waves", "clouds": "turbulence near clouds",
@@ -1687,9 +1760,10 @@ def route_md(route: Route, data: dict, level: int = 1) -> str:
            "", f"{h}# Where on the route it gets bumpy", ""]
     for sentence, _ in route.hotspot_sentences():
         out += [sentence, ""]
+    if route.thin_provinces():
+        out += [THIN_NOTE.format(places=join(route.thin_provinces())), ""]
     out += md_table(["Where", f"From {route.A}", f"From {route.B}", "Reports", "Moderate or stronger"],
-                    [[route.place(s), duration(s["minute_ab"]), duration(s["minute_ba"]), f"{total(s['counts']):,}",
-                      f"{bumpy(s['counts']):,}"] for s in route.r["along"]])
+                    [[place, ab, ba, f"{n:,}", f"{m:,}"] for place, ab, ba, n, m in stretch_rows(route)])
     out += [f"{h}# When in the year", "", route.season_sentence(), ""]
     out += md_table(["Month", "Reports", "Smooth", "Light", "Light to moderate", "Moderate", "Severe", "Vs. average"],
                     [[month_year(k), f"{total(c):,}", f"{c['smooth']:,}", f"{c['light']:,}", f"{c['light_moderate']:,}",

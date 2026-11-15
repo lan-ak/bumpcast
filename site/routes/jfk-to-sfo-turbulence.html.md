@@ -28,14 +28,12 @@ The next most were near JFK, where flights climb out or come in to land, about 1
 | over Iowa, near Des Moines | 2 h | 3 h 15 min | 2,568 | 593 |
 | over Iowa, near Omaha | 2 h 15 min | 3 h | 3,085 | 757 |
 | over Nebraska, near Omaha | 2 h 30 min | 2 h 45 min | 2,943 | 736 |
-| over eastern Nebraska | 2 h 45 min | 2 h 30 min | 1,842 | 490 |
-| over western Nebraska | 3 h | 2 h 15 min | 1,758 | 467 |
+| over Nebraska | 2 h 45 min to 3 h | 2 h 15 min to 2 h 30 min | 3,600 | 957 |
 | over Wyoming, near Denver | 3 h 15 min | 2 h | 1,706 | 439 |
 | over Wyoming | 3 h 30 min | 1 h 45 min | 2,181 | 400 |
 | over Utah | 3 h 45 min | 1 h 30 min | 816 | 359 |
 | over Utah, near Salt Lake City | 4 h | 1 h 15 min | 376 | 255 |
-| over eastern Nevada | 4 h 15 min | 1 h | 424 | 266 |
-| over western Nevada | 4 h 30 min | 45 min | 299 | 194 |
+| over Nevada | 4 h 15 min to 4 h 30 min | 45 min to 1 h | 723 | 460 |
 | over Nevada, near Reno | 4 h 45 min | 30 min | 204 | 115 |
 | near SFO, where flights climb out or come in to land | 5 h 5 min | 10 min | 437 | 243 |
 

@@ -28,14 +28,12 @@ The next most were over Nebraska, near Omaha, about 2 h 30 min after leaving EWR
 | over Iowa, near Des Moines | 2 h | 3 h 15 min | 2,927 | 699 |
 | over Iowa, near Omaha | 2 h 15 min | 3 h | 2,678 | 641 |
 | over Nebraska, near Omaha | 2 h 30 min | 2 h 45 min | 2,916 | 724 |
-| over eastern Nebraska | 2 h 45 min | 2 h 30 min | 1,850 | 493 |
-| over western Nebraska | 3 h | 2 h 15 min | 1,758 | 468 |
+| over Nebraska | 2 h 45 min to 3 h | 2 h 15 min to 2 h 30 min | 3,608 | 961 |
 | over Wyoming, near Denver | 3 h 15 min | 2 h | 1,722 | 439 |
 | over Wyoming | 3 h 30 min | 1 h 45 min | 2,185 | 404 |
 | over Utah | 3 h 45 min | 1 h 30 min | 798 | 358 |
 | over Utah, near Salt Lake City | 4 h | 1 h 15 min | 380 | 255 |
-| over eastern Nevada | 4 h 15 min | 1 h | 417 | 264 |
-| over western Nevada | 4 h 30 min | 45 min | 299 | 194 |
+| over Nevada | 4 h 15 min to 4 h 30 min | 45 min to 1 h | 716 | 458 |
 | over Nevada, near Reno | 4 h 45 min | 30 min | 205 | 110 |
 | near SFO, where flights climb out or come in to land | 5 h | 10 min | 423 | 237 |
 

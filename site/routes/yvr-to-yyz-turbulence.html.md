@@ -2,7 +2,7 @@
 
 > Vancouver (YVR) ⇄ Toronto (YYZ), both directions. November 2025 to October 2026.
 
-Flights between Vancouver (YVR) and Toronto (YYZ) fly about 2,080 miles, roughly 4¼ hours in the air. In the past year, pilots near this route reported moderate bumps most often over east-central Michigan, and more often in June and August.
+Flights between Vancouver (YVR) and Toronto (YYZ) fly about 2,080 miles, roughly 4¼ hours in the air. In the past year, pilots near this route reported moderate bumps most often over Michigan, and more often in June and August.
 
 - Distance: 2,080 miles (3,350 km)
 - In the air: about 4 h 20 min (typical jet, still air)
@@ -12,29 +12,19 @@ Flights between Vancouver (YVR) and Toronto (YYZ) fly about 2,080 miles, roughly
 
 ## Where on the route it gets bumpy
 
-Moderate bumps were reported most often over east-central Michigan, about 3 h 40 min after leaving YVR, or 35 min after leaving YYZ. There, 164 of 600 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Moderate bumps were reported most often over Michigan, about 3 h 40 min after leaving YVR, or 35 min after leaving YYZ. There, 164 of 600 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
 | Where | From YVR | From YYZ | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near YVR, where flights climb out or come in to land | 10 min | 4 h 5 min | 33 | 18 |
-| over western British Columbia, near Kelowna | 25 min | 3 h 50 min | 16 | 8 |
-| over eastern British Columbia, near Kelowna | 35 min | 3 h 40 min | 11 | 6 |
+| over British Columbia, near Kelowna | 25 min to 35 min | 3 h 40 min to 3 h 50 min | 27 | 14 |
 | over British Columbia | 50 min | 3 h 25 min | 18 | 9 |
-| over western Alberta | 1 h | 3 h 15 min | 62 | 30 |
-| over eastern Alberta | 1 h 10 min | 3 h 5 min | 46 | 20 |
-| over western Saskatchewan | 1 h 25 min | 2 h 50 min | 40 | 20 |
-| over eastern Saskatchewan | 1 h 35 min | 2 h 40 min | 55 | 32 |
-| over western North Dakota | 1 h 50 min | 2 h 25 min | 61 | 20 |
-| over central North Dakota | 2 h | 2 h 15 min | 216 | 45 |
-| over eastern North Dakota | 2 h 15 min | 2 h | 225 | 46 |
-| over western Minnesota | 2 h 25 min | 1 h 50 min | 349 | 59 |
-| over central Minnesota | 2 h 40 min | 1 h 35 min | 365 | 56 |
-| over eastern Minnesota | 2 h 50 min | 1 h 25 min | 463 | 81 |
+| over Alberta | 1 h to 1 h 10 min | 3 h 5 min to 3 h 15 min | 108 | 50 |
+| over Saskatchewan | 1 h 25 min to 1 h 35 min | 2 h 40 min to 2 h 50 min | 95 | 52 |
+| over North Dakota | 1 h 50 min to 2 h 15 min | 2 h to 2 h 25 min | 502 | 111 |
+| over Minnesota | 2 h 25 min to 2 h 50 min | 1 h 25 min to 1 h 50 min | 1,177 | 196 |
 | over Wisconsin | 3 h | 1 h 10 min | 316 | 77 |
-| over western Michigan | 3 h 15 min | 1 h | 420 | 115 |
-| over west-central Michigan | 3 h 25 min | 50 min | 195 | 50 |
-| over east-central Michigan | 3 h 40 min | 35 min | 600 | 164 |
-| over eastern Michigan | 3 h 50 min | 25 min | 221 | 75 |
+| over Michigan | 3 h 15 min to 3 h 50 min | 25 min to 1 h | 1,436 | 404 |
 | near YYZ, where flights climb out or come in to land | 4 h 5 min | 10 min | 57 | 29 |
 
 ## When in the year
@@ -68,7 +58,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between YVR and YYZ?
 
-Pilots reported moderate bumps most often over east-central Michigan, about 3 h 40 min after leaving YVR, or 35 min after leaving YYZ.
+Pilots reported moderate bumps most often over Michigan, about 3 h 40 min after leaving YVR, or 35 min after leaving YYZ.
 
 ### When is the smoothest time of year to fly YVR to YYZ?
 

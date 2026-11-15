@@ -12,31 +12,17 @@ Flights between Montréal (YUL) and Toronto (YYZ) fly about 320 miles, roughly a
 
 ## Where on the route it gets bumpy
 
-Moderate bumps were reported most often over Ontario, near Ottawa (part 6 of 8), about 20 min after leaving YUL, or 30 min after leaving YYZ. There, 34 of 128 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Moderate bumps were reported most often over Ontario, near Ottawa, about 20 min after leaving YUL, or 30 min after leaving YYZ. There, 34 of 128 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
-The next most were over western Ontario, near Toronto, about 45 min after leaving YUL, or 5 min after leaving YYZ. There, 24 of 51 reports were moderate or stronger. Close to the ground, wind over buildings and land stirs the air, and gusty days at YYZ add to it.
+Few pilot reports are filed over Quebec and Ontario in the archive these pages use, so those stretches have little data. Few reports there doesn't mean smooth air.
 
 | Where | From YUL | From YYZ | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near YUL, where flights climb out or come in to land | 5 min | 50 min | 30 | 10 |
-| over eastern Quebec, near Montréal | 5 min | 45 min | 11 | 7 |
-| over western Quebec, near Montréal | 10 min | 45 min | 24 | 5 |
-| over Ontario, near Ottawa (part 1 of 8) | 10 min | 40 min | 70 | 19 |
-| over Ontario, near Ottawa (part 2 of 8) | 15 min | 40 min | 12 | 3 |
-| over Ontario, near Ottawa (part 3 of 8) | 15 min | 35 min | 7 | 3 |
-| over Ontario, near Ottawa (part 4 of 8) | 20 min | 35 min | 14 | 4 |
-| over Ontario, near Ottawa (part 5 of 8) | 20 min | 30 min | 26 | 12 |
-| over Ontario, near Ottawa (part 6 of 8) | 20 min | 30 min | 128 | 34 |
-| over Ontario, near Ottawa (part 7 of 8) | 25 min | 25 min | 6 | 2 |
-| over Ontario, near Ottawa (part 8 of 8) | 25 min | 25 min | 7 | 3 |
-| over eastern Ontario, near Rochester | 30 min | 20 min | 11 | 7 |
-| over east-central Ontario, near Rochester | 30 min | 20 min | 4 | 0 |
-| over west-central Ontario, near Rochester | 30 min | 20 min | 7 | 3 |
-| over western Ontario, near Rochester | 35 min | 15 min | 6 | 4 |
-| over eastern Ontario, near Toronto | 35 min | 15 min | 3 | 3 |
-| over east-central Ontario, near Toronto | 40 min | 10 min | 9 | 5 |
-| over west-central Ontario, near Toronto | 45 min | 10 min | 4 | 2 |
-| over western Ontario, near Toronto | 45 min | 5 min | 51 | 24 |
+| over Quebec, near Montréal | 5 min to 10 min | 45 min | 35 | 12 |
+| over Ontario, near Ottawa | 10 min to 25 min | 25 min to 40 min | 270 | 80 |
+| over Ontario, near Rochester | 30 min to 35 min | 15 min to 20 min | 28 | 14 |
+| over Ontario, near Toronto | 35 min to 45 min | 5 min to 15 min | 67 | 34 |
 | near YYZ, where flights climb out or come in to land | 50 min | 5 min | 17 | 6 |
 
 ## When in the year
@@ -70,7 +56,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between YUL and YYZ?
 
-Pilots reported moderate bumps most often over Ontario, near Ottawa (part 6 of 8), about 20 min after leaving YUL, or 30 min after leaving YYZ. The next most were over western Ontario, near Toronto, about 45 min after leaving YUL, or 5 min after leaving YYZ.
+Pilots reported moderate bumps most often over Ontario, near Ottawa, about 20 min after leaving YUL, or 30 min after leaving YYZ.
 
 ### When is the smoothest time of year to fly YUL to YYZ?
 

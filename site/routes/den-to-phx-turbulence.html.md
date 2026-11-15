@@ -18,23 +18,11 @@ Moderate bumps were reported most often near DEN, where flights climb out or com
 |---|---|---|---|---|
 | near DEN, where flights climb out or come in to land | 5 min | 1 h 20 min | 3,697 | 925 |
 | over Colorado, near Denver | 10 min | 1 h 15 min | 1,817 | 881 |
-| over eastern Colorado, near Colorado Springs | 15 min | 1 h 10 min | 1,482 | 232 |
-| over central Colorado, near Colorado Springs | 20 min | 1 h 5 min | 973 | 266 |
-| over western Colorado, near Colorado Springs | 20 min | 1 h | 754 | 260 |
-| over eastern Colorado | 25 min | 1 h | 830 | 193 |
-| over east-central Colorado | 30 min | 55 min | 490 | 213 |
-| over west-central Colorado | 35 min | 50 min | 224 | 85 |
-| over western Colorado | 35 min | 45 min | 299 | 78 |
-| over eastern New Mexico | 40 min | 45 min | 878 | 174 |
-| over western New Mexico | 45 min | 40 min | 242 | 86 |
-| over eastern Arizona | 45 min | 35 min | 106 | 43 |
-| over east-central Arizona | 50 min | 30 min | 170 | 71 |
-| over central Arizona | 55 min | 30 min | 175 | 74 |
-| over west-central Arizona | 1 h | 25 min | 187 | 88 |
-| over western Arizona | 1 h | 20 min | 211 | 112 |
-| over eastern Arizona, near Phoenix | 1 h 5 min | 20 min | 72 | 39 |
-| over central Arizona, near Phoenix | 1 h 10 min | 15 min | 43 | 28 |
-| over western Arizona, near Phoenix | 1 h 15 min | 10 min | 78 | 57 |
+| over Colorado, near Colorado Springs | 15 min to 20 min | 1 h to 1 h 10 min | 3,209 | 758 |
+| over Colorado | 25 min to 35 min | 45 min to 1 h | 1,843 | 569 |
+| over New Mexico | 40 min to 45 min | 40 min to 45 min | 1,120 | 260 |
+| over Arizona | 45 min to 1 h | 20 min to 35 min | 849 | 388 |
+| over Arizona, near Phoenix | 1 h 5 min to 1 h 15 min | 10 min to 20 min | 193 | 124 |
 | near PHX, where flights climb out or come in to land | 1 h 25 min | 5 min | 47 | 23 |
 
 ## When in the year
