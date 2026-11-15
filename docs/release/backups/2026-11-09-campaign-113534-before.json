@@ -1,0 +1,99 @@
+{
+  "id": "113534",
+  "object": "campaign",
+  "application_id": "58179",
+  "description": "Onboarding",
+  "notes": null,
+  "is_legacy": false,
+  "is_prioritized": true,
+  "delivery_mode": null,
+  "placements": [
+    {
+      "id": "147366",
+      "object": "placement",
+      "event_name": "onboarding",
+      "enabled": true,
+      "delivery_mode": null
+    }
+  ],
+  "audiences": [
+    {
+      "id": "200805",
+      "object": "audience",
+      "enabled": true,
+      "expression": null,
+      "rule_conditions": {
+        "operator": "and",
+        "conditions": [],
+        "entitlements": {
+          "rule": {
+            "type": "no_active_entitlements"
+          },
+          "type": "entitlement"
+        }
+      },
+      "expression_cel": "size(device.activeEntitlements) == 0",
+      "expression_sql": "true",
+      "rank": "0|hzzzzz:",
+      "description": "[07/11] Claude v1 Review - near-flier, offer ends at departure",
+      "notes": "onboarding-near 289001 v6: a quit hard offer resumes only until scheduled departure; after it, relaunch shows the closable Plans. Same rule as 199841 (paused). Why: 0BDB7267 got the hard offer on boarding and landing notifications, closed the app in 2 s both times.",
+      "variant_optimization": "none",
+      "variants": [
+        {
+          "id": "693993",
+          "object": "variant",
+          "type": "treatment",
+          "paywall": "289001",
+          "percentage": 100,
+          "created_at": "2026-11-07 15:49:58.006Z"
+        }
+      ],
+      "frequency_limit": null
+    },
+    {
+      "id": "199841",
+      "object": "audience",
+      "enabled": false,
+      "expression": null,
+      "rule_conditions": {
+        "operator": "and",
+        "conditions": [],
+        "entitlements": {
+          "rule": {
+            "type": "no_active_entitlements"
+          },
+          "type": "entitlement"
+        }
+      },
+      "expression_cel": "size(device.activeEntitlements) == 0",
+      "expression_sql": "true",
+      "rank": "0|i00007:",
+      "description": "[04/11] Claude v1 Review - All Users: near-flier trial",
+      "notes": null,
+      "variant_optimization": "none",
+      "variants": [
+        {
+          "id": "691062",
+          "object": "variant",
+          "type": "holdout",
+          "paywall": null,
+          "percentage": 0,
+          "created_at": "2026-11-04 23:57:19.454Z"
+        },
+        {
+          "id": "691063",
+          "object": "variant",
+          "type": "treatment",
+          "paywall": "289001",
+          "percentage": 100,
+          "created_at": "2026-11-04 23:57:19.454Z"
+        }
+      ],
+      "frequency_limit": null
+    }
+  ],
+  "created_at": "2026-10-18 15:10:44.933Z",
+  "updated_at": "2026-10-18 16:41:11.325Z",
+  "archived": false,
+  "can_reset_assignments": true
+}

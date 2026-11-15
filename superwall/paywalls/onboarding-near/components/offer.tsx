@@ -44,10 +44,11 @@ export default function NearOffer() {
 
   // Which page of the test they reached, for reading it later, and the flight, so quitting the app
   // here brings them back to this page on the next launch (app/index.tsx). HARD_OPEN_KEY keeps
-  // Forecast moments from opening over that relaunch (see near.ts).
+  // Forecast moments from opening over that relaunch (see near.ts); a flight that has already left
+  // has no offer to come back to, so it isn't set for one (13539E94, Nov 9).
   const { setUserAttributes } = actions;
   useEffect(() => {
-    if (opened && added) setUserAttributes({ onboarding_near_offer: "annual_or_pass", [HARD_FLIGHT_KEY]: saveableFlight(added), [HARD_OPEN_KEY]: true });
+    if (opened && added) setUserAttributes({ onboarding_near_offer: "annual_or_pass", [HARD_FLIGHT_KEY]: saveableFlight(added), [HARD_OPEN_KEY]: added.departure.getTime() > Date.now() });
   }, [opened, added, setUserAttributes]);
 
   const annual = getProduct("annual")?.variables;
@@ -76,6 +77,7 @@ export default function NearOffer() {
     setBlocked(false);
     const started = Date.now();
     const result = await purchase(picked === "pass" ? pass : "annual");
+    if (result.status === "completed") setUserAttributes({ [HARD_OPEN_KEY]: false });
     if (result.status === "failed" || (result.status === "abandoned" && Date.now() - started < 1500)) setBlocked(true);
   };
 
@@ -90,6 +92,7 @@ export default function NearOffer() {
               haptics.light();
               const result = await actions.restore();
               if (result.status === "restored") {
+                setUserAttributes({ [HARD_OPEN_KEY]: false });
                 actions.close();
                 return;
               }

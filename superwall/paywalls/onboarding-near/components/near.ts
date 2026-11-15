@@ -20,8 +20,9 @@ export const HARD_FLIGHT_KEY = "onboarding_hard_flight";
 /** True while they've left on the hard offer and the flow isn't finished. A notification can open
  * the app on that relaunch and fire a Forecast moments placement in the same second as the flow; the
  * one that loses doesn't show (230F2DA0, Nov 5), so that campaign's top audience skips while this is
- * true. Buying or restoring ends it through the entitlement; the flow clears it once the offer's
- * window has passed (app/index.tsx). */
+ * true. It must not outlive the flow, since the flow is the only thing that reads it: buying or
+ * restoring clears it (components/offer.tsx; an entitlement can lapse), it's never set for a flight
+ * that has already left, and the flow clears it once the offer's window has passed (app/index.tsx). */
 export const HARD_OPEN_KEY = "onboarding_hard_open";
 
 /** Set when this launch resumed the hard offer (app/index.tsx), so a forecast check that fails
@@ -39,14 +40,27 @@ export function saveableFlight(f: AddedFlight): string {
   });
 }
 
-/** The flight saved by an earlier launch's hard offer, if it's still within the offer's window. */
-export function savedHardFlight(user: Record<string, unknown>, now = Date.now()): AddedFlight | undefined {
+function hardFlight(user: Record<string, unknown>): AddedFlight | undefined {
   const raw = user[HARD_FLIGHT_KEY];
   if (typeof raw !== "string" || !raw) return undefined;
   try {
-    const added = parseFlight(JSON.parse(raw) as Record<string, unknown>);
-    return fliesWithin24h(added, now) ? added : undefined;
+    return parseFlight(JSON.parse(raw) as Record<string, unknown>);
   } catch {
     return undefined;
   }
+}
+
+/** The flight saved by an earlier launch's hard offer, until it departs. Past that a relaunch is
+ * usually a boarding or landing notification, and a pre-flight offer in the way of the flight
+ * only gets the app closed (0BDB7267, Nov 7: closed in 2 s, twice). */
+export function savedHardFlight(user: Record<string, unknown>, now = Date.now()): AddedFlight | undefined {
+  const added = hardFlight(user);
+  return added && fliesWithin24h(added, now) && added.departure.getTime() > now ? added : undefined;
+}
+
+/** They quit on the hard offer and that flight has since departed: the closable Plans, one tap from
+ * their flight, rather than the whole flow again. */
+export function leftHardOffer(user: Record<string, unknown>, now = Date.now()): boolean {
+  const added = hardFlight(user);
+  return added !== undefined && added.departure.getTime() <= now;
 }
