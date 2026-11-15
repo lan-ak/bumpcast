@@ -1,0 +1,1923 @@
+{
+ "schema": 1,
+ "period": {
+  "start": "2025-11-01",
+  "end": "2026-10-31"
+ },
+ "generated": "2026-11-15",
+ "analyses": 1460,
+ "analyses_planned": 1460,
+ "method": {
+  "light_edr": 0.1,
+  "every_min": 5,
+  "report_window_h": 3,
+  "models": [
+   "ECMWF IFS open data, 0.25°",
+   "NOAA GFS, 0.25°"
+  ],
+  "cap": null
+ },
+ "sources": {
+  "ecmwf": "https://registry.opendata.aws/ecmwf-forecasts/",
+  "gfs": "https://registry.opendata.aws/noaa-gfs-bdp-pds/",
+  "pireps": "https://mesonet.agron.iastate.edu/request/gis/pireps.php"
+ },
+ "point": {
+  "reports": 441678,
+  "auc": {
+   "all": {
+    "moderate": 0.691,
+    "any": 0.711,
+    "n": 441678
+   },
+   "cruise": {
+    "moderate": 0.692,
+    "any": 0.698,
+    "n": 284433
+   },
+   "mid": {
+    "moderate": 0.713,
+    "any": 0.732,
+    "n": 56842
+   },
+   "low": {
+    "moderate": 0.679,
+    "any": 0.7,
+    "n": 100403
+   },
+   "ecmwf": 0.682,
+   "gfs": 0.685
+  },
+  "bands": [
+   {
+    "from": 0,
+    "to": 0.05,
+    "reports": 13953,
+    "light": 0.403,
+    "moderate": 0.057,
+    "severe": 0.0016
+   },
+   {
+    "from": 0.05,
+    "to": 0.1,
+    "reports": 122645,
+    "light": 0.662,
+    "moderate": 0.171,
+    "severe": 0.0025
+   },
+   {
+    "from": 0.1,
+    "to": 0.15,
+    "reports": 81500,
+    "light": 0.81,
+    "moderate": 0.303,
+    "severe": 0.003
+   },
+   {
+    "from": 0.15,
+    "to": 0.2,
+    "reports": 47408,
+    "light": 0.865,
+    "moderate": 0.393,
+    "severe": 0.005
+   },
+   {
+    "from": 0.2,
+    "to": 0.3,
+    "reports": 46832,
+    "light": 0.897,
+    "moderate": 0.469,
+    "severe": 0.0085
+   },
+   {
+    "from": 0.3,
+    "to": null,
+    "reports": 28937,
+    "light": 0.928,
+    "moderate": 0.561,
+    "severe": 0.0208
+   }
+  ]
+ },
+ "check": {
+  "routes": {
+   "BOS-LAS": {
+    "stretches": 0.08,
+    "months": -0.08,
+    "stretches_at_reports": 0.53,
+    "months_at_reports": -0.23,
+    "reports": 42317
+   },
+   "ORD-MIA": {
+    "stretches": 0.73,
+    "months": 0.78,
+    "stretches_at_reports": 0.87,
+    "months_at_reports": 0.8,
+    "reports": 44882
+   },
+   "JFK-LAX": {
+    "stretches": -0.09,
+    "months": 0.17,
+    "stretches_at_reports": 0.59,
+    "months_at_reports": 0.26,
+    "reports": 37841
+   },
+   "SFO-IAD": {
+    "stretches": -0.45,
+    "months": 0.38,
+    "stretches_at_reports": 0.6,
+    "months_at_reports": 0.36,
+    "reports": 35619
+   },
+   "DEN-DCA": {
+    "stretches": -0.05,
+    "months": 0.55,
+    "stretches_at_reports": 0.63,
+    "months_at_reports": 0.64,
+    "reports": 38570
+   },
+   "BOS-DFW": {
+    "stretches": 0.14,
+    "months": 0.71,
+    "stretches_at_reports": 0.55,
+    "months_at_reports": 0.75,
+    "reports": 35205
+   },
+   "ATL-ORD": {
+    "stretches": 0.06,
+    "months": 0.73,
+    "stretches_at_reports": 0.15,
+    "months_at_reports": 0.62,
+    "reports": 25797
+   },
+   "DFW-LAX": {
+    "stretches": 0.36,
+    "months": 0.64,
+    "stretches_at_reports": 0.73,
+    "months_at_reports": 0.92,
+    "reports": 10071
+   },
+   "DEN-PHX": {
+    "stretches": -0.63,
+    "months": 0.29,
+    "stretches_at_reports": -0.42,
+    "months_at_reports": 0.62,
+    "reports": 19281
+   },
+   "LAX-SEA": {
+    "stretches": 0.07,
+    "months": 0.37,
+    "stretches_at_reports": 0.54,
+    "months_at_reports": 0.2,
+    "reports": 4652
+   },
+   "ATL-MCO": {
+    "stretches": 0.33,
+    "months": 0.83,
+    "stretches_at_reports": 0.21,
+    "months_at_reports": 0.92,
+    "reports": 11495
+   },
+   "LGA-ORD": {
+    "stretches": 0.66,
+    "months": 0.63,
+    "stretches_at_reports": 0.73,
+    "months_at_reports": 0.41,
+    "reports": 19458
+   },
+   "YVR-YYZ": {
+    "stretches": 0.13,
+    "months": 0.08,
+    "stretches_at_reports": 0.14,
+    "months_at_reports": -0.1,
+    "reports": 3795
+   },
+   "YYC-YYZ": {
+    "stretches": -0.15,
+    "months": 0.2,
+    "stretches_at_reports": -0.05,
+    "months_at_reports": -0.3,
+    "reports": 2185
+   },
+   "SEA-SFO": {
+    "stretches": 0.28,
+    "months": -0.03,
+    "stretches_at_reports": 0.28,
+    "months_at_reports": 0.27,
+    "reports": 3670
+   },
+   "DEN-SLC": {
+    "stretches": -0.22,
+    "months": 0.48,
+    "stretches_at_reports": 0.35,
+    "months_at_reports": 0.73,
+    "reports": 17083
+   }
+  },
+  "median": {
+   "stretches": 0.08,
+   "months": 0.43,
+   "stretches_at_reports": 0.54,
+   "months_at_reports": 0.52
+  },
+  "passed": {
+   "stretches": 2,
+   "months": 7
+  },
+  "of": 16
+ },
+ "routes": [
+  {
+   "a": {
+    "iata": "JFK",
+    "icao": "KJFK",
+    "name": "John F. Kennedy International Airport",
+    "city": "New York",
+    "country": "US",
+    "lat": 40.6394,
+    "lon": -73.7793,
+    "elev_ft": 13,
+    "tz": "America/New_York"
+   },
+   "b": {
+    "iata": "LHR",
+    "icao": "EGLL",
+    "name": "London Heathrow Airport",
+    "city": "London",
+    "country": "GB",
+    "lat": 51.4707,
+    "lon": -0.4599,
+    "elev_ft": 83,
+    "tz": "Europe/London"
+   },
+   "page": true,
+   "direct_nm": 2991,
+   "flown_nm": 3091,
+   "airborne_min": {
+    "ab": 400,
+    "ba": 404
+   },
+   "cruise_ft": 39000,
+   "months": {
+    "2025-11": 1.047,
+    "2025-12": 1.068,
+    "2026-01": 0.841,
+    "2026-02": 0.744,
+    "2026-03": 1.248,
+    "2026-04": 1.127,
+    "2026-05": 1.024,
+    "2026-06": 0.961,
+    "2026-07": 0.928,
+    "2026-08": 0.873,
+    "2026-09": 1.092,
+    "2026-10": 1.032
+   },
+   "models_agree": 0.99
+  },
+  {
+   "a": {
+    "iata": "EWR",
+    "icao": "KEWR",
+    "name": "Newark Liberty International Airport",
+    "city": "Newark",
+    "country": "US",
+    "lat": 40.6894,
+    "lon": -74.1705,
+    "elev_ft": 18,
+    "tz": "America/New_York"
+   },
+   "b": {
+    "iata": "LHR",
+    "icao": "EGLL",
+    "name": "London Heathrow Airport",
+    "city": "London",
+    "country": "GB",
+    "lat": 51.4707,
+    "lon": -0.4599,
+    "elev_ft": 83,
+    "tz": "Europe/London"
+   },
+   "page": false,
+   "direct_nm": 3003,
+   "flown_nm": 3103,
+   "airborne_min": {
+    "ab": 405,
+    "ba": 405
+   },
+   "cruise_ft": 39000,
+   "months": {
+    "2025-11": 1.046,
+    "2025-12": 1.062,
+    "2026-01": 0.839,
+    "2026-02": 0.736,
+    "2026-03": 1.242,
+    "2026-04": 1.117,
+    "2026-05": 1.033,
+    "2026-06": 0.961,
+    "2026-07": 0.927,
+    "2026-08": 0.874,
+    "2026-09": 1.106,
+    "2026-10": 1.039
+   },
+   "models_agree": 0.99
+  },
+  {
+   "a": {
+    "iata": "BOS",
+    "icao": "KBOS",
+    "name": "Boston Logan International Airport",
+    "city": "Boston",
+    "country": "US",
+    "lat": 42.362,
+    "lon": -71.0079,
+    "elev_ft": 20,
+    "tz": "America/New_York"
+   },
+   "b": {
+    "iata": "LHR",
+    "icao": "EGLL",
+    "name": "London Heathrow Airport",
+    "city": "London",
+    "country": "GB",
+    "lat": 51.4707,
+    "lon": -0.4599,
+    "elev_ft": 83,
+    "tz": "Europe/London"
+   },
+   "page": false,
+   "direct_nm": 2829,
+   "flown_nm": 2925,
+   "airborne_min": {
+    "ab": 385,
+    "ba": 387
+   },
+   "cruise_ft": 37000,
+   "months": {
+    "2025-11": 1.058,
+    "2025-12": 1.07,
+    "2026-01": 0.844,
+    "2026-02": 0.762,
+    "2026-03": 1.231,
+    "2026-04": 1.124,
+    "2026-05": 1.02,
+    "2026-06": 0.955,
+    "2026-07": 0.931,
+    "2026-08": 0.877,
+    "2026-09": 1.09,
+    "2026-10": 1.021
+   },
+   "models_agree": 0.99
+  },
+  {
+   "a": {
+    "iata": "IAD",
+    "icao": "KIAD",
+    "name": "Washington Dulles International Airport",
+    "city": "Dulles",
+    "country": "US",
+    "lat": 38.9445,
+    "lon": -77.4558,
+    "elev_ft": 312,
+    "tz": "America/New_York"
+   },
+   "b": {
+    "iata": "LHR",
+    "icao": "EGLL",
+    "name": "London Heathrow Airport",
+    "city": "London",
+    "country": "GB",
+    "lat": 51.4707,
+    "lon": -0.4599,
+    "elev_ft": 83,
+    "tz": "Europe/London"
+   },
+   "page": false,
+   "direct_nm": 3187,
+   "flown_nm": 3291,
+   "airborne_min": {
+    "ab": 425,
+    "ba": 428
+   },
+   "cruise_ft": 39000,
+   "months": {
+    "2025-11": 1.047,
+    "2025-12": 1.076,
+    "2026-01": 0.841,
+    "2026-02": 0.731,
+    "2026-03": 1.253,
+    "2026-04": 1.109,
+    "2026-05": 1.025,
+    "2026-06": 0.953,
+    "2026-07": 0.913,
+    "2026-08": 0.887,
+    "2026-09": 1.1,
+    "2026-10": 1.045
+   },
+   "models_agree": 0.99
+  },
+  {
+   "a": {
+    "iata": "ORD",
+    "icao": "KORD",
+    "name": "Chicago O'Hare International Airport",
+    "city": "Chicago",
+    "country": "US",
+    "lat": 41.9786,
+    "lon": -87.9048,
+    "elev_ft": 680,
+    "tz": "America/Chicago"
+   },
+   "b": {
+    "iata": "LHR",
+    "icao": "EGLL",
+    "name": "London Heathrow Airport",
+    "city": "London",
+    "country": "GB",
+    "lat": 51.4707,
+    "lon": -0.4599,
+    "elev_ft": 83,
+    "tz": "Europe/London"
+   },
+   "page": true,
+   "direct_nm": 3425,
+   "flown_nm": 3536,
+   "airborne_min": {
+    "ab": 455,
+    "ba": 459
+   },
+   "cruise_ft": 39000,
+   "months": {
+    "2025-11": 1.013,
+    "2025-12": 0.968,
+    "2026-01": 0.676,
+    "2026-02": 0.526,
+    "2026-03": 1.057,
+    "2026-04": 1.136,
+    "2026-05": 1.09,
+    "2026-06": 1.055,
+    "2026-07": 1.046,
+    "2026-08": 1.083,
+    "2026-09": 1.182,
+    "2026-10": 1.133
+   },
+   "models_agree": 1.0
+  },
+  {
+   "a": {
+    "iata": "YYZ",
+    "icao": "CYYZ",
+    "name": "Toronto Pearson International Airport",
+    "city": "Toronto",
+    "country": "CA",
+    "lat": 43.6759,
+    "lon": -79.6294,
+    "elev_ft": 569,
+    "tz": "America/Toronto"
+   },
+   "b": {
+    "iata": "LHR",
+    "icao": "EGLL",
+    "name": "London Heathrow Airport",
+    "city": "London",
+    "country": "GB",
+    "lat": 51.4707,
+    "lon": -0.4599,
+    "elev_ft": 83,
+    "tz": "Europe/London"
+   },
+   "page": true,
+   "direct_nm": 3082,
+   "flown_nm": 3184,
+   "airborne_min": {
+    "ab": 415,
+    "ba": 415
+   },
+   "cruise_ft": 39000,
+   "months": {
+    "2025-11": 1.019,
+    "2025-12": 1.063,
+    "2026-01": 0.711,
+    "2026-02": 0.573,
+    "2026-03": 1.135,
+    "2026-04": 1.149,
+    "2026-05": 1.072,
+    "2026-06": 1.036,
+    "2026-07": 0.955,
+    "2026-08": 1.002,
+    "2026-09": 1.132,
+    "2026-10": 1.123
+   },
+   "models_agree": 1.0
+  },
+  {
+   "a": {
+    "iata": "YUL",
+    "icao": "CYUL",
+    "name": "Montreal / Pierre Elliott Trudeau International Airport",
+    "city": "Montréal",
+    "country": "CA",
+    "lat": 45.4678,
+    "lon": -73.7423,
+    "elev_ft": 118,
+    "tz": "America/Toronto"
+   },
+   "b": {
+    "iata": "LHR",
+    "icao": "EGLL",
+    "name": "London Heathrow Airport",
+    "city": "London",
+    "country": "GB",
+    "lat": 51.4707,
+    "lon": -0.4599,
+    "elev_ft": 83,
+    "tz": "Europe/London"
+   },
+   "page": false,
+   "direct_nm": 2816,
+   "flown_nm": 2911,
+   "airborne_min": {
+    "ab": 385,
+    "ba": 386
+   },
+   "cruise_ft": 37000,
+   "months": {
+    "2025-11": 1.058,
+    "2025-12": 1.106,
+    "2026-01": 0.764,
+    "2026-02": 0.623,
+    "2026-03": 1.18,
+    "2026-04": 1.139,
+    "2026-05": 1.079,
+    "2026-06": 0.998,
+    "2026-07": 0.922,
+    "2026-08": 0.916,
+    "2026-09": 1.094,
+    "2026-10": 1.094
+   },
+   "models_agree": 0.94
+  },
+  {
+   "a": {
+    "iata": "JFK",
+    "icao": "KJFK",
+    "name": "John F. Kennedy International Airport",
+    "city": "New York",
+    "country": "US",
+    "lat": 40.6394,
+    "lon": -73.7793,
+    "elev_ft": 13,
+    "tz": "America/New_York"
+   },
+   "b": {
+    "iata": "CDG",
+    "icao": "LFPG",
+    "name": "Charles de Gaulle International Airport",
+    "city": "Paris",
+    "country": "FR",
+    "lat": 49.009,
+    "lon": 2.5541,
+    "elev_ft": 392,
+    "tz": "Europe/Paris"
+   },
+   "page": true,
+   "direct_nm": 3150,
+   "flown_nm": 3254,
+   "airborne_min": {
+    "ab": 420,
+    "ba": 424
+   },
+   "cruise_ft": 39000,
+   "months": {
+    "2025-11": 1.059,
+    "2025-12": 1.083,
+    "2026-01": 0.863,
+    "2026-02": 0.847,
+    "2026-03": 1.21,
+    "2026-04": 1.134,
+    "2026-05": 0.958,
+    "2026-06": 0.965,
+    "2026-07": 0.891,
+    "2026-08": 0.871,
+    "2026-09": 1.066,
+    "2026-10": 1.046
+   },
+   "models_agree": 0.97
+  },
+  {
+   "a": {
+    "iata": "JFK",
+    "icao": "KJFK",
+    "name": "John F. Kennedy International Airport",
+    "city": "New York",
+    "country": "US",
+    "lat": 40.6394,
+    "lon": -73.7793,
+    "elev_ft": 13,
+    "tz": "America/New_York"
+   },
+   "b": {
+    "iata": "FRA",
+    "icao": "EDDF",
+    "name": "Frankfurt Main Airport",
+    "city": "Frankfurt",
+    "country": "DE",
+    "lat": 50.0267,
+    "lon": 8.5584,
+    "elev_ft": 364,
+    "tz": "Europe/Berlin"
+   },
+   "page": false,
+   "direct_nm": 3342,
+   "flown_nm": 3450,
+   "airborne_min": {
+    "ab": 445,
+    "ba": 448
+   },
+   "cruise_ft": 39000,
+   "months": {
+    "2025-11": 1.058,
+    "2025-12": 1.095,
+    "2026-01": 0.837,
+    "2026-02": 0.716,
+    "2026-03": 1.227,
+    "2026-04": 1.126,
+    "2026-05": 0.993,
+    "2026-06": 0.941,
+    "2026-07": 0.934,
+    "2026-08": 0.873,
+    "2026-09": 1.117,
+    "2026-10": 1.063
+   },
+   "models_agree": 0.99
+  },
+  {
+   "a": {
+    "iata": "YYZ",
+    "icao": "CYYZ",
+    "name": "Toronto Pearson International Airport",
+    "city": "Toronto",
+    "country": "CA",
+    "lat": 43.6759,
+    "lon": -79.6294,
+    "elev_ft": 569,
+    "tz": "America/Toronto"
+   },
+   "b": {
+    "iata": "FRA",
+    "icao": "EDDF",
+    "name": "Frankfurt Main Airport",
+    "city": "Frankfurt",
+    "country": "DE",
+    "lat": 50.0267,
+    "lon": 8.5584,
+    "elev_ft": 364,
+    "tz": "Europe/Berlin"
+   },
+   "page": false,
+   "direct_nm": 3425,
+   "flown_nm": 3536,
+   "airborne_min": {
+    "ab": 455,
+    "ba": 459
+   },
+   "cruise_ft": 39000,
+   "months": {
+    "2025-11": 1.001,
+    "2025-12": 1.092,
+    "2026-01": 0.708,
+    "2026-02": 0.558,
+    "2026-03": 1.081,
+    "2026-04": 1.16,
+    "2026-05": 1.026,
+    "2026-06": 1.034,
+    "2026-07": 0.976,
+    "2026-08": 1.057,
+    "2026-09": 1.155,
+    "2026-10": 1.121
+   },
+   "models_agree": 0.99
+  },
+  {
+   "a": {
+    "iata": "LAX",
+    "icao": "KLAX",
+    "name": "Los Angeles International Airport",
+    "city": "Los Angeles",
+    "country": "US",
+    "lat": 33.9425,
+    "lon": -118.408,
+    "elev_ft": 125,
+    "tz": "America/Los_Angeles"
+   },
+   "b": {
+    "iata": "NRT",
+    "icao": "RJAA",
+    "name": "Narita International Airport",
+    "city": "Tokyo",
+    "country": "JP",
+    "lat": 35.7686,
+    "lon": 140.3887,
+    "elev_ft": 141,
+    "tz": "Asia/Tokyo"
+   },
+   "page": true,
+   "direct_nm": 4726,
+   "flown_nm": 4870,
+   "airborne_min": {
+    "ab": 625,
+    "ba": 626
+   },
+   "cruise_ft": 38000,
+   "months": {
+    "2025-11": 1.137,
+    "2025-12": 1.068,
+    "2026-01": 0.916,
+    "2026-02": 1.097,
+    "2026-03": 1.008,
+    "2026-04": 1.085,
+    "2026-05": 1.13,
+    "2026-06": 1.12,
+    "2026-07": 0.729,
+    "2026-08": 0.645,
+    "2026-09": 0.963,
+    "2026-10": 1.121
+   },
+   "models_agree": 0.95
+  },
+  {
+   "a": {
+    "iata": "SFO",
+    "icao": "KSFO",
+    "name": "San Francisco International Airport",
+    "city": "San Francisco",
+    "country": "US",
+    "lat": 37.6198,
+    "lon": -122.3748,
+    "elev_ft": 13,
+    "tz": "America/Los_Angeles"
+   },
+   "b": {
+    "iata": "NRT",
+    "icao": "RJAA",
+    "name": "Narita International Airport",
+    "city": "Tokyo",
+    "country": "JP",
+    "lat": 35.7686,
+    "lon": 140.3887,
+    "elev_ft": 141,
+    "tz": "Asia/Tokyo"
+   },
+   "page": false,
+   "direct_nm": 4442,
+   "flown_nm": 4578,
+   "airborne_min": {
+    "ab": 585,
+    "ba": 589
+   },
+   "cruise_ft": 38000,
+   "months": {
+    "2025-11": 1.103,
+    "2025-12": 1.049,
+    "2026-01": 0.864,
+    "2026-02": 1.033,
+    "2026-03": 1.012,
+    "2026-04": 1.078,
+    "2026-05": 1.157,
+    "2026-06": 1.132,
+    "2026-07": 0.773,
+    "2026-08": 0.685,
+    "2026-09": 1.0,
+    "2026-10": 1.127
+   },
+   "models_agree": 0.99
+  },
+  {
+   "a": {
+    "iata": "LAX",
+    "icao": "KLAX",
+    "name": "Los Angeles International Airport",
+    "city": "Los Angeles",
+    "country": "US",
+    "lat": 33.9425,
+    "lon": -118.408,
+    "elev_ft": 125,
+    "tz": "America/Los_Angeles"
+   },
+   "b": {
+    "iata": "HND",
+    "icao": "RJTT",
+    "name": "Tokyo Haneda International Airport",
+    "city": "Tokyo",
+    "country": "JP",
+    "lat": 35.5497,
+    "lon": 139.787,
+    "elev_ft": 35,
+    "tz": "Asia/Tokyo"
+   },
+   "page": false,
+   "direct_nm": 4758,
+   "flown_nm": 4902,
+   "airborne_min": {
+    "ab": 630,
+    "ba": 630
+   },
+   "cruise_ft": 38000,
+   "months": {
+    "2025-11": 1.135,
+    "2025-12": 1.069,
+    "2026-01": 0.91,
+    "2026-02": 1.098,
+    "2026-03": 1.005,
+    "2026-04": 1.081,
+    "2026-05": 1.131,
+    "2026-06": 1.12,
+    "2026-07": 0.729,
+    "2026-08": 0.647,
+    "2026-09": 0.971,
+    "2026-10": 1.123
+   },
+   "models_agree": 0.96
+  },
+  {
+   "a": {
+    "iata": "SEA",
+    "icao": "KSEA",
+    "name": "Seattle–Tacoma International Airport",
+    "city": "Seattle",
+    "country": "US",
+    "lat": 47.4479,
+    "lon": -122.3103,
+    "elev_ft": 433,
+    "tz": "America/Los_Angeles"
+   },
+   "b": {
+    "iata": "HND",
+    "icao": "RJTT",
+    "name": "Tokyo Haneda International Airport",
+    "city": "Tokyo",
+    "country": "JP",
+    "lat": 35.5497,
+    "lon": 139.787,
+    "elev_ft": 35,
+    "tz": "Asia/Tokyo"
+   },
+   "page": false,
+   "direct_nm": 4164,
+   "flown_nm": 4293,
+   "airborne_min": {
+    "ab": 550,
+    "ba": 554
+   },
+   "cruise_ft": 38000,
+   "months": {
+    "2025-11": 1.007,
+    "2025-12": 1.059,
+    "2026-01": 0.735,
+    "2026-02": 0.867,
+    "2026-03": 0.758,
+    "2026-04": 1.147,
+    "2026-05": 1.046,
+    "2026-06": 1.122,
+    "2026-07": 1.11,
+    "2026-08": 0.935,
+    "2026-09": 1.062,
+    "2026-10": 1.152
+   },
+   "models_agree": 0.97
+  },
+  {
+   "a": {
+    "iata": "YVR",
+    "icao": "CYVR",
+    "name": "Vancouver International Airport",
+    "city": "Vancouver",
+    "country": "CA",
+    "lat": 49.1939,
+    "lon": -123.184,
+    "elev_ft": 14,
+    "tz": "America/Vancouver"
+   },
+   "b": {
+    "iata": "NRT",
+    "icao": "RJAA",
+    "name": "Narita International Airport",
+    "city": "Tokyo",
+    "country": "JP",
+    "lat": 35.7686,
+    "lon": 140.3887,
+    "elev_ft": 141,
+    "tz": "Asia/Tokyo"
+   },
+   "page": false,
+   "direct_nm": 4051,
+   "flown_nm": 4178,
+   "airborne_min": {
+    "ab": 535,
+    "ba": 539
+   },
+   "cruise_ft": 38000,
+   "months": {
+    "2025-11": 0.964,
+    "2025-12": 1.073,
+    "2026-01": 0.716,
+    "2026-02": 0.875,
+    "2026-03": 0.718,
+    "2026-04": 1.162,
+    "2026-05": 1.031,
+    "2026-06": 1.122,
+    "2026-07": 1.165,
+    "2026-08": 0.958,
+    "2026-09": 1.068,
+    "2026-10": 1.145
+   },
+   "models_agree": 0.94
+  },
+  {
+   "a": {
+    "iata": "LAX",
+    "icao": "KLAX",
+    "name": "Los Angeles International Airport",
+    "city": "Los Angeles",
+    "country": "US",
+    "lat": 33.9425,
+    "lon": -118.408,
+    "elev_ft": 125,
+    "tz": "America/Los_Angeles"
+   },
+   "b": {
+    "iata": "ICN",
+    "icao": "RKSI",
+    "name": "Incheon International Airport",
+    "city": "Seoul",
+    "country": "KR",
+    "lat": 37.4691,
+    "lon": 126.451,
+    "elev_ft": 23,
+    "tz": "Asia/Seoul"
+   },
+   "page": false,
+   "direct_nm": 5197,
+   "flown_nm": 5352,
+   "airborne_min": {
+    "ab": 685,
+    "ba": 686
+   },
+   "cruise_ft": 38000,
+   "months": {
+    "2025-11": 1.018,
+    "2025-12": 1.041,
+    "2026-01": 0.796,
+    "2026-02": 0.995,
+    "2026-03": 0.833,
+    "2026-04": 0.99,
+    "2026-05": 1.171,
+    "2026-06": 1.065,
+    "2026-07": 1.057,
+    "2026-08": 0.922,
+    "2026-09": 1.063,
+    "2026-10": 1.053
+   },
+   "models_agree": 0.78
+  },
+  {
+   "a": {
+    "iata": "SFO",
+    "icao": "KSFO",
+    "name": "San Francisco International Airport",
+    "city": "San Francisco",
+    "country": "US",
+    "lat": 37.6198,
+    "lon": -122.3748,
+    "elev_ft": 13,
+    "tz": "America/Los_Angeles"
+   },
+   "b": {
+    "iata": "HKG",
+    "icao": "VHHH",
+    "name": "Hong Kong International Airport",
+    "city": "Hong Kong",
+    "country": "HK",
+    "lat": 22.3118,
+    "lon": 113.9149,
+    "elev_ft": 28,
+    "tz": "Asia/Hong_Kong"
+   },
+   "page": true,
+   "direct_nm": 6009,
+   "flown_nm": 6184,
+   "airborne_min": {
+    "ab": 790,
+    "ba": 790
+   },
+   "cruise_ft": 38000,
+   "months": {
+    "2025-11": 0.997,
+    "2025-12": 1.018,
+    "2026-01": 0.816,
+    "2026-02": 1.02,
+    "2026-03": 0.961,
+    "2026-04": 1.161,
+    "2026-05": 1.163,
+    "2026-06": 1.096,
+    "2026-07": 0.886,
+    "2026-08": 0.846,
+    "2026-09": 1.013,
+    "2026-10": 1.033
+   },
+   "models_agree": 0.99
+  },
+  {
+   "a": {
+    "iata": "LHR",
+    "icao": "EGLL",
+    "name": "London Heathrow Airport",
+    "city": "London",
+    "country": "GB",
+    "lat": 51.4707,
+    "lon": -0.4599,
+    "elev_ft": 83,
+    "tz": "Europe/London"
+   },
+   "b": {
+    "iata": "DXB",
+    "icao": "OMDB",
+    "name": "Dubai International Airport",
+    "city": "Dubai",
+    "country": "AE",
+    "lat": 25.2498,
+    "lon": 55.371,
+    "elev_ft": 62,
+    "tz": "Asia/Dubai"
+   },
+   "page": true,
+   "direct_nm": 2969,
+   "flown_nm": 3068,
+   "airborne_min": {
+    "ab": 400,
+    "ba": 401
+   },
+   "cruise_ft": 39000,
+   "months": {
+    "2025-11": 0.824,
+    "2025-12": 1.142,
+    "2026-01": 1.177,
+    "2026-02": 1.269,
+    "2026-03": 1.15,
+    "2026-04": 1.299,
+    "2026-05": 0.993,
+    "2026-06": 0.878,
+    "2026-07": 0.754,
+    "2026-08": 0.662,
+    "2026-09": 0.798,
+    "2026-10": 1.074
+   },
+   "models_agree": 1.0
+  },
+  {
+   "a": {
+    "iata": "FRA",
+    "icao": "EDDF",
+    "name": "Frankfurt Main Airport",
+    "city": "Frankfurt",
+    "country": "DE",
+    "lat": 50.0267,
+    "lon": 8.5584,
+    "elev_ft": 364,
+    "tz": "Europe/Berlin"
+   },
+   "b": {
+    "iata": "DXB",
+    "icao": "OMDB",
+    "name": "Dubai International Airport",
+    "city": "Dubai",
+    "country": "AE",
+    "lat": 25.2498,
+    "lon": 55.371,
+    "elev_ft": 62,
+    "tz": "Asia/Dubai"
+   },
+   "page": false,
+   "direct_nm": 2616,
+   "flown_nm": 2706,
+   "airborne_min": {
+    "ab": 365,
+    "ba": 365
+   },
+   "cruise_ft": 37000,
+   "months": {
+    "2025-11": 0.78,
+    "2025-12": 1.141,
+    "2026-01": 1.188,
+    "2026-02": 1.337,
+    "2026-03": 1.133,
+    "2026-04": 1.343,
+    "2026-05": 1.064,
+    "2026-06": 0.848,
+    "2026-07": 0.743,
+    "2026-08": 0.617,
+    "2026-09": 0.769,
+    "2026-10": 1.062
+   },
+   "models_agree": 0.98
+  },
+  {
+   "a": {
+    "iata": "CDG",
+    "icao": "LFPG",
+    "name": "Charles de Gaulle International Airport",
+    "city": "Paris",
+    "country": "FR",
+    "lat": 49.009,
+    "lon": 2.5541,
+    "elev_ft": 392,
+    "tz": "Europe/Paris"
+   },
+   "b": {
+    "iata": "DXB",
+    "icao": "OMDB",
+    "name": "Dubai International Airport",
+    "city": "Dubai",
+    "country": "AE",
+    "lat": 25.2498,
+    "lon": 55.371,
+    "elev_ft": 62,
+    "tz": "Asia/Dubai"
+   },
+   "page": false,
+   "direct_nm": 2829,
+   "flown_nm": 2925,
+   "airborne_min": {
+    "ab": 385,
+    "ba": 387
+   },
+   "cruise_ft": 37000,
+   "months": {
+    "2025-11": 0.78,
+    "2025-12": 1.21,
+    "2026-01": 1.118,
+    "2026-02": 1.388,
+    "2026-03": 1.152,
+    "2026-04": 1.288,
+    "2026-05": 1.032,
+    "2026-06": 0.845,
+    "2026-07": 0.75,
+    "2026-08": 0.604,
+    "2026-09": 0.767,
+    "2026-10": 1.092
+   },
+   "models_agree": 1.0
+  },
+  {
+   "a": {
+    "iata": "LHR",
+    "icao": "EGLL",
+    "name": "London Heathrow Airport",
+    "city": "London",
+    "country": "GB",
+    "lat": 51.4707,
+    "lon": -0.4599,
+    "elev_ft": 83,
+    "tz": "Europe/London"
+   },
+   "b": {
+    "iata": "DOH",
+    "icao": "OTHH",
+    "name": "Hamad International Airport",
+    "city": "Doha",
+    "country": "QA",
+    "lat": 25.2731,
+    "lon": 51.6081,
+    "elev_ft": 13,
+    "tz": "Asia/Qatar"
+   },
+   "page": true,
+   "direct_nm": 2830,
+   "flown_nm": 2926,
+   "airborne_min": {
+    "ab": 385,
+    "ba": 387
+   },
+   "cruise_ft": 37000,
+   "months": {
+    "2025-11": 0.841,
+    "2025-12": 1.16,
+    "2026-01": 1.171,
+    "2026-02": 1.292,
+    "2026-03": 1.134,
+    "2026-04": 1.225,
+    "2026-05": 0.992,
+    "2026-06": 0.875,
+    "2026-07": 0.783,
+    "2026-08": 0.671,
+    "2026-09": 0.779,
+    "2026-10": 1.097
+   },
+   "models_agree": 1.0
+  },
+  {
+   "a": {
+    "iata": "DXB",
+    "icao": "OMDB",
+    "name": "Dubai International Airport",
+    "city": "Dubai",
+    "country": "AE",
+    "lat": 25.2498,
+    "lon": 55.371,
+    "elev_ft": 62,
+    "tz": "Asia/Dubai"
+   },
+   "b": {
+    "iata": "BOM",
+    "icao": "VABB",
+    "name": "Chhatrapati Shivaji Maharaj International Airport",
+    "city": "Mumbai",
+    "country": "IN",
+    "lat": 19.0887,
+    "lon": 72.8679,
+    "elev_ft": 39,
+    "tz": "Asia/Kolkata"
+   },
+   "page": false,
+   "direct_nm": 1040,
+   "flown_nm": 1091,
+   "airborne_min": {
+    "ab": 155,
+    "ba": 157
+   },
+   "cruise_ft": 33000,
+   "months": {
+    "2025-11": 0.875,
+    "2025-12": 1.874,
+    "2026-01": 1.897,
+    "2026-02": 1.298,
+    "2026-03": 2.532,
+    "2026-04": 1.293,
+    "2026-05": 0.243,
+    "2026-06": 0.245,
+    "2026-07": 0.089,
+    "2026-08": 0.1,
+    "2026-09": 0.386,
+    "2026-10": 1.159
+   },
+   "models_agree": 0.99
+  },
+  {
+   "a": {
+    "iata": "DXB",
+    "icao": "OMDB",
+    "name": "Dubai International Airport",
+    "city": "Dubai",
+    "country": "AE",
+    "lat": 25.2498,
+    "lon": 55.371,
+    "elev_ft": 62,
+    "tz": "Asia/Dubai"
+   },
+   "b": {
+    "iata": "DEL",
+    "icao": "VIDP",
+    "name": "Indira Gandhi International Airport",
+    "city": "Delhi",
+    "country": "IN",
+    "lat": 28.5556,
+    "lon": 77.0952,
+    "elev_ft": 777,
+    "tz": "Asia/Kolkata"
+   },
+   "page": false,
+   "direct_nm": 1178,
+   "flown_nm": 1233,
+   "airborne_min": {
+    "ab": 175,
+    "ba": 176
+   },
+   "cruise_ft": 33000,
+   "months": {
+    "2025-11": 0.789,
+    "2025-12": 1.178,
+    "2026-01": 1.863,
+    "2026-02": 1.127,
+    "2026-03": 2.119,
+    "2026-04": 1.493,
+    "2026-05": 1.098,
+    "2026-06": 0.42,
+    "2026-07": 0.108,
+    "2026-08": 0.034,
+    "2026-09": 0.45,
+    "2026-10": 1.305
+   },
+   "models_agree": 0.97
+  },
+  {
+   "a": {
+    "iata": "SIN",
+    "icao": "WSSS",
+    "name": "Singapore Changi Airport",
+    "city": "Singapore",
+    "country": "SG",
+    "lat": 1.3502,
+    "lon": 103.994,
+    "elev_ft": 22,
+    "tz": "Asia/Singapore"
+   },
+   "b": {
+    "iata": "HKG",
+    "icao": "VHHH",
+    "name": "Hong Kong International Airport",
+    "city": "Hong Kong",
+    "country": "HK",
+    "lat": 22.3118,
+    "lon": 113.9149,
+    "elev_ft": 28,
+    "tz": "Asia/Hong_Kong"
+   },
+   "page": true,
+   "direct_nm": 1385,
+   "flown_nm": 1445,
+   "airborne_min": {
+    "ab": 200,
+    "ba": 204
+   },
+   "cruise_ft": 33000,
+   "months": {
+    "2025-11": 1.035,
+    "2025-12": 1.019,
+    "2026-01": 1.217,
+    "2026-02": 1.288,
+    "2026-03": 1.136,
+    "2026-04": 0.219,
+    "2026-05": 0.336,
+    "2026-06": 0.553,
+    "2026-07": 1.143,
+    "2026-08": 2.405,
+    "2026-09": 1.329,
+    "2026-10": 0.32
+   },
+   "models_agree": 0.97
+  },
+  {
+   "a": {
+    "iata": "SYD",
+    "icao": "YSSY",
+    "name": "Sydney Kingsford Smith International Airport",
+    "city": "Sydney",
+    "country": "AU",
+    "lat": -33.9461,
+    "lon": 151.177,
+    "elev_ft": 21,
+    "tz": "Australia/Sydney"
+   },
+   "b": {
+    "iata": "SIN",
+    "icao": "WSSS",
+    "name": "Singapore Changi Airport",
+    "city": "Singapore",
+    "country": "SG",
+    "lat": 1.3502,
+    "lon": 103.994,
+    "elev_ft": 22,
+    "tz": "Asia/Singapore"
+   },
+   "page": true,
+   "direct_nm": 3398,
+   "flown_nm": 3508,
+   "airborne_min": {
+    "ab": 455,
+    "ba": 456
+   },
+   "cruise_ft": 38000,
+   "months": {
+    "2025-11": 0.85,
+    "2025-12": 0.803,
+    "2026-01": 0.764,
+    "2026-02": 0.676,
+    "2026-03": 0.744,
+    "2026-04": 0.538,
+    "2026-05": 1.015,
+    "2026-06": 1.172,
+    "2026-07": 1.477,
+    "2026-08": 1.509,
+    "2026-09": 1.236,
+    "2026-10": 1.177
+   },
+   "models_agree": 0.99
+  },
+  {
+   "a": {
+    "iata": "HND",
+    "icao": "RJTT",
+    "name": "Tokyo Haneda International Airport",
+    "city": "Tokyo",
+    "country": "JP",
+    "lat": 35.5497,
+    "lon": 139.787,
+    "elev_ft": 35,
+    "tz": "Asia/Tokyo"
+   },
+   "b": {
+    "iata": "ICN",
+    "icao": "RKSI",
+    "name": "Incheon International Airport",
+    "city": "Seoul",
+    "country": "KR",
+    "lat": 37.4691,
+    "lon": 126.451,
+    "elev_ft": 23,
+    "tz": "Asia/Seoul"
+   },
+   "page": false,
+   "direct_nm": 653,
+   "flown_nm": 695,
+   "airborne_min": {
+    "ab": 105,
+    "ba": 106
+   },
+   "cruise_ft": 36000,
+   "months": {
+    "2025-11": 0.971,
+    "2025-12": 0.76,
+    "2026-01": 0.837,
+    "2026-02": 1.178,
+    "2026-03": 0.977,
+    "2026-04": 1.585,
+    "2026-05": 1.021,
+    "2026-06": 1.392,
+    "2026-07": 0.669,
+    "2026-08": 0.676,
+    "2026-09": 0.962,
+    "2026-10": 1.018
+   },
+   "models_agree": 0.9
+  },
+  {
+   "a": {
+    "iata": "HKG",
+    "icao": "VHHH",
+    "name": "Hong Kong International Airport",
+    "city": "Hong Kong",
+    "country": "HK",
+    "lat": 22.3118,
+    "lon": 113.9149,
+    "elev_ft": 28,
+    "tz": "Asia/Hong_Kong"
+   },
+   "b": {
+    "iata": "NRT",
+    "icao": "RJAA",
+    "name": "Narita International Airport",
+    "city": "Tokyo",
+    "country": "JP",
+    "lat": 35.7686,
+    "lon": 140.3887,
+    "elev_ft": 141,
+    "tz": "Asia/Tokyo"
+   },
+   "page": true,
+   "direct_nm": 1600,
+   "flown_nm": 1665,
+   "airborne_min": {
+    "ab": 230,
+    "ba": 232
+   },
+   "cruise_ft": 33000,
+   "months": {
+    "2025-11": 0.955,
+    "2025-12": 1.348,
+    "2026-01": 1.474,
+    "2026-02": 1.607,
+    "2026-03": 1.661,
+    "2026-04": 1.349,
+    "2026-05": 0.985,
+    "2026-06": 0.662,
+    "2026-07": 0.372,
+    "2026-08": 0.461,
+    "2026-09": 0.556,
+    "2026-10": 0.612
+   },
+   "models_agree": 0.99
+  },
+  {
+   "a": {
+    "iata": "DEL",
+    "icao": "VIDP",
+    "name": "Indira Gandhi International Airport",
+    "city": "Delhi",
+    "country": "IN",
+    "lat": 28.5556,
+    "lon": 77.0952,
+    "elev_ft": 777,
+    "tz": "Asia/Kolkata"
+   },
+   "b": {
+    "iata": "BOM",
+    "icao": "VABB",
+    "name": "Chhatrapati Shivaji Maharaj International Airport",
+    "city": "Mumbai",
+    "country": "IN",
+    "lat": 19.0887,
+    "lon": 72.8679,
+    "elev_ft": 39,
+    "tz": "Asia/Kolkata"
+   },
+   "page": false,
+   "direct_nm": 614,
+   "flown_nm": 654,
+   "airborne_min": {
+    "ab": 100,
+    "ba": 100
+   },
+   "cruise_ft": 36000,
+   "months": {
+    "2025-11": 0.747,
+    "2025-12": 1.782,
+    "2026-01": 1.538,
+    "2026-02": 1.055,
+    "2026-03": 2.206,
+    "2026-04": 1.917,
+    "2026-05": 0.654,
+    "2026-06": 0.279,
+    "2026-07": 0.234,
+    "2026-08": 0.318,
+    "2026-09": 0.034,
+    "2026-10": 1.209
+   },
+   "models_agree": 1.0
+  },
+  {
+   "a": {
+    "iata": "LHR",
+    "icao": "EGLL",
+    "name": "London Heathrow Airport",
+    "city": "London",
+    "country": "GB",
+    "lat": 51.4707,
+    "lon": -0.4599,
+    "elev_ft": 83,
+    "tz": "Europe/London"
+   },
+   "b": {
+    "iata": "MAD",
+    "icao": "LEMD",
+    "name": "Adolfo Suárez Madrid–Barajas Airport",
+    "city": "Madrid",
+    "country": "ES",
+    "lat": 40.4934,
+    "lon": -3.5722,
+    "elev_ft": 1998,
+    "tz": "Europe/Madrid"
+   },
+   "page": true,
+   "direct_nm": 672,
+   "flown_nm": 713,
+   "airborne_min": {
+    "ab": 105,
+    "ba": 108
+   },
+   "cruise_ft": 36000,
+   "months": {
+    "2025-11": 1.246,
+    "2025-12": 1.553,
+    "2026-01": 1.367,
+    "2026-02": 1.109,
+    "2026-03": 0.981,
+    "2026-04": 0.807,
+    "2026-05": 0.774,
+    "2026-06": 0.691,
+    "2026-07": 0.774,
+    "2026-08": 0.714,
+    "2026-09": 0.814,
+    "2026-10": 1.167
+   },
+   "models_agree": 0.94
+  },
+  {
+   "a": {
+    "iata": "LHR",
+    "icao": "EGLL",
+    "name": "London Heathrow Airport",
+    "city": "London",
+    "country": "GB",
+    "lat": 51.4707,
+    "lon": -0.4599,
+    "elev_ft": 83,
+    "tz": "Europe/London"
+   },
+   "b": {
+    "iata": "BCN",
+    "icao": "LEBL",
+    "name": "Josep Tarradellas Barcelona-El Prat Airport",
+    "city": "Barcelona",
+    "country": "ES",
+    "lat": 41.2971,
+    "lon": 2.0785,
+    "elev_ft": 12,
+    "tz": "Europe/Madrid"
+   },
+   "page": false,
+   "direct_nm": 620,
+   "flown_nm": 660,
+   "airborne_min": {
+    "ab": 100,
+    "ba": 101
+   },
+   "cruise_ft": 35000,
+   "months": {
+    "2025-11": 1.168,
+    "2025-12": 1.287,
+    "2026-01": 1.284,
+    "2026-02": 1.13,
+    "2026-03": 1.18,
+    "2026-04": 0.851,
+    "2026-05": 0.749,
+    "2026-06": 0.702,
+    "2026-07": 0.792,
+    "2026-08": 0.834,
+    "2026-09": 0.777,
+    "2026-10": 1.242
+   },
+   "models_agree": 0.96
+  },
+  {
+   "a": {
+    "iata": "LHR",
+    "icao": "EGLL",
+    "name": "London Heathrow Airport",
+    "city": "London",
+    "country": "GB",
+    "lat": 51.4707,
+    "lon": -0.4599,
+    "elev_ft": 83,
+    "tz": "Europe/London"
+   },
+   "b": {
+    "iata": "FRA",
+    "icao": "EDDF",
+    "name": "Frankfurt Main Airport",
+    "city": "Frankfurt",
+    "country": "DE",
+    "lat": 50.0267,
+    "lon": 8.5584,
+    "elev_ft": 364,
+    "tz": "Europe/Berlin"
+   },
+   "page": false,
+   "direct_nm": 353,
+   "flown_nm": 387,
+   "airborne_min": {
+    "ab": 65,
+    "ba": 65
+   },
+   "cruise_ft": 31000,
+   "months": {
+    "2025-11": 0.963,
+    "2025-12": 1.029,
+    "2026-01": 1.3,
+    "2026-02": 1.165,
+    "2026-03": 1.127,
+    "2026-04": 1.079,
+    "2026-05": 0.684,
+    "2026-06": 0.714,
+    "2026-07": 0.706,
+    "2026-08": 1.074,
+    "2026-09": 0.885,
+    "2026-10": 1.277
+   },
+   "models_agree": 0.94
+  },
+  {
+   "a": {
+    "iata": "LHR",
+    "icao": "EGLL",
+    "name": "London Heathrow Airport",
+    "city": "London",
+    "country": "GB",
+    "lat": 51.4707,
+    "lon": -0.4599,
+    "elev_ft": 83,
+    "tz": "Europe/London"
+   },
+   "b": {
+    "iata": "CDG",
+    "icao": "LFPG",
+    "name": "Charles de Gaulle International Airport",
+    "city": "Paris",
+    "country": "FR",
+    "lat": 49.009,
+    "lon": 2.5541,
+    "elev_ft": 392,
+    "tz": "Europe/Paris"
+   },
+   "page": false,
+   "direct_nm": 188,
+   "flown_nm": 217,
+   "airborne_min": {
+    "ab": 40,
+    "ba": 43
+   },
+   "cruise_ft": 21000,
+   "months": {
+    "2025-11": 1.228,
+    "2025-12": 1.294,
+    "2026-01": 1.826,
+    "2026-02": 1.728,
+    "2026-03": 1.099,
+    "2026-04": 1.283,
+    "2026-05": 0.532,
+    "2026-06": 0.513,
+    "2026-07": 0.213,
+    "2026-08": 0.692,
+    "2026-09": 0.348,
+    "2026-10": 1.294
+   },
+   "models_agree": 0.89
+  },
+  {
+   "a": {
+    "iata": "LHR",
+    "icao": "EGLL",
+    "name": "London Heathrow Airport",
+    "city": "London",
+    "country": "GB",
+    "lat": 51.4707,
+    "lon": -0.4599,
+    "elev_ft": 83,
+    "tz": "Europe/London"
+   },
+   "b": {
+    "iata": "AMS",
+    "icao": "EHAM",
+    "name": "Amsterdam Airport Schiphol",
+    "city": "Amsterdam",
+    "country": "NL",
+    "lat": 52.3086,
+    "lon": 4.7639,
+    "elev_ft": -11,
+    "tz": "Europe/Amsterdam"
+   },
+   "page": false,
+   "direct_nm": 200,
+   "flown_nm": 230,
+   "airborne_min": {
+    "ab": 45,
+    "ba": 45
+   },
+   "cruise_ft": 21000,
+   "months": {
+    "2025-11": 1.405,
+    "2025-12": 1.526,
+    "2026-01": 1.94,
+    "2026-02": 1.432,
+    "2026-03": 1.012,
+    "2026-04": 1.302,
+    "2026-05": 0.381,
+    "2026-06": 0.48,
+    "2026-07": 0.249,
+    "2026-08": 0.481,
+    "2026-09": 0.703,
+    "2026-10": 1.128
+   },
+   "models_agree": 0.97
+  },
+  {
+   "a": {
+    "iata": "LHR",
+    "icao": "EGLL",
+    "name": "London Heathrow Airport",
+    "city": "London",
+    "country": "GB",
+    "lat": 51.4707,
+    "lon": -0.4599,
+    "elev_ft": 83,
+    "tz": "Europe/London"
+   },
+   "b": {
+    "iata": "IST",
+    "icao": "LTFM",
+    "name": "İstanbul Airport",
+    "city": "Istanbul",
+    "country": "TR",
+    "lat": 41.2749,
+    "lon": 28.7321,
+    "elev_ft": 325,
+    "tz": "Europe/Istanbul"
+   },
+   "page": false,
+   "direct_nm": 1343,
+   "flown_nm": 1402,
+   "airborne_min": {
+    "ab": 195,
+    "ba": 198
+   },
+   "cruise_ft": 33000,
+   "months": {
+    "2025-11": 1.018,
+    "2025-12": 1.099,
+    "2026-01": 1.14,
+    "2026-02": 1.411,
+    "2026-03": 1.088,
+    "2026-04": 0.97,
+    "2026-05": 0.807,
+    "2026-06": 0.7,
+    "2026-07": 0.977,
+    "2026-08": 0.782,
+    "2026-09": 0.832,
+    "2026-10": 1.202
+   },
+   "models_agree": 1.0
+  },
+  {
+   "a": {
+    "iata": "CDG",
+    "icao": "LFPG",
+    "name": "Charles de Gaulle International Airport",
+    "city": "Paris",
+    "country": "FR",
+    "lat": 49.009,
+    "lon": 2.5541,
+    "elev_ft": 392,
+    "tz": "Europe/Paris"
+   },
+   "b": {
+    "iata": "BCN",
+    "icao": "LEBL",
+    "name": "Josep Tarradellas Barcelona-El Prat Airport",
+    "city": "Barcelona",
+    "country": "ES",
+    "lat": 41.2971,
+    "lon": 2.0785,
+    "elev_ft": 12,
+    "tz": "Europe/Madrid"
+   },
+   "page": false,
+   "direct_nm": 463,
+   "flown_nm": 500,
+   "airborne_min": {
+    "ab": 80,
+    "ba": 80
+   },
+   "cruise_ft": 32000,
+   "months": {
+    "2025-11": 1.076,
+    "2025-12": 1.176,
+    "2026-01": 1.459,
+    "2026-02": 1.636,
+    "2026-03": 1.288,
+    "2026-04": 0.696,
+    "2026-05": 0.824,
+    "2026-06": 0.596,
+    "2026-07": 0.623,
+    "2026-08": 0.755,
+    "2026-09": 0.752,
+    "2026-10": 1.153
+   },
+   "models_agree": 0.95
+  },
+  {
+   "a": {
+    "iata": "FRA",
+    "icao": "EDDF",
+    "name": "Frankfurt Main Airport",
+    "city": "Frankfurt",
+    "country": "DE",
+    "lat": 50.0267,
+    "lon": 8.5584,
+    "elev_ft": 364,
+    "tz": "Europe/Berlin"
+   },
+   "b": {
+    "iata": "IST",
+    "icao": "LTFM",
+    "name": "İstanbul Airport",
+    "city": "Istanbul",
+    "country": "TR",
+    "lat": 41.2749,
+    "lon": 28.7321,
+    "elev_ft": 325,
+    "tz": "Europe/Istanbul"
+   },
+   "page": false,
+   "direct_nm": 992,
+   "flown_nm": 1041,
+   "airborne_min": {
+    "ab": 150,
+    "ba": 151
+   },
+   "cruise_ft": 35000,
+   "months": {
+    "2025-11": 1.001,
+    "2025-12": 1.119,
+    "2026-01": 1.053,
+    "2026-02": 1.295,
+    "2026-03": 0.866,
+    "2026-04": 1.065,
+    "2026-05": 0.858,
+    "2026-06": 0.755,
+    "2026-07": 1.17,
+    "2026-08": 0.82,
+    "2026-09": 0.853,
+    "2026-10": 1.164
+   },
+   "models_agree": 0.95
+  }
+ ]
+}

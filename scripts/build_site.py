@@ -43,6 +43,7 @@ SITE = ROOT / "site"
 LEARN = SITE / "learn"
 ROUTES = SITE / "routes"
 ROUTE_DATA = ROOT / "scripts/data/routes.json"
+MODEL_DATA = ROOT / "scripts/data/model.json"
 
 SITE_URL = "https://bumpcast.app"
 APP_ID = "6824269447"
@@ -554,12 +555,13 @@ def store_badge(href: str, prefix: str = "../", height: int = 48) -> str:
 
 def cta(campaign: str, heading: str = "Know when the bumps will come.",
         body: str = ("Live flight status and a calm turbulence forecast for your exact route: when the bumps will "
-                     "come, how strong they'll be, and when they'll end.")) -> str:
+                     "come, how strong they'll be, and when they'll end."),
+        coverage: str = "Covers the continental United States and southern Canada.") -> str:
     return f"""<aside class="app-cta" aria-labelledby="cta-h">
   <div>
     <p class="eyebrow">BumpCast for iPhone</p>
     <h2 id="cta-h">{text(heading)}</h2>
-    <p class="muted">{text(body)} Covers the continental United States and southern Canada.</p>
+    <p class="muted">{text(body)} {text(coverage)}</p>
   </div>
   <div class="actions">{store_badge(app_link(campaign))}<span class="muted small">Free · No ads · No account</span></div>
 </aside>
@@ -694,6 +696,9 @@ def hub_html(explainers: list[Explainer], has_routes: bool) -> str:
 </section>""")
     routes = ("""<p class="learn-next">Flying soon? See <a href="../routes/">turbulence by route</a>: where and when pilots reported bumps on popular routes in the US and Canada.</p>
 """ if has_routes else "")
+    if MODEL_DATA.exists():
+        routes += f"""<p class="learn-next">How good are turbulence forecasts? See <a href="{ACCURACY_SLUG}.html">how accurate BumpCast's outlook is</a>, checked against a year of airline pilot reports.</p>
+"""
     return (head(title=page_title(HUB_SEO_TITLE), description=HUB_DESCRIPTION, url=url, og_type="website",
                  og_title=HUB_SEO_TITLE, markdown="index.html.md", data=data, section="learn", hub=True,
                  campaign="web-learn")
@@ -1136,7 +1141,10 @@ def along_chart(route: Route) -> str:
             f'the top of each bar. Below: the height of a typical flight, over the ground.</figcaption></figure>')
 
 
-def months_svg(rows: list[tuple[str, dict, float | None]], label: str, ident: str, size: str) -> str:
+def months_svg(rows: list[tuple[str, dict | None, float | None]], label: str, ident: str, size: str,
+               tip=None, title: str | None = None) -> str:
+    """Each month as a multiple of `label`. `tip(key, counts, index)` words a bar's tooltip (pilot-report
+    counts by default) and `title` the chart's accessible name, so model pages can reuse it."""
     width, left, right = SIZES[size]
     n = len(rows)
     pw = width - left - right
@@ -1155,14 +1163,18 @@ def months_svg(rows: list[tuple[str, dict, float | None]], label: str, ident: st
                    f'<text class="tick" x="{left - 6}" y="{y(t) + 4:.1f}" text-anchor="end">{t:g}×</text>')
     for j, (key, c, index) in enumerate(rows):
         x = left + band * j
+        if tip is not None:
+            words = tip(key, c, index)
+        elif index is None:
+            words = f"{month_year(key)}: too few reports ({total(c):,}) to compare."
+        else:
+            words = (f"{month_year(key)}: {total(c):,} reports, {bumpy(c):,} moderate or stronger: "
+                     f"{index:.2f}× {label}.")
         if index is None:
-            tip = f"{month_year(key)}: too few reports ({total(c):,}) to compare."
             bar = f'<text class="tick" x="{x + band / 2:.1f}" y="{y(1) - 6:.1f}" text-anchor="middle">–</text>'
         else:
-            tip = (f"{month_year(key)}: {total(c):,} reports, {bumpy(c):,} moderate or stronger: "
-                   f"{index:.2f}× {label}.")
             bar = f'<path class="bar" d="{bar_path(x + (band - bw) / 2, y(index), bw, y(1))}"/>'
-        out.append(f'<g class="band" data-tip="{attr(tip)}"><rect class="hit" x="{x:.1f}" y="{top}" width="{band:.1f}" '
+        out.append(f'<g class="band" data-tip="{attr(words)}"><rect class="hit" x="{x:.1f}" y="{top}" width="{band:.1f}" '
                    f'height="{bottom - top}"/>{bar}</g>')
         name = month_name(key, short=True)
         out.append(f'<text class="place" x="{x + band / 2:.1f}" y="{bottom + 18}" text-anchor="middle">'
@@ -1170,15 +1182,17 @@ def months_svg(rows: list[tuple[str, dict, float | None]], label: str, ident: st
         if j == 0 or key.endswith("-01"):
             out.append(f'<text class="tick" x="{x + band / 2:.1f}" y="{bottom + 34}" text-anchor="middle">{key[:4]}</text>')
     return (f'<svg class="{size}" viewBox="0 0 {width} 216" role="img" aria-labelledby="{ident}-{size}-t">'
-            f'<title id="{ident}-{size}-t">Share of moderate-or-stronger reports by month, compared with '
-            f'{text(label)}</title>{"".join(out)}</svg>')
+            f'<title id="{ident}-{size}-t">{text(title or "Share of moderate-or-stronger reports by month, compared with " + label)}'
+            f'</title>{"".join(out)}</svg>')
 
 
-def months_chart(rows: list[tuple[str, dict, float | None]], label: str, ident: str) -> str:
+def months_chart(rows: list[tuple[str, dict | None, float | None]], label: str, ident: str, tip=None,
+                 title: str | None = None, caption: str | None = None) -> str:
+    caption = caption or (f"Each month's share of moderate-or-stronger reports, as a multiple of {label}. "
+                          "Above 1× is bumpier than usual; below is calmer.")
     return (f'<figure class="chart"><p class="chart-title">Month by month</p>'
-            f'{months_svg(rows, label, ident, "wide")}{months_svg(rows, label, ident, "compact")}'
-            f'<figcaption>Each month\'s share of moderate-or-stronger reports, as a multiple of {text(label)}. '
-            f'Above 1× is bumpier than usual; below is calmer.</figcaption></figure>')
+            f'{months_svg(rows, label, ident, "wide", tip, title)}{months_svg(rows, label, ident, "compact", tip, title)}'
+            f'<figcaption>{text(caption)}</figcaption></figure>')
 
 
 def stretch_rows(route: Route) -> list[tuple[str, str, str, int, int]]:
@@ -1495,14 +1509,39 @@ def national(data: dict) -> dict:
             "summer": season({6, 7, 8}), "lo": (lo_name, lo), "hi": (hi_name, hi), "rows": rows}
 
 
-def routes_hub_html(routes: list[Route], data: dict) -> str:
+def model_hub_section(model_routes: list[ModelRoute], model: dict | None) -> str:
+    """International routes on the hub: by season only, marked as a model estimate."""
+    if not model_routes or not model:
+        return ""
+    rows = []
+    for r in model_routes:
+        bumpier, calmer = r.season()
+        rows.append(f'<tr><td><a href="{r.file}">{text(r.pair)}</a><span class="muted">{text(r.a["city"])} – '
+                    f'{text(r.b["city"])}</span></td><td data-label="In the air">{duration(r.minutes)}</td>'
+                    f'<td data-label="Bumpier months">{text(join([m[:3] for m in bumpier]) or "None stand out")}</td>'
+                    f'<td data-label="Calmer months">{text(join([m[:3] for m in calmer]) or "None stand out")}</td></tr>')
+    c = model["check"]
+    return f"""<section aria-labelledby="intl-h">
+  <h2 id="intl-h">International routes</h2>
+  <p>Pilots file few turbulence reports outside North America, so these routes are described from {model['analyses']:,} analyses by two global weather models ({text(model_period(model))}), by month only: a model estimate and a rough guide. On US routes, the model's bumpier and calmer months matched pilot reports on {c['passed']['months']} of {c['of']}. <a href="../learn/{ACCURACY_SLUG}.html">How accurate is the outlook?</a></p>
+  <div class="table-wrap"><table class="route-table">
+    <thead><tr><th>Route</th><th>In the air</th><th>Bumpier months</th><th>Calmer months</th></tr></thead>
+    <tbody>{"".join(rows)}</tbody>
+  </table></div>
+</section>
+"""
+
+
+def routes_hub_html(routes: list[Route], data: dict, model_routes: list[ModelRoute] = (), model: dict | None = None) -> str:
     url = f"{SITE_URL}/routes/"
     period = period_text(data)
     nat = national(data)
     ratio = nat["winter"] / nat["summer"] if nat["summer"] else 0
     total_reports = sum(r.n for r in routes)
     summary = (f"Where and when pilots reported bumps on {len(routes)} popular routes in the US and Canada, from a "
-               f"year of airline pilot reports ({period}), with gusty days at each airport.")
+               f"year of airline pilot reports ({period}), with gusty days at each airport."
+               + (f" Plus {len(model_routes)} international routes by season, a model estimate from a year of weather "
+                  "analyses." if model_routes else ""))
     description = (f"Where and when it's bumpy on {len(routes)} popular US and Canada routes, from a year of airline "
                    "pilot reports and airport weather. Calm, sourced and free.")
     rows = []
@@ -1530,9 +1569,9 @@ def routes_hub_html(routes: list[Route], data: dict) -> str:
         {"@type": "CollectionPage", "@id": f"{url}#collection", "name": ROUTES_SEO_TITLE, "description": description,
          "url": url, "inLanguage": "en", "dateModified": data["generated"], "isPartOf": {"@id": WEBSITE["@id"]},
          "publisher": {"@id": ORG["@id"]}, "mainEntity": {"@id": f"{url}#list"}},
-        {"@type": "ItemList", "@id": f"{url}#list", "numberOfItems": len(routes), "itemListElement": [
+        {"@type": "ItemList", "@id": f"{url}#list", "numberOfItems": len(routes) + len(model_routes), "itemListElement": [
             {"@type": "ListItem", "position": i, "url": r.url, "name": f"{r.name} turbulence"}
-            for i, r in enumerate(routes, 1)]},
+            for i, r in enumerate(list(routes) + list(model_routes), 1)]},
         {"@type": "Dataset", "@id": f"{url}#data", "name": f"Airliner turbulence reports, US and southern Canada, {period}",
          "description": (f"{total_reports:,} pilot reports of turbulence from airliners near {len(routes)} popular routes, "
                          "by stretch and by month, with gusty days at each airport. Compiled by BumpCast from US "
@@ -1552,7 +1591,7 @@ def routes_hub_html(routes: list[Route], data: dict) -> str:
   <h1>{text(ROUTES_TITLE)}</h1>
   <p class="lede">{text(summary)}</p>
 </header>
-{picker_html(routes, "")}
+{picker_html(list(routes) + list(model_routes), "")}
 <section aria-labelledby="find-h">
   <h2 id="find-h">What a year of pilot reports shows</h2>
   <ul class="ticks">{"".join(f for f in findings if f)}</ul>
@@ -1565,10 +1604,526 @@ def routes_hub_html(routes: list[Route], data: dict) -> str:
     <tbody>{"".join(rows)}</tbody>
   </table></div>
 </section>
-{method_html(None, data)}<p class="updated muted small">Data from {period} · Page built <time datetime="{data['generated']}">{long_date(data['generated'])}</time> · <a href="index.html.md">Markdown</a></p>
+{model_hub_section(model_routes, model)}{method_html(None, data)}<p class="updated muted small">Data from {period} · Page built <time datetime="{data['generated']}">{long_date(data['generated'])}</time> · <a href="index.html.md">Markdown</a></p>
 {cta("web-routes", "Get the forecast for your flight.", "A year of reports shows where bumps are more likely. BumpCast forecasts your exact flight from 48 hours before departure: when the bumps will come, how strong they'll be, and when they'll end.")}</main>
 
 """ + foot("routes"))
+
+
+
+# ---------- International routes and forecast accuracy: a year of the app's global outlook
+# (scripts/data/model.json, made by scripts/model_data.py). Pilot reports outside North America are
+# too few to count, so these routes are described from two weather models, by month only: on US
+# routes the model's months matched pilot reports on about half the routes, its stretches hardly ever
+# (docs/plans/international-route-pages.md). Every number on these pages says it's a model estimate.
+
+ACCURACY_SLUG = "forecast-accuracy"
+ACCURACY_URL = f"{SITE_URL}/learn/{ACCURACY_SLUG}.html"
+ECMWF_CREDIT = "Contains ECMWF open data (CC BY 4.0)"
+GLOBAL_COVERAGE = ("Detailed forecasts in the continental United States and southern Canada; Global outlooks (beta), "
+                   "in Settings, for international flights.")
+ICON_MODEL = ('<svg class="badge-icon" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6" fill="none" '
+              'stroke="currentColor" stroke-width="1.6"/><path d="M2 8h12M8 2c2 2 2 10 0 12M8 2c-2 2-2 10 0 12" '
+              'fill="none" stroke="currentColor" stroke-width="1.4"/></svg>')
+
+
+def model_period(model: dict) -> str:
+    return f"{month_year(model['period']['start'])} to {month_year(model['period']['end'])}"
+
+
+def pct(v: float) -> str:
+    p = 100 * v
+    return f"{p:.1f}%" if p < 10 else f"{round(p)}%"
+
+
+class ModelRoute:
+    """An international route, described by month from the global outlook (scripts/data/model.json)."""
+
+    def __init__(self, r: dict, model: dict):
+        self.r, self.model = r, model
+        self.a, self.b = r["a"], r["b"]
+        self.A, self.B = self.a["iata"], self.b["iata"]
+        self.pair = f"{self.A}–{self.B}"
+        self.name = f"{self.A} to {self.B}"
+        self.slug = f"{self.A.lower()}-to-{self.B.lower()}-turbulence"
+        self.file = f"{self.slug}.html"
+        self.url = f"{SITE_URL}/routes/{self.file}"
+        self.miles = int(round(r["direct_nm"] * NM_TO_MI, -1))
+        self.km = int(round(r["direct_nm"] * NM_TO_KM, -1))
+        self.minutes = r["airborne_min"]["ab"]
+
+    def months(self) -> list[tuple[str, None, float]]:
+        return [(k, None, v) for k, v in self.r["months"].items()]
+
+    def season(self) -> tuple[list[str], list[str]]:
+        """Months clearly bumpier and calmer than the route's average (up to three each), in order."""
+        rows = list(self.r["months"].items())
+        order = [k for k, _ in rows]
+        bumpier = sorted([r for r in rows if r[1] >= 1.15], key=lambda r: -r[1])[:3]
+        calmer = sorted([r for r in rows if r[1] <= 0.85], key=lambda r: r[1])[:3]
+        by_time = lambda picks: [month_name(k) for k in sorted((k for k, _ in picks), key=order.index)]  # noqa: E731
+        return by_time(bumpier), by_time(calmer)
+
+    def season_sentence(self) -> str:
+        bumpier, calmer = self.season()
+        lead = "In the model, the air at cruising height was"
+        if bumpier and calmer:
+            return f"{lead} bumpier than usual in {join(bumpier)}, and calmer in {join(calmer)}."
+        if bumpier:
+            return f"{lead} bumpier than usual in {join(bumpier)}."
+        if calmer:
+            return f"{lead} calmer than usual in {join(calmer)}."
+        return f"{lead} about as bumpy in every month."
+
+    def direction_note(self) -> str:
+        """Westerlies make one way faster, in mid-latitudes on routes that run east-west."""
+        dlon = (self.b["lon"] - self.a["lon"] + 180) % 360 - 180
+        if abs(dlon) < 8 or (abs(self.a["lat"]) + abs(self.b["lat"])) / 2 < 25:
+            return ""
+        west, east = (self.A, self.B) if dlon > 0 else (self.B, self.A)
+        return (f" Flights from {west} to {east} usually take less time than the way back, with the prevailing "
+                "westerly winds behind them.")
+
+    def lede(self) -> str:
+        bumpier, calmer = self.season()
+        when = (f" In a year of weather-model analyses, the air at cruising height was bumpier in {join(bumpier)}"
+                + (f" and calmer in {join(calmer)}" if calmer else "") + "." if bumpier else
+                (f" In a year of weather-model analyses, the air at cruising height was calmer in {join(calmer)}."
+                 if calmer else ""))
+        return (f"Flights between {self.a['city']} ({self.A}) and {self.b['city']} ({self.B}) fly about "
+                f"{self.miles:,} miles, roughly {rough_duration(self.minutes)} in the air. Pilots file few turbulence "
+                f"reports on this route, so this page is a model estimate, by season.{when}")
+
+    def description(self) -> str:
+        bumpier, calmer = self.season()
+        base = f"When it's bumpier on {self.pair} flights: a model estimate from a year of weather analyses"
+        options = []
+        if bumpier:
+            options.append(f"{base}. More bumps in {join([m[:3] for m in bumpier])}"
+                           + (f", fewer in {join([m[:3] for m in calmer])}." if calmer else "."))
+        options.append(f"{base}, by month.")
+        return next(o for o in options if len(o) <= 160)
+
+    def faq(self, us_severe: str | None) -> list[tuple[str, str]]:
+        bumpier, calmer = self.season()
+        period = model_period(self.model)
+        check = self.model["check"]
+        severe = (f" On the US routes where we can count reports, {us_severe} of airliner reports at cruising height "
+                  "were severe." if us_severe else "")
+        return [
+            (f"Is {self.name} a bumpy flight?",
+             f"Most flights on any airline route see light chop at most, and strong bumps are rare.{severe} We can't "
+             f"count reports on {self.pair} the same way: few are filed outside North America in the archive we use. "
+             f"{self.season_sentence()} On the day, the weather decides."),
+            (f"When is the smoothest time of year to fly {self.name}?",
+             (f"In a year of weather-model analyses ({period}), the air at cruising height was calmer in {join(calmer)}"
+              + (f" and bumpier in {join(bumpier)}" if bumpier else "") + ". " if calmer else self.season_sentence() + " ")
+             + f"Treat it as a rough guide: on US routes, the model's calmer and bumpier months matched pilot reports "
+               f"on {check['passed']['months']} of the {check['of']} routes we checked. Any month can bring a smooth "
+               "or a bumpy day."),
+            (f"Is {self.B} to {self.A} the same?",
+             f"Yes. It's the same air, just at different times into the flight.{self.direction_note()}"),
+            (f"Why doesn't this page say where on the route it's bumpiest?",
+             "Because we couldn't check it. On US routes, where pilots file thousands of reports, the stretches the "
+             "model rated bumpiest over a year didn't match the stretches where pilots reported the most bumps, so we "
+             "only show months here."),
+            (f"Can I get a turbulence forecast for my {self.name} flight?",
+             "Yes, as an approximate outlook. In BumpCast, turn on Global outlooks (beta) in Settings for a turbulence "
+             f"outlook on international flights like {self.pair}, from the same two weather models. Within the "
+             "continental US and southern Canada, the app's forecasts are more detailed. It's free to download on the "
+             "App Store for iPhone."),
+        ]
+
+    def related(self, routes: list[Route], model_routes: list["ModelRoute"]) -> list:
+        ends = {self.A, self.B}
+        own = [o for o in model_routes if o is not self and ({o.A, o.B} & ends)]
+        us = [o for o in routes if {o.A, o.B} & ends]
+        return (own + us)[:8]
+
+
+def month_tip(label: str):
+    def tip(key: str, _c, index: float | None) -> str:
+        return f"{month_year(key)}: {index:.2f}× {label}, in the model." if index is not None else month_year(key)
+    return tip
+
+
+def model_month_chart(route: "ModelRoute") -> str:
+    return months_chart(route.months(), "this route's average month", "months", tip=month_tip("this route's average month"),
+                        title="Bumpiness at cruising height by month in the model, compared with the route's average",
+                        caption=("Each month's share of cruise minutes with light bumps or more in the model, as a "
+                                 "multiple of this route's average month. Above 1× is bumpier than usual; below is calmer."))
+
+
+def model_month_table(route: "ModelRoute") -> str:
+    rows = "".join(f"<tr><td>{month_year(k)}</td><td>{i:.2f}×</td></tr>" for k, _, i in route.months())
+    return (f'<details class="data"><summary>Show the numbers by month</summary><div class="table-wrap"><table>'
+            f'<thead><tr><th>Month</th><th>Bumpiness vs. average (model)</th></tr></thead><tbody>{rows}</tbody>'
+            f'</table></div></details>')
+
+
+def model_method_html(model: dict, route: "ModelRoute | None") -> str:
+    c, m = model["check"], model["method"]
+    where = (f"along a typical {route.pair} flight (the direct path, a typical climb, cruise and descent)"
+             if route else "along a typical flight on each route (the direct path, a typical climb, cruise and descent)")
+    return f"""<section class="method" aria-labelledby="method-h">
+  <h2 id="method-h">How we made this page</h2>
+  <ul>
+    <li><b>Period:</b> {model_period(model)}. {model['analyses']:,} analyses, four a day, from two global weather models: ECMWF's open data (the European model) and NOAA's GFS (the US model), the same two behind the app's Global outlooks.</li>
+    <li><b>Turbulence:</b> BumpCast's own clear-air turbulence estimate from each model's winds and temperatures (wind shear, stability and waves over mountains), averaged over the two models, read every {m['every_min']} minutes {where}, at the height it would fly.</li>
+    <li><b>Light bumps or more:</b> an estimate of {m['light_edr']:.2f} or more on the turbulence scale pilots and forecasters use (eddy dissipation rate), where the app starts calling it light chop. Each month is compared with the route's own average, so these pages don't rank routes against each other.</li>
+    <li><b>Checked against pilots:</b> we ran the same method over the US and Canada and compared it with {model['point']['reports']:,} airliner pilot reports. Report by report, it has real skill (<a href="../learn/{ACCURACY_SLUG}.html">how accurate it is</a>). But over a year, its bumpier and calmer months matched pilot reports on {c['passed']['months']} of {c['of']} US routes, and its bumpiest stretches on {c['passed']['stretches']}. So these pages show months only, as a rough guide.</li>
+    <li><b>What it can't see:</b> weather models miss most bumps in and near thunderstorms and over small hills, and pilots steer around storms on the day. {ECMWF_CREDIT}. GFS data from NOAA.</li>
+  </ul>
+</section>
+"""
+
+
+def model_route_html(route: ModelRoute, routes: list[Route], model_routes: list[ModelRoute],
+                     by_id: dict[str, "Explainer"], model: dict, us_severe: str | None) -> str:
+    period = model_period(model)
+    faq = route.faq(us_severe)
+    check = model["check"]
+    generated = model["generated"]
+    faq_html = "\n".join(f'  <div class="qa"><h3>{text(q)}</h3><p>{text(a)}</p></div>' for q, a in faq)
+    rel_html = "".join(f'<li><a href="{o.file}">{text(o.pair)}</a></li>' for o in route.related(routes, model_routes))
+    learn_html = "".join(f'<li><a href="../learn/{by_id[i].file}">{text(by_id[i].title)}</a></li>'
+                         for i in ("clear-air", "clouds", "levels", "built"))
+    title = f"{route.name} Turbulence: The Bumpier and Calmer Months"
+    campaign = f"web-route-{route.A.lower()}-{route.B.lower()}"
+    dataset = {"@type": "Dataset", "@id": f"{route.url}#data",
+               "name": f"Modelled turbulence by month on the {route.pair} route, {period}",
+               "description": (f"Each month's share of cruise minutes with light turbulence or more along a typical "
+                               f"{route.pair} flight, as a multiple of the route's average, from {model['analyses']:,} "
+                               "analyses of the ECMWF and NOAA GFS global weather models, using BumpCast's clear-air "
+                               f"turbulence estimate. A model estimate, not pilot reports. {ECMWF_CREDIT}."),
+               "url": route.url, "temporalCoverage": f"{model['period']['start']}/{model['period']['end']}",
+               "spatialCoverage": {"@type": "Place", "name": f"{route.a['city']} to {route.b['city']}"},
+               "variableMeasured": ["Modelled clear-air turbulence (eddy dissipation rate) at cruising height, by month"],
+               "isBasedOn": [model["sources"]["ecmwf"], model["sources"]["gfs"]],
+               "license": "https://creativecommons.org/licenses/by/4.0/",
+               "creator": {"@id": ORG["@id"]}, "dateModified": generated,
+               "distribution": {"@type": "DataDownload", "encodingFormat": "text/markdown",
+                                "contentUrl": f"{route.url}.md"}}
+    ld = {"@context": "https://schema.org", "@graph": [
+        {"@type": "Article", "@id": f"{route.url}#article", "headline": title, "description": route.description(),
+         "url": route.url, "mainEntityOfPage": route.url, "inLanguage": "en", "dateModified": generated,
+         "datePublished": generated, "image": ICON_URL, "author": {"@id": ORG["@id"]},
+         "publisher": {"@id": ORG["@id"]}, "isPartOf": {"@id": f"{SITE_URL}/routes/#collection"},
+         "about": {"@id": f"{route.url}#data"}},
+        dataset,
+        {"@type": "FAQPage", "@id": f"{route.url}#faq", "url": route.url, "mainEntity": [
+            {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faq]},
+        breadcrumb_ld(("Home", f"{SITE_URL}/"), ("Routes", f"{SITE_URL}/routes/"), (route.name, None)),
+        ORG]}
+    return (head(title=page_title(title), description=route.description(), url=route.url, og_type="article",
+                 og_title=f"{route.name} turbulence", markdown=f"{route.file}.md", data=ld, section="routes",
+                 hub=False, campaign=campaign, published=generated, modified=generated, scripts=("charts.js",))
+            + f"""
+<main class="learn route">
+{crumbs(("Home", "../"), ("Routes", "./"), (route.name, None))}
+<article class="explainer">
+  <header>
+    <p class="eyebrow">{text(route.a['city'])} ⇄ {text(route.b['city'])}</p>
+    <h1>{text(route.name)} turbulence</h1>
+    <p class="lede">{text(route.lede())}</p>
+  </header>
+  <section class="grade" aria-labelledby="grade-h">
+    <p class="badge">{ICON_MODEL}Model estimate</p>
+    <div class="grade-head">{water_glass("light", 44)}<h2 id="grade-h">A rough guide, by season</h2></div>
+    <p>{text(f"Built from {model['analyses']:,} analyses by two global weather models, not pilot reports. On US routes, where we could check, the model's bumpier and calmer months matched pilot reports on {check['passed']['months']} of {check['of']}. So treat these months as a rough guide, and the forecast for your flight as the real answer.")}</p>
+    <p class="status">{text(period[:1].upper() + period[1:])} · cruising height, about {route.r['cruise_ft']:,} ft</p>
+  </section>
+  <ul class="tiles">
+    <li><b>{route.miles:,} mi</b><span>Distance · {route.km:,} km</span></li>
+    <li><b>{duration(route.minutes)}</b><span>In the air, typical jet</span></li>
+    <li><b>{model['analyses']:,}</b><span>Weather-model analyses</span></li>
+  </ul>
+  <section aria-labelledby="when-h">
+  <h2 id="when-h">When in the year</h2>
+  <p>{text(route.season_sentence())} Compared within this route, month against month. At cruising height, most bumps away from storms come from the jet stream, which shifts and strengthens with the seasons. <a href="../learn/{by_id['clear-air'].file}">More on clear-air turbulence</a>.</p>
+  {model_month_chart(route)}
+  {model_month_table(route)}
+  </section>
+  <section aria-labelledby="where-h">
+  <h2 id="where-h">Where on the route</h2>
+  <p>We don't show where on {text(route.pair)} it's bumpiest. On US routes, the stretches the model rated bumpiest over a year didn't match where pilots reported the most bumps, so we can't stand behind it. For US routes, our pages count pilot reports stretch by stretch.</p>
+  </section>
+  <aside class="good nudge" aria-labelledby="day-h"><h2 id="day-h">What this means for your flight</h2><p>A year of model analyses hints at which months tend to be bumpier, not what your flight will be like. That depends on the weather on the day. In BumpCast, turn on Global outlooks (beta) in Settings for an approximate turbulence outlook on your {text(route.pair)} flight, from the same two models.</p>
+  <div class="actions">{store_badge(app_link(campaign + "-mid"))}<span class="muted small">Free · No ads · No account</span></div></aside>
+  <section class="faq-list" aria-labelledby="faq-h">
+  <h2 id="faq-h">Questions</h2>
+{faq_html}
+  </section>
+{model_method_html(model, route)}  <p class="updated muted small">Model data from {period} · Page built <time datetime="{generated}">{long_date(generated)}</time> · <a href="{route.file}.md">Markdown</a></p>
+  <section class="more" aria-labelledby="rel-h"><h2 id="rel-h">More routes</h2><ul class="chips">{rel_html}<li><a href="./">All routes</a></li></ul></section>
+  <section class="more" aria-labelledby="learn-h"><h2 id="learn-h">Learn more</h2><ul class="chips"><li><a href="../learn/{ACCURACY_SLUG}.html">How accurate is the outlook?</a></li>{learn_html}</ul></section>
+</article>
+{cta(campaign, "Get the outlook for your flight.", f"Flying {route.pair}? Live flight status and an approximate turbulence outlook for your flight.", coverage=GLOBAL_COVERAGE)}</main>
+
+""" + foot("routes"))
+
+
+def model_method_md(model: dict) -> list[str]:
+    c = model["check"]
+    return [
+        f"- Period: {model_period(model)}. {model['analyses']:,} analyses, four a day, from ECMWF's open data and NOAA's "
+        "GFS, the two global weather models behind the app's Global outlooks.",
+        "- Turbulence: BumpCast's clear-air turbulence estimate from each model's winds and temperatures, averaged over "
+        f"the two models, read every {model['method']['every_min']} minutes along a typical flight (direct path, typical "
+        "climb, cruise and descent).",
+        f"- Light bumps or more: an estimate of {model['method']['light_edr']:.2f} or more (eddy dissipation rate). Each "
+        "month is compared with the route's own average.",
+        f"- Checked against {model['point']['reports']:,} airliner pilot reports over the US and Canada: real skill report "
+        f"by report ({ACCURACY_URL}), but over a year the model's months matched pilot reports on {c['passed']['months']} "
+        f"of {c['of']} US routes and its bumpiest stretches on {c['passed']['stretches']}. So these pages show months "
+        "only, as a rough guide.",
+        f"- Weather models miss most bumps near thunderstorms and over small hills. {ECMWF_CREDIT}. GFS data from NOAA.",
+        "",
+    ]
+
+
+def model_route_md(route: ModelRoute, model: dict, us_severe: str | None, level: int = 1) -> str:
+    h = "#" * level
+    period = model_period(model)
+    out = [f"{h} {route.name} turbulence", "",
+           f"> {route.a['city']} ({route.A}) ⇄ {route.b['city']} ({route.B}), both directions. Model estimate, {period}.",
+           "", route.lede(), "",
+           f"- Distance: {route.miles:,} miles ({route.km:,} km)",
+           f"- In the air: about {duration(route.minutes)} (typical jet, still air)",
+           f"- Weather-model analyses: {model['analyses']:,}",
+           "", f"{h}# When in the year", "", route.season_sentence(), ""]
+    out += md_table(["Month", "Bumpiness vs. average (model)"], [[month_year(k), f"{i:.2f}×"] for k, _, i in route.months()])
+    out += [f"{h}# Where on the route", "",
+            "Not shown: on US routes, the model's bumpiest stretches over a year didn't match where pilots reported the "
+            "most bumps.", ""]
+    out += [f"{h}# Questions", ""]
+    for q, a in route.faq(us_severe):
+        out += [f"{h}## {q}", "", a, ""]
+    out += [f"{h}# How this page was made", ""] + model_method_md(model)
+    out += [f"Source: {route.url} (model data {period}). From BumpCast, the flight tracker with turbulence forecasts "
+            f"for nervous flyers: {APP_URL}", ""]
+    return "\n".join(out)
+
+
+# The accuracy page: the outlook's model readings against what pilots reported.
+
+def band_label(b: dict, short: bool = False) -> str:
+    lo, hi = b["from"], b["to"]
+    if hi is None:
+        return f"{lo:.2f}+"
+    if lo == 0:
+        return f"<{hi:.2f}" if short else f"under {hi:.2f}"
+    return f"{lo:.2f}–{hi:.2f}"
+
+
+def bands_svg(bands: list[dict], size: str) -> str:
+    width, left, right = SIZES[size]
+    n = len(bands)
+    pw = width - left - right
+    band = pw / n
+    bw = min(44, band - 10)
+    top, base = 16, 176
+    vmax = 10 * math.ceil(max(b["moderate"] for b in bands) * 10)  # whole tens of percent: 60 for 56%
+    y = lambda v: base - (base - top) * v / vmax  # noqa: E731
+    out = [f'<line class="{"base" if t == 0 else "grid"}" x1="{left}" x2="{width - right}" y1="{y(t):.1f}" y2="{y(t):.1f}"/>'
+           f'<text class="tick" x="{left - 6}" y="{y(t) + 4:.1f}" text-anchor="end">{t:g}%</text>' for t in (0, vmax / 2, vmax)]
+    for j, b in enumerate(bands):
+        x = left + band * j
+        v = 100 * b["moderate"]
+        tip = (f"Outlook {band_label(b)}: {b['reports']:,} cruise reports, {pct(b['moderate'])} moderate or stronger, "
+               f"{pct(b['light'])} light or more.")
+        out.append(f'<g class="band" data-tip="{attr(tip)}"><rect class="hit" x="{x:.1f}" y="{top}" width="{band:.1f}" '
+                   f'height="{base - top}"/><path class="bar moderate" d="{bar_path(x + (band - bw) / 2, y(v), bw, base)}"/></g>')
+        label = band_label(b, short=True) if size == "wide" or b["from"] == 0 or b["to"] is None else f"{b['from']:.2f}"
+        out.append(f'<text class="place" x="{x + band / 2:.1f}" y="{base + 18}" text-anchor="middle">{text(label)}</text>')
+    axis = "Outlook reading (EDR)" if size == "wide" else "Outlook reading (EDR), from"
+    out.append(f'<text class="tick" x="{left + pw / 2:.1f}" y="{base + 36}" text-anchor="middle">{axis}</text>')
+    return (f'<svg class="{size}" viewBox="0 0 {width} 222" role="img" aria-labelledby="bands-{size}-t">'
+            f'<title id="bands-{size}-t">Share of pilot reports that were moderate or stronger, by the outlook\'s '
+            f'reading</title>{"".join(out)}</svg>')
+
+
+def accuracy_faq(model: dict) -> list[tuple[str, str]]:
+    p = model["point"]
+    lo, hi = p["bands"][0], p["bands"][-1]
+    return [
+        ("How accurate are turbulence forecasts?",
+         f"Useful, not perfect. We checked BumpCast's global outlook against {p['reports']:,} airline pilot reports over "
+         f"a year. Pick a report of moderate bumps and a calmer one at random, and the outlook rated the bumpier one "
+         f"higher about {round(10 * p['auc']['all']['moderate'])} times in 10. Where it read highest, "
+         f"{pct(hi['moderate'])} of reports were moderate or stronger; where it read lowest, {pct(lo['moderate'])}."),
+        ("Does a smooth forecast mean no bumps at all?",
+         f"No. Even where the outlook read lowest, pilots reported at least light bumps {pct(lo['light'])} of the time. "
+         "Light chop is common and harmless, and pilots report bumpy air more readily than smooth. Keep your seat belt "
+         "fastened while seated."),
+        ("Can turbulence be predicted?",
+         "Much of it, yes. Clear-air turbulence and mountain waves come from the wind and temperature patterns weather "
+         "models forecast, so higher model readings do go with more bumps. Bumps in and around thunderstorms and over "
+         "small hills are harder, which is why pilots also steer around storms and share reports on the day."),
+    ]
+
+
+def accuracy_html(model: dict, by_id: dict[str, "Explainer"], has_model_routes: bool) -> str:
+    p, c = model["point"], model["check"]
+    lo, hi = p["bands"][0], p["bands"][-1]
+    a = p["auc"]
+    in10 = round(10 * a["all"]["moderate"])
+    period = model_period(model)
+    generated = model["generated"]
+    faq = accuracy_faq(model)
+    title = "How Accurate Is BumpCast's Turbulence Outlook?"
+    description = (f"We checked BumpCast's global turbulence outlook against {p['reports']:,} airline pilot reports. "
+                   f"Higher readings meant more bumps: {pct(lo['moderate'])} to {pct(hi['moderate'])} moderate.")
+    rows = "".join(f"<tr><td>{text(band_label(b))}</td><td>{b['reports']:,}</td><td>{pct(b['light'])}</td>"
+                   f"<td>{pct(b['moderate'])}</td><td>{pct(b['severe'])}</td></tr>" for b in p["bands"])
+    heights = [("All heights", a["all"]), ("Cruise, 28,000 ft and up", a["cruise"]),
+               ("20,000 to 28,000 ft", a["mid"]), ("Below 20,000 ft", a["low"])]
+    auc_rows = "".join(f"<tr><td>{name}</td><td>{v['n']:,}</td><td>{v['moderate']:.2f}</td><td>{v['any']:.2f}</td></tr>"
+                       for name, v in heights)
+    faq_html = "\n".join(f'  <div class="qa"><h3>{text(q)}</h3><p>{text(ans)}</p></div>' for q, ans in faq)
+    routes_line = (" That's why our international route pages show months only, as a rough guide." if has_model_routes
+                   else "")
+    ld = {"@context": "https://schema.org", "@graph": [
+        {"@type": "Article", "@id": f"{ACCURACY_URL}#article", "headline": title, "description": description,
+         "url": ACCURACY_URL, "mainEntityOfPage": ACCURACY_URL, "inLanguage": "en", "dateModified": generated,
+         "datePublished": generated, "image": ICON_URL, "author": {"@id": ORG["@id"]}, "publisher": {"@id": ORG["@id"]},
+         "isPartOf": {"@id": f"{SITE_URL}/learn/#collection"}, "about": {"@id": f"{ACCURACY_URL}#data"}},
+        {"@type": "Dataset", "@id": f"{ACCURACY_URL}#data",
+         "name": f"BumpCast global turbulence outlook vs airline pilot reports, {period}",
+         "description": (f"{p['reports']:,} airliner pilot reports of turbulence over the US and Canada, each matched to "
+                         "BumpCast's clear-air turbulence estimate from the nearest 6-hourly analysis of the ECMWF and "
+                         f"NOAA GFS global models, at the report's place and height. {ECMWF_CREDIT}."),
+         "url": ACCURACY_URL, "temporalCoverage": f"{model['period']['start']}/{model['period']['end']}",
+         "variableMeasured": ["Modelled clear-air turbulence (eddy dissipation rate)", "Turbulence intensity in pilot reports"],
+         "isBasedOn": [model["sources"]["ecmwf"], model["sources"]["gfs"], model["sources"]["pireps"]],
+         "creator": {"@id": ORG["@id"]}, "dateModified": generated},
+        {"@type": "FAQPage", "@id": f"{ACCURACY_URL}#faq", "url": ACCURACY_URL, "mainEntity": [
+            {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": ans}} for q, ans in faq]},
+        breadcrumb_ld(("Home", f"{SITE_URL}/"), ("Learn", f"{SITE_URL}/learn/"), ("Forecast accuracy", None)),
+        ORG]}
+    chart = (f'<figure class="chart"><p class="chart-title">Moderate or stronger, by outlook reading</p>'
+             f'{bands_svg(p["bands"], "wide")}{bands_svg(p["bands"], "compact")}'
+             f'<figcaption>Share of pilot reports at cruising height (20,000 ft and up) that were moderate or stronger, '
+             f'by what the outlook read at that place and time.</figcaption></figure>')
+    return (head(title=page_title(title), description=description, url=ACCURACY_URL, og_type="article",
+                 og_title="How accurate is the turbulence outlook?", markdown=f"{ACCURACY_SLUG}.html.md", data=ld,
+                 section="learn", hub=False, campaign="web-accuracy", published=generated, modified=generated,
+                 scripts=("charts.js",))
+            + f"""
+<main class="learn route">
+{crumbs(("Home", "../"), ("Learn", "./"), ("Forecast accuracy", None))}
+<article class="explainer">
+  <header>
+    <p class="eyebrow">Forecast accuracy</p>
+    <h1>How accurate is the turbulence outlook?</h1>
+    <p class="lede">{text(f"We checked BumpCast's global turbulence outlook against {p['reports']:,} reports from airline pilots over the US and Canada, a year of them. Where the outlook read bumpier, pilots really did report more bumps.")}</p>
+  </header>
+  <section class="grade" aria-labelledby="grade-h">
+    <p class="badge">{ICON_REPORTS}Checked against pilot reports</p>
+    <div class="grade-head">{water_glass("light", 44)}<h2 id="grade-h">Useful, not perfect</h2></div>
+    <p>{text(f"Pick a pilot report of moderate bumps and a calmer one at random: the outlook rated the bumpier one higher about {in10} times in 10. Forecasters call this the AUC, here {a['all']['moderate']:.2f}, where 0.5 is a coin toss and 1 is perfect.")}</p>
+    <p class="status">{text(period[:1].upper() + period[1:])} · {model['analyses']:,} model analyses</p>
+  </section>
+  <ul class="tiles">
+    <li><b>{p['reports']:,}</b><span>Pilot reports checked</span></li>
+    <li><b>{in10} in 10</b><span>Bumpier report rated higher</span></li>
+    <li><b>{pct(lo['moderate'])} → {pct(hi['moderate'])}</b><span>Moderate, lowest to highest reading</span></li>
+  </ul>
+  <section aria-labelledby="bands-h">
+  <h2 id="bands-h">Higher readings, more bumps</h2>
+  <p>{text(f"Where the outlook read lowest (under 0.05 on the turbulence scale pilots and forecasters use), {pct(lo['moderate'])} of pilot reports at cruising height were moderate or stronger. Where it read 0.30 or more, {pct(hi['moderate'])} were. Severe bumps stayed rare: {pct(hi['severe'])} of reports even at the highest readings.")}</p>
+  {chart}
+  <details class="data"><summary>Show the numbers</summary><div class="table-wrap"><table>
+    <thead><tr><th>Outlook reading</th><th>Reports</th><th>Light or more</th><th>Moderate or stronger</th><th>Severe</th></tr></thead>
+    <tbody>{rows}</tbody></table></div></details>
+  </section>
+  <section aria-labelledby="mean-h">
+  <h2 id="mean-h">What it means for your flight</h2>
+  <p>{text(f"A high outlook is worth heeding: keep your seat belt on and stow hot drinks. A low one isn't a promise of smooth air: even at the lowest readings, pilots reported at least light bumps {pct(lo['light'])} of the time, though pilots report bumpy air more readily than smooth. On its own, the outlook never shows more than light chop in the app. Only the US national turbulence forecast, an official warning or a recent pilot report can raise it, and this check shows why: even at the highest readings, more than 4 in 10 reports were lighter than moderate.")}</p>
+  </section>
+  <section aria-labelledby="test-h">
+  <h2 id="test-h">What we tested, and what we didn't</h2>
+  <ul class="ticks">
+    <li><b>The global outlook.</b> BumpCast's own clear-air turbulence estimate from two global weather models, ECMWF's and NOAA's GFS, averaged. The app uses it for international flights (Global outlooks, beta) and beyond the 18 hours the US National Weather Service's Graphical Turbulence Guidance (GTG) covers. GTG, the main forecast for flights in the US and southern Canada, isn't what's tested here.</li>
+    <li><b>The best case.</b> We used each model's analysis, its picture of the weather at that hour, matched to every report within 3 hours. A forecast made a day or two ahead is less sharp.</li>
+    <li><b>Over North America.</b> Pilots outside North America file too few reports in the archive we use to check the outlook there.</li>
+    <li><b>Year-long patterns are harder.</b> Over a year, the outlook's calmer and bumpier months matched pilot reports on {c['passed']['months']} of {c['of']} US routes, and its bumpiest stretches on {c['passed']['stretches']}.{text(routes_line)}</li>
+  </ul>
+  <details class="data"><summary>Show the numbers by height</summary><div class="table-wrap"><table>
+    <thead><tr><th>Height</th><th>Reports</th><th>AUC, moderate or stronger</th><th>AUC, any bumps</th></tr></thead>
+    <tbody>{auc_rows}</tbody></table></div></details>
+  </section>
+  <section class="faq-list" aria-labelledby="faq-h">
+  <h2 id="faq-h">Questions</h2>
+{faq_html}
+  </section>
+  <section class="method" aria-labelledby="method-h">
+  <h2 id="method-h">How we made this page</h2>
+  <ul>
+    <li><b>Pilot reports:</b> {p['reports']:,} turbulence reports from airliners (mainline and regional jets and regional turboprops) over the US and Canada, {period}, from the US National Weather Service through the <a href="{model['sources']['pireps']}">Iowa Environmental Mesonet</a> archive. Each counts at the strongest turbulence it names.</li>
+    <li><b>The outlook:</b> {model['analyses']:,} analyses, four a day, of ECMWF's open data and NOAA's GFS. BumpCast's turbulence estimate from each, uncapped, averaged over the two models and read at each report's place and height, from the analysis nearest its time. ECMWF alone scored {a['ecmwf']:.2f} and GFS alone {a['gfs']:.2f}.</li>
+    <li>{ECMWF_CREDIT}. GFS data from NOAA.</li>
+  </ul>
+  </section>
+  <p class="updated muted small">Data from {period} · Page built <time datetime="{generated}">{long_date(generated)}</time> · <a href="{ACCURACY_SLUG}.html.md">Markdown</a></p>
+  <section class="more" aria-labelledby="learn-h"><h2 id="learn-h">Learn more</h2><ul class="chips">{"".join(f'<li><a href="{by_id[i].file}">{text(by_id[i].title)}</a></li>' for i in ("clear-air", "mountain-wave", "clouds", "levels"))}<li><a href="../routes/">Turbulence by route</a></li></ul></section>
+</article>
+{cta("web-accuracy", coverage=GLOBAL_COVERAGE)}</main>
+
+""" + foot("learn"))
+
+
+def accuracy_md(model: dict) -> str:
+    p, c = model["point"], model["check"]
+    a = p["auc"]
+    period = model_period(model)
+    out = ["# How accurate is the turbulence outlook?", "",
+           f"> BumpCast's global turbulence outlook checked against {p['reports']:,} airline pilot reports, {period}.", "",
+           f"Pick a pilot report of moderate bumps and a calmer one at random: the outlook rated the bumpier one higher "
+           f"about {round(10 * a['all']['moderate'])} times in 10 (AUC {a['all']['moderate']:.2f}; 0.5 is a coin toss, 1 is "
+           "perfect).", "", "## Higher readings, more bumps", "",
+           "Pilot reports at cruising height (20,000 ft and up), by the outlook's reading:", ""]
+    out += md_table(["Outlook reading", "Reports", "Light or more", "Moderate or stronger", "Severe"],
+                    [[band_label(b), f"{b['reports']:,}", pct(b["light"]), pct(b["moderate"]), pct(b["severe"])]
+                     for b in p["bands"]])
+    out += ["## By height", ""]
+    out += md_table(["Height", "Reports", "AUC, moderate or stronger", "AUC, any bumps"],
+                    [[n, f"{v['n']:,}", f"{v['moderate']:.2f}", f"{v['any']:.2f}"] for n, v in
+                     [("All heights", a["all"]), ("Cruise, 28,000 ft and up", a["cruise"]),
+                      ("20,000 to 28,000 ft", a["mid"]), ("Below 20,000 ft", a["low"])]])
+    out += ["## What we tested, and what we didn't", "",
+            "- The global outlook: BumpCast's clear-air turbulence estimate from ECMWF and NOAA GFS, averaged. Used for "
+            "international flights (Global outlooks, beta) and beyond the 18 hours of the US Graphical Turbulence "
+            "Guidance (GTG), which isn't tested here.",
+            "- The best case: each model's analysis, matched to every report within 3 hours. Forecasts made a day or two "
+            "ahead are less sharp.",
+            "- Over North America only: too few pilot reports elsewhere.",
+            f"- Year-long patterns: the outlook's months matched pilot reports on {c['passed']['months']} of {c['of']} US "
+            f"routes, its bumpiest stretches on {c['passed']['stretches']}.", "", "## Questions", ""]
+    for q, ans in accuracy_faq(model):
+        out += [f"### {q}", "", ans, ""]
+    out += [f"{ECMWF_CREDIT}. GFS data from NOAA. Pilot reports: {model['sources']['pireps']}", "",
+            f"Source: {ACCURACY_URL} (data {period}). From BumpCast: {APP_URL}", ""]
+    return "\n".join(out)
+
+
+def load_model(routes: list[Route]) -> tuple[list[ModelRoute], dict | None]:
+    if not MODEL_DATA.exists():
+        return [], None
+    model = json.loads(MODEL_DATA.read_text())
+    taken = {frozenset((r.A, r.B)) for r in routes}
+    out = [ModelRoute(r, model) for r in model["routes"] if r["page"]]
+    clash = [m.pair for m in out if frozenset((m.A, m.B)) in taken]
+    if clash:
+        fail(f"routes with both pilot-report and model pages: {', '.join(clash)}")
+    return out, model
+
+
+def us_severe_share(data: dict | None) -> str | None:
+    if not data:
+        return None
+    nat = national(data)
+    return share(nat["cruise_severe"], nat["cruise_n"])
 
 
 def load_routes() -> tuple[list[Route], dict | None]:
@@ -1620,7 +2175,7 @@ def data_details(explainers: list[Explainer], routes: list[Route], data: dict | 
 
 # ---------- Route picker: choose two airports, go to that route's page (picker.js)
 
-def picker_html(routes: list[Route], base: str, heading: str = "h2") -> str:
+def picker_html(routes: list, base: str, heading: str = "h2") -> str:
     """A From/To picker over the route pages, linking to `base` + page. Hidden until picker.js
     runs; without it, the links and the table on the same page still reach every route."""
     cities = {}
@@ -1640,7 +2195,7 @@ def picker_html(routes: list[Route], base: str, heading: str = "h2") -> str:
   </div>
   <p class="picker-note muted small">Each route page covers both directions.</p>
   <div class="picker-miss" role="status" hidden>
-    <p><b data-pair></b> doesn't have a route page yet. BumpCast still forecasts the turbulence on your exact flight, anywhere in the continental US and southern Canada, from 48 hours before departure.</p>
+    <p><b data-pair></b> doesn't have a route page yet. BumpCast still forecasts the turbulence on your exact flight, anywhere in the continental US and southern Canada, from 48 hours before departure, and Global outlooks (beta) give an approximate outlook for international flights.</p>
     {store_badge(app_link("web-picker"), prefix="../" if base == "" else "")}
   </div>
   <script type="application/json" data-routes>{data}</script>
@@ -1654,7 +2209,7 @@ HOME_END = "<!-- learn:end -->"
 HOME_ROUTES = ["JFK-LAX", "ATL-MCO", "LGA-ORD", "DEN-PHX", "LAS-LAX", "DEN-SFO", "BOS-DCA", "YVR-YYZ"]
 
 
-def home_section(explainers: list[Explainer], routes: list[Route]) -> str:
+def home_section(explainers: list[Explainer], routes: list[Route], model_routes: list[ModelRoute] = ()) -> str:
     cols = []
     for group, label in GROUPS.items():
         links = "".join(f'<li><a href="learn/{e.file}">{text(e.title)}</a> <span class="muted">{text(e.subtitle)}</span></li>'
@@ -1681,8 +2236,8 @@ def home_section(explainers: list[Explainer], routes: list[Route]) -> str:
   <div>
     <p class="eyebrow">Routes</p>
     <h2 id="routes-h">{text(ROUTES_TITLE)}</h2>
-    <p class="muted">Where and when pilots reported bumps on {len(routes)} popular routes, from a year of reports, with gusty days at each airport.</p>
-    {picker_html(routes, "routes/", heading="h3")}
+    <p class="muted">Where and when pilots reported bumps on {len(routes)} popular routes, from a year of reports, with gusty days at each airport{f", plus {len(model_routes)} international routes by season" if model_routes else ""}.</p>
+    {picker_html(list(routes) + list(model_routes), "routes/", heading="h3")}
   </div>
   <div><h3>Popular routes</h3><ul class="links two-col">{links}</ul><p><a href="routes/">See every route</a></p></div>
 </section>
@@ -1779,7 +2334,7 @@ def route_md(route: Route, data: dict, level: int = 1) -> str:
     return "\n".join(out)
 
 
-def routes_hub_md(routes: list[Route], data: dict) -> str:
+def routes_hub_md(routes: list[Route], data: dict, model_routes: list[ModelRoute] = (), model: dict | None = None) -> str:
     nat = national(data)
     period = period_text(data)
     out = [f"# {ROUTES_SEO_TITLE}", "",
@@ -1793,6 +2348,11 @@ def routes_hub_md(routes: list[Route], data: dict) -> str:
            f"at {nat['hi'][0]} Center, so routes aren't ranked against each other.", "", "## Routes", ""]
     for r in routes:
         out.append(f"- [{r.name} turbulence]({r.url}.md): {r.lede()}")
+    if model_routes and model:
+        out += ["", "## International routes (model estimate, by month)", "",
+                f"From {model['analyses']:,} analyses by two global weather models ({model_period(model)}); pilot reports "
+                "are too few outside North America. A rough guide: see each page's method.", ""]
+        out += [f"- [{r.name} turbulence]({r.url}.md): {r.lede()}" for r in model_routes]
     out += ["", "## How these pages were made", ""] + method_md(data)
     out += [f"Source: {SITE_URL}/routes/ (data {period}).", ""]
     return "\n".join(out)
@@ -1811,12 +2371,16 @@ def llms_learn_section(explainers: list[Explainer]) -> str:
     return "\n".join(out)
 
 
-def llms_routes_section(routes: list[Route], data: dict) -> str:
+def llms_routes_section(routes: list[Route], data: dict, model_routes: list[ModelRoute] = ()) -> str:
     out = ["## Routes: turbulence by route", "",
            f"Where and when pilots reported bumps on {len(routes)} popular routes in the US and Canada, from a year of "
            f"airline pilot reports ({period_text(data)}), with gusty days at each airport. Published at "
            f"{SITE_URL}/routes/ (Markdown: {SITE_URL}/routes/index.html.md).", ""]
     out += [f"- [{r.name} turbulence]({r.url}.md): {r.description()}" for r in routes]
+    if model_routes:
+        out += ["", "International routes, by month only (a model estimate from a year of ECMWF and GFS weather analyses; "
+                f"how accurate the outlook is: {ACCURACY_URL}.md):", ""]
+        out += [f"- [{r.name} turbulence]({r.url}.md): {r.description()}" for r in model_routes]
     out.append("")
     return "\n".join(out)
 
@@ -1832,7 +2396,7 @@ def with_section(llms: str, name: str, section: str) -> str:
 
 
 def llms_full(llms: str, explainers: list[Explainer], by_id: dict[str, Explainer], routes: list[Route],
-              data: dict | None) -> str:
+              data: dict | None, model_routes: list[ModelRoute] = (), model: dict | None = None) -> str:
     out = [llms.rstrip(), "", "---", "", "# Learn library: every explainer in full", ""]
     for group, label in GROUPS.items():
         out += [f"## {label}", ""]
@@ -1840,17 +2404,23 @@ def llms_full(llms: str, explainers: list[Explainer], by_id: dict[str, Explainer
     if routes and data:
         out += ["---", "", "# Turbulence by route: every route in full", ""]
         out += [route_md(r, data, level=2) for r in routes]
+    if model:
+        out += ["---", "", accuracy_md(model).replace("\n#", "\n##")]
+        out += [model_route_md(r, model, us_severe_share(data), level=2) for r in model_routes]
     return "\n".join(out).rstrip() + "\n"
 
 
 # ---------- Sitemap
 
-def sitemap(explainers: list[Explainer], routes: list[Route], data: dict | None) -> str:
+def sitemap(explainers: list[Explainer], routes: list[Route], data: dict | None,
+            model_routes: list[ModelRoute] = (), model: dict | None = None) -> str:
     pages = sorted(p.name for p in SITE.glob("*.html") if p.name not in {"404.html", "index.html"})
     urls = [(f"{SITE_URL}/", None), (f"{SITE_URL}/learn/", UPDATED)]
     urls += [(e.url, UPDATED) for e in explainers]
     if routes and data:
         urls += [(f"{SITE_URL}/routes/", data["generated"])] + [(r.url, data["generated"]) for r in routes]
+    if model:
+        urls += [(ACCURACY_URL, model["generated"])] + [(r.url, model["generated"]) for r in model_routes]
     urls += [(f"{SITE_URL}/{p}", None) for p in pages]
     rows = "".join(f"  <url><loc>{u}</loc>{f'<lastmod>{d}</lastmod>' if d else ''}</url>\n" for u, d in urls)
     return ('<?xml version="1.0" encoding="UTF-8"?>\n'
@@ -1863,6 +2433,8 @@ def build() -> dict[Path, str]:
     explainers = read_explainers()
     by_id = {e.id: e for e in explainers}
     routes, data = load_routes()
+    model_routes, model = load_model(routes)
+    us_severe = us_severe_share(data)
     data_details(explainers, routes, data)
     chips = learn_route_links(routes)
 
@@ -1872,25 +2444,31 @@ def build() -> dict[Path, str]:
         out[LEARN / e.file] = article_html(e, by_id, chips)
         out[LEARN / f"{e.file}.md"] = article_md(e, by_id)
     if routes and data:
-        out[ROUTES / "index.html"] = routes_hub_html(routes, data)
-        out[ROUTES / "index.html.md"] = routes_hub_md(routes, data)
+        out[ROUTES / "index.html"] = routes_hub_html(routes, data, model_routes, model)
+        out[ROUTES / "index.html.md"] = routes_hub_md(routes, data, model_routes, model)
         for r in routes:
             out[ROUTES / r.file] = route_html(r, routes, by_id, data)
             out[ROUTES / f"{r.file}.md"] = route_md(r, data)
+    if model:
+        out[LEARN / f"{ACCURACY_SLUG}.html"] = accuracy_html(model, by_id, bool(model_routes))
+        out[LEARN / f"{ACCURACY_SLUG}.html.md"] = accuracy_md(model)
+        for r in model_routes:
+            out[ROUTES / r.file] = model_route_html(r, routes, model_routes, by_id, model, us_severe)
+            out[ROUTES / f"{r.file}.md"] = model_route_md(r, model, us_severe)
 
     llms = with_section((SITE / "llms.txt").read_text(), "Learn", llms_learn_section(explainers))
     if routes and data:
-        llms = with_section(llms, "Routes", llms_routes_section(routes, data))
+        llms = with_section(llms, "Routes", llms_routes_section(routes, data, model_routes))
     out[SITE / "llms.txt"] = llms
-    out[SITE / "llms-full.txt"] = llms_full(llms, explainers, by_id, routes, data)
-    out[SITE / "sitemap.xml"] = sitemap(explainers, routes, data)
+    out[SITE / "llms-full.txt"] = llms_full(llms, explainers, by_id, routes, data, model_routes, model)
+    out[SITE / "sitemap.xml"] = sitemap(explainers, routes, data, model_routes, model)
 
     home = (SITE / "index.html").read_text()
     start = home.find("<!-- learn:start")
     end = home.find(HOME_END)
     if start < 0 or end < 0:
         fail(f"site/index.html needs the {HOME_START!r} and {HOME_END!r} markers")
-    out[SITE / "index.html"] = home[:start] + home_section(explainers, routes) + home[end + len(HOME_END):]
+    out[SITE / "index.html"] = home[:start] + home_section(explainers, routes, model_routes) + home[end + len(HOME_END):]
     return out
 
 

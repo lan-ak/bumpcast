@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How Accurate Is BumpCast's Turbulence Outlook? · BumpCast</title>
+<meta name="description" content="We checked BumpCast's global turbulence outlook against 441,678 airline pilot reports. Higher readings meant more bumps: 5.7% to 56% moderate.">
+<link rel="canonical" href="https://bumpcast.app/learn/forecast-accuracy.html">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+<meta name="apple-itunes-app" content="app-id=6824269447">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="BumpCast">
+<meta property="og:title" content="How accurate is the turbulence outlook?">
+<meta property="og:description" content="We checked BumpCast's global turbulence outlook against 441,678 airline pilot reports. Higher readings meant more bumps: 5.7% to 56% moderate.">
+<meta property="og:url" content="https://bumpcast.app/learn/forecast-accuracy.html">
+<meta property="og:image" content="https://bumpcast.app/icon.png">
+<meta name="twitter:card" content="summary">
+<meta property="article:published_time" content="2026-11-15">
+<meta property="article:modified_time" content="2026-11-15">
+<link rel="alternate" type="text/markdown" href="forecast-accuracy.html.md" title="Markdown">
+<link rel="icon" href="../favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="stylesheet" href="../style.css">
+<script src="../sky.js"></script>
+<script src="../charts.js" defer></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Article",
+   "@id": "https://bumpcast.app/learn/forecast-accuracy.html#article",
+   "headline": "How Accurate Is BumpCast's Turbulence Outlook?",
+   "description": "We checked BumpCast's global turbulence outlook against 441,678 airline pilot reports. Higher readings meant more bumps: 5.7% to 56% moderate.",
+   "url": "https://bumpcast.app/learn/forecast-accuracy.html",
+   "mainEntityOfPage": "https://bumpcast.app/learn/forecast-accuracy.html",
+   "inLanguage": "en",
+   "dateModified": "2026-11-15",
+   "datePublished": "2026-11-15",
+   "image": "https://bumpcast.app/icon.png",
+   "author": {
+    "@id": "https://bumpcast.app/#org"
+   },
+   "publisher": {
+    "@id": "https://bumpcast.app/#org"
+   },
+   "isPartOf": {
+    "@id": "https://bumpcast.app/learn/#collection"
+   },
+   "about": {
+    "@id": "https://bumpcast.app/learn/forecast-accuracy.html#data"
+   }
+  },
+  {
+   "@type": "Dataset",
+   "@id": "https://bumpcast.app/learn/forecast-accuracy.html#data",
+   "name": "BumpCast global turbulence outlook vs airline pilot reports, November 2025 to October 2026",
+   "description": "441,678 airliner pilot reports of turbulence over the US and Canada, each matched to BumpCast's clear-air turbulence estimate from the nearest 6-hourly analysis of the ECMWF and NOAA GFS global models, at the report's place and height. Contains ECMWF open data (CC BY 4.0).",
+   "url": "https://bumpcast.app/learn/forecast-accuracy.html",
+   "temporalCoverage": "2025-11-01/2026-10-31",
+   "variableMeasured": [
+    "Modelled clear-air turbulence (eddy dissipation rate)",
+    "Turbulence intensity in pilot reports"
+   ],
+   "isBasedOn": [
+    "https://registry.opendata.aws/ecmwf-forecasts/",
+    "https://registry.opendata.aws/noaa-gfs-bdp-pds/",
+    "https://mesonet.agron.iastate.edu/request/gis/pireps.php"
+   ],
+   "creator": {
+    "@id": "https://bumpcast.app/#org"
+   },
+   "dateModified": "2026-11-15"
+  },
+  {
+   "@type": "FAQPage",
+   "@id": "https://bumpcast.app/learn/forecast-accuracy.html#faq",
+   "url": "https://bumpcast.app/learn/forecast-accuracy.html",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "How accurate are turbulence forecasts?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Useful, not perfect. We checked BumpCast's global outlook against 441,678 airline pilot reports over a year. Pick a report of moderate bumps and a calmer one at random, and the outlook rated the bumpier one higher about 7 times in 10. Where it read highest, 56% of reports were moderate or stronger; where it read lowest, 5.7%."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Does a smooth forecast mean no bumps at all?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "No. Even where the outlook read lowest, pilots reported at least light bumps 40% of the time. Light chop is common and harmless, and pilots report bumpy air more readily than smooth. Keep your seat belt fastened while seated."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Can turbulence be predicted?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Much of it, yes. Clear-air turbulence and mountain waves come from the wind and temperature patterns weather models forecast, so higher model readings do go with more bumps. Bumps in and around thunderstorms and over small hills are harder, which is why pilots also steer around storms and share reports on the day."
+     }
+    }
+   ]
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Home",
+     "item": "https://bumpcast.app/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Learn",
+     "item": "https://bumpcast.app/learn/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Forecast accuracy"
+    }
+   ]
+  },
+  {
+   "@type": "Organization",
+   "@id": "https://bumpcast.app/#org",
+   "name": "Akinyemi & Co Ltd",
+   "url": "https://bumpcast.app/",
+   "logo": "https://bumpcast.app/icon.png",
+   "email": "support@akinyemi.ca",
+   "brand": {
+    "@type": "Brand",
+    "name": "BumpCast",
+    "url": "https://bumpcast.app/",
+    "logo": "https://bumpcast.app/icon.png"
+   }
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<header class="nav"><div class="nav-inner">
+  <a class="brand" href="../"><img src="../icon.png" alt="" width="30" height="30">BumpCast</a>
+  <nav aria-label="Site"><a href="./">Learn</a><a class="hide-sm" href="../routes/">Routes</a><a class="hide-sm" href="../support.html">Support</a><a class="hide-sm" href="../privacy.html">Privacy</a><a class="pill" href="https://apps.apple.com/app/apple-store/id6824269447?pt=127706324&amp;ct=web-accuracy&amp;mt=8">Get the app</a></nav>
+</div></header>
+
+<main class="learn route">
+<nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="../">Home</a></li><li><a href="./">Learn</a></li><li aria-current="page">Forecast accuracy</li></ol></nav>
+<article class="explainer">
+  <header>
+    <p class="eyebrow">Forecast accuracy</p>
+    <h1>How accurate is the turbulence outlook?</h1>
+    <p class="lede">We checked BumpCast's global turbulence outlook against 441,678 reports from airline pilots over the US and Canada, a year of them. Where the outlook read bumpier, pilots really did report more bumps.</p>
+  </header>
+  <section class="grade" aria-labelledby="grade-h">
+    <p class="badge"><svg class="badge-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 13h12M4 11V7M8 11V3M12 11V8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Checked against pilot reports</p>
+    <div class="grade-head"><svg class="wglass" style="--sev:var(--light)" width="35.2" height="44" viewBox="-2.75 -2.75 40.7 49.5" role="img" aria-label="Light chop"><path class="water" d="M4.22 44 L1.9 19.8 L4.01 19.8 C9.99 19.8 12.44 16.72 17.6 16.72 C22.76 16.72 25.21 19.8 31.19 19.8 L31.19 19.8 L33.3 19.8 L30.98 44 Z"/><path class="surface" d="M4.01 19.8 C9.99 19.8 12.44 16.72 17.6 16.72 C22.76 16.72 25.21 19.8 31.19 19.8 L31.19 19.8" stroke-width="3.58"/><path class="tumbler" d="M0 0 L4.22 44 L30.98 44 L35.2 0" stroke-width="2.75"/></svg><h2 id="grade-h">Useful, not perfect</h2></div>
+    <p>Pick a pilot report of moderate bumps and a calmer one at random: the outlook rated the bumpier one higher about 7 times in 10. Forecasters call this the AUC, here 0.69, where 0.5 is a coin toss and 1 is perfect.</p>
+    <p class="status">November 2025 to October 2026 · 1,460 model analyses</p>
+  </section>
+  <ul class="tiles">
+    <li><b>441,678</b><span>Pilot reports checked</span></li>
+    <li><b>7 in 10</b><span>Bumpier report rated higher</span></li>
+    <li><b>5.7% → 56%</b><span>Moderate, lowest to highest reading</span></li>
+  </ul>
+  <section aria-labelledby="bands-h">
+  <h2 id="bands-h">Higher readings, more bumps</h2>
+  <p>Where the outlook read lowest (under 0.05 on the turbulence scale pilots and forecasters use), 5.7% of pilot reports at cruising height were moderate or stronger. Where it read 0.30 or more, 56% were. Severe bumps stayed rare: 2.1% of reports even at the highest readings.</p>
+  <figure class="chart"><p class="chart-title">Moderate or stronger, by outlook reading</p><svg class="wide" viewBox="0 0 640 222" role="img" aria-labelledby="bands-wide-t"><title id="bands-wide-t">Share of pilot reports that were moderate or stronger, by the outlook's reading</title><line class="base" x1="48" x2="628" y1="176.0" y2="176.0"/><text class="tick" x="42" y="180.0" text-anchor="end">0%</text><line class="grid" x1="48" x2="628" y1="96.0" y2="96.0"/><text class="tick" x="42" y="100.0" text-anchor="end">30%</text><line class="grid" x1="48" x2="628" y1="16.0" y2="16.0"/><text class="tick" x="42" y="20.0" text-anchor="end">60%</text><g class="band" data-tip="Outlook under 0.05: 13,953 cruise reports, 5.7% moderate or stronger, 40% light or more."><rect class="hit" x="48.0" y="16" width="96.7" height="160"/><path class="bar moderate" d="M74.3 176.0V164.8Q74.3 160.8 78.3 160.8H114.3Q118.3 160.8 118.3 164.8V176.0Z"/></g><text class="place" x="96.3" y="194" text-anchor="middle">&lt;0.05</text><g class="band" data-tip="Outlook 0.05–0.10: 122,645 cruise reports, 17% moderate or stronger, 66% light or more."><rect class="hit" x="144.7" y="16" width="96.7" height="160"/><path class="bar moderate" d="M171.0 176.0V134.4Q171.0 130.4 175.0 130.4H211.0Q215.0 130.4 215.0 134.4V176.0Z"/></g><text class="place" x="193.0" y="194" text-anchor="middle">0.05–0.10</text><g class="band" data-tip="Outlook 0.10–0.15: 81,500 cruise reports, 30% moderate or stronger, 81% light or more."><rect class="hit" x="241.3" y="16" width="96.7" height="160"/><path class="bar moderate" d="M267.7 176.0V99.2Q267.7 95.2 271.7 95.2H307.7Q311.7 95.2 311.7 99.2V176.0Z"/></g><text class="place" x="289.7" y="194" text-anchor="middle">0.10–0.15</text><g class="band" data-tip="Outlook 0.15–0.20: 47,408 cruise reports, 39% moderate or stronger, 86% light or more."><rect class="hit" x="338.0" y="16" width="96.7" height="160"/><path class="bar moderate" d="M364.3 176.0V75.2Q364.3 71.2 368.3 71.2H404.3Q408.3 71.2 408.3 75.2V176.0Z"/></g><text class="place" x="386.3" y="194" text-anchor="middle">0.15–0.20</text><g class="band" data-tip="Outlook 0.20–0.30: 46,832 cruise reports, 47% moderate or stronger, 90% light or more."><rect class="hit" x="434.7" y="16" width="96.7" height="160"/><path class="bar moderate" d="M461.0 176.0V54.9Q461.0 50.9 465.0 50.9H501.0Q505.0 50.9 505.0 54.9V176.0Z"/></g><text class="place" x="483.0" y="194" text-anchor="middle">0.20–0.30</text><g class="band" data-tip="Outlook 0.30+: 28,937 cruise reports, 56% moderate or stronger, 93% light or more."><rect class="hit" x="531.3" y="16" width="96.7" height="160"/><path class="bar moderate" d="M557.7 176.0V30.4Q557.7 26.4 561.7 26.4H597.7Q601.7 26.4 601.7 30.4V176.0Z"/></g><text class="place" x="579.7" y="194" text-anchor="middle">0.30+</text><text class="tick" x="338.0" y="212" text-anchor="middle">Outlook reading (EDR)</text></svg><svg class="compact" viewBox="0 0 360 222" role="img" aria-labelledby="bands-compact-t"><title id="bands-compact-t">Share of pilot reports that were moderate or stronger, by the outlook's reading</title><line class="base" x1="48" x2="354" y1="176.0" y2="176.0"/><text class="tick" x="42" y="180.0" text-anchor="end">0%</text><line class="grid" x1="48" x2="354" y1="96.0" y2="96.0"/><text class="tick" x="42" y="100.0" text-anchor="end">30%</text><line class="grid" x1="48" x2="354" y1="16.0" y2="16.0"/><text class="tick" x="42" y="20.0" text-anchor="end">60%</text><g class="band" data-tip="Outlook under 0.05: 13,953 cruise reports, 5.7% moderate or stronger, 40% light or more."><rect class="hit" x="48.0" y="16" width="51.0" height="160"/><path class="bar moderate" d="M53.0 176.0V164.8Q53.0 160.8 57.0 160.8H90.0Q94.0 160.8 94.0 164.8V176.0Z"/></g><text class="place" x="73.5" y="194" text-anchor="middle">&lt;0.05</text><g class="band" data-tip="Outlook 0.05–0.10: 122,645 cruise reports, 17% moderate or stronger, 66% light or more."><rect class="hit" x="99.0" y="16" width="51.0" height="160"/><path class="bar moderate" d="M104.0 176.0V134.4Q104.0 130.4 108.0 130.4H141.0Q145.0 130.4 145.0 134.4V176.0Z"/></g><text class="place" x="124.5" y="194" text-anchor="middle">0.05</text><g class="band" data-tip="Outlook 0.10–0.15: 81,500 cruise reports, 30% moderate or stronger, 81% light or more."><rect class="hit" x="150.0" y="16" width="51.0" height="160"/><path class="bar moderate" d="M155.0 176.0V99.2Q155.0 95.2 159.0 95.2H192.0Q196.0 95.2 196.0 99.2V176.0Z"/></g><text class="place" x="175.5" y="194" text-anchor="middle">0.10</text><g class="band" data-tip="Outlook 0.15–0.20: 47,408 cruise reports, 39% moderate or stronger, 86% light or more."><rect class="hit" x="201.0" y="16" width="51.0" height="160"/><path class="bar moderate" d="M206.0 176.0V75.2Q206.0 71.2 210.0 71.2H243.0Q247.0 71.2 247.0 75.2V176.0Z"/></g><text class="place" x="226.5" y="194" text-anchor="middle">0.15</text><g class="band" data-tip="Outlook 0.20–0.30: 46,832 cruise reports, 47% moderate or stronger, 90% light or more."><rect class="hit" x="252.0" y="16" width="51.0" height="160"/><path class="bar moderate" d="M257.0 176.0V54.9Q257.0 50.9 261.0 50.9H294.0Q298.0 50.9 298.0 54.9V176.0Z"/></g><text class="place" x="277.5" y="194" text-anchor="middle">0.20</text><g class="band" data-tip="Outlook 0.30+: 28,937 cruise reports, 56% moderate or stronger, 93% light or more."><rect class="hit" x="303.0" y="16" width="51.0" height="160"/><path class="bar moderate" d="M308.0 176.0V30.4Q308.0 26.4 312.0 26.4H345.0Q349.0 26.4 349.0 30.4V176.0Z"/></g><text class="place" x="328.5" y="194" text-anchor="middle">0.30+</text><text class="tick" x="201.0" y="212" text-anchor="middle">Outlook reading (EDR), from</text></svg><figcaption>Share of pilot reports at cruising height (20,000 ft and up) that were moderate or stronger, by what the outlook read at that place and time.</figcaption></figure>
+  <details class="data"><summary>Show the numbers</summary><div class="table-wrap"><table>
+    <thead><tr><th>Outlook reading</th><th>Reports</th><th>Light or more</th><th>Moderate or stronger</th><th>Severe</th></tr></thead>
+    <tbody><tr><td>under 0.05</td><td>13,953</td><td>40%</td><td>5.7%</td><td>0.2%</td></tr><tr><td>0.05–0.10</td><td>122,645</td><td>66%</td><td>17%</td><td>0.2%</td></tr><tr><td>0.10–0.15</td><td>81,500</td><td>81%</td><td>30%</td><td>0.3%</td></tr><tr><td>0.15–0.20</td><td>47,408</td><td>86%</td><td>39%</td><td>0.5%</td></tr><tr><td>0.20–0.30</td><td>46,832</td><td>90%</td><td>47%</td><td>0.9%</td></tr><tr><td>0.30+</td><td>28,937</td><td>93%</td><td>56%</td><td>2.1%</td></tr></tbody></table></div></details>
+  </section>
+  <section aria-labelledby="mean-h">
+  <h2 id="mean-h">What it means for your flight</h2>
+  <p>A high outlook is worth heeding: keep your seat belt on and stow hot drinks. A low one isn't a promise of smooth air: even at the lowest readings, pilots reported at least light bumps 40% of the time, though pilots report bumpy air more readily than smooth. On its own, the outlook never shows more than light chop in the app. Only the US national turbulence forecast, an official warning or a recent pilot report can raise it, and this check shows why: even at the highest readings, more than 4 in 10 reports were lighter than moderate.</p>
+  </section>
+  <section aria-labelledby="test-h">
+  <h2 id="test-h">What we tested, and what we didn't</h2>
+  <ul class="ticks">
+    <li><b>The global outlook.</b> BumpCast's own clear-air turbulence estimate from two global weather models, ECMWF's and NOAA's GFS, averaged. The app uses it for international flights (Global outlooks, beta) and beyond the 18 hours the US National Weather Service's Graphical Turbulence Guidance (GTG) covers. GTG, the main forecast for flights in the US and southern Canada, isn't what's tested here.</li>
+    <li><b>The best case.</b> We used each model's analysis, its picture of the weather at that hour, matched to every report within 3 hours. A forecast made a day or two ahead is less sharp.</li>
+    <li><b>Over North America.</b> Pilots outside North America file too few reports in the archive we use to check the outlook there.</li>
+    <li><b>Year-long patterns are harder.</b> Over a year, the outlook's calmer and bumpier months matched pilot reports on 7 of 16 US routes, and its bumpiest stretches on 2. That's why our international route pages show months only, as a rough guide.</li>
+  </ul>
+  <details class="data"><summary>Show the numbers by height</summary><div class="table-wrap"><table>
+    <thead><tr><th>Height</th><th>Reports</th><th>AUC, moderate or stronger</th><th>AUC, any bumps</th></tr></thead>
+    <tbody><tr><td>All heights</td><td>441,678</td><td>0.69</td><td>0.71</td></tr><tr><td>Cruise, 28,000 ft and up</td><td>284,433</td><td>0.69</td><td>0.70</td></tr><tr><td>20,000 to 28,000 ft</td><td>56,842</td><td>0.71</td><td>0.73</td></tr><tr><td>Below 20,000 ft</td><td>100,403</td><td>0.68</td><td>0.70</td></tr></tbody></table></div></details>
+  </section>
+  <section class="faq-list" aria-labelledby="faq-h">
+  <h2 id="faq-h">Questions</h2>
+  <div class="qa"><h3>How accurate are turbulence forecasts?</h3><p>Useful, not perfect. We checked BumpCast's global outlook against 441,678 airline pilot reports over a year. Pick a report of moderate bumps and a calmer one at random, and the outlook rated the bumpier one higher about 7 times in 10. Where it read highest, 56% of reports were moderate or stronger; where it read lowest, 5.7%.</p></div>
+  <div class="qa"><h3>Does a smooth forecast mean no bumps at all?</h3><p>No. Even where the outlook read lowest, pilots reported at least light bumps 40% of the time. Light chop is common and harmless, and pilots report bumpy air more readily than smooth. Keep your seat belt fastened while seated.</p></div>
+  <div class="qa"><h3>Can turbulence be predicted?</h3><p>Much of it, yes. Clear-air turbulence and mountain waves come from the wind and temperature patterns weather models forecast, so higher model readings do go with more bumps. Bumps in and around thunderstorms and over small hills are harder, which is why pilots also steer around storms and share reports on the day.</p></div>
+  </section>
+  <section class="method" aria-labelledby="method-h">
+  <h2 id="method-h">How we made this page</h2>
+  <ul>
+    <li><b>Pilot reports:</b> 441,678 turbulence reports from airliners (mainline and regional jets and regional turboprops) over the US and Canada, November 2025 to October 2026, from the US National Weather Service through the <a href="https://mesonet.agron.iastate.edu/request/gis/pireps.php">Iowa Environmental Mesonet</a> archive. Each counts at the strongest turbulence it names.</li>
+    <li><b>The outlook:</b> 1,460 analyses, four a day, of ECMWF's open data and NOAA's GFS. BumpCast's turbulence estimate from each, uncapped, averaged over the two models and read at each report's place and height, from the analysis nearest its time. ECMWF alone scored 0.68 and GFS alone 0.69.</li>
+    <li>Contains ECMWF open data (CC BY 4.0). GFS data from NOAA.</li>
+  </ul>
+  </section>
+  <p class="updated muted small">Data from November 2025 to October 2026 · Page built <time datetime="2026-11-15">November 15, 2026</time> · <a href="forecast-accuracy.html.md">Markdown</a></p>
+  <section class="more" aria-labelledby="learn-h"><h2 id="learn-h">Learn more</h2><ul class="chips"><li><a href="clear-air-turbulence.html">Clear-air turbulence</a></li><li><a href="mountain-wave-turbulence.html">Mountain waves</a></li><li><a href="turbulence-near-clouds.html">Around clouds</a></li><li><a href="turbulence-levels.html">Light, moderate, strong</a></li><li><a href="../routes/">Turbulence by route</a></li></ul></section>
+</article>
+<aside class="app-cta" aria-labelledby="cta-h">
+  <div>
+    <p class="eyebrow">BumpCast for iPhone</p>
+    <h2 id="cta-h">Know when the bumps will come.</h2>
+    <p class="muted">Live flight status and a calm turbulence forecast for your exact route: when the bumps will come, how strong they'll be, and when they'll end. Detailed forecasts in the continental United States and southern Canada; Global outlooks (beta), in Settings, for international flights.</p>
+  </div>
+  <div class="actions"><a class="store-badge" href="https://apps.apple.com/app/apple-store/id6824269447?pt=127706324&amp;ct=web-accuracy&amp;mt=8"><img src="../app-store-badge.svg" width="144" height="48" alt="Download on the App Store"></a><span class="muted small">Free · No ads · No account</span></div>
+</aside>
+</main>
+
+<footer>
+  <nav aria-label="Footer"><a href="../">Home</a><a href="./">Learn</a><a href="../routes/">Routes</a><a href="../support.html">Support</a><a href="../privacy.html">Privacy Policy</a><a href="../email.html">Email access</a><a href="../terms.html">Terms of Use</a></nav>
+  <p>© 2026 Akinyemi &amp; Co Ltd · <a href="mailto:support@akinyemi.ca">support@akinyemi.ca</a></p>
+</footer>
+</body>
+</html>

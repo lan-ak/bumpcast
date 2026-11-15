@@ -18,6 +18,7 @@ Preview locally: the `site` entry in `.claude/launch.json` (`python3 -m http.ser
 | `/llms-full.txt` | Generated: `llms.txt` followed by every Learn explainer and route page in full, for AI agents that want everything in one file |
 | `/learn/` | Generated: the app's Learn library ("Turbulence, explained"), one page per explainer. See below |
 | `/routes/` | Generated: turbulence by route, one page per popular route, from a year of pilot reports. See below |
+| `/learn/forecast-accuracy.html` | Generated: how accurate the app's global outlook is, checked against a year of airline pilot reports (`scripts/data/model.json`). See "International routes and forecast accuracy" below |
 | `/learn/*.html.md`, `/routes/*.html.md` | Generated: a clean Markdown copy of each page for AI agents (llms.txt convention: the page's URL plus `.md`) |
 | `/charts.js` | Tooltips for the route charts (the numbers are also in a table under each chart) |
 | `/picker.js` | The "Find your route" picker on `/routes/` and the home page: From and To, then that route's page (either direction), or, for a pair without a page, a note that the app forecasts any covered flight. Hidden without JavaScript; the links and table still reach every route |
@@ -60,6 +61,22 @@ Where and when pilots reported bumps on popular routes, from a year of airliner 
 - **Find your route:** a From/To picker on `/routes/` and the home page (`picker_html` in the script, `picker.js`). A pair without a page gets the app pitch, with the `web-picker` campaign.
 - **Phones:** each chart is drawn twice, wide and compact, and CSS shows the one that fits; the routes table becomes one block per route.
 - **Gusty** means gusts of 25 kt or more in an hourly airport report, the app's own threshold (`worker/src/smooth_worker/airfield.py`).
+
+### International routes and forecast accuracy
+
+Pilot reports outside North America are too few to count, so 12 international routes (JFK–LHR, LHR–DXB, SYD–SIN…) are described from a weather model instead, **by month only** and marked "Model estimate". Data: `scripts/data/model.json`, made by `scripts/model_data.py`: a year of ECMWF and GFS analyses (four a day) run through the worker's own turbulence diagnostics, read along each route and at every airliner pilot report. The same file feeds `/learn/forecast-accuracy.html`.
+
+- **Why months only:** on 16 US routes, the model's bumpier and calmer months matched the pilot-report pages on 7, its bumpiest stretches on 2 (`docs/plans/international-route-pages.md`). The pages say so.
+- **Refresh** (after `route_data.py`, whose pilot-report downloads it reuses; ~30 min, ~77 GB downloaded and discarded, $0):
+
+  ```bash
+  cd worker && uv run python ../scripts/model_data.py    # the last 12 full months; per-analysis results cached in ~/.cache/bumpcast/model
+  cd .. && python3 scripts/build_site.py
+  ```
+
+- **Add a route:** add it to `INTL` (sampled) and `PAGES` (published) in `model_data.py` and rerun. A pair can't have both a pilot-report page and a model page.
+- **Credit:** "Contains ECMWF open data (CC BY 4.0)" is on every model page; keep it.
+- App pitch on these pages: Global outlooks (beta), in Settings. Don't promise the detailed US forecast.
 
 ### App Store links (counting downloads by page)
 
