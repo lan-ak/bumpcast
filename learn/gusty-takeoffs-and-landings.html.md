@@ -36,7 +36,7 @@ Source: [Airplane Flying Handbook (FAA-H-8083-3C), chapter 9: Approaches and Lan
 
 ### Which airports have the most gusty days?
 
-Of the 22 airports on BumpCast's route pages, the ones with the most days with gusts of 25 knots or more in November 2025 to October 2026 were JFK (157 days), DEN (155 days) and BOS (148 days). The fewest were LAX (17 days), YVR (32 days) and SEA (48 days).
+Of the 54 airports on BumpCast's route pages, the ones with the most days with gusts of 25 knots or more in November 2025 to October 2026 were JFK (157 days), DEN (155 days) and OKC (155 days). The fewest were LAX (17 days), SAN (20 days) and OAK (24 days).
 
 Source: [Turbulence by route: a year of pilot reports and airport weather](https://bumpcast.app/routes/)
 

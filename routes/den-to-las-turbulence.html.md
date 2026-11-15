@@ -17,23 +17,11 @@ Moderate bumps were reported most often near DEN, where flights climb out or com
 | Where | From DEN | From LAS | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near DEN, where flights climb out or come in to land | 5 min | 1 h 25 min | 3,978 | 1,190 |
-| over eastern Colorado, near Denver | 10 min | 1 h 20 min | 2,766 | 1,053 |
-| over western Colorado, near Denver | 15 min | 1 h 15 min | 1,554 | 236 |
-| over eastern Colorado | 20 min | 1 h 10 min | 952 | 218 |
-| over east-central Colorado | 20 min | 1 h 5 min | 564 | 127 |
-| over central Colorado | 25 min | 1 h | 927 | 169 |
-| over west-central Colorado | 30 min | 55 min | 585 | 173 |
-| over western Colorado | 35 min | 55 min | 877 | 152 |
-| over Utah (part 1 of 7) | 40 min | 50 min | 615 | 162 |
-| over Utah (part 2 of 7) | 40 min | 45 min | 239 | 92 |
-| over Utah (part 3 of 7) | 45 min | 40 min | 241 | 99 |
-| over Utah (part 4 of 7) | 50 min | 35 min | 205 | 98 |
-| over Utah (part 5 of 7) | 55 min | 35 min | 282 | 85 |
-| over Utah (part 6 of 7) | 55 min | 30 min | 368 | 122 |
-| over Utah (part 7 of 7) | 1 h | 25 min | 45 | 21 |
+| over Colorado, near Denver | 10 min to 15 min | 1 h 15 min to 1 h 20 min | 4,320 | 1,289 |
+| over Colorado | 20 min to 35 min | 55 min to 1 h 10 min | 3,905 | 839 |
+| over Utah | 40 min to 1 h | 25 min to 50 min | 1,995 | 679 |
 | over Arizona | 1 h 5 min | 20 min | 102 | 59 |
-| over eastern Utah, near Las Vegas | 1 h 10 min | 20 min | 35 | 18 |
-| over western Utah, near Las Vegas | 1 h 15 min | 15 min | 33 | 20 |
+| over Utah, near Las Vegas | 1 h 10 min to 1 h 15 min | 15 min to 20 min | 68 | 38 |
 | over Nevada, near Las Vegas | 1 h 20 min | 10 min | 94 | 39 |
 | near LAS, where flights climb out or come in to land | 1 h 25 min | 5 min | 170 | 38 |
 

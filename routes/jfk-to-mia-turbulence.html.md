@@ -2,7 +2,7 @@
 
 > New York (JFK) ⇄ Miami (MIA), both directions. November 2025 to October 2026.
 
-Flights between New York (JFK) and Miami (MIA) fly about 1,090 miles, roughly 2½ hours in the air. In the past year, pilots near this route reported moderate bumps most often over northern North Carolina, and more often in November, December and February.
+Flights between New York (JFK) and Miami (MIA) fly about 1,090 miles, roughly 2½ hours in the air. In the past year, pilots near this route reported moderate bumps most often over North Carolina, and more often in November, December and February.
 
 - Distance: 1,090 miles (1,760 km)
 - In the air: about 2 h 25 min (typical jet, still air)
@@ -12,31 +12,21 @@ Flights between New York (JFK) and Miami (MIA) fly about 1,090 miles, roughly 2�
 
 ## Where on the route it gets bumpy
 
-Moderate bumps were reported most often over northern North Carolina, near Norfolk, about 40 min after leaving JFK, or 1 h 40 min after leaving MIA. There, 492 of 738 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Moderate bumps were reported most often over North Carolina, near Norfolk, about 40 min after leaving JFK, or 1 h 40 min after leaving MIA. There, 492 of 738 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
 The next most were near JFK, where flights climb out or come in to land, about 5 min after leaving JFK, or 2 h 15 min after leaving MIA. There, 364 of 784 reports were moderate or stronger. Close to the ground, wind over buildings and land stirs the air, and gusty days at JFK add to it.
 
 | Where | From JFK | From MIA | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near JFK, where flights climb out or come in to land | 5 min | 2 h 15 min | 784 | 364 |
-| over northern New Jersey, near Philadelphia | 15 min | 2 h 5 min | 479 | 235 |
-| over southern New Jersey, near Philadelphia | 20 min | 2 h | 246 | 180 |
-| over northern Virginia, near Norfolk | 30 min | 1 h 50 min | 153 | 97 |
-| over southern Virginia, near Norfolk | 35 min | 1 h 45 min | 199 | 126 |
-| over northern North Carolina, near Norfolk | 40 min | 1 h 40 min | 738 | 492 |
-| over southern North Carolina, near Norfolk | 45 min | 1 h 35 min | 215 | 149 |
-| over northern North Carolina | 55 min | 1 h 25 min | 208 | 135 |
-| over southern North Carolina | 1 h | 1 h 20 min | 234 | 127 |
-| near Myrtle Beach, northern stretch | 1 h 5 min | 1 h 15 min | 407 | 104 |
-| near Myrtle Beach, southern stretch | 1 h 15 min | 1 h 5 min | 959 | 138 |
-| over or near northern South Carolina | 1 h 20 min | 1 h | 755 | 114 |
-| over or near central South Carolina | 1 h 25 min | 55 min | 758 | 99 |
-| over or near southern South Carolina | 1 h 35 min | 45 min | 296 | 43 |
-| over or near northern Florida | 1 h 40 min | 40 min | 477 | 66 |
-| over or near central Florida | 1 h 45 min | 35 min | 592 | 67 |
-| over or near southern Florida | 1 h 50 min | 30 min | 653 | 74 |
-| near West Palm Beach | 2 h | 20 min | 727 | 89 |
-| over Florida, near West Palm Beach | 2 h 5 min | 15 min | 1,228 | 132 |
+| over New Jersey, near Philadelphia | 15 min to 20 min | 2 h to 2 h 5 min | 725 | 415 |
+| over Virginia, near Norfolk | 30 min to 35 min | 1 h 45 min to 1 h 50 min | 352 | 223 |
+| over North Carolina, near Norfolk | 40 min to 45 min | 1 h 35 min to 1 h 40 min | 953 | 641 |
+| over North Carolina | 55 min to 1 h | 1 h 20 min to 1 h 25 min | 442 | 262 |
+| near Myrtle Beach | 1 h 5 min to 1 h 15 min | 1 h 5 min to 1 h 15 min | 1,366 | 242 |
+| over or near South Carolina | 1 h 20 min to 1 h 35 min | 45 min to 1 h | 1,809 | 256 |
+| over or near Florida | 1 h 40 min to 1 h 50 min | 30 min to 40 min | 1,722 | 207 |
+| over Florida, near West Palm Beach | 2 h to 2 h 5 min | 15 min to 20 min | 1,955 | 221 |
 | near MIA, where flights climb out or come in to land | 2 h 15 min | 5 min | 1,690 | 156 |
 
 ## When in the year
@@ -70,7 +60,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between JFK and MIA?
 
-Pilots reported moderate bumps most often over northern North Carolina, near Norfolk, about 40 min after leaving JFK, or 1 h 40 min after leaving MIA. The next most were near JFK, where flights climb out or come in to land, about 5 min after leaving JFK, or 2 h 15 min after leaving MIA.
+Pilots reported moderate bumps most often over North Carolina, near Norfolk, about 40 min after leaving JFK, or 1 h 40 min after leaving MIA. The next most were near JFK, where flights climb out or come in to land, about 5 min after leaving JFK, or 2 h 15 min after leaving MIA.
 
 ### When is the smoothest time of year to fly JFK to MIA?
 

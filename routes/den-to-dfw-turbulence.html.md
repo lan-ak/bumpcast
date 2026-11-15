@@ -17,24 +17,14 @@ Moderate bumps were reported most often near DEN, where flights climb out or com
 | Where | From DEN | From DFW | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near DEN, where flights climb out or come in to land | 5 min | 1 h 25 min | 3,733 | 869 |
-| over western Colorado, near Colorado Springs | 10 min | 1 h 20 min | 957 | 354 |
-| over central Colorado, near Colorado Springs | 15 min | 1 h 15 min | 916 | 321 |
-| over eastern Colorado, near Colorado Springs | 20 min | 1 h 10 min | 536 | 222 |
-| over western Colorado | 25 min | 1 h 5 min | 538 | 227 |
-| over eastern Colorado | 25 min | 1 h | 805 | 276 |
-| over western Kansas | 30 min | 1 h | 340 | 159 |
-| over central Kansas | 35 min | 55 min | 475 | 209 |
-| over eastern Kansas | 40 min | 50 min | 458 | 202 |
-| over western Texas | 40 min | 45 min | 325 | 156 |
-| over central Texas | 45 min | 40 min | 289 | 142 |
-| over eastern Texas | 50 min | 40 min | 544 | 216 |
+| over Colorado, near Colorado Springs | 10 min to 20 min | 1 h 10 min to 1 h 20 min | 2,409 | 897 |
+| over Colorado | 25 min | 1 h to 1 h 5 min | 1,343 | 503 |
+| over Kansas | 30 min to 40 min | 50 min to 1 h | 1,273 | 570 |
+| over Texas | 40 min to 50 min | 40 min to 45 min | 1,158 | 514 |
 | over Oklahoma | 55 min | 35 min | 666 | 202 |
-| over western Oklahoma, near Oklahoma City | 1 h | 30 min | 684 | 161 |
-| over central Oklahoma, near Oklahoma City | 1 h | 25 min | 525 | 119 |
-| over eastern Oklahoma, near Oklahoma City | 1 h 5 min | 20 min | 333 | 91 |
+| over Oklahoma, near Oklahoma City | 1 h to 1 h 5 min | 20 min to 30 min | 1,542 | 371 |
 | over Texas, near Oklahoma City | 1 h 10 min | 20 min | 292 | 104 |
-| over western Texas, near Dallas-Fort Worth | 1 h 15 min | 15 min | 209 | 47 |
-| over eastern Texas, near Dallas-Fort Worth | 1 h 20 min | 10 min | 313 | 102 |
+| over Texas, near Dallas-Fort Worth | 1 h 15 min to 1 h 20 min | 10 min to 15 min | 522 | 149 |
 | near DFW, where flights climb out or come in to land | 1 h 30 min | 5 min | 199 | 63 |
 
 ## When in the year

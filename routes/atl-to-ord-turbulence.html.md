@@ -2,7 +2,7 @@
 
 > Atlanta (ATL) ⇄ Chicago (ORD), both directions. November 2025 to October 2026.
 
-Flights between Atlanta (ATL) and Chicago (ORD) fly about 610 miles, roughly 1½ hours in the air. In the past year, pilots near this route reported moderate bumps most often over central Indiana, and more often in March and May.
+Flights between Atlanta (ATL) and Chicago (ORD) fly about 610 miles, roughly 1½ hours in the air. In the past year, pilots near this route reported moderate bumps most often over Indiana, and more often in March and May.
 
 - Distance: 610 miles (980 km)
 - In the air: about 1 h 30 min (typical jet, still air)
@@ -12,29 +12,20 @@ Flights between Atlanta (ATL) and Chicago (ORD) fly about 610 miles, roughly 1½
 
 ## Where on the route it gets bumpy
 
-Moderate bumps were reported most often over central Indiana, near Indianapolis, about 1 h after leaving ATL, or 25 min after leaving ORD. There, 388 of 1,692 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Moderate bumps were reported most often over Indiana, near Indianapolis, about 1 h after leaving ATL, or 25 min after leaving ORD. There, 388 of 1,692 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
-The next most were over northern Kentucky, near Louisville, about 45 min after leaving ATL, or 40 min after leaving ORD. There, 302 of 1,579 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+The next most were over Kentucky, near Louisville, about 45 min after leaving ATL, or 40 min after leaving ORD. There, 302 of 1,579 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
 | Where | From ATL | From ORD | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near ATL, where flights climb out or come in to land | 5 min | 1 h 25 min | 230 | 64 |
-| over southern Georgia, near Atlanta | 10 min | 1 h 15 min | 709 | 111 |
-| over northern Georgia, near Atlanta | 15 min | 1 h 10 min | 372 | 95 |
-| over southern Tennessee, near Knoxville/Maryville | 20 min | 1 h 5 min | 728 | 139 |
-| over central Tennessee, near Knoxville/Maryville | 20 min | 1 h | 443 | 101 |
-| over northern Tennessee, near Knoxville/Maryville | 25 min | 1 h | 1,524 | 264 |
+| over Georgia, near Atlanta | 10 min to 15 min | 1 h 10 min to 1 h 15 min | 1,081 | 206 |
+| over Tennessee, near Knoxville/Maryville | 20 min to 25 min | 1 h to 1 h 5 min | 2,695 | 504 |
 | over Tennessee, near Nashville | 30 min | 55 min | 990 | 245 |
 | over Kentucky, near Nashville | 35 min | 50 min | 856 | 260 |
-| over southern Kentucky, near Louisville | 35 min | 45 min | 938 | 244 |
-| over central Kentucky, near Louisville | 40 min | 45 min | 605 | 146 |
-| over northern Kentucky, near Louisville | 45 min | 40 min | 1,579 | 302 |
+| over Kentucky, near Louisville | 35 min to 45 min | 40 min to 45 min | 3,122 | 692 |
 | over Indiana, near Louisville | 45 min | 35 min | 569 | 110 |
-| over southern Indiana, near Indianapolis | 50 min | 35 min | 638 | 137 |
-| over south-central Indiana, near Indianapolis | 55 min | 30 min | 1,045 | 255 |
-| over central Indiana, near Indianapolis | 1 h | 25 min | 1,692 | 388 |
-| over north-central Indiana, near Indianapolis | 1 h | 20 min | 669 | 149 |
-| over northern Indiana, near Indianapolis | 1 h 5 min | 20 min | 895 | 191 |
+| over Indiana, near Indianapolis | 50 min to 1 h 5 min | 20 min to 35 min | 4,939 | 1,120 |
 | over Indiana, near Chicago | 1 h 10 min | 15 min | 699 | 150 |
 | over Illinois, near Chicago | 1 h 15 min | 10 min | 621 | 182 |
 | near ORD, where flights climb out or come in to land | 1 h 25 min | 5 min | 1,897 | 260 |
@@ -70,7 +61,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between ATL and ORD?
 
-Pilots reported moderate bumps most often over central Indiana, near Indianapolis, about 1 h after leaving ATL, or 25 min after leaving ORD. The next most were over northern Kentucky, near Louisville, about 45 min after leaving ATL, or 40 min after leaving ORD.
+Pilots reported moderate bumps most often over Indiana, near Indianapolis, about 1 h after leaving ATL, or 25 min after leaving ORD. The next most were over Kentucky, near Louisville, about 45 min after leaving ATL, or 40 min after leaving ORD.
 
 ### When is the smoothest time of year to fly ATL to ORD?
 

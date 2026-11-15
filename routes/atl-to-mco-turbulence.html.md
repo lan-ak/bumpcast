@@ -2,7 +2,7 @@
 
 > Atlanta (ATL) ⇄ Orlando (MCO), both directions. November 2025 to October 2026.
 
-Flights between Atlanta (ATL) and Orlando (MCO) fly about 400 miles, roughly an hour in the air. In the past year, pilots near this route reported moderate bumps most often over northern Georgia, and more often in December, February and April.
+Flights between Atlanta (ATL) and Orlando (MCO) fly about 400 miles, roughly an hour in the air. In the past year, pilots near this route reported moderate bumps most often over Georgia, and more often in December, February and April.
 
 - Distance: 400 miles (650 km)
 - In the air: about 1 h 5 min (typical jet, still air)
@@ -12,31 +12,18 @@ Flights between Atlanta (ATL) and Orlando (MCO) fly about 400 miles, roughly an 
 
 ## Where on the route it gets bumpy
 
-Moderate bumps were reported most often over northern Georgia, about 20 min after leaving ATL, or 40 min after leaving MCO. There, 135 of 554 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Moderate bumps were reported most often over Georgia, about 20 min after leaving ATL, or 40 min after leaving MCO. There, 135 of 554 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
-The next most were over north-central Florida, near Jacksonville, about 35 min after leaving ATL, or 25 min after leaving MCO. There, 127 of 752 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+The next most were over Florida, near Jacksonville, about 35 min after leaving ATL, or 25 min after leaving MCO. There, 127 of 752 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
 | Where | From ATL | From MCO | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near ATL, where flights climb out or come in to land | 5 min | 1 h | 158 | 37 |
-| over northern Georgia, near Atlanta | 5 min | 55 min | 177 | 42 |
-| over north-central Georgia, near Atlanta | 10 min | 50 min | 225 | 41 |
-| over south-central Georgia, near Atlanta | 15 min | 50 min | 295 | 53 |
-| over southern Georgia, near Atlanta | 15 min | 45 min | 163 | 31 |
-| over northern Georgia | 20 min | 40 min | 554 | 135 |
-| over central Georgia | 20 min | 40 min | 281 | 83 |
-| over southern Georgia | 25 min | 35 min | 120 | 34 |
-| over northern Georgia, near Jacksonville | 25 min | 35 min | 1,247 | 129 |
-| over central Georgia, near Jacksonville | 30 min | 30 min | 229 | 44 |
-| over southern Georgia, near Jacksonville | 30 min | 30 min | 411 | 85 |
-| over northern Florida, near Jacksonville | 35 min | 25 min | 247 | 53 |
-| over north-central Florida, near Jacksonville | 35 min | 25 min | 752 | 127 |
-| over central Florida, near Jacksonville | 40 min | 20 min | 756 | 95 |
-| over south-central Florida, near Jacksonville | 40 min | 20 min | 351 | 36 |
-| over southern Florida, near Jacksonville | 45 min | 15 min | 209 | 25 |
-| over northern Florida, near Orlando | 50 min | 15 min | 309 | 34 |
-| over central Florida, near Orlando | 50 min | 10 min | 116 | 24 |
-| over southern Florida, near Orlando | 55 min | 5 min | 136 | 21 |
+| over Georgia, near Atlanta | 5 min to 15 min | 45 min to 55 min | 860 | 167 |
+| over Georgia | 20 min to 25 min | 35 min to 40 min | 955 | 252 |
+| over Georgia, near Jacksonville | 25 min to 30 min | 30 min to 35 min | 1,887 | 258 |
+| over Florida, near Jacksonville | 35 min to 45 min | 15 min to 25 min | 2,315 | 336 |
+| over Florida, near Orlando | 50 min to 55 min | 5 min to 15 min | 561 | 79 |
 | near MCO, where flights climb out or come in to land | 1 h | 5 min | 334 | 11 |
 
 ## When in the year
@@ -70,7 +57,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between ATL and MCO?
 
-Pilots reported moderate bumps most often over northern Georgia, about 20 min after leaving ATL, or 40 min after leaving MCO. The next most were over north-central Florida, near Jacksonville, about 35 min after leaving ATL, or 25 min after leaving MCO.
+Pilots reported moderate bumps most often over Georgia, about 20 min after leaving ATL, or 40 min after leaving MCO. The next most were over Florida, near Jacksonville, about 35 min after leaving ATL, or 25 min after leaving MCO.
 
 ### When is the smoothest time of year to fly ATL to MCO?
 
