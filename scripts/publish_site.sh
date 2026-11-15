@@ -2,6 +2,8 @@
 # Publish site/ to the gh-pages branch (GitHub Pages serves it at https://bumpcast.app).
 set -eu
 root=$(cd "$(dirname "$0")/.." && pwd)
+# The Learn and Routes pages are generated; stop if they are out of date.
+python3 "$root/scripts/build_site.py" --check
 tmp=$(mktemp -d)
 trap 'rm -rf "$tmp"' EXIT
 git -C "$root" fetch -q origin gh-pages
