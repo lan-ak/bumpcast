@@ -2,7 +2,7 @@
 
 > Denver (DEN) ⇄ Los Angeles (LAX), both directions. November 2025 to October 2026.
 
-Flights between Denver (DEN) and Los Angeles (LAX) fly about 860 miles, roughly 2 hours in the air. In the past year, pilots near this route reported moderate bumps most often near DEN, and more often in December and June. Severe reports were rare: 115 of 14,934.
+Flights between Denver (DEN) and Los Angeles (LAX) fly about 860 miles, roughly 2 hours in the air. In the past year, pilots near this route reported moderate bumps most often near DEN, and more often in December and June.
 
 - Distance: 860 miles (1,390 km)
 - In the air: about 2 h (typical jet, still air)
@@ -12,26 +12,26 @@ Flights between Denver (DEN) and Los Angeles (LAX) fly about 860 miles, roughly 
 
 ## Where on the route it gets bumpy
 
-Moderate bumps were reported most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN (1 h 50 min after leaving LAX): 1,686 of 5,113 reports there. Close to the ground, wind over the mountains stirs the air, and gusty days at DEN add to it.
+Moderate bumps were reported most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN, or 1 h 50 min after leaving LAX. There, 1,686 of 5,113 reports were moderate or stronger. Close to the ground, wind over the mountains stirs the air, and gusty days at DEN add to it.
 
 | Where | From DEN | From LAX | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near DEN, where flights climb out or come in to land | 5 min | 1 h 50 min | 5,113 | 1,686 |
 | over Colorado, near Denver | 10 min | 1 h 40 min | 2,826 | 678 |
-| over Colorado | 20 min | 1 h 35 min | 1,275 | 298 |
-| over Colorado | 25 min | 1 h 30 min | 1,144 | 203 |
-| over Colorado | 30 min | 1 h 25 min | 693 | 216 |
-| over Colorado | 35 min | 1 h 20 min | 961 | 169 |
-| over Utah | 40 min | 1 h 15 min | 716 | 212 |
-| over Utah | 45 min | 1 h 10 min | 386 | 158 |
-| over Utah | 50 min | 1 h 5 min | 306 | 116 |
-| over Arizona | 55 min | 1 h | 582 | 157 |
-| over Utah | 1 h | 55 min | 120 | 50 |
-| over Arizona | 1 h 5 min | 50 min | 75 | 22 |
+| over eastern Colorado | 20 min | 1 h 35 min | 1,275 | 298 |
+| over east-central Colorado | 25 min | 1 h 30 min | 1,144 | 203 |
+| over west-central Colorado | 30 min | 1 h 25 min | 693 | 216 |
+| over western Colorado | 35 min | 1 h 20 min | 961 | 169 |
+| over eastern Utah | 40 min | 1 h 15 min | 716 | 212 |
+| over east-central Utah | 45 min | 1 h 10 min | 386 | 158 |
+| over west-central Utah | 50 min | 1 h 5 min | 306 | 116 |
+| over eastern Arizona | 55 min | 1 h | 582 | 157 |
+| over western Utah | 1 h | 55 min | 120 | 50 |
+| over western Arizona | 1 h 5 min | 50 min | 75 | 22 |
 | near Las Vegas | 1 h 10 min | 45 min | 52 | 18 |
-| over Nevada, near Las Vegas | 1 h 15 min | 40 min | 60 | 17 |
-| over Nevada, near Las Vegas | 1 h 20 min | 35 min | 64 | 20 |
-| over Nevada, near Las Vegas | 1 h 25 min | 30 min | 47 | 17 |
+| over eastern Nevada, near Las Vegas | 1 h 15 min | 40 min | 60 | 17 |
+| over central Nevada, near Las Vegas | 1 h 20 min | 35 min | 64 | 20 |
+| over western Nevada, near Las Vegas | 1 h 25 min | 30 min | 47 | 17 |
 | over California, near Palm Springs | 1 h 30 min | 25 min | 42 | 10 |
 | over California, near San Bernardino | 1 h 35 min | 20 min | 65 | 20 |
 | over California, near Ontario | 1 h 45 min | 10 min | 210 | 182 |
@@ -68,7 +68,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between DEN and LAX?
 
-Pilots reported moderate bumps most often near DEN, where flights climb out or come in to land (about 5 min after leaving DEN (1 h 50 min after leaving LAX)).
+Pilots reported moderate bumps most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN, or 1 h 50 min after leaving LAX.
 
 ### When is the smoothest time of year to fly DEN to LAX?
 

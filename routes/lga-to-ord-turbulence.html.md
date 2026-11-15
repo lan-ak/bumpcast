@@ -2,7 +2,7 @@
 
 > New York (LGA) ⇄ Chicago (ORD), both directions. November 2025 to October 2026.
 
-Flights between New York (LGA) and Chicago (ORD) fly about 730 miles, roughly 1¾ hours in the air. In the past year, pilots near this route reported moderate bumps most often over Pennsylvania, and more often in April. Severe reports were rare: 79 of 11,961.
+Flights between New York (LGA) and Chicago (ORD) fly about 730 miles, roughly 1¾ hours in the air. In the past year, pilots near this route reported moderate bumps most often over western Pennsylvania, and more often in April.
 
 - Distance: 730 miles (1,180 km)
 - In the air: about 1 h 45 min (typical jet, still air)
@@ -12,9 +12,9 @@ Flights between New York (LGA) and Chicago (ORD) fly about 730 miles, roughly 1�
 
 ## Where on the route it gets bumpy
 
-Moderate bumps were reported most often over Pennsylvania, near Pittsburgh, about 45 min after leaving LGA (55 min after leaving ORD): 451 of 643 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Moderate bumps were reported most often over western Pennsylvania, near Pittsburgh, about 45 min after leaving LGA, or 55 min after leaving ORD. There, 451 of 643 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
-The next most were over Michigan, near Grand Rapids, about 1 h 20 min after leaving LGA (20 min after leaving ORD): 437 of 2,036 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+The next most were over western Michigan, near Grand Rapids, about 1 h 20 min after leaving LGA, or 20 min after leaving ORD. There, 437 of 2,036 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
 | Where | From LGA | From ORD | Reports | Moderate or stronger |
 |---|---|---|---|---|
@@ -22,19 +22,19 @@ The next most were over Michigan, near Grand Rapids, about 1 h 20 min after leav
 | over New Jersey, near Newark | 10 min | 1 h 30 min | 480 | 205 |
 | over Pennsylvania, near Newark | 15 min | 1 h 25 min | 368 | 160 |
 | over Pennsylvania, near Philadelphia | 20 min | 1 h 20 min | 242 | 101 |
-| over Pennsylvania | 25 min | 1 h 15 min | 243 | 139 |
-| over Pennsylvania | 30 min | 1 h 10 min | 326 | 235 |
-| over Pennsylvania | 35 min | 1 h 5 min | 360 | 254 |
-| over Pennsylvania, near Pittsburgh | 40 min | 1 h | 181 | 123 |
-| over Pennsylvania, near Pittsburgh | 45 min | 55 min | 643 | 451 |
-| over Ohio, near Cleveland | 45 min | 50 min | 305 | 211 |
-| over Ohio, near Cleveland | 50 min | 45 min | 445 | 325 |
-| over Ohio, near Cleveland | 55 min | 45 min | 320 | 242 |
+| over eastern Pennsylvania | 25 min | 1 h 15 min | 243 | 139 |
+| over central Pennsylvania | 30 min | 1 h 10 min | 326 | 235 |
+| over western Pennsylvania | 35 min | 1 h 5 min | 360 | 254 |
+| over eastern Pennsylvania, near Pittsburgh | 40 min | 1 h | 181 | 123 |
+| over western Pennsylvania, near Pittsburgh | 45 min | 55 min | 643 | 451 |
+| over eastern Ohio, near Cleveland | 45 min | 50 min | 305 | 211 |
+| over central Ohio, near Cleveland | 50 min | 45 min | 445 | 325 |
+| over western Ohio, near Cleveland | 55 min | 45 min | 320 | 242 |
 | near Windsor | 1 h | 40 min | 322 | 242 |
-| over Michigan, near Detroit | 1 h 5 min | 35 min | 551 | 382 |
-| over Michigan, near Detroit | 1 h 10 min | 30 min | 290 | 178 |
-| over Michigan, near Grand Rapids | 1 h 15 min | 25 min | 510 | 224 |
-| over Michigan, near Grand Rapids | 1 h 20 min | 20 min | 2,036 | 437 |
+| over eastern Michigan, near Detroit | 1 h 5 min | 35 min | 551 | 382 |
+| over western Michigan, near Detroit | 1 h 10 min | 30 min | 290 | 178 |
+| over eastern Michigan, near Grand Rapids | 1 h 15 min | 25 min | 510 | 224 |
+| over western Michigan, near Grand Rapids | 1 h 20 min | 20 min | 2,036 | 437 |
 | over Indiana, near Grand Rapids | 1 h 25 min | 15 min | 640 | 164 |
 | over Indiana, near Chicago | 1 h 30 min | 10 min | 1,130 | 261 |
 | near ORD, where flights climb out or come in to land | 1 h 40 min | 5 min | 1,865 | 273 |
@@ -70,7 +70,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between LGA and ORD?
 
-Pilots reported moderate bumps most often over Pennsylvania, near Pittsburgh (about 45 min after leaving LGA (55 min after leaving ORD)), and next most over Michigan, near Grand Rapids (about 1 h 20 min after leaving LGA (20 min after leaving ORD)).
+Pilots reported moderate bumps most often over western Pennsylvania, near Pittsburgh, about 45 min after leaving LGA, or 55 min after leaving ORD. The next most were over western Michigan, near Grand Rapids, about 1 h 20 min after leaving LGA, or 20 min after leaving ORD.
 
 ### When is the smoothest time of year to fly LGA to ORD?
 

@@ -2,7 +2,7 @@
 
 > Seattle (SEA) ⇄ San Francisco (SFO), both directions. November 2025 to October 2026.
 
-Flights between Seattle (SEA) and San Francisco (SFO) fly about 680 miles, roughly 1½ hours in the air. In the past year, pilots near this route reported moderate bumps most often near SEA, and more often in November and December. Severe reports were rare: 4 of 2,463.
+Flights between Seattle (SEA) and San Francisco (SFO) fly about 680 miles, roughly 1½ hours in the air. In the past year, pilots near this route reported moderate bumps most often near SEA, and more often in November and December.
 
 - Distance: 680 miles (1,090 km)
 - In the air: about 1 h 35 min (typical jet, still air)
@@ -12,30 +12,30 @@ Flights between Seattle (SEA) and San Francisco (SFO) fly about 680 miles, rough
 
 ## Where on the route it gets bumpy
 
-Moderate bumps were reported most often near SEA, where flights climb out or come in to land, about 5 min after leaving SEA (1 h 30 min after leaving SFO): 152 of 506 reports there. Close to the ground, wind over buildings and land stirs the air.
+Moderate bumps were reported most often near SEA, where flights climb out or come in to land, about 5 min after leaving SEA, or 1 h 30 min after leaving SFO. There, 152 of 506 reports were moderate or stronger. Close to the ground, wind over buildings and land stirs the air.
 
-The next most were over Oregon, near Portland, about 30 min after leaving SEA (1 h after leaving SFO): 107 of 200 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+The next most were over southern Oregon, near Portland, about 30 min after leaving SEA, or 1 h after leaving SFO. There, 107 of 200 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
 | Where | From SEA | From SFO | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near SEA, where flights climb out or come in to land | 5 min | 1 h 30 min | 506 | 152 |
 | over Washington, near Seattle | 10 min | 1 h 25 min | 234 | 118 |
 | over Washington, near Portland | 15 min | 1 h 20 min | 151 | 84 |
-| over Oregon, near Portland | 20 min | 1 h 15 min | 183 | 104 |
-| over Oregon, near Portland | 25 min | 1 h 10 min | 119 | 78 |
-| over Oregon, near Portland | 30 min | 1 h 5 min | 100 | 65 |
-| over Oregon, near Portland | 30 min | 1 h | 200 | 107 |
-| over Oregon | 35 min | 55 min | 147 | 87 |
+| over northern Oregon, near Portland | 20 min | 1 h 15 min | 183 | 104 |
+| over north-central Oregon, near Portland | 25 min | 1 h 10 min | 119 | 78 |
+| over south-central Oregon, near Portland | 30 min | 1 h 5 min | 100 | 65 |
+| over southern Oregon, near Portland | 30 min | 1 h | 200 | 107 |
+| over northern Oregon | 35 min | 55 min | 147 | 87 |
 | over or near Oregon | 40 min | 50 min | 91 | 36 |
-| over Oregon | 45 min | 50 min | 113 | 58 |
-| over Oregon | 50 min | 45 min | 188 | 94 |
-| over California | 50 min | 40 min | 118 | 73 |
-| over California | 55 min | 35 min | 76 | 53 |
-| over California | 1 h | 30 min | 46 | 32 |
-| over California | 1 h 5 min | 30 min | 33 | 19 |
-| over California, near Sacramento | 1 h 10 min | 25 min | 21 | 12 |
-| over California, near Sacramento | 1 h 15 min | 20 min | 23 | 20 |
-| over California, near Sacramento | 1 h 20 min | 15 min | 7 | 2 |
+| over central Oregon | 45 min | 50 min | 113 | 58 |
+| over southern Oregon | 50 min | 45 min | 188 | 94 |
+| over northern California | 50 min | 40 min | 118 | 73 |
+| over north-central California | 55 min | 35 min | 76 | 53 |
+| over south-central California | 1 h | 30 min | 46 | 32 |
+| over southern California | 1 h 5 min | 30 min | 33 | 19 |
+| over northern California, near Sacramento | 1 h 10 min | 25 min | 21 | 12 |
+| over central California, near Sacramento | 1 h 15 min | 20 min | 23 | 20 |
+| over southern California, near Sacramento | 1 h 20 min | 15 min | 7 | 2 |
 | over California, near Oakland | 1 h 25 min | 10 min | 25 | 12 |
 | near SFO, where flights climb out or come in to land | 1 h 30 min | 5 min | 82 | 42 |
 
@@ -70,7 +70,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between SEA and SFO?
 
-Pilots reported moderate bumps most often near SEA, where flights climb out or come in to land (about 5 min after leaving SEA (1 h 30 min after leaving SFO)), and next most over Oregon, near Portland (about 30 min after leaving SEA (1 h after leaving SFO)).
+Pilots reported moderate bumps most often near SEA, where flights climb out or come in to land, about 5 min after leaving SEA, or 1 h 30 min after leaving SFO. The next most were over southern Oregon, near Portland, about 30 min after leaving SEA, or 1 h after leaving SFO.
 
 ### When is the smoothest time of year to fly SEA to SFO?
 

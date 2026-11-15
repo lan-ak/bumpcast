@@ -92,38 +92,38 @@ Where and when pilots reported bumps on 36 popular routes in the US and Canada, 
 - [LAX to SFO turbulence](https://bumpcast.app/routes/lax-to-sfo-turbulence.html.md): Where and when it's bumpy on LAX–SFO flights, from 823 pilot reports: moderate bumps most often near LAX, more in Dec and Mar.
 - [JFK to SFO turbulence](https://bumpcast.app/routes/jfk-to-sfo-turbulence.html.md): Where and when it's bumpy on JFK–SFO flights, from 32,267 pilot reports: moderate bumps most often near Cleveland.
 - [EWR to SFO turbulence](https://bumpcast.app/routes/ewr-to-sfo-turbulence.html.md): Where and when it's bumpy on EWR–SFO flights, from 31,734 pilot reports: moderate bumps most often over Pennsylvania.
-- [ATL to MCO turbulence](https://bumpcast.app/routes/atl-to-mco-turbulence.html.md): Where and when it's bumpy on ATL–MCO flights, from 7,070 pilot reports: moderate bumps most often over Georgia, more in Dec, Feb and Apr.
-- [LAS to LAX turbulence](https://bumpcast.app/routes/las-to-lax-turbulence.html.md): Where and when it's bumpy on LAS–LAX flights, from 1,071 pilot reports: moderate bumps most often over Nevada, more in Jan, Feb and Mar.
-- [LGA to ORD turbulence](https://bumpcast.app/routes/lga-to-ord-turbulence.html.md): Where and when it's bumpy on LGA–ORD flights, from 11,961 pilot reports: moderate bumps most often over Pennsylvania, more in Apr.
-- [ATL to LGA turbulence](https://bumpcast.app/routes/atl-to-lga-turbulence.html.md): Where and when it's bumpy on ATL–LGA flights, from 12,454 pilot reports: moderate bumps most often over North Carolina, more in May and Jun.
+- [ATL to MCO turbulence](https://bumpcast.app/routes/atl-to-mco-turbulence.html.md): Where and when it's bumpy on ATL–MCO flights, from 7,070 pilot reports: moderate bumps most often over northern Georgia, more in Dec, Feb and Apr.
+- [LAS to LAX turbulence](https://bumpcast.app/routes/las-to-lax-turbulence.html.md): Where and when it's bumpy on LAS–LAX flights, from 1,071 pilot reports: moderate bumps most often over eastern Nevada, more in Jan, Feb and Mar.
+- [LGA to ORD turbulence](https://bumpcast.app/routes/lga-to-ord-turbulence.html.md): Where and when it's bumpy on LGA–ORD flights, from 11,961 pilot reports: moderate bumps most often over western Pennsylvania, more in Apr.
+- [ATL to LGA turbulence](https://bumpcast.app/routes/atl-to-lga-turbulence.html.md): Where and when it's bumpy on ATL–LGA flights, from 12,454 pilot reports: moderate bumps most often over central North Carolina, more in May and Jun.
 - [DEN to PHX turbulence](https://bumpcast.app/routes/den-to-phx-turbulence.html.md): Where and when it's bumpy on DEN–PHX flights, from 12,775 pilot reports: moderate bumps most often near DEN, more in Dec and Jun.
 - [LAX to SEA turbulence](https://bumpcast.app/routes/lax-to-sea-turbulence.html.md): Where and when it's bumpy on LAX–SEA flights, from 2,883 pilot reports: moderate bumps most often near LAX, more in Dec.
-- [BOS to DCA turbulence](https://bumpcast.app/routes/bos-to-dca-turbulence.html.md): Where and when it's bumpy on BOS–DCA flights, from 6,451 pilot reports: moderate bumps most often over New York, more in Dec and Oct.
+- [BOS to DCA turbulence](https://bumpcast.app/routes/bos-to-dca-turbulence.html.md): Where and when it's bumpy on BOS–DCA flights, from 6,451 pilot reports: moderate bumps most often over eastern New York, more in Dec and Oct.
 - [BOS to LGA turbulence](https://bumpcast.app/routes/bos-to-lga-turbulence.html.md): Where and when it's bumpy on BOS–LGA flights, from 2,695 pilot reports: moderate bumps most often over Connecticut, more in Nov and Oct.
-- [LAX to ORD turbulence](https://bumpcast.app/routes/lax-to-ord-turbulence.html.md): Where and when it's bumpy on LAX–ORD flights, from 26,088 pilot reports: moderate bumps most often over Colorado, more in May, Jun and Oct.
-- [ATL to DFW turbulence](https://bumpcast.app/routes/atl-to-dfw-turbulence.html.md): Where and when it's bumpy on ATL–DFW flights, from 10,903 pilot reports: moderate bumps most often over Alabama, more in Apr and May.
+- [LAX to ORD turbulence](https://bumpcast.app/routes/lax-to-ord-turbulence.html.md): Where and when it's bumpy on LAX–ORD flights, from 26,088 pilot reports: moderate bumps most often over central Colorado, more in May, Jun and Oct.
+- [ATL to DFW turbulence](https://bumpcast.app/routes/atl-to-dfw-turbulence.html.md): Where and when it's bumpy on ATL–DFW flights, from 10,903 pilot reports: moderate bumps most often over central Alabama, more in Apr and May.
 - [DEN to LAS turbulence](https://bumpcast.app/routes/den-to-las-turbulence.html.md): Where and when it's bumpy on DEN–LAS flights, from 14,632 pilot reports: moderate bumps most often near DEN, more in Dec and Jun.
 - [DEN to LAX turbulence](https://bumpcast.app/routes/den-to-lax-turbulence.html.md): Where and when it's bumpy on DEN–LAX flights, from 14,934 pilot reports: moderate bumps most often near DEN, more in Dec and Jun.
 - [SEA to SFO turbulence](https://bumpcast.app/routes/sea-to-sfo-turbulence.html.md): Where and when it's bumpy on SEA–SFO flights, from 2,463 pilot reports: moderate bumps most often near SEA, more in Nov and Dec.
-- [EWR to MCO turbulence](https://bumpcast.app/routes/ewr-to-mco-turbulence.html.md): Where and when it's bumpy on EWR–MCO flights, from 8,542 pilot reports: moderate bumps most often over Virginia, more in Nov, Dec and Feb.
+- [EWR to MCO turbulence](https://bumpcast.app/routes/ewr-to-mco-turbulence.html.md): Where and when it's bumpy on EWR–MCO flights, from 8,542 pilot reports: moderate bumps most often over central Virginia, more in Nov, Dec and Feb.
 - [DEN to ORD turbulence](https://bumpcast.app/routes/den-to-ord-turbulence.html.md): Where and when it's bumpy on DEN–ORD flights, from 20,138 pilot reports: moderate bumps most often near DEN, more in May and Jun.
 - [DFW to LAX turbulence](https://bumpcast.app/routes/dfw-to-lax-turbulence.html.md): Where and when it's bumpy on DFW–LAX flights, from 8,044 pilot reports: moderate bumps most often near DFW, more in Jan, Feb and Mar.
-- [JFK to MIA turbulence](https://bumpcast.app/routes/jfk-to-mia-turbulence.html.md): Where and when it's bumpy on JFK–MIA flights, from 11,798 pilot reports: moderate bumps most often over North Carolina, more in Nov, Dec and Feb.
-- [LAS to SFO turbulence](https://bumpcast.app/routes/las-to-sfo-turbulence.html.md): Where and when it's bumpy on LAS–SFO flights, from 952 pilot reports: moderate bumps most often over California, more in Dec.
+- [JFK to MIA turbulence](https://bumpcast.app/routes/jfk-to-mia-turbulence.html.md): Where and when it's bumpy on JFK–MIA flights, from 11,798 pilot reports: moderate bumps most often over northern North Carolina, more in Nov, Dec and Feb.
+- [LAS to SFO turbulence](https://bumpcast.app/routes/las-to-sfo-turbulence.html.md): Where and when it's bumpy on LAS–SFO flights, from 952 pilot reports: moderate bumps most often over east-central California, more in Dec.
 - [DFW to ORD turbulence](https://bumpcast.app/routes/dfw-to-ord-turbulence.html.md): Where and when it's bumpy on DFW–ORD flights, from 11,184 pilot reports: moderate bumps most often near ORD, more in Mar, Apr and May.
-- [ATL to ORD turbulence](https://bumpcast.app/routes/atl-to-ord-turbulence.html.md): Where and when it's bumpy on ATL–ORD flights, from 17,699 pilot reports: moderate bumps most often over Indiana, more in Mar and May.
+- [ATL to ORD turbulence](https://bumpcast.app/routes/atl-to-ord-turbulence.html.md): Where and when it's bumpy on ATL–ORD flights, from 17,699 pilot reports: moderate bumps most often over central Indiana, more in Mar and May.
 - [LAX to PHX turbulence](https://bumpcast.app/routes/lax-to-phx-turbulence.html.md): Where and when it's bumpy on LAX–PHX flights, from 629 pilot reports: moderate bumps most often over California, more in Jan, Mar and May.
-- [ATL to BOS turbulence](https://bumpcast.app/routes/atl-to-bos-turbulence.html.md): Where and when it's bumpy on ATL–BOS flights, from 15,695 pilot reports: moderate bumps most often over Virginia, more in Jun.
+- [ATL to BOS turbulence](https://bumpcast.app/routes/atl-to-bos-turbulence.html.md): Where and when it's bumpy on ATL–BOS flights, from 15,695 pilot reports: moderate bumps most often over western Virginia, more in Jun.
 - [DEN to SFO turbulence](https://bumpcast.app/routes/den-to-sfo-turbulence.html.md): Where and when it's bumpy on DEN–SFO flights, from 15,177 pilot reports: moderate bumps most often near DEN, more in Dec and Jun.
 - [DEN to SEA turbulence](https://bumpcast.app/routes/den-to-sea-turbulence.html.md): Where and when it's bumpy on DEN–SEA flights, from 11,594 pilot reports: moderate bumps most often near DEN, more in Dec.
 - [LAX to SLC turbulence](https://bumpcast.app/routes/lax-to-slc-turbulence.html.md): Where and when it's bumpy on LAX–SLC flights, from 1,765 pilot reports: moderate bumps most often over California, more in Mar.
-- [MSP to ORD turbulence](https://bumpcast.app/routes/msp-to-ord-turbulence.html.md): Where and when it's bumpy on MSP–ORD flights, from 5,323 pilot reports: moderate bumps most often over Wisconsin, more in Apr, May and Jun.
+- [MSP to ORD turbulence](https://bumpcast.app/routes/msp-to-ord-turbulence.html.md): Where and when it's bumpy on MSP–ORD flights, from 5,323 pilot reports: moderate bumps most often over Wisconsin (part 6 of 6), more in Apr, May and Jun.
 - [DEN to DFW turbulence](https://bumpcast.app/routes/den-to-dfw-turbulence.html.md): Where and when it's bumpy on DEN–DFW flights, from 13,137 pilot reports: moderate bumps most often near DEN, more in Dec.
-- [BOS to ORD turbulence](https://bumpcast.app/routes/bos-to-ord-turbulence.html.md): Where and when it's bumpy on BOS–ORD flights, from 16,938 pilot reports: moderate bumps most often over New York.
+- [BOS to ORD turbulence](https://bumpcast.app/routes/bos-to-ord-turbulence.html.md): Where and when it's bumpy on BOS–ORD flights, from 16,938 pilot reports: moderate bumps most often over western New York.
 - [YUL to YYZ turbulence](https://bumpcast.app/routes/yul-to-yyz-turbulence.html.md): Where and when it's bumpy on YUL–YYZ flights, from 447 pilot reports: moderate bumps most often over Ontario, more in Dec, May and Oct.
-- [YVR to YYZ turbulence](https://bumpcast.app/routes/yvr-to-yyz-turbulence.html.md): Where and when it's bumpy on YVR–YYZ flights, from 3,769 pilot reports: moderate bumps most often over Michigan, more in Jun and Aug.
-- [YYC to YYZ turbulence](https://bumpcast.app/routes/yyc-to-yyz-turbulence.html.md): Where and when it's bumpy on YYC–YYZ flights, from 2,203 pilot reports: moderate bumps most often over Michigan, more in Apr, Jun and Aug.
-- [LGA to YYZ turbulence](https://bumpcast.app/routes/lga-to-yyz-turbulence.html.md): Where and when it's bumpy on LGA–YYZ flights, from 4,788 pilot reports: moderate bumps most often over New York, more in Dec and Oct.
+- [YVR to YYZ turbulence](https://bumpcast.app/routes/yvr-to-yyz-turbulence.html.md): Where and when it's bumpy on YVR–YYZ flights, from 3,769 pilot reports: moderate bumps most often over east-central Michigan, more in Jun and Aug.
+- [YYC to YYZ turbulence](https://bumpcast.app/routes/yyc-to-yyz-turbulence.html.md): Where and when it's bumpy on YYC–YYZ flights, from 2,203 pilot reports: moderate bumps most often over eastern Michigan, more in Apr, Jun and Aug.
+- [LGA to YYZ turbulence](https://bumpcast.app/routes/lga-to-yyz-turbulence.html.md): Where and when it's bumpy on LGA–YYZ flights, from 4,788 pilot reports: moderate bumps most often over eastern New York, more in Dec and Oct.
 
 ## Pages
 
@@ -563,7 +563,7 @@ Source: https://bumpcast.app/learn/how-bumpcast-forecasts-turbulence.html (updat
 
 > New York (JFK) ⇄ Los Angeles (LAX), both directions. November 2025 to October 2026.
 
-Flights between New York (JFK) and Los Angeles (LAX) fly about 2,470 miles, roughly 5 hours in the air. In the past year, pilots near this route reported moderate bumps most often over Colorado. Severe reports were rare: 120 of 35,528.
+Flights between New York (JFK) and Los Angeles (LAX) fly about 2,470 miles, roughly 5 hours in the air. In the past year, pilots near this route reported moderate bumps most often over Colorado.
 
 - Distance: 2,470 miles (3,970 km)
 - In the air: about 5 h 5 min (typical jet, still air)
@@ -573,9 +573,9 @@ Flights between New York (JFK) and Los Angeles (LAX) fly about 2,470 miles, roug
 
 ### Where on the route it gets bumpy
 
-Moderate bumps were reported most often over Colorado, near Colorado Springs, about 3 h 20 min after leaving JFK (1 h 40 min after leaving LAX): 1,072 of 2,964 reports there. The ground below is high, and wind over mountains makes waves that reach cruising height.
+Moderate bumps were reported most often over Colorado, near Colorado Springs, about 3 h 20 min after leaving JFK, or 1 h 40 min after leaving LAX. There, 1,072 of 2,964 reports were moderate or stronger. The ground below is high, and wind over mountains makes waves that reach cruising height.
 
-The next most were over Pennsylvania, near Pittsburgh, about 40 min after leaving JFK (4 h 20 min after leaving LAX): 1,056 of 1,571 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+The next most were over Pennsylvania, near Pittsburgh, about 40 min after leaving JFK, or 4 h 20 min after leaving LAX. There, 1,056 of 1,571 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
 | Where | From JFK | From LAX | Reports | Moderate or stronger |
 |---|---|---|---|---|
@@ -589,11 +589,11 @@ The next most were over Pennsylvania, near Pittsburgh, about 40 min after leavin
 | over Iowa | 1 h 55 min | 3 h 5 min | 994 | 406 |
 | over Missouri, near Kansas City | 2 h 10 min | 2 h 50 min | 1,050 | 417 |
 | over Kansas, near Kansas City | 2 h 25 min | 2 h 35 min | 978 | 395 |
-| over Kansas | 2 h 35 min | 2 h 25 min | 1,204 | 452 |
-| over Kansas | 2 h 50 min | 2 h 10 min | 2,025 | 575 |
-| over Colorado | 3 h 5 min | 1 h 55 min | 2,219 | 829 |
+| over eastern Kansas | 2 h 35 min | 2 h 25 min | 1,204 | 452 |
+| over western Kansas | 2 h 50 min | 2 h 10 min | 2,025 | 575 |
+| over eastern Colorado | 3 h 5 min | 1 h 55 min | 2,219 | 829 |
 | over Colorado, near Colorado Springs | 3 h 20 min | 1 h 40 min | 2,964 | 1,072 |
-| over Colorado | 3 h 35 min | 1 h 25 min | 1,826 | 530 |
+| over western Colorado | 3 h 35 min | 1 h 25 min | 1,826 | 530 |
 | over or near Colorado | 3 h 50 min | 1 h 10 min | 1,655 | 411 |
 | over Arizona | 4 h 5 min | 55 min | 1,307 | 288 |
 | over Arizona, near Las Vegas | 4 h 20 min | 40 min | 180 | 71 |
@@ -631,7 +631,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between JFK and LAX?
 
-Pilots reported moderate bumps most often over Colorado, near Colorado Springs (about 3 h 20 min after leaving JFK (1 h 40 min after leaving LAX)), and next most over Pennsylvania, near Pittsburgh (about 40 min after leaving JFK (4 h 20 min after leaving LAX)).
+Pilots reported moderate bumps most often over Colorado, near Colorado Springs, about 3 h 20 min after leaving JFK, or 1 h 40 min after leaving LAX. The next most were over Pennsylvania, near Pittsburgh, about 40 min after leaving JFK, or 4 h 20 min after leaving LAX.
 
 #### When is the smoothest time of year to fly JFK to LAX?
 
@@ -662,7 +662,7 @@ Source: https://bumpcast.app/routes/jfk-to-lax-turbulence.html (data November 20
 
 > Los Angeles (LAX) ⇄ San Francisco (SFO), both directions. November 2025 to October 2026.
 
-Flights between Los Angeles (LAX) and San Francisco (SFO) fly about 340 miles, roughly an hour in the air. In the past year, pilots near this route reported moderate bumps most often near LAX, and more often in December and March. Severe reports were rare: 13 of 823.
+Flights between Los Angeles (LAX) and San Francisco (SFO) fly about 340 miles, roughly an hour in the air. In the past year, pilots near this route reported moderate bumps most often near LAX, and more often in December and March.
 
 - Distance: 340 miles (540 km)
 - In the air: about 1 h (typical jet, still air)
@@ -672,29 +672,29 @@ Flights between Los Angeles (LAX) and San Francisco (SFO) fly about 340 miles, r
 
 ### Where on the route it gets bumpy
 
-Moderate bumps were reported most often near LAX, where flights climb out or come in to land, about 5 min after leaving LAX (55 min after leaving SFO): 73 of 158 reports there. Close to the ground, wind over buildings and land stirs the air.
+Moderate bumps were reported most often near LAX, where flights climb out or come in to land, about 5 min after leaving LAX, or 55 min after leaving SFO. There, 73 of 158 reports were moderate or stronger. Close to the ground, wind over buildings and land stirs the air.
 
 | Where | From LAX | From SFO | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near LAX, where flights climb out or come in to land | 5 min | 55 min | 158 | 73 |
-| over California, near Burbank | 5 min | 50 min | 82 | 65 |
-| over California, near Burbank | 10 min | 45 min | 34 | 18 |
-| over California, near Burbank | 10 min | 40 min | 26 | 18 |
-| over California, near Burbank | 15 min | 40 min | 14 | 7 |
-| over California, near Burbank | 15 min | 35 min | 32 | 13 |
+| over eastern California, near Burbank | 5 min | 50 min | 82 | 65 |
+| over east-central California, near Burbank | 10 min | 45 min | 34 | 18 |
+| over central California, near Burbank | 10 min | 40 min | 26 | 18 |
+| over west-central California, near Burbank | 15 min | 40 min | 14 | 7 |
+| over western California, near Burbank | 15 min | 35 min | 32 | 13 |
 | over California | 20 min | 35 min | 37 | 17 |
-| over California, near Fresno | 20 min | 30 min | 27 | 11 |
-| over California, near Fresno | 25 min | 30 min | 27 | 18 |
-| over California, near Fresno | 25 min | 30 min | 36 | 23 |
-| over California, near Fresno | 25 min | 25 min | 43 | 29 |
-| over California, near Fresno | 30 min | 25 min | 15 | 10 |
+| over California, near Fresno (part 1 of 6) | 20 min | 30 min | 27 | 11 |
+| over California, near Fresno (part 2 of 6) | 25 min | 30 min | 27 | 18 |
+| over California, near Fresno (part 3 of 6) | 25 min | 30 min | 36 | 23 |
+| over California, near Fresno (part 4 of 6) | 25 min | 25 min | 43 | 29 |
+| over California, near Fresno (part 5 of 6) | 30 min | 25 min | 15 | 10 |
 | near Fresno | 30 min | 20 min | 14 | 8 |
-| over California, near Fresno | 35 min | 20 min | 21 | 10 |
-| over California, near San Jose | 35 min | 15 min | 35 | 17 |
-| over California, near San Jose | 40 min | 15 min | 49 | 27 |
-| over California, near San Jose | 40 min | 10 min | 35 | 22 |
-| over California, near San Jose | 45 min | 10 min | 61 | 39 |
-| over California, near San Jose | 50 min | 5 min | 35 | 17 |
+| over California, near Fresno (part 6 of 6) | 35 min | 20 min | 21 | 10 |
+| over eastern California, near San Jose | 35 min | 15 min | 35 | 17 |
+| over east-central California, near San Jose | 40 min | 15 min | 49 | 27 |
+| over central California, near San Jose | 40 min | 10 min | 35 | 22 |
+| over west-central California, near San Jose | 45 min | 10 min | 61 | 39 |
+| over western California, near San Jose | 50 min | 5 min | 35 | 17 |
 | near SFO, where flights climb out or come in to land | 55 min | 5 min | 42 | 23 |
 
 ### When in the year
@@ -728,7 +728,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between LAX and SFO?
 
-Pilots reported moderate bumps most often near LAX, where flights climb out or come in to land (about 5 min after leaving LAX (55 min after leaving SFO)).
+Pilots reported moderate bumps most often near LAX, where flights climb out or come in to land, about 5 min after leaving LAX, or 55 min after leaving SFO.
 
 #### When is the smoothest time of year to fly LAX to SFO?
 
@@ -759,7 +759,7 @@ Source: https://bumpcast.app/routes/lax-to-sfo-turbulence.html (data November 20
 
 > New York (JFK) ⇄ San Francisco (SFO), both directions. November 2025 to October 2026.
 
-Flights between New York (JFK) and San Francisco (SFO) fly about 2,580 miles, roughly 5¼ hours in the air. In the past year, pilots near this route reported moderate bumps most often near Cleveland. Severe reports were rare: 114 of 32,267.
+Flights between New York (JFK) and San Francisco (SFO) fly about 2,580 miles, roughly 5¼ hours in the air. In the past year, pilots near this route reported moderate bumps most often near Cleveland.
 
 - Distance: 2,580 miles (4,150 km)
 - In the air: about 5 h 20 min (typical jet, still air)
@@ -769,9 +769,9 @@ Flights between New York (JFK) and San Francisco (SFO) fly about 2,580 miles, ro
 
 ### Where on the route it gets bumpy
 
-Moderate bumps were reported most often near Cleveland, about 1 h after leaving JFK (4 h 15 min after leaving SFO): 1,110 of 1,515 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Moderate bumps were reported most often near Cleveland, about 1 h after leaving JFK, or 4 h 15 min after leaving SFO. There, 1,110 of 1,515 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
-The next most were near JFK, where flights climb out or come in to land, about 10 min after leaving JFK (5 h 5 min after leaving SFO): 793 of 1,849 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+The next most were near JFK, where flights climb out or come in to land, about 10 min after leaving JFK, or 5 h 5 min after leaving SFO. There, 793 of 1,849 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
 | Where | From JFK | From SFO | Reports | Moderate or stronger |
 |---|---|---|---|---|
@@ -785,14 +785,14 @@ The next most were near JFK, where flights climb out or come in to land, about 1
 | over Iowa, near Des Moines | 2 h | 3 h 15 min | 2,568 | 593 |
 | over Iowa, near Omaha | 2 h 15 min | 3 h | 3,085 | 757 |
 | over Nebraska, near Omaha | 2 h 30 min | 2 h 45 min | 2,943 | 736 |
-| over Nebraska | 2 h 45 min | 2 h 30 min | 1,842 | 490 |
-| over Nebraska | 3 h | 2 h 15 min | 1,758 | 467 |
+| over eastern Nebraska | 2 h 45 min | 2 h 30 min | 1,842 | 490 |
+| over western Nebraska | 3 h | 2 h 15 min | 1,758 | 467 |
 | over Wyoming, near Denver | 3 h 15 min | 2 h | 1,706 | 439 |
 | over Wyoming | 3 h 30 min | 1 h 45 min | 2,181 | 400 |
 | over Utah | 3 h 45 min | 1 h 30 min | 816 | 359 |
 | over Utah, near Salt Lake City | 4 h | 1 h 15 min | 376 | 255 |
-| over Nevada | 4 h 15 min | 1 h | 424 | 266 |
-| over Nevada | 4 h 30 min | 45 min | 299 | 194 |
+| over eastern Nevada | 4 h 15 min | 1 h | 424 | 266 |
+| over western Nevada | 4 h 30 min | 45 min | 299 | 194 |
 | over Nevada, near Reno | 4 h 45 min | 30 min | 204 | 115 |
 | near SFO, where flights climb out or come in to land | 5 h 5 min | 10 min | 437 | 243 |
 
@@ -827,7 +827,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between JFK and SFO?
 
-Pilots reported moderate bumps most often near Cleveland (about 1 h after leaving JFK (4 h 15 min after leaving SFO)), and next most near JFK, where flights climb out or come in to land (about 10 min after leaving JFK (5 h 5 min after leaving SFO)).
+Pilots reported moderate bumps most often near Cleveland, about 1 h after leaving JFK, or 4 h 15 min after leaving SFO. The next most were near JFK, where flights climb out or come in to land, about 10 min after leaving JFK, or 5 h 5 min after leaving SFO.
 
 #### When is the smoothest time of year to fly JFK to SFO?
 
@@ -858,7 +858,7 @@ Source: https://bumpcast.app/routes/jfk-to-sfo-turbulence.html (data November 20
 
 > Newark (EWR) ⇄ San Francisco (SFO), both directions. November 2025 to October 2026.
 
-Flights between Newark (EWR) and San Francisco (SFO) fly about 2,560 miles, roughly 5¼ hours in the air. In the past year, pilots near this route reported moderate bumps most often over Pennsylvania. Severe reports were rare: 114 of 31,734.
+Flights between Newark (EWR) and San Francisco (SFO) fly about 2,560 miles, roughly 5¼ hours in the air. In the past year, pilots near this route reported moderate bumps most often over Pennsylvania.
 
 - Distance: 2,560 miles (4,120 km)
 - In the air: about 5 h 15 min (typical jet, still air)
@@ -868,9 +868,9 @@ Flights between Newark (EWR) and San Francisco (SFO) fly about 2,560 miles, roug
 
 ### Where on the route it gets bumpy
 
-Moderate bumps were reported most often over Pennsylvania, near Pittsburgh, about 45 min after leaving EWR (4 h 30 min after leaving SFO): 1,029 of 1,458 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Moderate bumps were reported most often over Pennsylvania, near Pittsburgh, about 45 min after leaving EWR, or 4 h 30 min after leaving SFO. There, 1,029 of 1,458 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
-The next most were over Nebraska, near Omaha, about 2 h 30 min after leaving EWR (2 h 45 min after leaving SFO): 724 of 2,916 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+The next most were over Nebraska, near Omaha, about 2 h 30 min after leaving EWR, or 2 h 45 min after leaving SFO. There, 724 of 2,916 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
 | Where | From EWR | From SFO | Reports | Moderate or stronger |
 |---|---|---|---|---|
@@ -884,14 +884,14 @@ The next most were over Nebraska, near Omaha, about 2 h 30 min after leaving EWR
 | over Iowa, near Des Moines | 2 h | 3 h 15 min | 2,927 | 699 |
 | over Iowa, near Omaha | 2 h 15 min | 3 h | 2,678 | 641 |
 | over Nebraska, near Omaha | 2 h 30 min | 2 h 45 min | 2,916 | 724 |
-| over Nebraska | 2 h 45 min | 2 h 30 min | 1,850 | 493 |
-| over Nebraska | 3 h | 2 h 15 min | 1,758 | 468 |
+| over eastern Nebraska | 2 h 45 min | 2 h 30 min | 1,850 | 493 |
+| over western Nebraska | 3 h | 2 h 15 min | 1,758 | 468 |
 | over Wyoming, near Denver | 3 h 15 min | 2 h | 1,722 | 439 |
 | over Wyoming | 3 h 30 min | 1 h 45 min | 2,185 | 404 |
 | over Utah | 3 h 45 min | 1 h 30 min | 798 | 358 |
 | over Utah, near Salt Lake City | 4 h | 1 h 15 min | 380 | 255 |
-| over Nevada | 4 h 15 min | 1 h | 417 | 264 |
-| over Nevada | 4 h 30 min | 45 min | 299 | 194 |
+| over eastern Nevada | 4 h 15 min | 1 h | 417 | 264 |
+| over western Nevada | 4 h 30 min | 45 min | 299 | 194 |
 | over Nevada, near Reno | 4 h 45 min | 30 min | 205 | 110 |
 | near SFO, where flights climb out or come in to land | 5 h | 10 min | 423 | 237 |
 
@@ -926,7 +926,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between EWR and SFO?
 
-Pilots reported moderate bumps most often over Pennsylvania, near Pittsburgh (about 45 min after leaving EWR (4 h 30 min after leaving SFO)), and next most over Nebraska, near Omaha (about 2 h 30 min after leaving EWR (2 h 45 min after leaving SFO)).
+Pilots reported moderate bumps most often over Pennsylvania, near Pittsburgh, about 45 min after leaving EWR, or 4 h 30 min after leaving SFO. The next most were over Nebraska, near Omaha, about 2 h 30 min after leaving EWR, or 2 h 45 min after leaving SFO.
 
 #### When is the smoothest time of year to fly EWR to SFO?
 
@@ -957,7 +957,7 @@ Source: https://bumpcast.app/routes/ewr-to-sfo-turbulence.html (data November 20
 
 > Atlanta (ATL) ⇄ Orlando (MCO), both directions. November 2025 to October 2026.
 
-Flights between Atlanta (ATL) and Orlando (MCO) fly about 400 miles, roughly an hour in the air. In the past year, pilots near this route reported moderate bumps most often over Georgia, and more often in December, February and April. Severe reports were rare: 21 of 7,070.
+Flights between Atlanta (ATL) and Orlando (MCO) fly about 400 miles, roughly an hour in the air. In the past year, pilots near this route reported moderate bumps most often over northern Georgia, and more often in December, February and April.
 
 - Distance: 400 miles (650 km)
 - In the air: about 1 h 5 min (typical jet, still air)
@@ -967,31 +967,31 @@ Flights between Atlanta (ATL) and Orlando (MCO) fly about 400 miles, roughly an 
 
 ### Where on the route it gets bumpy
 
-Moderate bumps were reported most often over Georgia, about 20 min after leaving ATL (40 min after leaving MCO): 135 of 554 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Moderate bumps were reported most often over northern Georgia, about 20 min after leaving ATL, or 40 min after leaving MCO. There, 135 of 554 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
-The next most were over Florida, near Jacksonville, about 35 min after leaving ATL (25 min after leaving MCO): 127 of 752 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+The next most were over north-central Florida, near Jacksonville, about 35 min after leaving ATL, or 25 min after leaving MCO. There, 127 of 752 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
 | Where | From ATL | From MCO | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near ATL, where flights climb out or come in to land | 5 min | 1 h | 158 | 37 |
-| over Georgia, near Atlanta | 5 min | 55 min | 177 | 42 |
-| over Georgia, near Atlanta | 10 min | 50 min | 225 | 41 |
-| over Georgia, near Atlanta | 15 min | 50 min | 295 | 53 |
-| over Georgia, near Atlanta | 15 min | 45 min | 163 | 31 |
-| over Georgia | 20 min | 40 min | 554 | 135 |
-| over Georgia | 20 min | 40 min | 281 | 83 |
-| over Georgia | 25 min | 35 min | 120 | 34 |
-| over Georgia, near Jacksonville | 25 min | 35 min | 1,247 | 129 |
-| over Georgia, near Jacksonville | 30 min | 30 min | 229 | 44 |
-| over Georgia, near Jacksonville | 30 min | 30 min | 411 | 85 |
-| over Florida, near Jacksonville | 35 min | 25 min | 247 | 53 |
-| over Florida, near Jacksonville | 35 min | 25 min | 752 | 127 |
-| over Florida, near Jacksonville | 40 min | 20 min | 756 | 95 |
-| over Florida, near Jacksonville | 40 min | 20 min | 351 | 36 |
-| over Florida, near Jacksonville | 45 min | 15 min | 209 | 25 |
-| over Florida, near Orlando | 50 min | 15 min | 309 | 34 |
-| over Florida, near Orlando | 50 min | 10 min | 116 | 24 |
-| over Florida, near Orlando | 55 min | 5 min | 136 | 21 |
+| over northern Georgia, near Atlanta | 5 min | 55 min | 177 | 42 |
+| over north-central Georgia, near Atlanta | 10 min | 50 min | 225 | 41 |
+| over south-central Georgia, near Atlanta | 15 min | 50 min | 295 | 53 |
+| over southern Georgia, near Atlanta | 15 min | 45 min | 163 | 31 |
+| over northern Georgia | 20 min | 40 min | 554 | 135 |
+| over central Georgia | 20 min | 40 min | 281 | 83 |
+| over southern Georgia | 25 min | 35 min | 120 | 34 |
+| over northern Georgia, near Jacksonville | 25 min | 35 min | 1,247 | 129 |
+| over central Georgia, near Jacksonville | 30 min | 30 min | 229 | 44 |
+| over southern Georgia, near Jacksonville | 30 min | 30 min | 411 | 85 |
+| over northern Florida, near Jacksonville | 35 min | 25 min | 247 | 53 |
+| over north-central Florida, near Jacksonville | 35 min | 25 min | 752 | 127 |
+| over central Florida, near Jacksonville | 40 min | 20 min | 756 | 95 |
+| over south-central Florida, near Jacksonville | 40 min | 20 min | 351 | 36 |
+| over southern Florida, near Jacksonville | 45 min | 15 min | 209 | 25 |
+| over northern Florida, near Orlando | 50 min | 15 min | 309 | 34 |
+| over central Florida, near Orlando | 50 min | 10 min | 116 | 24 |
+| over southern Florida, near Orlando | 55 min | 5 min | 136 | 21 |
 | near MCO, where flights climb out or come in to land | 1 h | 5 min | 334 | 11 |
 
 ### When in the year
@@ -1025,7 +1025,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between ATL and MCO?
 
-Pilots reported moderate bumps most often over Georgia (about 20 min after leaving ATL (40 min after leaving MCO)), and next most over Florida, near Jacksonville (about 35 min after leaving ATL (25 min after leaving MCO)).
+Pilots reported moderate bumps most often over northern Georgia, about 20 min after leaving ATL, or 40 min after leaving MCO. The next most were over north-central Florida, near Jacksonville, about 35 min after leaving ATL, or 25 min after leaving MCO.
 
 #### When is the smoothest time of year to fly ATL to MCO?
 
@@ -1056,7 +1056,7 @@ Source: https://bumpcast.app/routes/atl-to-mco-turbulence.html (data November 20
 
 > Las Vegas (LAS) ⇄ Los Angeles (LAX), both directions. November 2025 to October 2026.
 
-Flights between Las Vegas (LAS) and Los Angeles (LAX) fly about 240 miles, roughly 45 minutes in the air. In the past year, pilots near this route reported moderate bumps most often over Nevada, and more often in January, February and March. Severe reports were rare: 18 of 1,071.
+Flights between Las Vegas (LAS) and Los Angeles (LAX) fly about 240 miles, roughly 45 minutes in the air. In the past year, pilots near this route reported moderate bumps most often over eastern Nevada, and more often in January, February and March.
 
 - Distance: 240 miles (380 km)
 - In the air: about 45 min (typical jet, still air)
@@ -1066,31 +1066,31 @@ Flights between Las Vegas (LAS) and Los Angeles (LAX) fly about 240 miles, rough
 
 ### Where on the route it gets bumpy
 
-Moderate bumps were reported most often over Nevada, near Las Vegas, about 5 min after leaving LAS (40 min after leaving LAX): 80 of 207 reports there. Close to the ground, wind over buildings and land stirs the air, and gusty days at LAS add to it.
+Moderate bumps were reported most often over eastern Nevada, near Las Vegas, about 5 min after leaving LAS, or 40 min after leaving LAX. There, 80 of 207 reports were moderate or stronger. Close to the ground, wind over buildings and land stirs the air, and gusty days at LAS add to it.
 
-The next most were over California, near Ontario, about 35 min after leaving LAS (10 min after leaving LAX): 76 of 93 reports there. Close to the ground, wind over buildings and land stirs the air.
+The next most were over western California, near Ontario, about 35 min after leaving LAS, or 10 min after leaving LAX. There, 76 of 93 reports were moderate or stronger. Close to the ground, wind over buildings and land stirs the air.
 
 | Where | From LAS | From LAX | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near LAS, where flights climb out or come in to land | 0 min | 45 min | 176 | 55 |
-| over Nevada, near Las Vegas | 5 min | 40 min | 207 | 80 |
-| over Nevada, near Las Vegas | 5 min | 35 min | 131 | 44 |
-| over Nevada, near Las Vegas | 10 min | 35 min | 40 | 20 |
-| over California, near Las Vegas | 10 min | 30 min | 16 | 12 |
-| over California, near Las Vegas | 15 min | 30 min | 5 | 1 |
-| over California, near Las Vegas | 15 min | 25 min | 5 | 2 |
-| over California, near Las Vegas | 15 min | 25 min | 14 | 2 |
-| over California, near San Bernardino | 20 min | 25 min | 14 | 2 |
-| over California, near San Bernardino | 20 min | 20 min | 9 | 4 |
-| over California, near San Bernardino | 20 min | 20 min | 21 | 7 |
-| over California, near San Bernardino | 25 min | 20 min | 13 | 3 |
-| over California, near San Bernardino | 25 min | 15 min | 10 | 5 |
-| over California, near San Bernardino | 25 min | 15 min | 20 | 18 |
-| over California, near Ontario | 30 min | 15 min | 59 | 55 |
-| over California, near Ontario | 30 min | 10 min | 56 | 52 |
-| over California, near Ontario | 35 min | 10 min | 93 | 76 |
-| over California, near Burbank | 35 min | 5 min | 69 | 60 |
-| over California, near Burbank | 40 min | 5 min | 43 | 29 |
+| over eastern Nevada, near Las Vegas | 5 min | 40 min | 207 | 80 |
+| over central Nevada, near Las Vegas | 5 min | 35 min | 131 | 44 |
+| over western Nevada, near Las Vegas | 10 min | 35 min | 40 | 20 |
+| over eastern California, near Las Vegas | 10 min | 30 min | 16 | 12 |
+| over east-central California, near Las Vegas | 15 min | 30 min | 5 | 1 |
+| over west-central California, near Las Vegas | 15 min | 25 min | 5 | 2 |
+| over western California, near Las Vegas | 15 min | 25 min | 14 | 2 |
+| over California, near San Bernardino (part 1 of 6) | 20 min | 25 min | 14 | 2 |
+| over California, near San Bernardino (part 2 of 6) | 20 min | 20 min | 9 | 4 |
+| over California, near San Bernardino (part 3 of 6) | 20 min | 20 min | 21 | 7 |
+| over California, near San Bernardino (part 4 of 6) | 25 min | 20 min | 13 | 3 |
+| over California, near San Bernardino (part 5 of 6) | 25 min | 15 min | 10 | 5 |
+| over California, near San Bernardino (part 6 of 6) | 25 min | 15 min | 20 | 18 |
+| over eastern California, near Ontario | 30 min | 15 min | 59 | 55 |
+| over central California, near Ontario | 30 min | 10 min | 56 | 52 |
+| over western California, near Ontario | 35 min | 10 min | 93 | 76 |
+| over eastern California, near Burbank | 35 min | 5 min | 69 | 60 |
+| over western California, near Burbank | 40 min | 5 min | 43 | 29 |
 | near LAX, where flights climb out or come in to land | 45 min | 0 min | 70 | 33 |
 
 ### When in the year
@@ -1124,7 +1124,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between LAS and LAX?
 
-Pilots reported moderate bumps most often over Nevada, near Las Vegas (about 5 min after leaving LAS (40 min after leaving LAX)), and next most over California, near Ontario (about 35 min after leaving LAS (10 min after leaving LAX)).
+Pilots reported moderate bumps most often over eastern Nevada, near Las Vegas, about 5 min after leaving LAS, or 40 min after leaving LAX. The next most were over western California, near Ontario, about 35 min after leaving LAS, or 10 min after leaving LAX.
 
 #### When is the smoothest time of year to fly LAS to LAX?
 
@@ -1155,7 +1155,7 @@ Source: https://bumpcast.app/routes/las-to-lax-turbulence.html (data November 20
 
 > New York (LGA) ⇄ Chicago (ORD), both directions. November 2025 to October 2026.
 
-Flights between New York (LGA) and Chicago (ORD) fly about 730 miles, roughly 1¾ hours in the air. In the past year, pilots near this route reported moderate bumps most often over Pennsylvania, and more often in April. Severe reports were rare: 79 of 11,961.
+Flights between New York (LGA) and Chicago (ORD) fly about 730 miles, roughly 1¾ hours in the air. In the past year, pilots near this route reported moderate bumps most often over western Pennsylvania, and more often in April.
 
 - Distance: 730 miles (1,180 km)
 - In the air: about 1 h 45 min (typical jet, still air)
@@ -1165,9 +1165,9 @@ Flights between New York (LGA) and Chicago (ORD) fly about 730 miles, roughly 1�
 
 ### Where on the route it gets bumpy
 
-Moderate bumps were reported most often over Pennsylvania, near Pittsburgh, about 45 min after leaving LGA (55 min after leaving ORD): 451 of 643 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Moderate bumps were reported most often over western Pennsylvania, near Pittsburgh, about 45 min after leaving LGA, or 55 min after leaving ORD. There, 451 of 643 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
-The next most were over Michigan, near Grand Rapids, about 1 h 20 min after leaving LGA (20 min after leaving ORD): 437 of 2,036 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+The next most were over western Michigan, near Grand Rapids, about 1 h 20 min after leaving LGA, or 20 min after leaving ORD. There, 437 of 2,036 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
 | Where | From LGA | From ORD | Reports | Moderate or stronger |
 |---|---|---|---|---|
@@ -1175,19 +1175,19 @@ The next most were over Michigan, near Grand Rapids, about 1 h 20 min after leav
 | over New Jersey, near Newark | 10 min | 1 h 30 min | 480 | 205 |
 | over Pennsylvania, near Newark | 15 min | 1 h 25 min | 368 | 160 |
 | over Pennsylvania, near Philadelphia | 20 min | 1 h 20 min | 242 | 101 |
-| over Pennsylvania | 25 min | 1 h 15 min | 243 | 139 |
-| over Pennsylvania | 30 min | 1 h 10 min | 326 | 235 |
-| over Pennsylvania | 35 min | 1 h 5 min | 360 | 254 |
-| over Pennsylvania, near Pittsburgh | 40 min | 1 h | 181 | 123 |
-| over Pennsylvania, near Pittsburgh | 45 min | 55 min | 643 | 451 |
-| over Ohio, near Cleveland | 45 min | 50 min | 305 | 211 |
-| over Ohio, near Cleveland | 50 min | 45 min | 445 | 325 |
-| over Ohio, near Cleveland | 55 min | 45 min | 320 | 242 |
+| over eastern Pennsylvania | 25 min | 1 h 15 min | 243 | 139 |
+| over central Pennsylvania | 30 min | 1 h 10 min | 326 | 235 |
+| over western Pennsylvania | 35 min | 1 h 5 min | 360 | 254 |
+| over eastern Pennsylvania, near Pittsburgh | 40 min | 1 h | 181 | 123 |
+| over western Pennsylvania, near Pittsburgh | 45 min | 55 min | 643 | 451 |
+| over eastern Ohio, near Cleveland | 45 min | 50 min | 305 | 211 |
+| over central Ohio, near Cleveland | 50 min | 45 min | 445 | 325 |
+| over western Ohio, near Cleveland | 55 min | 45 min | 320 | 242 |
 | near Windsor | 1 h | 40 min | 322 | 242 |
-| over Michigan, near Detroit | 1 h 5 min | 35 min | 551 | 382 |
-| over Michigan, near Detroit | 1 h 10 min | 30 min | 290 | 178 |
-| over Michigan, near Grand Rapids | 1 h 15 min | 25 min | 510 | 224 |
-| over Michigan, near Grand Rapids | 1 h 20 min | 20 min | 2,036 | 437 |
+| over eastern Michigan, near Detroit | 1 h 5 min | 35 min | 551 | 382 |
+| over western Michigan, near Detroit | 1 h 10 min | 30 min | 290 | 178 |
+| over eastern Michigan, near Grand Rapids | 1 h 15 min | 25 min | 510 | 224 |
+| over western Michigan, near Grand Rapids | 1 h 20 min | 20 min | 2,036 | 437 |
 | over Indiana, near Grand Rapids | 1 h 25 min | 15 min | 640 | 164 |
 | over Indiana, near Chicago | 1 h 30 min | 10 min | 1,130 | 261 |
 | near ORD, where flights climb out or come in to land | 1 h 40 min | 5 min | 1,865 | 273 |
@@ -1223,7 +1223,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between LGA and ORD?
 
-Pilots reported moderate bumps most often over Pennsylvania, near Pittsburgh (about 45 min after leaving LGA (55 min after leaving ORD)), and next most over Michigan, near Grand Rapids (about 1 h 20 min after leaving LGA (20 min after leaving ORD)).
+Pilots reported moderate bumps most often over western Pennsylvania, near Pittsburgh, about 45 min after leaving LGA, or 55 min after leaving ORD. The next most were over western Michigan, near Grand Rapids, about 1 h 20 min after leaving LGA, or 20 min after leaving ORD.
 
 #### When is the smoothest time of year to fly LGA to ORD?
 
@@ -1254,7 +1254,7 @@ Source: https://bumpcast.app/routes/lga-to-ord-turbulence.html (data November 20
 
 > Atlanta (ATL) ⇄ New York (LGA), both directions. November 2025 to October 2026.
 
-Flights between Atlanta (ATL) and New York (LGA) fly about 760 miles, roughly 1¾ hours in the air. In the past year, pilots near this route reported moderate bumps most often over North Carolina, and more often in May and June. Severe reports were rare: 70 of 12,454.
+Flights between Atlanta (ATL) and New York (LGA) fly about 760 miles, roughly 1¾ hours in the air. In the past year, pilots near this route reported moderate bumps most often over central North Carolina, and more often in May and June.
 
 - Distance: 760 miles (1,220 km)
 - In the air: about 1 h 45 min (typical jet, still air)
@@ -1264,9 +1264,9 @@ Flights between Atlanta (ATL) and New York (LGA) fly about 760 miles, roughly 1�
 
 ### Where on the route it gets bumpy
 
-Moderate bumps were reported most often over North Carolina, near Charlotte, about 30 min after leaving ATL (1 h 10 min after leaving LGA): 331 of 1,993 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Moderate bumps were reported most often over central North Carolina, near Charlotte, about 30 min after leaving ATL, or 1 h 10 min after leaving LGA. There, 331 of 1,993 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
-The next most were over Virginia, near Greensboro, about 45 min after leaving ATL (1 h after leaving LGA): 270 of 883 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+The next most were over western Virginia, near Greensboro, about 45 min after leaving ATL, or 1 h after leaving LGA. There, 270 of 883 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
 | Where | From ATL | From LGA | Reports | Moderate or stronger |
 |---|---|---|---|---|
@@ -1274,16 +1274,16 @@ The next most were over Virginia, near Greensboro, about 45 min after leaving AT
 | over Georgia, near Atlanta | 10 min | 1 h 30 min | 662 | 94 |
 | over Georgia, near Knoxville/Maryville | 15 min | 1 h 25 min | 1,005 | 162 |
 | over South Carolina, near Knoxville/Maryville | 20 min | 1 h 20 min | 615 | 98 |
-| over North Carolina, near Charlotte | 25 min | 1 h 15 min | 1,715 | 304 |
-| over North Carolina, near Charlotte | 30 min | 1 h 10 min | 1,993 | 331 |
-| over North Carolina, near Charlotte | 35 min | 1 h 5 min | 710 | 177 |
+| over western North Carolina, near Charlotte | 25 min | 1 h 15 min | 1,715 | 304 |
+| over central North Carolina, near Charlotte | 30 min | 1 h 10 min | 1,993 | 331 |
+| over eastern North Carolina, near Charlotte | 35 min | 1 h 5 min | 710 | 177 |
 | over North Carolina, near Greensboro | 40 min | 1 h | 1,352 | 287 |
-| over Virginia, near Greensboro | 45 min | 1 h | 883 | 270 |
-| over Virginia, near Greensboro | 50 min | 55 min | 347 | 211 |
-| over Virginia, near Richmond | 55 min | 50 min | 254 | 171 |
-| over Virginia, near Richmond | 1 h | 45 min | 358 | 243 |
-| over Virginia, near Dulles | 1 h | 40 min | 276 | 185 |
-| over Virginia, near Dulles | 1 h 5 min | 35 min | 244 | 156 |
+| over western Virginia, near Greensboro | 45 min | 1 h | 883 | 270 |
+| over eastern Virginia, near Greensboro | 50 min | 55 min | 347 | 211 |
+| over western Virginia, near Richmond | 55 min | 50 min | 254 | 171 |
+| over eastern Virginia, near Richmond | 1 h | 45 min | 358 | 243 |
+| over western Virginia, near Dulles | 1 h | 40 min | 276 | 185 |
+| over eastern Virginia, near Dulles | 1 h 5 min | 35 min | 244 | 156 |
 | over Maryland, near Washington | 1 h 10 min | 30 min | 147 | 93 |
 | over Maryland, near Baltimore | 1 h 15 min | 25 min | 128 | 73 |
 | over Delaware, near Philadelphia | 1 h 20 min | 20 min | 216 | 137 |
@@ -1322,7 +1322,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between ATL and LGA?
 
-Pilots reported moderate bumps most often over North Carolina, near Charlotte (about 30 min after leaving ATL (1 h 10 min after leaving LGA)), and next most over Virginia, near Greensboro (about 45 min after leaving ATL (1 h after leaving LGA)).
+Pilots reported moderate bumps most often over central North Carolina, near Charlotte, about 30 min after leaving ATL, or 1 h 10 min after leaving LGA. The next most were over western Virginia, near Greensboro, about 45 min after leaving ATL, or 1 h after leaving LGA.
 
 #### When is the smoothest time of year to fly ATL to LGA?
 
@@ -1353,7 +1353,7 @@ Source: https://bumpcast.app/routes/atl-to-lga-turbulence.html (data November 20
 
 > Denver (DEN) ⇄ Phoenix (PHX), both directions. November 2025 to October 2026.
 
-Flights between Denver (DEN) and Phoenix (PHX) fly about 600 miles, roughly 1½ hours in the air. In the past year, pilots near this route reported moderate bumps most often near DEN, and more often in December and June. Severe reports were rare: 87 of 12,775.
+Flights between Denver (DEN) and Phoenix (PHX) fly about 600 miles, roughly 1½ hours in the air. In the past year, pilots near this route reported moderate bumps most often near DEN, and more often in December and June.
 
 - Distance: 600 miles (970 km)
 - In the air: about 1 h 30 min (typical jet, still air)
@@ -1363,29 +1363,29 @@ Flights between Denver (DEN) and Phoenix (PHX) fly about 600 miles, roughly 1½ 
 
 ### Where on the route it gets bumpy
 
-Moderate bumps were reported most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN (1 h 20 min after leaving PHX): 925 of 3,697 reports there. Close to the ground, wind over the mountains stirs the air, and gusty days at DEN add to it.
+Moderate bumps were reported most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN, or 1 h 20 min after leaving PHX. There, 925 of 3,697 reports were moderate or stronger. Close to the ground, wind over the mountains stirs the air, and gusty days at DEN add to it.
 
 | Where | From DEN | From PHX | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near DEN, where flights climb out or come in to land | 5 min | 1 h 20 min | 3,697 | 925 |
 | over Colorado, near Denver | 10 min | 1 h 15 min | 1,817 | 881 |
-| over Colorado, near Colorado Springs | 15 min | 1 h 10 min | 1,482 | 232 |
-| over Colorado, near Colorado Springs | 20 min | 1 h 5 min | 973 | 266 |
-| over Colorado, near Colorado Springs | 20 min | 1 h | 754 | 260 |
-| over Colorado | 25 min | 1 h | 830 | 193 |
-| over Colorado | 30 min | 55 min | 490 | 213 |
-| over Colorado | 35 min | 50 min | 224 | 85 |
-| over Colorado | 35 min | 45 min | 299 | 78 |
-| over New Mexico | 40 min | 45 min | 878 | 174 |
-| over New Mexico | 45 min | 40 min | 242 | 86 |
-| over Arizona | 45 min | 35 min | 106 | 43 |
-| over Arizona | 50 min | 30 min | 170 | 71 |
-| over Arizona | 55 min | 30 min | 175 | 74 |
-| over Arizona | 1 h | 25 min | 187 | 88 |
-| over Arizona | 1 h | 20 min | 211 | 112 |
-| over Arizona, near Phoenix | 1 h 5 min | 20 min | 72 | 39 |
-| over Arizona, near Phoenix | 1 h 10 min | 15 min | 43 | 28 |
-| over Arizona, near Phoenix | 1 h 15 min | 10 min | 78 | 57 |
+| over eastern Colorado, near Colorado Springs | 15 min | 1 h 10 min | 1,482 | 232 |
+| over central Colorado, near Colorado Springs | 20 min | 1 h 5 min | 973 | 266 |
+| over western Colorado, near Colorado Springs | 20 min | 1 h | 754 | 260 |
+| over eastern Colorado | 25 min | 1 h | 830 | 193 |
+| over east-central Colorado | 30 min | 55 min | 490 | 213 |
+| over west-central Colorado | 35 min | 50 min | 224 | 85 |
+| over western Colorado | 35 min | 45 min | 299 | 78 |
+| over eastern New Mexico | 40 min | 45 min | 878 | 174 |
+| over western New Mexico | 45 min | 40 min | 242 | 86 |
+| over eastern Arizona | 45 min | 35 min | 106 | 43 |
+| over east-central Arizona | 50 min | 30 min | 170 | 71 |
+| over central Arizona | 55 min | 30 min | 175 | 74 |
+| over west-central Arizona | 1 h | 25 min | 187 | 88 |
+| over western Arizona | 1 h | 20 min | 211 | 112 |
+| over eastern Arizona, near Phoenix | 1 h 5 min | 20 min | 72 | 39 |
+| over central Arizona, near Phoenix | 1 h 10 min | 15 min | 43 | 28 |
+| over western Arizona, near Phoenix | 1 h 15 min | 10 min | 78 | 57 |
 | near PHX, where flights climb out or come in to land | 1 h 25 min | 5 min | 47 | 23 |
 
 ### When in the year
@@ -1419,7 +1419,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between DEN and PHX?
 
-Pilots reported moderate bumps most often near DEN, where flights climb out or come in to land (about 5 min after leaving DEN (1 h 20 min after leaving PHX)).
+Pilots reported moderate bumps most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN, or 1 h 20 min after leaving PHX.
 
 #### When is the smoothest time of year to fly DEN to PHX?
 
@@ -1450,7 +1450,7 @@ Source: https://bumpcast.app/routes/den-to-phx-turbulence.html (data November 20
 
 > Los Angeles (LAX) ⇄ Seattle (SEA), both directions. November 2025 to October 2026.
 
-Flights between Los Angeles (LAX) and Seattle (SEA) fly about 960 miles, roughly 2¼ hours in the air. In the past year, pilots near this route reported moderate bumps most often near LAX, and more often in December. Severe reports were rare: 17 of 2,883.
+Flights between Los Angeles (LAX) and Seattle (SEA) fly about 960 miles, roughly 2¼ hours in the air. In the past year, pilots near this route reported moderate bumps most often near LAX, and more often in December.
 
 - Distance: 960 miles (1,540 km)
 - In the air: about 2 h 10 min (typical jet, still air)
@@ -1460,30 +1460,30 @@ Flights between Los Angeles (LAX) and Seattle (SEA) fly about 960 miles, roughly
 
 ### Where on the route it gets bumpy
 
-Moderate bumps were reported most often near LAX, where flights climb out or come in to land, about 5 min after leaving LAX (2 h after leaving SEA): 181 of 305 reports there. Close to the ground, wind over buildings and land stirs the air.
+Moderate bumps were reported most often near LAX, where flights climb out or come in to land, about 5 min after leaving LAX, or 2 h after leaving SEA. There, 181 of 305 reports were moderate or stronger. Close to the ground, wind over buildings and land stirs the air.
 
-The next most were over California, about 1 h 10 min after leaving LAX (55 min after leaving SEA): 128 of 209 reports there. The ground below is high, and wind over mountains makes waves that reach cruising height.
+The next most were over northern California, about 1 h 10 min after leaving LAX, or 55 min after leaving SEA. There, 128 of 209 reports were moderate or stronger. The ground below is high, and wind over mountains makes waves that reach cruising height.
 
 | Where | From LAX | From SEA | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near LAX, where flights climb out or come in to land | 5 min | 2 h | 305 | 181 |
 | over California, near Burbank | 15 min | 1 h 50 min | 43 | 19 |
-| over California, near Fresno | 20 min | 1 h 45 min | 84 | 42 |
-| over California, near Fresno | 25 min | 1 h 40 min | 60 | 31 |
-| over California, near Fresno | 30 min | 1 h 35 min | 83 | 47 |
-| over California, near Fresno | 35 min | 1 h 30 min | 64 | 43 |
-| over California, near Reno | 40 min | 1 h 20 min | 92 | 50 |
-| over Nevada, near Reno | 50 min | 1 h 15 min | 75 | 42 |
-| over Nevada, near Reno | 55 min | 1 h 10 min | 114 | 67 |
-| over California, near Reno | 1 h | 1 h 5 min | 70 | 41 |
-| over California | 1 h 5 min | 1 h | 145 | 95 |
-| over California | 1 h 10 min | 55 min | 209 | 128 |
-| over Oregon | 1 h 15 min | 50 min | 231 | 121 |
+| over southern California, near Fresno | 20 min | 1 h 45 min | 84 | 42 |
+| over south-central California, near Fresno | 25 min | 1 h 40 min | 60 | 31 |
+| over north-central California, near Fresno | 30 min | 1 h 35 min | 83 | 47 |
+| over northern California, near Fresno | 35 min | 1 h 30 min | 64 | 43 |
+| over southern California, near Reno | 40 min | 1 h 20 min | 92 | 50 |
+| over southern Nevada, near Reno | 50 min | 1 h 15 min | 75 | 42 |
+| over northern Nevada, near Reno | 55 min | 1 h 10 min | 114 | 67 |
+| over northern California, near Reno | 1 h | 1 h 5 min | 70 | 41 |
+| over southern California | 1 h 5 min | 1 h | 145 | 95 |
+| over northern California | 1 h 10 min | 55 min | 209 | 128 |
+| over southern Oregon | 1 h 15 min | 50 min | 231 | 121 |
 | over or near Oregon | 1 h 20 min | 40 min | 123 | 59 |
-| over Oregon | 1 h 30 min | 35 min | 204 | 107 |
-| over Oregon, near Portland | 1 h 35 min | 30 min | 198 | 111 |
-| over Oregon, near Portland | 1 h 40 min | 25 min | 131 | 89 |
-| over Oregon, near Portland | 1 h 45 min | 20 min | 192 | 123 |
+| over northern Oregon | 1 h 30 min | 35 min | 204 | 107 |
+| over southern Oregon, near Portland | 1 h 35 min | 30 min | 198 | 111 |
+| over central Oregon, near Portland | 1 h 40 min | 25 min | 131 | 89 |
+| over northern Oregon, near Portland | 1 h 45 min | 20 min | 192 | 123 |
 | over Washington, near Portland | 1 h 50 min | 15 min | 110 | 70 |
 | near SEA, where flights climb out or come in to land | 2 h | 5 min | 350 | 91 |
 
@@ -1518,7 +1518,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between LAX and SEA?
 
-Pilots reported moderate bumps most often near LAX, where flights climb out or come in to land (about 5 min after leaving LAX (2 h after leaving SEA)), and next most over California (about 1 h 10 min after leaving LAX (55 min after leaving SEA)).
+Pilots reported moderate bumps most often near LAX, where flights climb out or come in to land, about 5 min after leaving LAX, or 2 h after leaving SEA. The next most were over northern California, about 1 h 10 min after leaving LAX, or 55 min after leaving SEA.
 
 #### When is the smoothest time of year to fly LAX to SEA?
 
@@ -1549,7 +1549,7 @@ Source: https://bumpcast.app/routes/lax-to-sea-turbulence.html (data November 20
 
 > Boston (BOS) ⇄ Washington (DCA), both directions. November 2025 to October 2026.
 
-Flights between Boston (BOS) and Washington (DCA) fly about 400 miles, roughly an hour in the air. In the past year, pilots near this route reported moderate bumps most often over New York, and more often in December and October. Severe reports were rare: 55 of 6,451.
+Flights between Boston (BOS) and Washington (DCA) fly about 400 miles, roughly an hour in the air. In the past year, pilots near this route reported moderate bumps most often over eastern New York, and more often in December and October.
 
 - Distance: 400 miles (640 km)
 - In the air: about 1 h 5 min (typical jet, still air)
@@ -1559,31 +1559,31 @@ Flights between Boston (BOS) and Washington (DCA) fly about 400 miles, roughly a
 
 ### Where on the route it gets bumpy
 
-Moderate bumps were reported most often near New York, about 25 min after leaving BOS (35 min after leaving DCA): 230 of 988 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Moderate bumps were reported most often over eastern New York, about 25 min after leaving BOS, or 35 min after leaving DCA. There, 230 of 988 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
-The next most were over Connecticut, near Hartford, about 15 min after leaving BOS (50 min after leaving DCA): 172 of 548 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+The next most were over eastern Connecticut, near Hartford, about 15 min after leaving BOS, or 50 min after leaving DCA. There, 172 of 548 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
 | Where | From BOS | From DCA | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near BOS, where flights climb out or come in to land | 5 min | 1 h | 262 | 74 |
-| over Rhode Island, near Providence/Warwick | 5 min | 55 min | 309 | 91 |
-| over Rhode Island, near Providence/Warwick | 10 min | 50 min | 284 | 124 |
-| over Connecticut, near Hartford | 15 min | 50 min | 548 | 172 |
-| over Connecticut, near Hartford | 15 min | 45 min | 273 | 67 |
-| over Connecticut, near Hartford | 20 min | 40 min | 429 | 160 |
+| over eastern Rhode Island, near Providence/Warwick | 5 min | 55 min | 309 | 91 |
+| over western Rhode Island, near Providence/Warwick | 10 min | 50 min | 284 | 124 |
+| over eastern Connecticut, near Hartford | 15 min | 50 min | 548 | 172 |
+| over central Connecticut, near Hartford | 15 min | 45 min | 273 | 67 |
+| over western Connecticut, near Hartford | 20 min | 40 min | 429 | 160 |
 | over Connecticut, near New York | 20 min | 40 min | 428 | 98 |
-| near New York | 25 min | 35 min | 988 | 230 |
-| near New York | 25 min | 35 min | 145 | 58 |
+| over eastern New York | 25 min | 35 min | 988 | 230 |
+| over western New York | 25 min | 35 min | 145 | 58 |
 | over New York, near Newark | 30 min | 30 min | 389 | 157 |
-| over New Jersey, near Newark | 30 min | 30 min | 398 | 137 |
-| over New Jersey, near Newark | 35 min | 25 min | 443 | 147 |
+| over eastern New Jersey, near Newark | 30 min | 30 min | 398 | 137 |
+| over western New Jersey, near Newark | 35 min | 25 min | 443 | 147 |
 | over New Jersey, near Philadelphia | 35 min | 25 min | 335 | 121 |
 | over Pennsylvania, near Philadelphia | 40 min | 20 min | 141 | 65 |
-| over Delaware, near Philadelphia | 40 min | 20 min | 289 | 126 |
-| over Delaware, near Philadelphia | 45 min | 15 min | 131 | 75 |
-| over Maryland, near Baltimore | 50 min | 15 min | 171 | 111 |
-| over Maryland, near Baltimore | 50 min | 10 min | 88 | 52 |
-| over Maryland, near Baltimore | 55 min | 5 min | 290 | 138 |
+| over eastern Delaware, near Philadelphia | 40 min | 20 min | 289 | 126 |
+| over western Delaware, near Philadelphia | 45 min | 15 min | 131 | 75 |
+| over eastern Maryland, near Baltimore | 50 min | 15 min | 171 | 111 |
+| over central Maryland, near Baltimore | 50 min | 10 min | 88 | 52 |
+| over western Maryland, near Baltimore | 55 min | 5 min | 290 | 138 |
 | near DCA, where flights climb out or come in to land | 1 h | 5 min | 110 | 52 |
 
 ### When in the year
@@ -1617,7 +1617,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between BOS and DCA?
 
-Pilots reported moderate bumps most often near New York (about 25 min after leaving BOS (35 min after leaving DCA)), and next most over Connecticut, near Hartford (about 15 min after leaving BOS (50 min after leaving DCA)).
+Pilots reported moderate bumps most often over eastern New York, about 25 min after leaving BOS, or 35 min after leaving DCA. The next most were over eastern Connecticut, near Hartford, about 15 min after leaving BOS, or 50 min after leaving DCA.
 
 #### When is the smoothest time of year to fly BOS to DCA?
 
@@ -1648,7 +1648,7 @@ Source: https://bumpcast.app/routes/bos-to-dca-turbulence.html (data November 20
 
 > Boston (BOS) ⇄ New York (LGA), both directions. November 2025 to October 2026.
 
-Flights between Boston (BOS) and New York (LGA) fly about 180 miles, roughly 40 minutes in the air. In the past year, pilots near this route reported moderate bumps most often over Connecticut, and more often in November and October. Severe reports were rare: 22 of 2,695.
+Flights between Boston (BOS) and New York (LGA) fly about 180 miles, roughly 40 minutes in the air. In the past year, pilots near this route reported moderate bumps most often over Connecticut, and more often in November and October.
 
 - Distance: 180 miles (300 km)
 - In the air: about 40 min (typical jet, still air)
@@ -1658,29 +1658,29 @@ Flights between Boston (BOS) and New York (LGA) fly about 180 miles, roughly 40 
 
 ### Where on the route it gets bumpy
 
-Moderate bumps were reported most often over Connecticut, near Hartford, about 15 min after leaving BOS (20 min after leaving LGA): 145 of 440 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Moderate bumps were reported most often over Connecticut, near Hartford (part 2 of 7), about 15 min after leaving BOS, or 20 min after leaving LGA. There, 145 of 440 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
 | Where | From BOS | From LGA | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near BOS, where flights climb out or come in to land | 0 min | 35 min | 202 | 48 |
-| over Massachusetts, near Boston | 5 min | 35 min | 54 | 21 |
-| over Massachusetts, near Boston | 5 min | 30 min | 90 | 32 |
-| over Rhode Island, near Providence/Warwick | 10 min | 30 min | 270 | 73 |
-| over Rhode Island, near Providence/Warwick | 10 min | 25 min | 164 | 69 |
-| over Rhode Island, near Providence/Warwick | 10 min | 25 min | 153 | 63 |
+| over eastern Massachusetts, near Boston | 5 min | 35 min | 54 | 21 |
+| over western Massachusetts, near Boston | 5 min | 30 min | 90 | 32 |
+| over eastern Rhode Island, near Providence/Warwick | 10 min | 30 min | 270 | 73 |
+| over central Rhode Island, near Providence/Warwick | 10 min | 25 min | 164 | 69 |
+| over western Rhode Island, near Providence/Warwick | 10 min | 25 min | 153 | 63 |
 | over Connecticut, near Providence/Warwick | 10 min | 25 min | 31 | 15 |
-| over Connecticut, near Hartford | 15 min | 20 min | 66 | 20 |
-| over Connecticut, near Hartford | 15 min | 20 min | 440 | 145 |
-| over Connecticut, near Hartford | 15 min | 20 min | 144 | 43 |
-| over Connecticut, near Hartford | 20 min | 15 min | 89 | 37 |
-| over Connecticut, near Hartford | 20 min | 15 min | 81 | 30 |
-| over Connecticut, near Hartford | 20 min | 15 min | 195 | 67 |
-| over Connecticut, near Hartford | 25 min | 10 min | 83 | 31 |
-| over Connecticut, near New York | 25 min | 10 min | 80 | 31 |
-| over Connecticut, near New York | 25 min | 10 min | 233 | 85 |
-| near New York | 30 min | 10 min | 83 | 28 |
-| near New York | 30 min | 5 min | 30 | 15 |
-| near New York | 35 min | 5 min | 57 | 22 |
+| over Connecticut, near Hartford (part 1 of 7) | 15 min | 20 min | 66 | 20 |
+| over Connecticut, near Hartford (part 2 of 7) | 15 min | 20 min | 440 | 145 |
+| over Connecticut, near Hartford (part 3 of 7) | 15 min | 20 min | 144 | 43 |
+| over Connecticut, near Hartford (part 4 of 7) | 20 min | 15 min | 89 | 37 |
+| over Connecticut, near Hartford (part 5 of 7) | 20 min | 15 min | 81 | 30 |
+| over Connecticut, near Hartford (part 6 of 7) | 20 min | 15 min | 195 | 67 |
+| over Connecticut, near Hartford (part 7 of 7) | 25 min | 10 min | 83 | 31 |
+| over eastern Connecticut, near New York | 25 min | 10 min | 80 | 31 |
+| over western Connecticut, near New York | 25 min | 10 min | 233 | 85 |
+| over eastern New York | 30 min | 10 min | 83 | 28 |
+| over central New York | 30 min | 5 min | 30 | 15 |
+| over western New York | 35 min | 5 min | 57 | 22 |
 | near LGA, where flights climb out or come in to land | 35 min | 0 min | 150 | 58 |
 
 ### When in the year
@@ -1714,7 +1714,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between BOS and LGA?
 
-Pilots reported moderate bumps most often over Connecticut, near Hartford (about 15 min after leaving BOS (20 min after leaving LGA)).
+Pilots reported moderate bumps most often over Connecticut, near Hartford (part 2 of 7), about 15 min after leaving BOS, or 20 min after leaving LGA.
 
 #### When is the smoothest time of year to fly BOS to LGA?
 
@@ -1745,7 +1745,7 @@ Source: https://bumpcast.app/routes/bos-to-lga-turbulence.html (data November 20
 
 > Los Angeles (LAX) ⇄ Chicago (ORD), both directions. November 2025 to October 2026.
 
-Flights between Los Angeles (LAX) and Chicago (ORD) fly about 1,740 miles, roughly 3¾ hours in the air. In the past year, pilots near this route reported moderate bumps most often over Colorado, and more often in May, June and October. Severe reports were rare: 89 of 26,088.
+Flights between Los Angeles (LAX) and Chicago (ORD) fly about 1,740 miles, roughly 3¾ hours in the air. In the past year, pilots near this route reported moderate bumps most often over central Colorado, and more often in May, June and October.
 
 - Distance: 1,740 miles (2,800 km)
 - In the air: about 3 h 40 min (typical jet, still air)
@@ -1755,7 +1755,7 @@ Flights between Los Angeles (LAX) and Chicago (ORD) fly about 1,740 miles, rough
 
 ### Where on the route it gets bumpy
 
-Moderate bumps were reported most often over Colorado, near Colorado Springs, about 1 h 45 min after leaving LAX (1 h 55 min after leaving ORD): 863 of 2,423 reports there. The ground below is high, and wind over mountains makes waves that reach cruising height.
+Moderate bumps were reported most often over central Colorado, near Colorado Springs, about 1 h 45 min after leaving LAX, or 1 h 55 min after leaving ORD. There, 863 of 2,423 reports were moderate or stronger. The ground below is high, and wind over mountains makes waves that reach cruising height.
 
 | Where | From LAX | From ORD | Reports | Moderate or stronger |
 |---|---|---|---|---|
@@ -1764,19 +1764,19 @@ Moderate bumps were reported most often over Colorado, near Colorado Springs, ab
 | over Arizona, near Las Vegas | 30 min | 3 h 5 min | 147 | 53 |
 | near Las Vegas | 40 min | 2 h 55 min | 116 | 49 |
 | over Arizona | 50 min | 2 h 45 min | 581 | 144 |
-| over Utah | 1 h | 2 h 35 min | 1,002 | 243 |
-| over Utah | 1 h 10 min | 2 h 25 min | 1,624 | 409 |
+| over western Utah | 1 h | 2 h 35 min | 1,002 | 243 |
+| over eastern Utah | 1 h 10 min | 2 h 25 min | 1,624 | 409 |
 | over Colorado | 1 h 20 min | 2 h 15 min | 1,105 | 348 |
-| over Colorado, near Colorado Springs | 1 h 30 min | 2 h 5 min | 2,429 | 736 |
-| over Colorado, near Colorado Springs | 1 h 45 min | 1 h 55 min | 2,423 | 863 |
-| over Colorado, near Colorado Springs | 1 h 55 min | 1 h 45 min | 1,692 | 608 |
-| over Kansas | 2 h 5 min | 1 h 30 min | 1,404 | 410 |
-| over Kansas | 2 h 15 min | 1 h 20 min | 2,149 | 465 |
+| over western Colorado, near Colorado Springs | 1 h 30 min | 2 h 5 min | 2,429 | 736 |
+| over central Colorado, near Colorado Springs | 1 h 45 min | 1 h 55 min | 2,423 | 863 |
+| over eastern Colorado, near Colorado Springs | 1 h 55 min | 1 h 45 min | 1,692 | 608 |
+| over western Kansas | 2 h 5 min | 1 h 30 min | 1,404 | 410 |
+| over eastern Kansas | 2 h 15 min | 1 h 20 min | 2,149 | 465 |
 | over Nebraska | 2 h 25 min | 1 h 10 min | 1,379 | 446 |
 | over Nebraska, near Omaha | 2 h 35 min | 1 h | 1,274 | 444 |
 | over Iowa, near Omaha | 2 h 45 min | 50 min | 1,110 | 380 |
-| over Iowa, near Des Moines | 2 h 55 min | 40 min | 1,341 | 442 |
-| over Iowa, near Des Moines | 3 h 5 min | 30 min | 1,878 | 446 |
+| over western Iowa, near Des Moines | 2 h 55 min | 40 min | 1,341 | 442 |
+| over eastern Iowa, near Des Moines | 3 h 5 min | 30 min | 1,878 | 446 |
 | over Iowa | 3 h 15 min | 20 min | 1,503 | 391 |
 | near ORD, where flights climb out or come in to land | 3 h 30 min | 10 min | 2,446 | 480 |
 
@@ -1811,7 +1811,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between LAX and ORD?
 
-Pilots reported moderate bumps most often over Colorado, near Colorado Springs (about 1 h 45 min after leaving LAX (1 h 55 min after leaving ORD)).
+Pilots reported moderate bumps most often over central Colorado, near Colorado Springs, about 1 h 45 min after leaving LAX, or 1 h 55 min after leaving ORD.
 
 #### When is the smoothest time of year to fly LAX to ORD?
 
@@ -1842,7 +1842,7 @@ Source: https://bumpcast.app/routes/lax-to-ord-turbulence.html (data November 20
 
 > Atlanta (ATL) ⇄ Dallas-Fort Worth (DFW), both directions. November 2025 to October 2026.
 
-Flights between Atlanta (ATL) and Dallas-Fort Worth (DFW) fly about 730 miles, roughly 1¾ hours in the air. In the past year, pilots near this route reported moderate bumps most often over Alabama, and more often in April and May. Severe reports were rare: 47 of 10,903.
+Flights between Atlanta (ATL) and Dallas-Fort Worth (DFW) fly about 730 miles, roughly 1¾ hours in the air. In the past year, pilots near this route reported moderate bumps most often over central Alabama, and more often in April and May.
 
 - Distance: 730 miles (1,170 km)
 - In the air: about 1 h 45 min (typical jet, still air)
@@ -1852,31 +1852,31 @@ Flights between Atlanta (ATL) and Dallas-Fort Worth (DFW) fly about 730 miles, r
 
 ### Where on the route it gets bumpy
 
-Moderate bumps were reported most often over Alabama, near Birmingham, about 20 min after leaving ATL (1 h 20 min after leaving DFW): 312 of 1,234 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Moderate bumps were reported most often over central Alabama, near Birmingham, about 20 min after leaving ATL, or 1 h 20 min after leaving DFW. There, 312 of 1,234 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
-The next most were over Mississippi, about 35 min after leaving ATL (1 h 5 min after leaving DFW): 235 of 436 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+The next most were over eastern Mississippi, about 35 min after leaving ATL, or 1 h 5 min after leaving DFW. There, 235 of 436 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
 | Where | From ATL | From DFW | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near ATL, where flights climb out or come in to land | 5 min | 1 h 35 min | 293 | 87 |
 | over Georgia, near Atlanta | 10 min | 1 h 30 min | 875 | 172 |
-| over Alabama, near Birmingham | 15 min | 1 h 25 min | 525 | 142 |
-| over Alabama, near Birmingham | 20 min | 1 h 20 min | 1,234 | 312 |
-| over Alabama, near Birmingham | 25 min | 1 h 15 min | 574 | 217 |
+| over eastern Alabama, near Birmingham | 15 min | 1 h 25 min | 525 | 142 |
+| over central Alabama, near Birmingham | 20 min | 1 h 20 min | 1,234 | 312 |
+| over western Alabama, near Birmingham | 25 min | 1 h 15 min | 574 | 217 |
 | over Mississippi, near Birmingham | 30 min | 1 h 10 min | 231 | 140 |
-| over Mississippi | 35 min | 1 h 5 min | 436 | 235 |
-| over Mississippi | 40 min | 1 h | 159 | 98 |
-| over Mississippi | 45 min | 55 min | 311 | 183 |
-| over Mississippi | 45 min | 50 min | 310 | 181 |
-| over Mississippi | 50 min | 45 min | 292 | 144 |
-| over Arkansas | 55 min | 40 min | 534 | 191 |
-| over Arkansas | 1 h | 40 min | 783 | 221 |
-| over Arkansas | 1 h 5 min | 35 min | 1,051 | 225 |
-| over Arkansas | 1 h 10 min | 30 min | 1,003 | 190 |
-| over Texas | 1 h 15 min | 25 min | 940 | 210 |
-| over Texas | 1 h 20 min | 20 min | 404 | 106 |
-| over Texas, near Dallas | 1 h 25 min | 15 min | 356 | 115 |
-| over Texas, near Dallas | 1 h 30 min | 10 min | 348 | 98 |
+| over eastern Mississippi | 35 min | 1 h 5 min | 436 | 235 |
+| over east-central Mississippi | 40 min | 1 h | 159 | 98 |
+| over central Mississippi | 45 min | 55 min | 311 | 183 |
+| over west-central Mississippi | 45 min | 50 min | 310 | 181 |
+| over western Mississippi | 50 min | 45 min | 292 | 144 |
+| over eastern Arkansas | 55 min | 40 min | 534 | 191 |
+| over east-central Arkansas | 1 h | 40 min | 783 | 221 |
+| over west-central Arkansas | 1 h 5 min | 35 min | 1,051 | 225 |
+| over western Arkansas | 1 h 10 min | 30 min | 1,003 | 190 |
+| over eastern Texas | 1 h 15 min | 25 min | 940 | 210 |
+| over western Texas | 1 h 20 min | 20 min | 404 | 106 |
+| over eastern Texas, near Dallas | 1 h 25 min | 15 min | 356 | 115 |
+| over western Texas, near Dallas | 1 h 30 min | 10 min | 348 | 98 |
 | near DFW, where flights climb out or come in to land | 1 h 35 min | 5 min | 244 | 95 |
 
 ### When in the year
@@ -1910,7 +1910,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between ATL and DFW?
 
-Pilots reported moderate bumps most often over Alabama, near Birmingham (about 20 min after leaving ATL (1 h 20 min after leaving DFW)), and next most over Mississippi (about 35 min after leaving ATL (1 h 5 min after leaving DFW)).
+Pilots reported moderate bumps most often over central Alabama, near Birmingham, about 20 min after leaving ATL, or 1 h 20 min after leaving DFW. The next most were over eastern Mississippi, about 35 min after leaving ATL, or 1 h 5 min after leaving DFW.
 
 #### When is the smoothest time of year to fly ATL to DFW?
 
@@ -1941,7 +1941,7 @@ Source: https://bumpcast.app/routes/atl-to-dfw-turbulence.html (data November 20
 
 > Denver (DEN) ⇄ Las Vegas (LAS), both directions. November 2025 to October 2026.
 
-Flights between Denver (DEN) and Las Vegas (LAS) fly about 630 miles, roughly 1½ hours in the air. In the past year, pilots near this route reported moderate bumps most often near DEN, and more often in December and June. Severe reports were rare: 102 of 14,632.
+Flights between Denver (DEN) and Las Vegas (LAS) fly about 630 miles, roughly 1½ hours in the air. In the past year, pilots near this route reported moderate bumps most often near DEN, and more often in December and June.
 
 - Distance: 630 miles (1,010 km)
 - In the air: about 1 h 30 min (typical jet, still air)
@@ -1951,28 +1951,28 @@ Flights between Denver (DEN) and Las Vegas (LAS) fly about 630 miles, roughly 1�
 
 ### Where on the route it gets bumpy
 
-Moderate bumps were reported most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN (1 h 25 min after leaving LAS): 1,190 of 3,978 reports there. Close to the ground, wind over the mountains stirs the air, and gusty days at DEN add to it.
+Moderate bumps were reported most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN, or 1 h 25 min after leaving LAS. There, 1,190 of 3,978 reports were moderate or stronger. Close to the ground, wind over the mountains stirs the air, and gusty days at DEN add to it.
 
 | Where | From DEN | From LAS | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near DEN, where flights climb out or come in to land | 5 min | 1 h 25 min | 3,978 | 1,190 |
-| over Colorado, near Denver | 10 min | 1 h 20 min | 2,766 | 1,053 |
-| over Colorado, near Denver | 15 min | 1 h 15 min | 1,554 | 236 |
-| over Colorado | 20 min | 1 h 10 min | 952 | 218 |
-| over Colorado | 20 min | 1 h 5 min | 564 | 127 |
-| over Colorado | 25 min | 1 h | 927 | 169 |
-| over Colorado | 30 min | 55 min | 585 | 173 |
-| over Colorado | 35 min | 55 min | 877 | 152 |
-| over Utah | 40 min | 50 min | 615 | 162 |
-| over Utah | 40 min | 45 min | 239 | 92 |
-| over Utah | 45 min | 40 min | 241 | 99 |
-| over Utah | 50 min | 35 min | 205 | 98 |
-| over Utah | 55 min | 35 min | 282 | 85 |
-| over Utah | 55 min | 30 min | 368 | 122 |
-| over Utah | 1 h | 25 min | 45 | 21 |
+| over eastern Colorado, near Denver | 10 min | 1 h 20 min | 2,766 | 1,053 |
+| over western Colorado, near Denver | 15 min | 1 h 15 min | 1,554 | 236 |
+| over eastern Colorado | 20 min | 1 h 10 min | 952 | 218 |
+| over east-central Colorado | 20 min | 1 h 5 min | 564 | 127 |
+| over central Colorado | 25 min | 1 h | 927 | 169 |
+| over west-central Colorado | 30 min | 55 min | 585 | 173 |
+| over western Colorado | 35 min | 55 min | 877 | 152 |
+| over Utah (part 1 of 7) | 40 min | 50 min | 615 | 162 |
+| over Utah (part 2 of 7) | 40 min | 45 min | 239 | 92 |
+| over Utah (part 3 of 7) | 45 min | 40 min | 241 | 99 |
+| over Utah (part 4 of 7) | 50 min | 35 min | 205 | 98 |
+| over Utah (part 5 of 7) | 55 min | 35 min | 282 | 85 |
+| over Utah (part 6 of 7) | 55 min | 30 min | 368 | 122 |
+| over Utah (part 7 of 7) | 1 h | 25 min | 45 | 21 |
 | over Arizona | 1 h 5 min | 20 min | 102 | 59 |
-| over Utah, near Las Vegas | 1 h 10 min | 20 min | 35 | 18 |
-| over Utah, near Las Vegas | 1 h 15 min | 15 min | 33 | 20 |
+| over eastern Utah, near Las Vegas | 1 h 10 min | 20 min | 35 | 18 |
+| over western Utah, near Las Vegas | 1 h 15 min | 15 min | 33 | 20 |
 | over Nevada, near Las Vegas | 1 h 20 min | 10 min | 94 | 39 |
 | near LAS, where flights climb out or come in to land | 1 h 25 min | 5 min | 170 | 38 |
 
@@ -2007,7 +2007,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between DEN and LAS?
 
-Pilots reported moderate bumps most often near DEN, where flights climb out or come in to land (about 5 min after leaving DEN (1 h 25 min after leaving LAS)).
+Pilots reported moderate bumps most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN, or 1 h 25 min after leaving LAS.
 
 #### When is the smoothest time of year to fly DEN to LAS?
 
@@ -2038,7 +2038,7 @@ Source: https://bumpcast.app/routes/den-to-las-turbulence.html (data November 20
 
 > Denver (DEN) ⇄ Los Angeles (LAX), both directions. November 2025 to October 2026.
 
-Flights between Denver (DEN) and Los Angeles (LAX) fly about 860 miles, roughly 2 hours in the air. In the past year, pilots near this route reported moderate bumps most often near DEN, and more often in December and June. Severe reports were rare: 115 of 14,934.
+Flights between Denver (DEN) and Los Angeles (LAX) fly about 860 miles, roughly 2 hours in the air. In the past year, pilots near this route reported moderate bumps most often near DEN, and more often in December and June.
 
 - Distance: 860 miles (1,390 km)
 - In the air: about 2 h (typical jet, still air)
@@ -2048,26 +2048,26 @@ Flights between Denver (DEN) and Los Angeles (LAX) fly about 860 miles, roughly 
 
 ### Where on the route it gets bumpy
 
-Moderate bumps were reported most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN (1 h 50 min after leaving LAX): 1,686 of 5,113 reports there. Close to the ground, wind over the mountains stirs the air, and gusty days at DEN add to it.
+Moderate bumps were reported most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN, or 1 h 50 min after leaving LAX. There, 1,686 of 5,113 reports were moderate or stronger. Close to the ground, wind over the mountains stirs the air, and gusty days at DEN add to it.
 
 | Where | From DEN | From LAX | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near DEN, where flights climb out or come in to land | 5 min | 1 h 50 min | 5,113 | 1,686 |
 | over Colorado, near Denver | 10 min | 1 h 40 min | 2,826 | 678 |
-| over Colorado | 20 min | 1 h 35 min | 1,275 | 298 |
-| over Colorado | 25 min | 1 h 30 min | 1,144 | 203 |
-| over Colorado | 30 min | 1 h 25 min | 693 | 216 |
-| over Colorado | 35 min | 1 h 20 min | 961 | 169 |
-| over Utah | 40 min | 1 h 15 min | 716 | 212 |
-| over Utah | 45 min | 1 h 10 min | 386 | 158 |
-| over Utah | 50 min | 1 h 5 min | 306 | 116 |
-| over Arizona | 55 min | 1 h | 582 | 157 |
-| over Utah | 1 h | 55 min | 120 | 50 |
-| over Arizona | 1 h 5 min | 50 min | 75 | 22 |
+| over eastern Colorado | 20 min | 1 h 35 min | 1,275 | 298 |
+| over east-central Colorado | 25 min | 1 h 30 min | 1,144 | 203 |
+| over west-central Colorado | 30 min | 1 h 25 min | 693 | 216 |
+| over western Colorado | 35 min | 1 h 20 min | 961 | 169 |
+| over eastern Utah | 40 min | 1 h 15 min | 716 | 212 |
+| over east-central Utah | 45 min | 1 h 10 min | 386 | 158 |
+| over west-central Utah | 50 min | 1 h 5 min | 306 | 116 |
+| over eastern Arizona | 55 min | 1 h | 582 | 157 |
+| over western Utah | 1 h | 55 min | 120 | 50 |
+| over western Arizona | 1 h 5 min | 50 min | 75 | 22 |
 | near Las Vegas | 1 h 10 min | 45 min | 52 | 18 |
-| over Nevada, near Las Vegas | 1 h 15 min | 40 min | 60 | 17 |
-| over Nevada, near Las Vegas | 1 h 20 min | 35 min | 64 | 20 |
-| over Nevada, near Las Vegas | 1 h 25 min | 30 min | 47 | 17 |
+| over eastern Nevada, near Las Vegas | 1 h 15 min | 40 min | 60 | 17 |
+| over central Nevada, near Las Vegas | 1 h 20 min | 35 min | 64 | 20 |
+| over western Nevada, near Las Vegas | 1 h 25 min | 30 min | 47 | 17 |
 | over California, near Palm Springs | 1 h 30 min | 25 min | 42 | 10 |
 | over California, near San Bernardino | 1 h 35 min | 20 min | 65 | 20 |
 | over California, near Ontario | 1 h 45 min | 10 min | 210 | 182 |
@@ -2104,7 +2104,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between DEN and LAX?
 
-Pilots reported moderate bumps most often near DEN, where flights climb out or come in to land (about 5 min after leaving DEN (1 h 50 min after leaving LAX)).
+Pilots reported moderate bumps most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN, or 1 h 50 min after leaving LAX.
 
 #### When is the smoothest time of year to fly DEN to LAX?
 
@@ -2135,7 +2135,7 @@ Source: https://bumpcast.app/routes/den-to-lax-turbulence.html (data November 20
 
 > Seattle (SEA) ⇄ San Francisco (SFO), both directions. November 2025 to October 2026.
 
-Flights between Seattle (SEA) and San Francisco (SFO) fly about 680 miles, roughly 1½ hours in the air. In the past year, pilots near this route reported moderate bumps most often near SEA, and more often in November and December. Severe reports were rare: 4 of 2,463.
+Flights between Seattle (SEA) and San Francisco (SFO) fly about 680 miles, roughly 1½ hours in the air. In the past year, pilots near this route reported moderate bumps most often near SEA, and more often in November and December.
 
 - Distance: 680 miles (1,090 km)
 - In the air: about 1 h 35 min (typical jet, still air)
@@ -2145,30 +2145,30 @@ Flights between Seattle (SEA) and San Francisco (SFO) fly about 680 miles, rough
 
 ### Where on the route it gets bumpy
 
-Moderate bumps were reported most often near SEA, where flights climb out or come in to land, about 5 min after leaving SEA (1 h 30 min after leaving SFO): 152 of 506 reports there. Close to the ground, wind over buildings and land stirs the air.
+Moderate bumps were reported most often near SEA, where flights climb out or come in to land, about 5 min after leaving SEA, or 1 h 30 min after leaving SFO. There, 152 of 506 reports were moderate or stronger. Close to the ground, wind over buildings and land stirs the air.
 
-The next most were over Oregon, near Portland, about 30 min after leaving SEA (1 h after leaving SFO): 107 of 200 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+The next most were over southern Oregon, near Portland, about 30 min after leaving SEA, or 1 h after leaving SFO. There, 107 of 200 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
 | Where | From SEA | From SFO | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near SEA, where flights climb out or come in to land | 5 min | 1 h 30 min | 506 | 152 |
 | over Washington, near Seattle | 10 min | 1 h 25 min | 234 | 118 |
 | over Washington, near Portland | 15 min | 1 h 20 min | 151 | 84 |
-| over Oregon, near Portland | 20 min | 1 h 15 min | 183 | 104 |
-| over Oregon, near Portland | 25 min | 1 h 10 min | 119 | 78 |
-| over Oregon, near Portland | 30 min | 1 h 5 min | 100 | 65 |
-| over Oregon, near Portland | 30 min | 1 h | 200 | 107 |
-| over Oregon | 35 min | 55 min | 147 | 87 |
+| over northern Oregon, near Portland | 20 min | 1 h 15 min | 183 | 104 |
+| over north-central Oregon, near Portland | 25 min | 1 h 10 min | 119 | 78 |
+| over south-central Oregon, near Portland | 30 min | 1 h 5 min | 100 | 65 |
+| over southern Oregon, near Portland | 30 min | 1 h | 200 | 107 |
+| over northern Oregon | 35 min | 55 min | 147 | 87 |
 | over or near Oregon | 40 min | 50 min | 91 | 36 |
-| over Oregon | 45 min | 50 min | 113 | 58 |
-| over Oregon | 50 min | 45 min | 188 | 94 |
-| over California | 50 min | 40 min | 118 | 73 |
-| over California | 55 min | 35 min | 76 | 53 |
-| over California | 1 h | 30 min | 46 | 32 |
-| over California | 1 h 5 min | 30 min | 33 | 19 |
-| over California, near Sacramento | 1 h 10 min | 25 min | 21 | 12 |
-| over California, near Sacramento | 1 h 15 min | 20 min | 23 | 20 |
-| over California, near Sacramento | 1 h 20 min | 15 min | 7 | 2 |
+| over central Oregon | 45 min | 50 min | 113 | 58 |
+| over southern Oregon | 50 min | 45 min | 188 | 94 |
+| over northern California | 50 min | 40 min | 118 | 73 |
+| over north-central California | 55 min | 35 min | 76 | 53 |
+| over south-central California | 1 h | 30 min | 46 | 32 |
+| over southern California | 1 h 5 min | 30 min | 33 | 19 |
+| over northern California, near Sacramento | 1 h 10 min | 25 min | 21 | 12 |
+| over central California, near Sacramento | 1 h 15 min | 20 min | 23 | 20 |
+| over southern California, near Sacramento | 1 h 20 min | 15 min | 7 | 2 |
 | over California, near Oakland | 1 h 25 min | 10 min | 25 | 12 |
 | near SFO, where flights climb out or come in to land | 1 h 30 min | 5 min | 82 | 42 |
 
@@ -2203,7 +2203,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between SEA and SFO?
 
-Pilots reported moderate bumps most often near SEA, where flights climb out or come in to land (about 5 min after leaving SEA (1 h 30 min after leaving SFO)), and next most over Oregon, near Portland (about 30 min after leaving SEA (1 h after leaving SFO)).
+Pilots reported moderate bumps most often near SEA, where flights climb out or come in to land, about 5 min after leaving SEA, or 1 h 30 min after leaving SFO. The next most were over southern Oregon, near Portland, about 30 min after leaving SEA, or 1 h after leaving SFO.
 
 #### When is the smoothest time of year to fly SEA to SFO?
 
@@ -2234,7 +2234,7 @@ Source: https://bumpcast.app/routes/sea-to-sfo-turbulence.html (data November 20
 
 > Newark (EWR) ⇄ Orlando (MCO), both directions. November 2025 to October 2026.
 
-Flights between Newark (EWR) and Orlando (MCO) fly about 940 miles, roughly 2 hours in the air. In the past year, pilots near this route reported moderate bumps most often over Virginia, and more often in November, December and February. Severe reports were rare: 83 of 8,542.
+Flights between Newark (EWR) and Orlando (MCO) fly about 940 miles, roughly 2 hours in the air. In the past year, pilots near this route reported moderate bumps most often over central Virginia, and more often in November, December and February.
 
 - Distance: 940 miles (1,510 km)
 - In the air: about 2 h 5 min (typical jet, still air)
@@ -2244,9 +2244,9 @@ Flights between Newark (EWR) and Orlando (MCO) fly about 940 miles, roughly 2 ho
 
 ### Where on the route it gets bumpy
 
-Moderate bumps were reported most often over Virginia, near Norfolk, about 35 min after leaving EWR (1 h 25 min after leaving MCO): 584 of 876 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Moderate bumps were reported most often over central Virginia, near Norfolk, about 35 min after leaving EWR, or 1 h 25 min after leaving MCO. There, 584 of 876 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
-The next most were near EWR, where flights climb out or come in to land, about 5 min after leaving EWR (2 h after leaving MCO): 356 of 732 reports there. Close to the ground, wind over buildings and land stirs the air, and gusty days at EWR add to it.
+The next most were near EWR, where flights climb out or come in to land, about 5 min after leaving EWR, or 2 h after leaving MCO. There, 356 of 732 reports were moderate or stronger. Close to the ground, wind over buildings and land stirs the air, and gusty days at EWR add to it.
 
 | Where | From EWR | From MCO | Reports | Moderate or stronger |
 |---|---|---|---|---|
@@ -2254,20 +2254,20 @@ The next most were near EWR, where flights climb out or come in to land, about 5
 | over New Jersey, near Philadelphia | 15 min | 1 h 50 min | 581 | 274 |
 | over Delaware, near Philadelphia | 20 min | 1 h 45 min | 243 | 176 |
 | over Maryland, near Baltimore | 25 min | 1 h 40 min | 151 | 101 |
-| over Virginia, near Norfolk | 30 min | 1 h 30 min | 126 | 76 |
-| over Virginia, near Norfolk | 35 min | 1 h 25 min | 876 | 584 |
-| over Virginia, near Norfolk | 40 min | 1 h 20 min | 150 | 99 |
+| over northern Virginia, near Norfolk | 30 min | 1 h 30 min | 126 | 76 |
+| over central Virginia, near Norfolk | 35 min | 1 h 25 min | 876 | 584 |
+| over southern Virginia, near Norfolk | 40 min | 1 h 20 min | 150 | 99 |
 | over North Carolina, near Norfolk | 45 min | 1 h 15 min | 225 | 146 |
-| over North Carolina, near Raleigh/Durham | 55 min | 1 h 10 min | 286 | 191 |
-| over North Carolina, near Raleigh/Durham | 1 h | 1 h 5 min | 139 | 89 |
+| over northern North Carolina, near Raleigh/Durham | 55 min | 1 h 10 min | 286 | 191 |
+| over southern North Carolina, near Raleigh/Durham | 1 h | 1 h 5 min | 139 | 89 |
 | over North Carolina, near Myrtle Beach | 1 h 5 min | 1 h | 411 | 178 |
-| over South Carolina, near Myrtle Beach | 1 h 10 min | 55 min | 614 | 153 |
-| over South Carolina, near Myrtle Beach | 1 h 15 min | 45 min | 885 | 125 |
-| near Charleston | 1 h 20 min | 40 min | 1,233 | 200 |
-| near Charleston | 1 h 25 min | 35 min | 421 | 63 |
+| over northern South Carolina, near Myrtle Beach | 1 h 10 min | 55 min | 614 | 153 |
+| over southern South Carolina, near Myrtle Beach | 1 h 15 min | 45 min | 885 | 125 |
+| near Charleston, northern stretch | 1 h 20 min | 40 min | 1,233 | 200 |
+| near Charleston, southern stretch | 1 h 25 min | 35 min | 421 | 63 |
 | near Savannah | 1 h 30 min | 30 min | 179 | 41 |
-| near Jacksonville | 1 h 40 min | 25 min | 318 | 59 |
-| near Jacksonville | 1 h 45 min | 20 min | 420 | 61 |
+| near Jacksonville, northern stretch | 1 h 40 min | 25 min | 318 | 59 |
+| near Jacksonville, southern stretch | 1 h 45 min | 20 min | 420 | 61 |
 | over Florida, near Orlando | 1 h 50 min | 15 min | 114 | 21 |
 | near MCO, where flights climb out or come in to land | 2 h | 5 min | 438 | 32 |
 
@@ -2302,7 +2302,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between EWR and MCO?
 
-Pilots reported moderate bumps most often over Virginia, near Norfolk (about 35 min after leaving EWR (1 h 25 min after leaving MCO)), and next most near EWR, where flights climb out or come in to land (about 5 min after leaving EWR (2 h after leaving MCO)).
+Pilots reported moderate bumps most often over central Virginia, near Norfolk, about 35 min after leaving EWR, or 1 h 25 min after leaving MCO. The next most were near EWR, where flights climb out or come in to land, about 5 min after leaving EWR, or 2 h after leaving MCO.
 
 #### When is the smoothest time of year to fly EWR to MCO?
 
@@ -2333,7 +2333,7 @@ Source: https://bumpcast.app/routes/ewr-to-mco-turbulence.html (data November 20
 
 > Denver (DEN) ⇄ Chicago (ORD), both directions. November 2025 to October 2026.
 
-Flights between Denver (DEN) and Chicago (ORD) fly about 890 miles, roughly 2 hours in the air. In the past year, pilots near this route reported moderate bumps most often near DEN, and more often in May and June. Severe reports were rare: 74 of 20,138.
+Flights between Denver (DEN) and Chicago (ORD) fly about 890 miles, roughly 2 hours in the air. In the past year, pilots near this route reported moderate bumps most often near DEN, and more often in May and June.
 
 - Distance: 890 miles (1,430 km)
 - In the air: about 2 h (typical jet, still air)
@@ -2343,27 +2343,27 @@ Flights between Denver (DEN) and Chicago (ORD) fly about 890 miles, roughly 2 ho
 
 ### Where on the route it gets bumpy
 
-Moderate bumps were reported most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN (1 h 55 min after leaving ORD): 964 of 3,952 reports there. Close to the ground, wind over the mountains stirs the air, and gusty days at DEN add to it.
+Moderate bumps were reported most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN, or 1 h 55 min after leaving ORD. There, 964 of 3,952 reports were moderate or stronger. Close to the ground, wind over the mountains stirs the air, and gusty days at DEN add to it.
 
 | Where | From DEN | From ORD | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near DEN, where flights climb out or come in to land | 5 min | 1 h 55 min | 3,952 | 964 |
 | over Colorado, near Denver | 10 min | 1 h 45 min | 979 | 271 |
 | over Colorado | 20 min | 1 h 40 min | 795 | 241 |
-| over Nebraska | 25 min | 1 h 35 min | 572 | 185 |
-| over Nebraska | 30 min | 1 h 25 min | 1,143 | 244 |
-| over Nebraska | 35 min | 1 h 20 min | 778 | 184 |
-| over Nebraska | 40 min | 1 h 15 min | 592 | 158 |
-| over Nebraska | 45 min | 1 h 10 min | 962 | 289 |
-| over Nebraska, near Omaha | 50 min | 1 h 5 min | 211 | 86 |
-| over Nebraska, near Omaha | 55 min | 1 h | 982 | 319 |
-| over Nebraska, near Omaha | 1 h | 55 min | 742 | 256 |
+| over western Nebraska | 25 min | 1 h 35 min | 572 | 185 |
+| over west-central Nebraska | 30 min | 1 h 25 min | 1,143 | 244 |
+| over central Nebraska | 35 min | 1 h 20 min | 778 | 184 |
+| over east-central Nebraska | 40 min | 1 h 15 min | 592 | 158 |
+| over eastern Nebraska | 45 min | 1 h 10 min | 962 | 289 |
+| over western Nebraska, near Omaha | 50 min | 1 h 5 min | 211 | 86 |
+| over central Nebraska, near Omaha | 55 min | 1 h | 982 | 319 |
+| over eastern Nebraska, near Omaha | 1 h | 55 min | 742 | 256 |
 | over Iowa, near Omaha | 1 h 5 min | 50 min | 433 | 127 |
-| over Iowa, near Des Moines | 1 h 10 min | 45 min | 677 | 219 |
-| over Iowa, near Des Moines | 1 h 15 min | 40 min | 850 | 253 |
-| over Iowa, near Des Moines | 1 h 20 min | 35 min | 942 | 235 |
-| over Iowa | 1 h 30 min | 30 min | 1,183 | 237 |
-| over Iowa | 1 h 35 min | 25 min | 1,538 | 376 |
+| over western Iowa, near Des Moines | 1 h 10 min | 45 min | 677 | 219 |
+| over central Iowa, near Des Moines | 1 h 15 min | 40 min | 850 | 253 |
+| over eastern Iowa, near Des Moines | 1 h 20 min | 35 min | 942 | 235 |
+| over western Iowa | 1 h 30 min | 30 min | 1,183 | 237 |
+| over eastern Iowa | 1 h 35 min | 25 min | 1,538 | 376 |
 | over Illinois | 1 h 40 min | 20 min | 328 | 110 |
 | over Illinois, near Chicago | 1 h 45 min | 10 min | 553 | 171 |
 | near ORD, where flights climb out or come in to land | 1 h 55 min | 5 min | 1,926 | 313 |
@@ -2399,7 +2399,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between DEN and ORD?
 
-Pilots reported moderate bumps most often near DEN, where flights climb out or come in to land (about 5 min after leaving DEN (1 h 55 min after leaving ORD)).
+Pilots reported moderate bumps most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN, or 1 h 55 min after leaving ORD.
 
 #### When is the smoothest time of year to fly DEN to ORD?
 
@@ -2430,7 +2430,7 @@ Source: https://bumpcast.app/routes/den-to-ord-turbulence.html (data November 20
 
 > Dallas-Fort Worth (DFW) ⇄ Los Angeles (LAX), both directions. November 2025 to October 2026.
 
-Flights between Dallas-Fort Worth (DFW) and Los Angeles (LAX) fly about 1,230 miles, roughly 2¾ hours in the air. In the past year, pilots near this route reported moderate bumps most often near DFW, and more often in January, February and March. Severe reports were rare: 54 of 8,044.
+Flights between Dallas-Fort Worth (DFW) and Los Angeles (LAX) fly about 1,230 miles, roughly 2¾ hours in the air. In the past year, pilots near this route reported moderate bumps most often near DFW, and more often in January, February and March.
 
 - Distance: 1,230 miles (1,980 km)
 - In the air: about 2 h 40 min (typical jet, still air)
@@ -2440,31 +2440,31 @@ Flights between Dallas-Fort Worth (DFW) and Los Angeles (LAX) fly about 1,230 mi
 
 ### Where on the route it gets bumpy
 
-Moderate bumps were reported most often near DFW, where flights climb out or come in to land, about 5 min after leaving DFW (2 h 30 min after leaving LAX): 314 of 1,038 reports there. Close to the ground, wind over buildings and land stirs the air, and gusty days at DFW add to it.
+Moderate bumps were reported most often near DFW, where flights climb out or come in to land, about 5 min after leaving DFW, or 2 h 30 min after leaving LAX. There, 314 of 1,038 reports were moderate or stronger. Close to the ground, wind over buildings and land stirs the air, and gusty days at DFW add to it.
 
-The next most were over Texas, about 45 min after leaving DFW (1 h 50 min after leaving LAX): 217 of 633 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+The next most were over western Texas, about 45 min after leaving DFW, or 1 h 50 min after leaving LAX. There, 217 of 633 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
 | Where | From DFW | From LAX | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near DFW, where flights climb out or come in to land | 5 min | 2 h 30 min | 1,038 | 314 |
 | over Texas, near Dallas-Fort Worth | 15 min | 2 h 20 min | 727 | 209 |
-| over or near Texas | 25 min | 2 h 15 min | 1,086 | 228 |
-| over or near Texas | 30 min | 2 h 5 min | 608 | 142 |
-| over Texas | 40 min | 2 h | 785 | 138 |
-| over Texas | 45 min | 1 h 50 min | 633 | 217 |
-| over New Mexico | 55 min | 1 h 45 min | 259 | 124 |
-| over New Mexico | 1 h | 1 h 35 min | 285 | 145 |
-| over New Mexico, near Albuquerque | 1 h 5 min | 1 h 30 min | 228 | 141 |
-| over New Mexico, near Albuquerque | 1 h 15 min | 1 h 20 min | 264 | 119 |
-| over or near Arizona | 1 h 20 min | 1 h 15 min | 156 | 74 |
+| over or near eastern Texas | 25 min | 2 h 15 min | 1,086 | 228 |
+| over or near western Texas | 30 min | 2 h 5 min | 608 | 142 |
+| over eastern Texas | 40 min | 2 h | 785 | 138 |
+| over western Texas | 45 min | 1 h 50 min | 633 | 217 |
+| over eastern New Mexico | 55 min | 1 h 45 min | 259 | 124 |
+| over western New Mexico | 1 h | 1 h 35 min | 285 | 145 |
+| over eastern New Mexico, near Albuquerque | 1 h 5 min | 1 h 30 min | 228 | 141 |
+| over western New Mexico, near Albuquerque | 1 h 15 min | 1 h 20 min | 264 | 119 |
+| over or near eastern Arizona | 1 h 20 min | 1 h 15 min | 156 | 74 |
 | over Arizona | 1 h 30 min | 1 h 5 min | 261 | 123 |
-| over Arizona, near Phoenix | 1 h 35 min | 1 h | 283 | 143 |
-| over Arizona, near Phoenix | 1 h 45 min | 55 min | 308 | 141 |
-| over Arizona, near Phoenix | 1 h 50 min | 45 min | 306 | 140 |
-| over or near Arizona | 2 h | 40 min | 200 | 86 |
-| over California, near Palm Springs | 2 h 5 min | 30 min | 152 | 52 |
-| over California, near Palm Springs | 2 h 15 min | 25 min | 90 | 35 |
-| over California, near Palm Springs | 2 h 20 min | 15 min | 131 | 96 |
+| over eastern Arizona, near Phoenix | 1 h 35 min | 1 h | 283 | 143 |
+| over central Arizona, near Phoenix | 1 h 45 min | 55 min | 308 | 141 |
+| over western Arizona, near Phoenix | 1 h 50 min | 45 min | 306 | 140 |
+| over or near western Arizona | 2 h | 40 min | 200 | 86 |
+| over eastern California, near Palm Springs | 2 h 5 min | 30 min | 152 | 52 |
+| over central California, near Palm Springs | 2 h 15 min | 25 min | 90 | 35 |
+| over western California, near Palm Springs | 2 h 20 min | 15 min | 131 | 96 |
 | near LAX, where flights climb out or come in to land | 2 h 35 min | 5 min | 244 | 173 |
 
 ### When in the year
@@ -2498,7 +2498,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between DFW and LAX?
 
-Pilots reported moderate bumps most often near DFW, where flights climb out or come in to land (about 5 min after leaving DFW (2 h 30 min after leaving LAX)), and next most over Texas (about 45 min after leaving DFW (1 h 50 min after leaving LAX)).
+Pilots reported moderate bumps most often near DFW, where flights climb out or come in to land, about 5 min after leaving DFW, or 2 h 30 min after leaving LAX. The next most were over western Texas, about 45 min after leaving DFW, or 1 h 50 min after leaving LAX.
 
 #### When is the smoothest time of year to fly DFW to LAX?
 
@@ -2529,7 +2529,7 @@ Source: https://bumpcast.app/routes/dfw-to-lax-turbulence.html (data November 20
 
 > New York (JFK) ⇄ Miami (MIA), both directions. November 2025 to October 2026.
 
-Flights between New York (JFK) and Miami (MIA) fly about 1,090 miles, roughly 2½ hours in the air. In the past year, pilots near this route reported moderate bumps most often over North Carolina, and more often in November, December and February. Severe reports were rare: 87 of 11,798.
+Flights between New York (JFK) and Miami (MIA) fly about 1,090 miles, roughly 2½ hours in the air. In the past year, pilots near this route reported moderate bumps most often over northern North Carolina, and more often in November, December and February.
 
 - Distance: 1,090 miles (1,760 km)
 - In the air: about 2 h 25 min (typical jet, still air)
@@ -2539,29 +2539,29 @@ Flights between New York (JFK) and Miami (MIA) fly about 1,090 miles, roughly 2�
 
 ### Where on the route it gets bumpy
 
-Moderate bumps were reported most often over North Carolina, near Norfolk, about 40 min after leaving JFK (1 h 40 min after leaving MIA): 492 of 738 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Moderate bumps were reported most often over northern North Carolina, near Norfolk, about 40 min after leaving JFK, or 1 h 40 min after leaving MIA. There, 492 of 738 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
-The next most were near JFK, where flights climb out or come in to land, about 5 min after leaving JFK (2 h 15 min after leaving MIA): 364 of 784 reports there. Close to the ground, wind over buildings and land stirs the air, and gusty days at JFK add to it.
+The next most were near JFK, where flights climb out or come in to land, about 5 min after leaving JFK, or 2 h 15 min after leaving MIA. There, 364 of 784 reports were moderate or stronger. Close to the ground, wind over buildings and land stirs the air, and gusty days at JFK add to it.
 
 | Where | From JFK | From MIA | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near JFK, where flights climb out or come in to land | 5 min | 2 h 15 min | 784 | 364 |
-| over New Jersey, near Philadelphia | 15 min | 2 h 5 min | 479 | 235 |
-| over New Jersey, near Philadelphia | 20 min | 2 h | 246 | 180 |
-| over Virginia, near Norfolk | 30 min | 1 h 50 min | 153 | 97 |
-| over Virginia, near Norfolk | 35 min | 1 h 45 min | 199 | 126 |
-| over North Carolina, near Norfolk | 40 min | 1 h 40 min | 738 | 492 |
-| over North Carolina, near Norfolk | 45 min | 1 h 35 min | 215 | 149 |
-| over North Carolina | 55 min | 1 h 25 min | 208 | 135 |
-| over North Carolina | 1 h | 1 h 20 min | 234 | 127 |
-| near Myrtle Beach | 1 h 5 min | 1 h 15 min | 407 | 104 |
-| near Myrtle Beach | 1 h 15 min | 1 h 5 min | 959 | 138 |
-| over or near South Carolina | 1 h 20 min | 1 h | 755 | 114 |
-| over or near South Carolina | 1 h 25 min | 55 min | 758 | 99 |
-| over or near South Carolina | 1 h 35 min | 45 min | 296 | 43 |
-| over or near Florida | 1 h 40 min | 40 min | 477 | 66 |
-| over or near Florida | 1 h 45 min | 35 min | 592 | 67 |
-| over or near Florida | 1 h 50 min | 30 min | 653 | 74 |
+| over northern New Jersey, near Philadelphia | 15 min | 2 h 5 min | 479 | 235 |
+| over southern New Jersey, near Philadelphia | 20 min | 2 h | 246 | 180 |
+| over northern Virginia, near Norfolk | 30 min | 1 h 50 min | 153 | 97 |
+| over southern Virginia, near Norfolk | 35 min | 1 h 45 min | 199 | 126 |
+| over northern North Carolina, near Norfolk | 40 min | 1 h 40 min | 738 | 492 |
+| over southern North Carolina, near Norfolk | 45 min | 1 h 35 min | 215 | 149 |
+| over northern North Carolina | 55 min | 1 h 25 min | 208 | 135 |
+| over southern North Carolina | 1 h | 1 h 20 min | 234 | 127 |
+| near Myrtle Beach, northern stretch | 1 h 5 min | 1 h 15 min | 407 | 104 |
+| near Myrtle Beach, southern stretch | 1 h 15 min | 1 h 5 min | 959 | 138 |
+| over or near northern South Carolina | 1 h 20 min | 1 h | 755 | 114 |
+| over or near central South Carolina | 1 h 25 min | 55 min | 758 | 99 |
+| over or near southern South Carolina | 1 h 35 min | 45 min | 296 | 43 |
+| over or near northern Florida | 1 h 40 min | 40 min | 477 | 66 |
+| over or near central Florida | 1 h 45 min | 35 min | 592 | 67 |
+| over or near southern Florida | 1 h 50 min | 30 min | 653 | 74 |
 | near West Palm Beach | 2 h | 20 min | 727 | 89 |
 | over Florida, near West Palm Beach | 2 h 5 min | 15 min | 1,228 | 132 |
 | near MIA, where flights climb out or come in to land | 2 h 15 min | 5 min | 1,690 | 156 |
@@ -2597,7 +2597,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between JFK and MIA?
 
-Pilots reported moderate bumps most often over North Carolina, near Norfolk (about 40 min after leaving JFK (1 h 40 min after leaving MIA)), and next most near JFK, where flights climb out or come in to land (about 5 min after leaving JFK (2 h 15 min after leaving MIA)).
+Pilots reported moderate bumps most often over northern North Carolina, near Norfolk, about 40 min after leaving JFK, or 1 h 40 min after leaving MIA. The next most were near JFK, where flights climb out or come in to land, about 5 min after leaving JFK, or 2 h 15 min after leaving MIA.
 
 #### When is the smoothest time of year to fly JFK to MIA?
 
@@ -2628,7 +2628,7 @@ Source: https://bumpcast.app/routes/jfk-to-mia-turbulence.html (data November 20
 
 > Las Vegas (LAS) ⇄ San Francisco (SFO), both directions. November 2025 to October 2026.
 
-Flights between Las Vegas (LAS) and San Francisco (SFO) fly about 410 miles, roughly an hour in the air. In the past year, pilots near this route reported moderate bumps most often over California, and more often in December. Severe reports were rare: 4 of 952.
+Flights between Las Vegas (LAS) and San Francisco (SFO) fly about 410 miles, roughly an hour in the air. In the past year, pilots near this route reported moderate bumps most often over east-central California, and more often in December.
 
 - Distance: 410 miles (660 km)
 - In the air: about 1 h 5 min (typical jet, still air)
@@ -2638,31 +2638,31 @@ Flights between Las Vegas (LAS) and San Francisco (SFO) fly about 410 miles, rou
 
 ### Where on the route it gets bumpy
 
-Moderate bumps were reported most often over California, near San Jose, about 50 min after leaving LAS (15 min after leaving SFO): 79 of 130 reports there. Close to the ground, wind over buildings and land stirs the air, and gusty days at SFO add to it.
+Moderate bumps were reported most often over east-central California, near San Jose, about 50 min after leaving LAS, or 15 min after leaving SFO. There, 79 of 130 reports were moderate or stronger. Close to the ground, wind over buildings and land stirs the air, and gusty days at SFO add to it.
 
-The next most were near LAS, where flights climb out or come in to land, about 5 min after leaving LAS (1 h 5 min after leaving SFO): 48 of 179 reports there. Close to the ground, wind over buildings and land stirs the air, and gusty days at LAS add to it.
+The next most were near LAS, where flights climb out or come in to land, about 5 min after leaving LAS, or 1 h 5 min after leaving SFO. There, 48 of 179 reports were moderate or stronger. Close to the ground, wind over buildings and land stirs the air, and gusty days at LAS add to it.
 
 | Where | From LAS | From SFO | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near LAS, where flights climb out or come in to land | 5 min | 1 h 5 min | 179 | 48 |
-| over Nevada, near Las Vegas | 5 min | 55 min | 61 | 26 |
-| over Nevada, near Las Vegas | 10 min | 50 min | 20 | 12 |
-| over Nevada, near Las Vegas | 15 min | 50 min | 8 | 4 |
-| over Nevada, near Las Vegas | 15 min | 45 min | 18 | 8 |
+| over eastern Nevada, near Las Vegas | 5 min | 55 min | 61 | 26 |
+| over east-central Nevada, near Las Vegas | 10 min | 50 min | 20 | 12 |
+| over west-central Nevada, near Las Vegas | 15 min | 50 min | 8 | 4 |
+| over western Nevada, near Las Vegas | 15 min | 45 min | 18 | 8 |
 | over or near California | 20 min | 45 min | 11 | 4 |
 | over California | 20 min | 40 min | 25 | 15 |
-| over California, near Fresno | 25 min | 35 min | 26 | 7 |
-| over California, near Fresno | 25 min | 35 min | 11 | 6 |
-| over California, near Fresno | 30 min | 30 min | 23 | 10 |
-| over California, near Fresno | 30 min | 30 min | 22 | 13 |
-| over California, near Fresno | 35 min | 25 min | 37 | 28 |
-| over California, near Fresno | 35 min | 25 min | 50 | 31 |
-| over California, near Fresno | 40 min | 20 min | 19 | 12 |
-| over California, near Fresno | 45 min | 20 min | 49 | 28 |
-| over California, near San Jose | 45 min | 15 min | 67 | 29 |
-| over California, near San Jose | 50 min | 15 min | 130 | 79 |
-| over California, near San Jose | 55 min | 10 min | 81 | 47 |
-| over California, near San Jose | 55 min | 5 min | 71 | 43 |
+| over California, near Fresno (part 1 of 8) | 25 min | 35 min | 26 | 7 |
+| over California, near Fresno (part 2 of 8) | 25 min | 35 min | 11 | 6 |
+| over California, near Fresno (part 3 of 8) | 30 min | 30 min | 23 | 10 |
+| over California, near Fresno (part 4 of 8) | 30 min | 30 min | 22 | 13 |
+| over California, near Fresno (part 5 of 8) | 35 min | 25 min | 37 | 28 |
+| over California, near Fresno (part 6 of 8) | 35 min | 25 min | 50 | 31 |
+| over California, near Fresno (part 7 of 8) | 40 min | 20 min | 19 | 12 |
+| over California, near Fresno (part 8 of 8) | 45 min | 20 min | 49 | 28 |
+| over eastern California, near San Jose | 45 min | 15 min | 67 | 29 |
+| over east-central California, near San Jose | 50 min | 15 min | 130 | 79 |
+| over west-central California, near San Jose | 55 min | 10 min | 81 | 47 |
+| over western California, near San Jose | 55 min | 5 min | 71 | 43 |
 | near SFO, where flights climb out or come in to land | 1 h 5 min | 5 min | 44 | 23 |
 
 ### When in the year
@@ -2696,7 +2696,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between LAS and SFO?
 
-Pilots reported moderate bumps most often over California, near San Jose (about 50 min after leaving LAS (15 min after leaving SFO)), and next most near LAS, where flights climb out or come in to land (about 5 min after leaving LAS (1 h 5 min after leaving SFO)).
+Pilots reported moderate bumps most often over east-central California, near San Jose, about 50 min after leaving LAS, or 15 min after leaving SFO. The next most were near LAS, where flights climb out or come in to land, about 5 min after leaving LAS, or 1 h 5 min after leaving SFO.
 
 #### When is the smoothest time of year to fly LAS to SFO?
 
@@ -2727,7 +2727,7 @@ Source: https://bumpcast.app/routes/las-to-sfo-turbulence.html (data November 20
 
 > Dallas-Fort Worth (DFW) ⇄ Chicago (ORD), both directions. November 2025 to October 2026.
 
-Flights between Dallas-Fort Worth (DFW) and Chicago (ORD) fly about 800 miles, roughly 1¾ hours in the air. In the past year, pilots near this route reported moderate bumps most often near ORD, and more often in March, April and May. Severe reports were rare: 54 of 11,184.
+Flights between Dallas-Fort Worth (DFW) and Chicago (ORD) fly about 800 miles, roughly 1¾ hours in the air. In the past year, pilots near this route reported moderate bumps most often near ORD, and more often in March, April and May.
 
 - Distance: 800 miles (1,290 km)
 - In the air: about 1 h 50 min (typical jet, still air)
@@ -2737,9 +2737,9 @@ Flights between Dallas-Fort Worth (DFW) and Chicago (ORD) fly about 800 miles, r
 
 ### Where on the route it gets bumpy
 
-Moderate bumps were reported most often near ORD, where flights climb out or come in to land, about 1 h 45 min after leaving DFW (5 min after leaving ORD): 291 of 2,116 reports there. Close to the ground, wind over buildings and land stirs the air, and gusty days at ORD add to it.
+Moderate bumps were reported most often near ORD, where flights climb out or come in to land, about 1 h 45 min after leaving DFW, or 5 min after leaving ORD. There, 291 of 2,116 reports were moderate or stronger. Close to the ground, wind over buildings and land stirs the air, and gusty days at ORD add to it.
 
-The next most were over Arkansas, about 40 min after leaving DFW (1 h 5 min after leaving ORD): 252 of 621 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+The next most were over Arkansas, about 40 min after leaving DFW, or 1 h 5 min after leaving ORD. There, 252 of 621 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
 | Where | From DFW | From ORD | Reports | Moderate or stronger |
 |---|---|---|---|---|
@@ -2747,21 +2747,21 @@ The next most were over Arkansas, about 40 min after leaving DFW (1 h 5 min afte
 | over Texas, near Dallas | 10 min | 1 h 35 min | 441 | 113 |
 | over Oklahoma, near Dallas | 15 min | 1 h 30 min | 618 | 173 |
 | over Oklahoma | 20 min | 1 h 25 min | 700 | 159 |
-| over Oklahoma, near Tulsa | 25 min | 1 h 20 min | 714 | 182 |
-| over Oklahoma, near Tulsa | 30 min | 1 h 15 min | 618 | 230 |
+| over western Oklahoma, near Tulsa | 25 min | 1 h 20 min | 714 | 182 |
+| over eastern Oklahoma, near Tulsa | 30 min | 1 h 15 min | 618 | 230 |
 | over Arkansas, near Tulsa | 35 min | 1 h 10 min | 398 | 165 |
 | over Arkansas | 40 min | 1 h 5 min | 621 | 252 |
-| over Missouri | 45 min | 1 h | 271 | 93 |
-| over Missouri | 50 min | 55 min | 303 | 128 |
-| over Missouri | 55 min | 50 min | 218 | 75 |
-| over Missouri, near St Louis | 1 h | 45 min | 223 | 108 |
-| over Missouri, near St Louis | 1 h 5 min | 40 min | 289 | 111 |
-| over Missouri, near St Louis | 1 h 10 min | 35 min | 511 | 184 |
-| over Illinois, near St Louis | 1 h 15 min | 30 min | 293 | 117 |
-| over Illinois, near St Louis | 1 h 20 min | 25 min | 647 | 200 |
+| over western Missouri | 45 min | 1 h | 271 | 93 |
+| over central Missouri | 50 min | 55 min | 303 | 128 |
+| over eastern Missouri | 55 min | 50 min | 218 | 75 |
+| over western Missouri, near St Louis | 1 h | 45 min | 223 | 108 |
+| over central Missouri, near St Louis | 1 h 5 min | 40 min | 289 | 111 |
+| over eastern Missouri, near St Louis | 1 h 10 min | 35 min | 511 | 184 |
+| over western Illinois, near St Louis | 1 h 15 min | 30 min | 293 | 117 |
+| over eastern Illinois, near St Louis | 1 h 20 min | 25 min | 647 | 200 |
 | over Illinois | 1 h 25 min | 20 min | 822 | 250 |
-| over Illinois, near Chicago | 1 h 30 min | 15 min | 462 | 153 |
-| over Illinois, near Chicago | 1 h 35 min | 10 min | 422 | 151 |
+| over western Illinois, near Chicago | 1 h 30 min | 15 min | 462 | 153 |
+| over eastern Illinois, near Chicago | 1 h 35 min | 10 min | 422 | 151 |
 | near ORD, where flights climb out or come in to land | 1 h 45 min | 5 min | 2,116 | 291 |
 
 ### When in the year
@@ -2795,7 +2795,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between DFW and ORD?
 
-Pilots reported moderate bumps most often near ORD, where flights climb out or come in to land (about 1 h 45 min after leaving DFW (5 min after leaving ORD)), and next most over Arkansas (about 40 min after leaving DFW (1 h 5 min after leaving ORD)).
+Pilots reported moderate bumps most often near ORD, where flights climb out or come in to land, about 1 h 45 min after leaving DFW, or 5 min after leaving ORD. The next most were over Arkansas, about 40 min after leaving DFW, or 1 h 5 min after leaving ORD.
 
 #### When is the smoothest time of year to fly DFW to ORD?
 
@@ -2826,7 +2826,7 @@ Source: https://bumpcast.app/routes/dfw-to-ord-turbulence.html (data November 20
 
 > Atlanta (ATL) ⇄ Chicago (ORD), both directions. November 2025 to October 2026.
 
-Flights between Atlanta (ATL) and Chicago (ORD) fly about 610 miles, roughly 1½ hours in the air. In the past year, pilots near this route reported moderate bumps most often over Indiana, and more often in March and May. Severe reports were rare: 42 of 17,699.
+Flights between Atlanta (ATL) and Chicago (ORD) fly about 610 miles, roughly 1½ hours in the air. In the past year, pilots near this route reported moderate bumps most often over central Indiana, and more often in March and May.
 
 - Distance: 610 miles (980 km)
 - In the air: about 1 h 30 min (typical jet, still air)
@@ -2836,29 +2836,29 @@ Flights between Atlanta (ATL) and Chicago (ORD) fly about 610 miles, roughly 1½
 
 ### Where on the route it gets bumpy
 
-Moderate bumps were reported most often over Indiana, near Indianapolis, about 1 h after leaving ATL (25 min after leaving ORD): 388 of 1,692 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Moderate bumps were reported most often over central Indiana, near Indianapolis, about 1 h after leaving ATL, or 25 min after leaving ORD. There, 388 of 1,692 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
-The next most were over Kentucky, near Louisville, about 45 min after leaving ATL (40 min after leaving ORD): 302 of 1,579 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+The next most were over northern Kentucky, near Louisville, about 45 min after leaving ATL, or 40 min after leaving ORD. There, 302 of 1,579 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
 | Where | From ATL | From ORD | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near ATL, where flights climb out or come in to land | 5 min | 1 h 25 min | 230 | 64 |
-| over Georgia, near Atlanta | 10 min | 1 h 15 min | 709 | 111 |
-| over Georgia, near Atlanta | 15 min | 1 h 10 min | 372 | 95 |
-| over Tennessee, near Knoxville/Maryville | 20 min | 1 h 5 min | 728 | 139 |
-| over Tennessee, near Knoxville/Maryville | 20 min | 1 h | 443 | 101 |
-| over Tennessee, near Knoxville/Maryville | 25 min | 1 h | 1,524 | 264 |
+| over southern Georgia, near Atlanta | 10 min | 1 h 15 min | 709 | 111 |
+| over northern Georgia, near Atlanta | 15 min | 1 h 10 min | 372 | 95 |
+| over southern Tennessee, near Knoxville/Maryville | 20 min | 1 h 5 min | 728 | 139 |
+| over central Tennessee, near Knoxville/Maryville | 20 min | 1 h | 443 | 101 |
+| over northern Tennessee, near Knoxville/Maryville | 25 min | 1 h | 1,524 | 264 |
 | over Tennessee, near Nashville | 30 min | 55 min | 990 | 245 |
 | over Kentucky, near Nashville | 35 min | 50 min | 856 | 260 |
-| over Kentucky, near Louisville | 35 min | 45 min | 938 | 244 |
-| over Kentucky, near Louisville | 40 min | 45 min | 605 | 146 |
-| over Kentucky, near Louisville | 45 min | 40 min | 1,579 | 302 |
+| over southern Kentucky, near Louisville | 35 min | 45 min | 938 | 244 |
+| over central Kentucky, near Louisville | 40 min | 45 min | 605 | 146 |
+| over northern Kentucky, near Louisville | 45 min | 40 min | 1,579 | 302 |
 | over Indiana, near Louisville | 45 min | 35 min | 569 | 110 |
-| over Indiana, near Indianapolis | 50 min | 35 min | 638 | 137 |
-| over Indiana, near Indianapolis | 55 min | 30 min | 1,045 | 255 |
-| over Indiana, near Indianapolis | 1 h | 25 min | 1,692 | 388 |
-| over Indiana, near Indianapolis | 1 h | 20 min | 669 | 149 |
-| over Indiana, near Indianapolis | 1 h 5 min | 20 min | 895 | 191 |
+| over southern Indiana, near Indianapolis | 50 min | 35 min | 638 | 137 |
+| over south-central Indiana, near Indianapolis | 55 min | 30 min | 1,045 | 255 |
+| over central Indiana, near Indianapolis | 1 h | 25 min | 1,692 | 388 |
+| over north-central Indiana, near Indianapolis | 1 h | 20 min | 669 | 149 |
+| over northern Indiana, near Indianapolis | 1 h 5 min | 20 min | 895 | 191 |
 | over Indiana, near Chicago | 1 h 10 min | 15 min | 699 | 150 |
 | over Illinois, near Chicago | 1 h 15 min | 10 min | 621 | 182 |
 | near ORD, where flights climb out or come in to land | 1 h 25 min | 5 min | 1,897 | 260 |
@@ -2894,7 +2894,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between ATL and ORD?
 
-Pilots reported moderate bumps most often over Indiana, near Indianapolis (about 1 h after leaving ATL (25 min after leaving ORD)), and next most over Kentucky, near Louisville (about 45 min after leaving ATL (40 min after leaving ORD)).
+Pilots reported moderate bumps most often over central Indiana, near Indianapolis, about 1 h after leaving ATL, or 25 min after leaving ORD. The next most were over northern Kentucky, near Louisville, about 45 min after leaving ATL, or 40 min after leaving ORD.
 
 #### When is the smoothest time of year to fly ATL to ORD?
 
@@ -2925,7 +2925,7 @@ Source: https://bumpcast.app/routes/atl-to-ord-turbulence.html (data November 20
 
 > Los Angeles (LAX) ⇄ Phoenix (PHX), both directions. November 2025 to October 2026.
 
-Flights between Los Angeles (LAX) and Phoenix (PHX) fly about 370 miles, roughly an hour in the air. In the past year, pilots near this route reported moderate bumps most often over California, and more often in January, March and May. Severe reports were rare: 16 of 629.
+Flights between Los Angeles (LAX) and Phoenix (PHX) fly about 370 miles, roughly an hour in the air. In the past year, pilots near this route reported moderate bumps most often over California, and more often in January, March and May.
 
 - Distance: 370 miles (590 km)
 - In the air: about 1 h (typical jet, still air)
@@ -2935,7 +2935,7 @@ Flights between Los Angeles (LAX) and Phoenix (PHX) fly about 370 miles, roughly
 
 ### Where on the route it gets bumpy
 
-Moderate bumps were reported most often over California, near Santa Ana, about 5 min after leaving LAX (55 min after leaving PHX): 53 of 74 reports there. Close to the ground, wind over buildings and land stirs the air.
+Moderate bumps were reported most often over California, near Santa Ana, about 5 min after leaving LAX, or 55 min after leaving PHX. There, 53 of 74 reports were moderate or stronger. Close to the ground, wind over buildings and land stirs the air.
 
 | Where | From LAX | From PHX | Reports | Moderate or stronger |
 |---|---|---|---|---|
@@ -2943,21 +2943,21 @@ Moderate bumps were reported most often over California, near Santa Ana, about 5
 | over California, near Santa Ana | 5 min | 55 min | 74 | 53 |
 | over California, near Ontario | 10 min | 50 min | 70 | 51 |
 | over California, near San Bernardino | 10 min | 45 min | 53 | 39 |
-| over California, near Palm Springs | 15 min | 40 min | 33 | 16 |
-| over California, near Palm Springs | 20 min | 40 min | 37 | 18 |
-| over California, near Palm Springs | 20 min | 35 min | 23 | 10 |
-| over California, near Palm Springs | 20 min | 35 min | 41 | 18 |
-| over California, near Palm Springs | 25 min | 30 min | 19 | 6 |
-| over California, near Palm Springs | 25 min | 30 min | 16 | 8 |
-| over California, near Palm Springs | 30 min | 25 min | 17 | 5 |
-| over California | 30 min | 25 min | 30 | 14 |
-| over California | 35 min | 20 min | 39 | 16 |
-| over California | 35 min | 20 min | 15 | 11 |
+| over California, near Palm Springs (part 1 of 7) | 15 min | 40 min | 33 | 16 |
+| over California, near Palm Springs (part 2 of 7) | 20 min | 40 min | 37 | 18 |
+| over California, near Palm Springs (part 3 of 7) | 20 min | 35 min | 23 | 10 |
+| over California, near Palm Springs (part 4 of 7) | 20 min | 35 min | 41 | 18 |
+| over California, near Palm Springs (part 5 of 7) | 25 min | 30 min | 19 | 6 |
+| over California, near Palm Springs (part 6 of 7) | 25 min | 30 min | 16 | 8 |
+| over California, near Palm Springs (part 7 of 7) | 30 min | 25 min | 17 | 5 |
+| over western California | 30 min | 25 min | 30 | 14 |
+| over central California | 35 min | 20 min | 39 | 16 |
+| over eastern California | 35 min | 20 min | 15 | 11 |
 | near Phoenix | 40 min | 20 min | 34 | 16 |
-| over Arizona, near Phoenix | 40 min | 15 min | 12 | 6 |
-| over Arizona, near Phoenix | 45 min | 10 min | 15 | 10 |
-| over Arizona, near Phoenix | 50 min | 10 min | 11 | 7 |
-| over Arizona, near Phoenix | 55 min | 5 min | 9 | 4 |
+| over western Arizona, near Phoenix | 40 min | 15 min | 12 | 6 |
+| over west-central Arizona, near Phoenix | 45 min | 10 min | 15 | 10 |
+| over east-central Arizona, near Phoenix | 50 min | 10 min | 11 | 7 |
+| over eastern Arizona, near Phoenix | 55 min | 5 min | 9 | 4 |
 | near PHX, where flights climb out or come in to land | 1 h | 5 min | 22 | 9 |
 
 ### When in the year
@@ -2991,7 +2991,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between LAX and PHX?
 
-Pilots reported moderate bumps most often over California, near Santa Ana (about 5 min after leaving LAX (55 min after leaving PHX)).
+Pilots reported moderate bumps most often over California, near Santa Ana, about 5 min after leaving LAX, or 55 min after leaving PHX.
 
 #### When is the smoothest time of year to fly LAX to PHX?
 
@@ -3022,7 +3022,7 @@ Source: https://bumpcast.app/routes/lax-to-phx-turbulence.html (data November 20
 
 > Atlanta (ATL) ⇄ Boston (BOS), both directions. November 2025 to October 2026.
 
-Flights between Atlanta (ATL) and Boston (BOS) fly about 940 miles, roughly 2¼ hours in the air. In the past year, pilots near this route reported moderate bumps most often over Virginia, and more often in June. Severe reports were rare: 72 of 15,695.
+Flights between Atlanta (ATL) and Boston (BOS) fly about 940 miles, roughly 2¼ hours in the air. In the past year, pilots near this route reported moderate bumps most often over western Virginia, and more often in June.
 
 - Distance: 940 miles (1,520 km)
 - In the air: about 2 h 10 min (typical jet, still air)
@@ -3032,31 +3032,31 @@ Flights between Atlanta (ATL) and Boston (BOS) fly about 940 miles, roughly 2¼ 
 
 ### Where on the route it gets bumpy
 
-Moderate bumps were reported most often over Virginia, near Greensboro, about 40 min after leaving ATL (1 h 20 min after leaving BOS): 486 of 1,994 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Moderate bumps were reported most often over western Virginia, near Greensboro, about 40 min after leaving ATL, or 1 h 20 min after leaving BOS. There, 486 of 1,994 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
-The next most were over Connecticut, near Hartford, about 1 h 45 min after leaving ATL (20 min after leaving BOS): 373 of 1,310 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+The next most were over western Connecticut, near Hartford, about 1 h 45 min after leaving ATL, or 20 min after leaving BOS. There, 373 of 1,310 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
 | Where | From ATL | From BOS | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near ATL, where flights climb out or come in to land | 5 min | 2 h | 503 | 84 |
 | over Georgia, near Atlanta | 15 min | 1 h 50 min | 601 | 99 |
 | over South Carolina, near Knoxville/Maryville | 20 min | 1 h 45 min | 1,364 | 204 |
-| over North Carolina, near Charlotte | 25 min | 1 h 40 min | 1,849 | 339 |
-| over North Carolina, near Charlotte | 30 min | 1 h 35 min | 2,015 | 328 |
+| over western North Carolina, near Charlotte | 25 min | 1 h 40 min | 1,849 | 339 |
+| over eastern North Carolina, near Charlotte | 30 min | 1 h 35 min | 2,015 | 328 |
 | over North Carolina, near Greensboro | 35 min | 1 h 25 min | 902 | 224 |
-| over Virginia, near Greensboro | 40 min | 1 h 20 min | 1,994 | 486 |
-| over Virginia, near Greensboro | 45 min | 1 h 15 min | 342 | 214 |
-| over Virginia, near Richmond | 55 min | 1 h 10 min | 474 | 322 |
-| over Virginia, near Richmond | 1 h | 1 h 5 min | 346 | 228 |
+| over western Virginia, near Greensboro | 40 min | 1 h 20 min | 1,994 | 486 |
+| over eastern Virginia, near Greensboro | 45 min | 1 h 15 min | 342 | 214 |
+| over western Virginia, near Richmond | 55 min | 1 h 10 min | 474 | 322 |
+| over eastern Virginia, near Richmond | 1 h | 1 h 5 min | 346 | 228 |
 | over Virginia, near Dulles | 1 h 5 min | 1 h | 286 | 189 |
 | over Virginia, near Washington | 1 h 10 min | 55 min | 203 | 125 |
 | over Maryland, near Baltimore | 1 h 15 min | 45 min | 141 | 78 |
 | over Delaware, near Philadelphia | 1 h 20 min | 40 min | 422 | 174 |
 | over Pennsylvania, near Philadelphia | 1 h 25 min | 35 min | 374 | 141 |
 | over New Jersey, near Newark | 1 h 35 min | 30 min | 937 | 314 |
-| near New York | 1 h 40 min | 25 min | 807 | 208 |
-| over Connecticut, near Hartford | 1 h 45 min | 20 min | 1,310 | 373 |
-| over Connecticut, near Hartford | 1 h 50 min | 15 min | 476 | 174 |
+| over New York | 1 h 40 min | 25 min | 807 | 208 |
+| over western Connecticut, near Hartford | 1 h 45 min | 20 min | 1,310 | 373 |
+| over eastern Connecticut, near Hartford | 1 h 50 min | 15 min | 476 | 174 |
 | near BOS, where flights climb out or come in to land | 2 h | 5 min | 349 | 101 |
 
 ### When in the year
@@ -3090,7 +3090,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between ATL and BOS?
 
-Pilots reported moderate bumps most often over Virginia, near Greensboro (about 40 min after leaving ATL (1 h 20 min after leaving BOS)), and next most over Connecticut, near Hartford (about 1 h 45 min after leaving ATL (20 min after leaving BOS)).
+Pilots reported moderate bumps most often over western Virginia, near Greensboro, about 40 min after leaving ATL, or 1 h 20 min after leaving BOS. The next most were over western Connecticut, near Hartford, about 1 h 45 min after leaving ATL, or 20 min after leaving BOS.
 
 #### When is the smoothest time of year to fly ATL to BOS?
 
@@ -3121,7 +3121,7 @@ Source: https://bumpcast.app/routes/atl-to-bos-turbulence.html (data November 20
 
 > Denver (DEN) ⇄ San Francisco (SFO), both directions. November 2025 to October 2026.
 
-Flights between Denver (DEN) and San Francisco (SFO) fly about 960 miles, roughly 2¼ hours in the air. In the past year, pilots near this route reported moderate bumps most often near DEN, and more often in December and June. Severe reports were rare: 108 of 15,177.
+Flights between Denver (DEN) and San Francisco (SFO) fly about 960 miles, roughly 2¼ hours in the air. In the past year, pilots near this route reported moderate bumps most often near DEN, and more often in December and June.
 
 - Distance: 960 miles (1,550 km)
 - In the air: about 2 h 10 min (typical jet, still air)
@@ -3131,25 +3131,25 @@ Flights between Denver (DEN) and San Francisco (SFO) fly about 960 miles, roughl
 
 ### Where on the route it gets bumpy
 
-Moderate bumps were reported most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN (2 h after leaving SFO): 2,098 of 5,803 reports there. Close to the ground, wind over the mountains stirs the air, and gusty days at DEN add to it.
+Moderate bumps were reported most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN, or 2 h after leaving SFO. There, 2,098 of 5,803 reports were moderate or stronger. Close to the ground, wind over the mountains stirs the air, and gusty days at DEN add to it.
 
 | Where | From DEN | From SFO | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near DEN, where flights climb out or come in to land | 5 min | 2 h | 5,803 | 2,098 |
 | over Colorado, near Denver | 15 min | 1 h 55 min | 3,107 | 526 |
-| over Colorado | 20 min | 1 h 45 min | 1,595 | 313 |
-| over Colorado | 25 min | 1 h 40 min | 917 | 147 |
-| over Colorado | 30 min | 1 h 35 min | 1,178 | 208 |
-| over Utah | 35 min | 1 h 30 min | 506 | 175 |
-| over Utah | 45 min | 1 h 25 min | 260 | 157 |
-| over Utah | 50 min | 1 h 15 min | 114 | 72 |
-| over Utah | 55 min | 1 h 10 min | 167 | 118 |
-| over Utah | 1 h | 1 h 5 min | 163 | 101 |
-| over Nevada | 1 h 5 min | 1 h | 213 | 135 |
-| over Nevada | 1 h 10 min | 55 min | 185 | 121 |
+| over eastern Colorado | 20 min | 1 h 45 min | 1,595 | 313 |
+| over central Colorado | 25 min | 1 h 40 min | 917 | 147 |
+| over western Colorado | 30 min | 1 h 35 min | 1,178 | 208 |
+| over eastern Utah | 35 min | 1 h 30 min | 506 | 175 |
+| over east-central Utah | 45 min | 1 h 25 min | 260 | 157 |
+| over central Utah | 50 min | 1 h 15 min | 114 | 72 |
+| over west-central Utah | 55 min | 1 h 10 min | 167 | 118 |
+| over western Utah | 1 h | 1 h 5 min | 163 | 101 |
+| over eastern Nevada | 1 h 5 min | 1 h | 213 | 135 |
+| over east-central Nevada | 1 h 10 min | 55 min | 185 | 121 |
 | over or near Nevada | 1 h 15 min | 50 min | 101 | 69 |
-| over Nevada | 1 h 25 min | 45 min | 126 | 82 |
-| over Nevada | 1 h 30 min | 35 min | 154 | 91 |
+| over west-central Nevada | 1 h 25 min | 45 min | 126 | 82 |
+| over western Nevada | 1 h 30 min | 35 min | 154 | 91 |
 | over Nevada, near Reno | 1 h 35 min | 30 min | 63 | 30 |
 | over California, near Reno | 1 h 40 min | 25 min | 70 | 42 |
 | over California, near Sacramento | 1 h 45 min | 20 min | 102 | 60 |
@@ -3187,7 +3187,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between DEN and SFO?
 
-Pilots reported moderate bumps most often near DEN, where flights climb out or come in to land (about 5 min after leaving DEN (2 h after leaving SFO)).
+Pilots reported moderate bumps most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN, or 2 h after leaving SFO.
 
 #### When is the smoothest time of year to fly DEN to SFO?
 
@@ -3218,7 +3218,7 @@ Source: https://bumpcast.app/routes/den-to-sfo-turbulence.html (data November 20
 
 > Denver (DEN) ⇄ Seattle (SEA), both directions. November 2025 to October 2026.
 
-Flights between Denver (DEN) and Seattle (SEA) fly about 1,020 miles, roughly 2¼ hours in the air. In the past year, pilots near this route reported moderate bumps most often near DEN, and more often in December. Severe reports were rare: 83 of 11,594.
+Flights between Denver (DEN) and Seattle (SEA) fly about 1,020 miles, roughly 2¼ hours in the air. In the past year, pilots near this route reported moderate bumps most often near DEN, and more often in December.
 
 - Distance: 1,020 miles (1,640 km)
 - In the air: about 2 h 15 min (typical jet, still air)
@@ -3228,28 +3228,28 @@ Flights between Denver (DEN) and Seattle (SEA) fly about 1,020 miles, roughly 2�
 
 ### Where on the route it gets bumpy
 
-Moderate bumps were reported most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN (2 h 10 min after leaving SEA): 1,388 of 4,792 reports there. Close to the ground, wind over the mountains stirs the air, and gusty days at DEN add to it.
+Moderate bumps were reported most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN, or 2 h 10 min after leaving SEA. There, 1,388 of 4,792 reports were moderate or stronger. Close to the ground, wind over the mountains stirs the air, and gusty days at DEN add to it.
 
 | Where | From DEN | From SEA | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near DEN, where flights climb out or come in to land | 5 min | 2 h 10 min | 4,792 | 1,388 |
 | over Colorado, near Denver | 15 min | 2 h | 2,045 | 418 |
-| over Wyoming | 20 min | 1 h 50 min | 1,240 | 228 |
-| over Wyoming | 25 min | 1 h 45 min | 641 | 149 |
-| over Wyoming | 35 min | 1 h 40 min | 308 | 160 |
-| over Wyoming | 40 min | 1 h 35 min | 200 | 130 |
-| over Wyoming | 45 min | 1 h 25 min | 204 | 124 |
-| over Wyoming | 50 min | 1 h 20 min | 186 | 121 |
-| over Idaho | 55 min | 1 h 15 min | 209 | 96 |
-| over Idaho | 1 h 5 min | 1 h 10 min | 153 | 85 |
+| over Wyoming (part 1 of 6) | 20 min | 1 h 50 min | 1,240 | 228 |
+| over Wyoming (part 2 of 6) | 25 min | 1 h 45 min | 641 | 149 |
+| over Wyoming (part 3 of 6) | 35 min | 1 h 40 min | 308 | 160 |
+| over Wyoming (part 4 of 6) | 40 min | 1 h 35 min | 200 | 130 |
+| over Wyoming (part 5 of 6) | 45 min | 1 h 25 min | 204 | 124 |
+| over Wyoming (part 6 of 6) | 50 min | 1 h 20 min | 186 | 121 |
+| over eastern Idaho | 55 min | 1 h 15 min | 209 | 96 |
+| over east-central Idaho | 1 h 5 min | 1 h 10 min | 153 | 85 |
 | over or near Idaho | 1 h 10 min | 1 h 5 min | 105 | 60 |
-| over Idaho | 1 h 15 min | 55 min | 142 | 73 |
-| over Idaho | 1 h 20 min | 50 min | 106 | 61 |
-| over Idaho | 1 h 30 min | 45 min | 161 | 91 |
+| over central Idaho | 1 h 15 min | 55 min | 142 | 73 |
+| over west-central Idaho | 1 h 20 min | 50 min | 106 | 61 |
+| over western Idaho | 1 h 30 min | 45 min | 161 | 91 |
 | over Oregon | 1 h 35 min | 40 min | 175 | 109 |
-| over Washington | 1 h 40 min | 30 min | 137 | 84 |
-| over Washington | 1 h 45 min | 25 min | 167 | 112 |
-| over Washington | 1 h 50 min | 20 min | 154 | 95 |
+| over eastern Washington | 1 h 40 min | 30 min | 137 | 84 |
+| over central Washington | 1 h 45 min | 25 min | 167 | 112 |
+| over western Washington | 1 h 50 min | 20 min | 154 | 95 |
 | over Washington, near Seattle | 2 h | 15 min | 117 | 74 |
 | near SEA, where flights climb out or come in to land | 2 h 10 min | 5 min | 352 | 94 |
 
@@ -3284,7 +3284,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between DEN and SEA?
 
-Pilots reported moderate bumps most often near DEN, where flights climb out or come in to land (about 5 min after leaving DEN (2 h 10 min after leaving SEA)).
+Pilots reported moderate bumps most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN, or 2 h 10 min after leaving SEA.
 
 #### When is the smoothest time of year to fly DEN to SEA?
 
@@ -3315,7 +3315,7 @@ Source: https://bumpcast.app/routes/den-to-sea-turbulence.html (data November 20
 
 > Los Angeles (LAX) ⇄ Salt Lake City (SLC), both directions. November 2025 to October 2026.
 
-Flights between Los Angeles (LAX) and Salt Lake City (SLC) fly about 590 miles, roughly 1½ hours in the air. In the past year, pilots near this route reported moderate bumps most often over California, and more often in March. Severe reports were rare: 18 of 1,765.
+Flights between Los Angeles (LAX) and Salt Lake City (SLC) fly about 590 miles, roughly 1½ hours in the air. In the past year, pilots near this route reported moderate bumps most often over California, and more often in March.
 
 - Distance: 590 miles (950 km)
 - In the air: about 1 h 25 min (typical jet, still air)
@@ -3325,31 +3325,31 @@ Flights between Los Angeles (LAX) and Salt Lake City (SLC) fly about 590 miles, 
 
 ### Where on the route it gets bumpy
 
-Moderate bumps were reported most often over California, near Burbank, about 10 min after leaving LAX (1 h 15 min after leaving SLC): 146 of 180 reports there. Close to the ground, wind over buildings and land stirs the air.
+Moderate bumps were reported most often over California, near Burbank, about 10 min after leaving LAX, or 1 h 15 min after leaving SLC. There, 146 of 180 reports were moderate or stronger. Close to the ground, wind over buildings and land stirs the air.
 
-The next most were near SLC, where flights climb out or come in to land, about 1 h 20 min after leaving LAX (5 min after leaving SLC): 109 of 307 reports there. Close to the ground, wind over the mountains stirs the air, and gusty days at SLC add to it.
+The next most were near SLC, where flights climb out or come in to land, about 1 h 20 min after leaving LAX, or 5 min after leaving SLC. There, 109 of 307 reports were moderate or stronger. Close to the ground, wind over the mountains stirs the air, and gusty days at SLC add to it.
 
 | Where | From LAX | From SLC | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near LAX, where flights climb out or come in to land | 5 min | 1 h 20 min | 200 | 124 |
 | over California, near Burbank | 10 min | 1 h 15 min | 180 | 146 |
 | over California, near Ontario | 15 min | 1 h 10 min | 55 | 41 |
-| over California, near San Bernardino | 15 min | 1 h 5 min | 41 | 12 |
-| over California, near San Bernardino | 20 min | 1 h | 28 | 4 |
+| over southern California, near San Bernardino | 15 min | 1 h 5 min | 41 | 12 |
+| over northern California, near San Bernardino | 20 min | 1 h | 28 | 4 |
 | over California, near Las Vegas | 25 min | 55 min | 15 | 5 |
-| over Nevada, near Las Vegas | 30 min | 55 min | 20 | 8 |
-| over Nevada, near Las Vegas | 30 min | 50 min | 134 | 71 |
-| over Nevada, near Las Vegas | 35 min | 45 min | 12 | 4 |
+| over southern Nevada, near Las Vegas | 30 min | 55 min | 20 | 8 |
+| over central Nevada, near Las Vegas | 30 min | 50 min | 134 | 71 |
+| over northern Nevada, near Las Vegas | 35 min | 45 min | 12 | 4 |
 | near Las Vegas | 40 min | 45 min | 11 | 6 |
-| over Nevada | 45 min | 40 min | 23 | 14 |
-| over Nevada | 45 min | 35 min | 39 | 25 |
-| over or near Nevada | 50 min | 30 min | 113 | 79 |
-| over or near Nevada | 55 min | 30 min | 135 | 89 |
-| over or near Utah | 55 min | 25 min | 168 | 97 |
-| over or near Utah | 1 h | 20 min | 89 | 69 |
-| over Utah, near Salt Lake City | 1 h 5 min | 20 min | 56 | 41 |
-| over Utah, near Salt Lake City | 1 h 10 min | 15 min | 23 | 17 |
-| over Utah, near Salt Lake City | 1 h 15 min | 10 min | 116 | 71 |
+| over southern Nevada | 45 min | 40 min | 23 | 14 |
+| over northern Nevada | 45 min | 35 min | 39 | 25 |
+| over or near southern Nevada | 50 min | 30 min | 113 | 79 |
+| over or near northern Nevada | 55 min | 30 min | 135 | 89 |
+| over or near southern Utah | 55 min | 25 min | 168 | 97 |
+| over or near northern Utah | 1 h | 20 min | 89 | 69 |
+| over southern Utah, near Salt Lake City | 1 h 5 min | 20 min | 56 | 41 |
+| over central Utah, near Salt Lake City | 1 h 10 min | 15 min | 23 | 17 |
+| over northern Utah, near Salt Lake City | 1 h 15 min | 10 min | 116 | 71 |
 | near SLC, where flights climb out or come in to land | 1 h 20 min | 5 min | 307 | 109 |
 
 ### When in the year
@@ -3383,7 +3383,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between LAX and SLC?
 
-Pilots reported moderate bumps most often over California, near Burbank (about 10 min after leaving LAX (1 h 15 min after leaving SLC)), and next most near SLC, where flights climb out or come in to land (about 1 h 20 min after leaving LAX (5 min after leaving SLC)).
+Pilots reported moderate bumps most often over California, near Burbank, about 10 min after leaving LAX, or 1 h 15 min after leaving SLC. The next most were near SLC, where flights climb out or come in to land, about 1 h 20 min after leaving LAX, or 5 min after leaving SLC.
 
 #### When is the smoothest time of year to fly LAX to SLC?
 
@@ -3414,7 +3414,7 @@ Source: https://bumpcast.app/routes/lax-to-slc-turbulence.html (data November 20
 
 > Minneapolis (MSP) ⇄ Chicago (ORD), both directions. November 2025 to October 2026.
 
-Flights between Minneapolis (MSP) and Chicago (ORD) fly about 330 miles, roughly an hour in the air. In the past year, pilots near this route reported moderate bumps most often over Wisconsin, and more often in April, May and June. Severe reports were rare: 23 of 5,323.
+Flights between Minneapolis (MSP) and Chicago (ORD) fly about 330 miles, roughly an hour in the air. In the past year, pilots near this route reported moderate bumps most often over Wisconsin (part 6 of 6), and more often in April, May and June.
 
 - Distance: 330 miles (540 km)
 - In the air: about 55 min (typical jet, still air)
@@ -3424,29 +3424,29 @@ Flights between Minneapolis (MSP) and Chicago (ORD) fly about 330 miles, roughly
 
 ### Where on the route it gets bumpy
 
-Moderate bumps were reported most often over Wisconsin, about 30 min after leaving MSP (25 min after leaving ORD): 172 of 837 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Moderate bumps were reported most often over Wisconsin (part 6 of 6), about 30 min after leaving MSP, or 25 min after leaving ORD. There, 172 of 837 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
-The next most were near ORD, where flights climb out or come in to land, about 55 min after leaving MSP (5 min after leaving ORD): 104 of 904 reports there. Close to the ground, wind over buildings and land stirs the air, and gusty days at ORD add to it.
+The next most were near ORD, where flights climb out or come in to land, about 55 min after leaving MSP, or 5 min after leaving ORD. There, 104 of 904 reports were moderate or stronger. Close to the ground, wind over buildings and land stirs the air, and gusty days at ORD add to it.
 
 | Where | From MSP | From ORD | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near MSP, where flights climb out or come in to land | 5 min | 55 min | 225 | 48 |
-| over Minnesota, near Minneapolis | 5 min | 50 min | 129 | 34 |
-| over Minnesota, near Minneapolis | 10 min | 45 min | 168 | 30 |
-| over Minnesota, near Minneapolis | 10 min | 40 min | 106 | 24 |
-| over Minnesota, near Minneapolis | 15 min | 40 min | 296 | 55 |
-| over Minnesota, near Minneapolis | 15 min | 35 min | 100 | 16 |
-| over Wisconsin | 20 min | 35 min | 447 | 71 |
-| over Wisconsin | 20 min | 30 min | 212 | 40 |
-| over Wisconsin | 25 min | 30 min | 48 | 12 |
-| over Wisconsin | 25 min | 25 min | 147 | 32 |
-| over Wisconsin | 25 min | 25 min | 127 | 29 |
-| over Wisconsin | 30 min | 25 min | 837 | 172 |
-| over Wisconsin, near Milwaukee | 30 min | 20 min | 105 | 22 |
-| over Wisconsin, near Milwaukee | 35 min | 20 min | 159 | 43 |
-| over Wisconsin, near Milwaukee | 35 min | 15 min | 106 | 31 |
-| over Wisconsin, near Milwaukee | 40 min | 15 min | 170 | 40 |
-| over Wisconsin, near Milwaukee | 40 min | 10 min | 372 | 99 |
+| over western Minnesota, near Minneapolis | 5 min | 50 min | 129 | 34 |
+| over west-central Minnesota, near Minneapolis | 10 min | 45 min | 168 | 30 |
+| over central Minnesota, near Minneapolis | 10 min | 40 min | 106 | 24 |
+| over east-central Minnesota, near Minneapolis | 15 min | 40 min | 296 | 55 |
+| over eastern Minnesota, near Minneapolis | 15 min | 35 min | 100 | 16 |
+| over Wisconsin (part 1 of 6) | 20 min | 35 min | 447 | 71 |
+| over Wisconsin (part 2 of 6) | 20 min | 30 min | 212 | 40 |
+| over Wisconsin (part 3 of 6) | 25 min | 30 min | 48 | 12 |
+| over Wisconsin (part 4 of 6) | 25 min | 25 min | 147 | 32 |
+| over Wisconsin (part 5 of 6) | 25 min | 25 min | 127 | 29 |
+| over Wisconsin (part 6 of 6) | 30 min | 25 min | 837 | 172 |
+| over western Wisconsin, near Milwaukee | 30 min | 20 min | 105 | 22 |
+| over west-central Wisconsin, near Milwaukee | 35 min | 20 min | 159 | 43 |
+| over central Wisconsin, near Milwaukee | 35 min | 15 min | 106 | 31 |
+| over east-central Wisconsin, near Milwaukee | 40 min | 15 min | 170 | 40 |
+| over eastern Wisconsin, near Milwaukee | 40 min | 10 min | 372 | 99 |
 | over Wisconsin, near Chicago | 45 min | 10 min | 245 | 76 |
 | over Illinois, near Chicago | 50 min | 5 min | 420 | 81 |
 | near ORD, where flights climb out or come in to land | 55 min | 5 min | 904 | 104 |
@@ -3482,7 +3482,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between MSP and ORD?
 
-Pilots reported moderate bumps most often over Wisconsin (about 30 min after leaving MSP (25 min after leaving ORD)), and next most near ORD, where flights climb out or come in to land (about 55 min after leaving MSP (5 min after leaving ORD)).
+Pilots reported moderate bumps most often over Wisconsin (part 6 of 6), about 30 min after leaving MSP, or 25 min after leaving ORD. The next most were near ORD, where flights climb out or come in to land, about 55 min after leaving MSP, or 5 min after leaving ORD.
 
 #### When is the smoothest time of year to fly MSP to ORD?
 
@@ -3513,7 +3513,7 @@ Source: https://bumpcast.app/routes/msp-to-ord-turbulence.html (data November 20
 
 > Denver (DEN) ⇄ Dallas-Fort Worth (DFW), both directions. November 2025 to October 2026.
 
-Flights between Denver (DEN) and Dallas-Fort Worth (DFW) fly about 640 miles, roughly 1½ hours in the air. In the past year, pilots near this route reported moderate bumps most often near DEN, and more often in December. Severe reports were rare: 57 of 13,137.
+Flights between Denver (DEN) and Dallas-Fort Worth (DFW) fly about 640 miles, roughly 1½ hours in the air. In the past year, pilots near this route reported moderate bumps most often near DEN, and more often in December.
 
 - Distance: 640 miles (1,030 km)
 - In the air: about 1 h 35 min (typical jet, still air)
@@ -3523,29 +3523,29 @@ Flights between Denver (DEN) and Dallas-Fort Worth (DFW) fly about 640 miles, ro
 
 ### Where on the route it gets bumpy
 
-Moderate bumps were reported most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN (1 h 25 min after leaving DFW): 869 of 3,733 reports there. Close to the ground, wind over the mountains stirs the air, and gusty days at DEN add to it.
+Moderate bumps were reported most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN, or 1 h 25 min after leaving DFW. There, 869 of 3,733 reports were moderate or stronger. Close to the ground, wind over the mountains stirs the air, and gusty days at DEN add to it.
 
 | Where | From DEN | From DFW | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near DEN, where flights climb out or come in to land | 5 min | 1 h 25 min | 3,733 | 869 |
-| over Colorado, near Colorado Springs | 10 min | 1 h 20 min | 957 | 354 |
-| over Colorado, near Colorado Springs | 15 min | 1 h 15 min | 916 | 321 |
-| over Colorado, near Colorado Springs | 20 min | 1 h 10 min | 536 | 222 |
-| over Colorado | 25 min | 1 h 5 min | 538 | 227 |
-| over Colorado | 25 min | 1 h | 805 | 276 |
-| over Kansas | 30 min | 1 h | 340 | 159 |
-| over Kansas | 35 min | 55 min | 475 | 209 |
-| over Kansas | 40 min | 50 min | 458 | 202 |
-| over Texas | 40 min | 45 min | 325 | 156 |
-| over Texas | 45 min | 40 min | 289 | 142 |
-| over Texas | 50 min | 40 min | 544 | 216 |
+| over western Colorado, near Colorado Springs | 10 min | 1 h 20 min | 957 | 354 |
+| over central Colorado, near Colorado Springs | 15 min | 1 h 15 min | 916 | 321 |
+| over eastern Colorado, near Colorado Springs | 20 min | 1 h 10 min | 536 | 222 |
+| over western Colorado | 25 min | 1 h 5 min | 538 | 227 |
+| over eastern Colorado | 25 min | 1 h | 805 | 276 |
+| over western Kansas | 30 min | 1 h | 340 | 159 |
+| over central Kansas | 35 min | 55 min | 475 | 209 |
+| over eastern Kansas | 40 min | 50 min | 458 | 202 |
+| over western Texas | 40 min | 45 min | 325 | 156 |
+| over central Texas | 45 min | 40 min | 289 | 142 |
+| over eastern Texas | 50 min | 40 min | 544 | 216 |
 | over Oklahoma | 55 min | 35 min | 666 | 202 |
-| over Oklahoma, near Oklahoma City | 1 h | 30 min | 684 | 161 |
-| over Oklahoma, near Oklahoma City | 1 h | 25 min | 525 | 119 |
-| over Oklahoma, near Oklahoma City | 1 h 5 min | 20 min | 333 | 91 |
+| over western Oklahoma, near Oklahoma City | 1 h | 30 min | 684 | 161 |
+| over central Oklahoma, near Oklahoma City | 1 h | 25 min | 525 | 119 |
+| over eastern Oklahoma, near Oklahoma City | 1 h 5 min | 20 min | 333 | 91 |
 | over Texas, near Oklahoma City | 1 h 10 min | 20 min | 292 | 104 |
-| over Texas, near Dallas-Fort Worth | 1 h 15 min | 15 min | 209 | 47 |
-| over Texas, near Dallas-Fort Worth | 1 h 20 min | 10 min | 313 | 102 |
+| over western Texas, near Dallas-Fort Worth | 1 h 15 min | 15 min | 209 | 47 |
+| over eastern Texas, near Dallas-Fort Worth | 1 h 20 min | 10 min | 313 | 102 |
 | near DFW, where flights climb out or come in to land | 1 h 30 min | 5 min | 199 | 63 |
 
 ### When in the year
@@ -3579,7 +3579,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between DEN and DFW?
 
-Pilots reported moderate bumps most often near DEN, where flights climb out or come in to land (about 5 min after leaving DEN (1 h 25 min after leaving DFW)).
+Pilots reported moderate bumps most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN, or 1 h 25 min after leaving DFW.
 
 #### When is the smoothest time of year to fly DEN to DFW?
 
@@ -3610,7 +3610,7 @@ Source: https://bumpcast.app/routes/den-to-dfw-turbulence.html (data November 20
 
 > Boston (BOS) ⇄ Chicago (ORD), both directions. November 2025 to October 2026.
 
-Flights between Boston (BOS) and Chicago (ORD) fly about 860 miles, roughly 2 hours in the air. In the past year, pilots near this route reported moderate bumps most often over New York. Severe reports were rare: 63 of 16,938.
+Flights between Boston (BOS) and Chicago (ORD) fly about 860 miles, roughly 2 hours in the air. In the past year, pilots near this route reported moderate bumps most often over western New York.
 
 - Distance: 860 miles (1,390 km)
 - In the air: about 2 h (typical jet, still air)
@@ -3620,30 +3620,30 @@ Flights between Boston (BOS) and Chicago (ORD) fly about 860 miles, roughly 2 ho
 
 ### Where on the route it gets bumpy
 
-Moderate bumps were reported most often over New York, near Syracuse, about 40 min after leaving BOS (1 h 15 min after leaving ORD): 490 of 1,601 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Moderate bumps were reported most often over western New York, near Syracuse, about 40 min after leaving BOS, or 1 h 15 min after leaving ORD. There, 490 of 1,601 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
-The next most were over Michigan, near Detroit, about 1 h 20 min after leaving BOS (35 min after leaving ORD): 423 of 712 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+The next most were over eastern New York, near Albany, about 25 min after leaving BOS, or 1 h 30 min after leaving ORD. There, 469 of 1,920 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
 | Where | From BOS | From ORD | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near BOS, where flights climb out or come in to land | 5 min | 1 h 50 min | 504 | 184 |
 | over Massachusetts, near Hartford | 10 min | 1 h 45 min | 854 | 239 |
 | over Massachusetts, near Albany | 20 min | 1 h 35 min | 1,430 | 313 |
-| over New York, near Albany | 25 min | 1 h 30 min | 1,920 | 469 |
-| over New York, near Albany | 30 min | 1 h 25 min | 692 | 189 |
-| over New York, near Syracuse | 35 min | 1 h 20 min | 1,344 | 362 |
-| over New York, near Syracuse | 40 min | 1 h 15 min | 1,601 | 490 |
+| over eastern New York, near Albany | 25 min | 1 h 30 min | 1,920 | 469 |
+| over western New York, near Albany | 30 min | 1 h 25 min | 692 | 189 |
+| over eastern New York, near Syracuse | 35 min | 1 h 20 min | 1,344 | 362 |
+| over western New York, near Syracuse | 40 min | 1 h 15 min | 1,601 | 490 |
 | over New York, near Rochester | 45 min | 1 h 10 min | 576 | 342 |
-| over New York, near Buffalo | 50 min | 1 h 5 min | 356 | 246 |
-| over New York, near Buffalo | 55 min | 1 h | 427 | 291 |
-| near Hamilton | 1 h | 55 min | 254 | 175 |
-| near Hamilton | 1 h 5 min | 50 min | 110 | 83 |
-| near Windsor | 1 h 10 min | 45 min | 199 | 141 |
-| near Windsor | 1 h 15 min | 40 min | 385 | 253 |
-| over Michigan, near Detroit | 1 h 20 min | 35 min | 712 | 423 |
-| over Michigan, near Detroit | 1 h 25 min | 30 min | 498 | 295 |
-| over Michigan, near Grand Rapids | 1 h 30 min | 25 min | 394 | 158 |
-| over Michigan, near Grand Rapids | 1 h 35 min | 20 min | 1,671 | 391 |
+| over eastern New York, near Buffalo | 50 min | 1 h 5 min | 356 | 246 |
+| over western New York, near Buffalo | 55 min | 1 h | 427 | 291 |
+| near Hamilton, eastern stretch | 1 h | 55 min | 254 | 175 |
+| near Hamilton, western stretch | 1 h 5 min | 50 min | 110 | 83 |
+| near Windsor, eastern stretch | 1 h 10 min | 45 min | 199 | 141 |
+| near Windsor, western stretch | 1 h 15 min | 40 min | 385 | 253 |
+| over eastern Michigan, near Detroit | 1 h 20 min | 35 min | 712 | 423 |
+| over western Michigan, near Detroit | 1 h 25 min | 30 min | 498 | 295 |
+| over eastern Michigan, near Grand Rapids | 1 h 30 min | 25 min | 394 | 158 |
+| over western Michigan, near Grand Rapids | 1 h 35 min | 20 min | 1,671 | 391 |
 | over Michigan, near Chicago | 1 h 45 min | 10 min | 1,114 | 267 |
 | near ORD, where flights climb out or come in to land | 1 h 50 min | 5 min | 1,897 | 280 |
 
@@ -3678,7 +3678,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between BOS and ORD?
 
-Pilots reported moderate bumps most often over New York, near Syracuse (about 40 min after leaving BOS (1 h 15 min after leaving ORD)), and next most over Michigan, near Detroit (about 1 h 20 min after leaving BOS (35 min after leaving ORD)).
+Pilots reported moderate bumps most often over western New York, near Syracuse, about 40 min after leaving BOS, or 1 h 15 min after leaving ORD. The next most were over eastern New York, near Albany, about 25 min after leaving BOS, or 1 h 30 min after leaving ORD.
 
 #### When is the smoothest time of year to fly BOS to ORD?
 
@@ -3709,7 +3709,7 @@ Source: https://bumpcast.app/routes/bos-to-ord-turbulence.html (data November 20
 
 > Montréal (YUL) ⇄ Toronto (YYZ), both directions. November 2025 to October 2026.
 
-Flights between Montréal (YUL) and Toronto (YYZ) fly about 320 miles, roughly an hour in the air. In the past year, pilots near this route reported moderate bumps most often over Ontario, and more often in December, May and October. Severe reports were rare: 9 of 447.
+Flights between Montréal (YUL) and Toronto (YYZ) fly about 320 miles, roughly an hour in the air. In the past year, pilots near this route reported moderate bumps most often over Ontario, and more often in December, May and October.
 
 - Distance: 320 miles (510 km)
 - In the air: about 55 min (typical jet, still air)
@@ -3719,29 +3719,31 @@ Flights between Montréal (YUL) and Toronto (YYZ) fly about 320 miles, roughly a
 
 ### Where on the route it gets bumpy
 
-Moderate bumps were reported most often over Ontario, near Ottawa, about 20 min after leaving YUL (30 min after leaving YYZ): 34 of 128 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Moderate bumps were reported most often over Ontario, near Ottawa (part 6 of 8), about 20 min after leaving YUL, or 30 min after leaving YYZ. There, 34 of 128 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+
+The next most were over western Ontario, near Toronto, about 45 min after leaving YUL, or 5 min after leaving YYZ. There, 24 of 51 reports were moderate or stronger. Close to the ground, wind over buildings and land stirs the air, and gusty days at YYZ add to it.
 
 | Where | From YUL | From YYZ | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near YUL, where flights climb out or come in to land | 5 min | 50 min | 30 | 10 |
-| over Quebec, near Montréal | 5 min | 45 min | 11 | 7 |
-| over Quebec, near Montréal | 10 min | 45 min | 24 | 5 |
-| over Ontario, near Ottawa | 10 min | 40 min | 70 | 19 |
-| over Ontario, near Ottawa | 15 min | 40 min | 12 | 3 |
-| over Ontario, near Ottawa | 15 min | 35 min | 7 | 3 |
-| over Ontario, near Ottawa | 20 min | 35 min | 14 | 4 |
-| over Ontario, near Ottawa | 20 min | 30 min | 26 | 12 |
-| over Ontario, near Ottawa | 20 min | 30 min | 128 | 34 |
-| over Ontario, near Ottawa | 25 min | 25 min | 6 | 2 |
-| over Ontario, near Ottawa | 25 min | 25 min | 7 | 3 |
-| over Ontario, near Rochester | 30 min | 20 min | 11 | 7 |
-| over Ontario, near Rochester | 30 min | 20 min | 4 | 0 |
-| over Ontario, near Rochester | 30 min | 20 min | 7 | 3 |
-| over Ontario, near Rochester | 35 min | 15 min | 6 | 4 |
-| over Ontario, near Toronto | 35 min | 15 min | 3 | 3 |
-| over Ontario, near Toronto | 40 min | 10 min | 9 | 5 |
-| over Ontario, near Toronto | 45 min | 10 min | 4 | 2 |
-| over Ontario, near Toronto | 45 min | 5 min | 51 | 24 |
+| over eastern Quebec, near Montréal | 5 min | 45 min | 11 | 7 |
+| over western Quebec, near Montréal | 10 min | 45 min | 24 | 5 |
+| over Ontario, near Ottawa (part 1 of 8) | 10 min | 40 min | 70 | 19 |
+| over Ontario, near Ottawa (part 2 of 8) | 15 min | 40 min | 12 | 3 |
+| over Ontario, near Ottawa (part 3 of 8) | 15 min | 35 min | 7 | 3 |
+| over Ontario, near Ottawa (part 4 of 8) | 20 min | 35 min | 14 | 4 |
+| over Ontario, near Ottawa (part 5 of 8) | 20 min | 30 min | 26 | 12 |
+| over Ontario, near Ottawa (part 6 of 8) | 20 min | 30 min | 128 | 34 |
+| over Ontario, near Ottawa (part 7 of 8) | 25 min | 25 min | 6 | 2 |
+| over Ontario, near Ottawa (part 8 of 8) | 25 min | 25 min | 7 | 3 |
+| over eastern Ontario, near Rochester | 30 min | 20 min | 11 | 7 |
+| over east-central Ontario, near Rochester | 30 min | 20 min | 4 | 0 |
+| over west-central Ontario, near Rochester | 30 min | 20 min | 7 | 3 |
+| over western Ontario, near Rochester | 35 min | 15 min | 6 | 4 |
+| over eastern Ontario, near Toronto | 35 min | 15 min | 3 | 3 |
+| over east-central Ontario, near Toronto | 40 min | 10 min | 9 | 5 |
+| over west-central Ontario, near Toronto | 45 min | 10 min | 4 | 2 |
+| over western Ontario, near Toronto | 45 min | 5 min | 51 | 24 |
 | near YYZ, where flights climb out or come in to land | 50 min | 5 min | 17 | 6 |
 
 ### When in the year
@@ -3775,7 +3777,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between YUL and YYZ?
 
-Pilots reported moderate bumps most often over Ontario, near Ottawa (about 20 min after leaving YUL (30 min after leaving YYZ)).
+Pilots reported moderate bumps most often over Ontario, near Ottawa (part 6 of 8), about 20 min after leaving YUL, or 30 min after leaving YYZ. The next most were over western Ontario, near Toronto, about 45 min after leaving YUL, or 5 min after leaving YYZ.
 
 #### When is the smoothest time of year to fly YUL to YYZ?
 
@@ -3806,7 +3808,7 @@ Source: https://bumpcast.app/routes/yul-to-yyz-turbulence.html (data November 20
 
 > Vancouver (YVR) ⇄ Toronto (YYZ), both directions. November 2025 to October 2026.
 
-Flights between Vancouver (YVR) and Toronto (YYZ) fly about 2,080 miles, roughly 4¼ hours in the air. In the past year, pilots near this route reported moderate bumps most often over Michigan, and more often in June and August. Severe reports were rare: 21 of 3,769.
+Flights between Vancouver (YVR) and Toronto (YYZ) fly about 2,080 miles, roughly 4¼ hours in the air. In the past year, pilots near this route reported moderate bumps most often over east-central Michigan, and more often in June and August.
 
 - Distance: 2,080 miles (3,350 km)
 - In the air: about 4 h 20 min (typical jet, still air)
@@ -3816,29 +3818,29 @@ Flights between Vancouver (YVR) and Toronto (YYZ) fly about 2,080 miles, roughly
 
 ### Where on the route it gets bumpy
 
-Moderate bumps were reported most often over Michigan, about 3 h 40 min after leaving YVR (35 min after leaving YYZ): 164 of 600 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Moderate bumps were reported most often over east-central Michigan, about 3 h 40 min after leaving YVR, or 35 min after leaving YYZ. There, 164 of 600 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
 | Where | From YVR | From YYZ | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near YVR, where flights climb out or come in to land | 10 min | 4 h 5 min | 33 | 18 |
-| over British Columbia, near Kelowna | 25 min | 3 h 50 min | 16 | 8 |
-| over British Columbia, near Kelowna | 35 min | 3 h 40 min | 11 | 6 |
+| over western British Columbia, near Kelowna | 25 min | 3 h 50 min | 16 | 8 |
+| over eastern British Columbia, near Kelowna | 35 min | 3 h 40 min | 11 | 6 |
 | over British Columbia | 50 min | 3 h 25 min | 18 | 9 |
-| over Alberta | 1 h | 3 h 15 min | 62 | 30 |
-| over Alberta | 1 h 10 min | 3 h 5 min | 46 | 20 |
-| over Saskatchewan | 1 h 25 min | 2 h 50 min | 40 | 20 |
-| over Saskatchewan | 1 h 35 min | 2 h 40 min | 55 | 32 |
-| over North Dakota | 1 h 50 min | 2 h 25 min | 61 | 20 |
-| over North Dakota | 2 h | 2 h 15 min | 216 | 45 |
-| over North Dakota | 2 h 15 min | 2 h | 225 | 46 |
-| over Minnesota | 2 h 25 min | 1 h 50 min | 349 | 59 |
-| over Minnesota | 2 h 40 min | 1 h 35 min | 365 | 56 |
-| over Minnesota | 2 h 50 min | 1 h 25 min | 463 | 81 |
+| over western Alberta | 1 h | 3 h 15 min | 62 | 30 |
+| over eastern Alberta | 1 h 10 min | 3 h 5 min | 46 | 20 |
+| over western Saskatchewan | 1 h 25 min | 2 h 50 min | 40 | 20 |
+| over eastern Saskatchewan | 1 h 35 min | 2 h 40 min | 55 | 32 |
+| over western North Dakota | 1 h 50 min | 2 h 25 min | 61 | 20 |
+| over central North Dakota | 2 h | 2 h 15 min | 216 | 45 |
+| over eastern North Dakota | 2 h 15 min | 2 h | 225 | 46 |
+| over western Minnesota | 2 h 25 min | 1 h 50 min | 349 | 59 |
+| over central Minnesota | 2 h 40 min | 1 h 35 min | 365 | 56 |
+| over eastern Minnesota | 2 h 50 min | 1 h 25 min | 463 | 81 |
 | over Wisconsin | 3 h | 1 h 10 min | 316 | 77 |
-| over Michigan | 3 h 15 min | 1 h | 420 | 115 |
-| over Michigan | 3 h 25 min | 50 min | 195 | 50 |
-| over Michigan | 3 h 40 min | 35 min | 600 | 164 |
-| over Michigan | 3 h 50 min | 25 min | 221 | 75 |
+| over western Michigan | 3 h 15 min | 1 h | 420 | 115 |
+| over west-central Michigan | 3 h 25 min | 50 min | 195 | 50 |
+| over east-central Michigan | 3 h 40 min | 35 min | 600 | 164 |
+| over eastern Michigan | 3 h 50 min | 25 min | 221 | 75 |
 | near YYZ, where flights climb out or come in to land | 4 h 5 min | 10 min | 57 | 29 |
 
 ### When in the year
@@ -3872,7 +3874,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between YVR and YYZ?
 
-Pilots reported moderate bumps most often over Michigan (about 3 h 40 min after leaving YVR (35 min after leaving YYZ)).
+Pilots reported moderate bumps most often over east-central Michigan, about 3 h 40 min after leaving YVR, or 35 min after leaving YYZ.
 
 #### When is the smoothest time of year to fly YVR to YYZ?
 
@@ -3903,7 +3905,7 @@ Source: https://bumpcast.app/routes/yvr-to-yyz-turbulence.html (data November 20
 
 > Calgary (YYC) ⇄ Toronto (YYZ), both directions. November 2025 to October 2026.
 
-Flights between Calgary (YYC) and Toronto (YYZ) fly about 1,670 miles, roughly 3½ hours in the air. In the past year, pilots near this route reported moderate bumps most often over Michigan, and more often in April, June and August. Severe reports were rare: 7 of 2,203.
+Flights between Calgary (YYC) and Toronto (YYZ) fly about 1,670 miles, roughly 3½ hours in the air. In the past year, pilots near this route reported moderate bumps most often over eastern Michigan, and more often in April, June and August.
 
 - Distance: 1,670 miles (2,690 km)
 - In the air: about 3 h 30 min (typical jet, still air)
@@ -3913,30 +3915,30 @@ Flights between Calgary (YYC) and Toronto (YYZ) fly about 1,670 miles, roughly 3
 
 ### Where on the route it gets bumpy
 
-Moderate bumps were reported most often over Michigan, about 3 h after leaving YYC (30 min after leaving YYZ): 80 of 271 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Moderate bumps were reported most often over eastern Michigan, about 3 h after leaving YYC, or 30 min after leaving YYZ. There, 80 of 271 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
-The next most were over Minnesota, about 2 h 10 min after leaving YYC (1 h 20 min after leaving YYZ): 68 of 335 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+The next most were over western Michigan, about 2 h 30 min after leaving YYC, or 1 h after leaving YYZ. There, 69 of 263 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
 | Where | From YYC | From YYZ | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near YYC, where flights climb out or come in to land | 10 min | 3 h 20 min | 1 | 1 |
 | over Alberta | 20 min | 3 h 10 min | 2 | 1 |
-| over Saskatchewan | 30 min | 3 h | 1 | 1 |
-| over Saskatchewan | 40 min | 2 h 50 min | 0 | 0 |
-| over Saskatchewan | 50 min | 2 h 40 min | 0 | 0 |
-| over Saskatchewan | 1 h | 2 h 30 min | 0 | 0 |
+| over western Saskatchewan | 30 min | 3 h | 1 | 1 |
+| over west-central Saskatchewan | 40 min | 2 h 50 min | 0 | 0 |
+| over east-central Saskatchewan | 50 min | 2 h 40 min | 0 | 0 |
+| over eastern Saskatchewan | 1 h | 2 h 30 min | 0 | 0 |
 | over or near Saskatchewan | 1 h 10 min | 2 h 20 min | 7 | 1 |
 | over Manitoba | 1 h 20 min | 2 h 10 min | 20 | 6 |
 | over Manitoba, near Winnipeg | 1 h 30 min | 2 h | 40 | 9 |
 | over Minnesota, near Winnipeg | 1 h 40 min | 1 h 50 min | 166 | 18 |
-| over Minnesota | 1 h 50 min | 1 h 40 min | 272 | 40 |
-| over Minnesota | 2 h | 1 h 30 min | 242 | 32 |
-| over Minnesota | 2 h 10 min | 1 h 20 min | 335 | 68 |
+| over western Minnesota | 1 h 50 min | 1 h 40 min | 272 | 40 |
+| over central Minnesota | 2 h | 1 h 30 min | 242 | 32 |
+| over eastern Minnesota | 2 h 10 min | 1 h 20 min | 335 | 68 |
 | over or near Minnesota | 2 h 20 min | 1 h 10 min | 128 | 28 |
-| over Michigan | 2 h 30 min | 1 h | 263 | 69 |
-| over Michigan | 2 h 40 min | 50 min | 132 | 31 |
-| over Michigan | 2 h 50 min | 40 min | 248 | 72 |
-| over Michigan | 3 h | 30 min | 271 | 80 |
+| over western Michigan | 2 h 30 min | 1 h | 263 | 69 |
+| over west-central Michigan | 2 h 40 min | 50 min | 132 | 31 |
+| over east-central Michigan | 2 h 50 min | 40 min | 248 | 72 |
+| over eastern Michigan | 3 h | 30 min | 271 | 80 |
 | over Ontario | 3 h 10 min | 20 min | 20 | 11 |
 | near YYZ, where flights climb out or come in to land | 3 h 20 min | 10 min | 55 | 28 |
 
@@ -3971,7 +3973,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between YYC and YYZ?
 
-Pilots reported moderate bumps most often over Michigan (about 3 h after leaving YYC (30 min after leaving YYZ)), and next most over Minnesota (about 2 h 10 min after leaving YYC (1 h 20 min after leaving YYZ)).
+Pilots reported moderate bumps most often over eastern Michigan, about 3 h after leaving YYC, or 30 min after leaving YYZ. The next most were over western Michigan, about 2 h 30 min after leaving YYC, or 1 h after leaving YYZ.
 
 #### When is the smoothest time of year to fly YYC to YYZ?
 
@@ -4002,7 +4004,7 @@ Source: https://bumpcast.app/routes/yyc-to-yyz-turbulence.html (data November 20
 
 > New York (LGA) ⇄ Toronto (YYZ), both directions. November 2025 to October 2026.
 
-Flights between New York (LGA) and Toronto (YYZ) fly about 360 miles, roughly an hour in the air. In the past year, pilots near this route reported moderate bumps most often over New York, and more often in December and October. Severe reports were rare: 38 of 4,788.
+Flights between New York (LGA) and Toronto (YYZ) fly about 360 miles, roughly an hour in the air. In the past year, pilots near this route reported moderate bumps most often over eastern New York, and more often in December and October.
 
 - Distance: 360 miles (570 km)
 - In the air: about 1 h (typical jet, still air)
@@ -4012,28 +4014,28 @@ Flights between New York (LGA) and Toronto (YYZ) fly about 360 miles, roughly an
 
 ### Where on the route it gets bumpy
 
-Moderate bumps were reported most often over New York, near Rochester, about 30 min after leaving LGA (25 min after leaving YYZ): 354 of 1,267 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Moderate bumps were reported most often over eastern New York, near Rochester, about 30 min after leaving LGA, or 25 min after leaving YYZ. There, 354 of 1,267 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
 | Where | From LGA | From YYZ | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near LGA, where flights climb out or come in to land | 5 min | 55 min | 361 | 159 |
-| over New Jersey, near Newark | 5 min | 50 min | 303 | 126 |
-| over New Jersey, near Newark | 10 min | 50 min | 331 | 142 |
-| over New Jersey, near Newark | 10 min | 45 min | 117 | 52 |
+| over eastern New Jersey, near Newark | 5 min | 50 min | 303 | 126 |
+| over central New Jersey, near Newark | 10 min | 50 min | 331 | 142 |
+| over western New Jersey, near Newark | 10 min | 45 min | 117 | 52 |
 | over New York, near Newark | 15 min | 40 min | 153 | 66 |
 | over Pennsylvania, near Newark | 15 min | 40 min | 196 | 83 |
 | over Pennsylvania, near Syracuse | 20 min | 35 min | 581 | 146 |
-| over New York, near Syracuse | 20 min | 35 min | 136 | 47 |
-| over New York, near Syracuse | 25 min | 30 min | 268 | 111 |
-| over New York, near Syracuse | 25 min | 30 min | 313 | 115 |
-| over New York, near Rochester | 30 min | 25 min | 1,267 | 354 |
-| over New York, near Rochester | 30 min | 25 min | 222 | 116 |
-| over New York, near Rochester | 35 min | 20 min | 166 | 99 |
-| over New York, near Rochester | 35 min | 20 min | 196 | 140 |
-| over New York, near Rochester | 40 min | 15 min | 78 | 38 |
-| over New York, near Buffalo | 40 min | 15 min | 22 | 15 |
-| over New York, near Buffalo | 45 min | 10 min | 64 | 41 |
-| over New York, near Buffalo | 45 min | 10 min | 11 | 4 |
+| over eastern New York, near Syracuse | 20 min | 35 min | 136 | 47 |
+| over central New York, near Syracuse | 25 min | 30 min | 268 | 111 |
+| over western New York, near Syracuse | 25 min | 30 min | 313 | 115 |
+| over eastern New York, near Rochester | 30 min | 25 min | 1,267 | 354 |
+| over east-central New York, near Rochester | 30 min | 25 min | 222 | 116 |
+| over central New York, near Rochester | 35 min | 20 min | 166 | 99 |
+| over west-central New York, near Rochester | 35 min | 20 min | 196 | 140 |
+| over western New York, near Rochester | 40 min | 15 min | 78 | 38 |
+| over eastern New York, near Buffalo | 40 min | 15 min | 22 | 15 |
+| over central New York, near Buffalo | 45 min | 10 min | 64 | 41 |
+| over western New York, near Buffalo | 45 min | 10 min | 11 | 4 |
 | over Ontario, near Toronto | 50 min | 5 min | 1 | 0 |
 | near YYZ, where flights climb out or come in to land | 55 min | 5 min | 2 | 0 |
 
@@ -4068,7 +4070,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 #### Where is it bumpiest between LGA and YYZ?
 
-Pilots reported moderate bumps most often over New York, near Rochester (about 30 min after leaving LGA (25 min after leaving YYZ)).
+Pilots reported moderate bumps most often over eastern New York, near Rochester, about 30 min after leaving LGA, or 25 min after leaving YYZ.
 
 #### When is the smoothest time of year to fly LGA to YYZ?
 

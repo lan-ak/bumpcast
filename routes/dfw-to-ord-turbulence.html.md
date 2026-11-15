@@ -2,7 +2,7 @@
 
 > Dallas-Fort Worth (DFW) ⇄ Chicago (ORD), both directions. November 2025 to October 2026.
 
-Flights between Dallas-Fort Worth (DFW) and Chicago (ORD) fly about 800 miles, roughly 1¾ hours in the air. In the past year, pilots near this route reported moderate bumps most often near ORD, and more often in March, April and May. Severe reports were rare: 54 of 11,184.
+Flights between Dallas-Fort Worth (DFW) and Chicago (ORD) fly about 800 miles, roughly 1¾ hours in the air. In the past year, pilots near this route reported moderate bumps most often near ORD, and more often in March, April and May.
 
 - Distance: 800 miles (1,290 km)
 - In the air: about 1 h 50 min (typical jet, still air)
@@ -12,9 +12,9 @@ Flights between Dallas-Fort Worth (DFW) and Chicago (ORD) fly about 800 miles, r
 
 ## Where on the route it gets bumpy
 
-Moderate bumps were reported most often near ORD, where flights climb out or come in to land, about 1 h 45 min after leaving DFW (5 min after leaving ORD): 291 of 2,116 reports there. Close to the ground, wind over buildings and land stirs the air, and gusty days at ORD add to it.
+Moderate bumps were reported most often near ORD, where flights climb out or come in to land, about 1 h 45 min after leaving DFW, or 5 min after leaving ORD. There, 291 of 2,116 reports were moderate or stronger. Close to the ground, wind over buildings and land stirs the air, and gusty days at ORD add to it.
 
-The next most were over Arkansas, about 40 min after leaving DFW (1 h 5 min after leaving ORD): 252 of 621 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+The next most were over Arkansas, about 40 min after leaving DFW, or 1 h 5 min after leaving ORD. There, 252 of 621 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
 | Where | From DFW | From ORD | Reports | Moderate or stronger |
 |---|---|---|---|---|
@@ -22,21 +22,21 @@ The next most were over Arkansas, about 40 min after leaving DFW (1 h 5 min afte
 | over Texas, near Dallas | 10 min | 1 h 35 min | 441 | 113 |
 | over Oklahoma, near Dallas | 15 min | 1 h 30 min | 618 | 173 |
 | over Oklahoma | 20 min | 1 h 25 min | 700 | 159 |
-| over Oklahoma, near Tulsa | 25 min | 1 h 20 min | 714 | 182 |
-| over Oklahoma, near Tulsa | 30 min | 1 h 15 min | 618 | 230 |
+| over western Oklahoma, near Tulsa | 25 min | 1 h 20 min | 714 | 182 |
+| over eastern Oklahoma, near Tulsa | 30 min | 1 h 15 min | 618 | 230 |
 | over Arkansas, near Tulsa | 35 min | 1 h 10 min | 398 | 165 |
 | over Arkansas | 40 min | 1 h 5 min | 621 | 252 |
-| over Missouri | 45 min | 1 h | 271 | 93 |
-| over Missouri | 50 min | 55 min | 303 | 128 |
-| over Missouri | 55 min | 50 min | 218 | 75 |
-| over Missouri, near St Louis | 1 h | 45 min | 223 | 108 |
-| over Missouri, near St Louis | 1 h 5 min | 40 min | 289 | 111 |
-| over Missouri, near St Louis | 1 h 10 min | 35 min | 511 | 184 |
-| over Illinois, near St Louis | 1 h 15 min | 30 min | 293 | 117 |
-| over Illinois, near St Louis | 1 h 20 min | 25 min | 647 | 200 |
+| over western Missouri | 45 min | 1 h | 271 | 93 |
+| over central Missouri | 50 min | 55 min | 303 | 128 |
+| over eastern Missouri | 55 min | 50 min | 218 | 75 |
+| over western Missouri, near St Louis | 1 h | 45 min | 223 | 108 |
+| over central Missouri, near St Louis | 1 h 5 min | 40 min | 289 | 111 |
+| over eastern Missouri, near St Louis | 1 h 10 min | 35 min | 511 | 184 |
+| over western Illinois, near St Louis | 1 h 15 min | 30 min | 293 | 117 |
+| over eastern Illinois, near St Louis | 1 h 20 min | 25 min | 647 | 200 |
 | over Illinois | 1 h 25 min | 20 min | 822 | 250 |
-| over Illinois, near Chicago | 1 h 30 min | 15 min | 462 | 153 |
-| over Illinois, near Chicago | 1 h 35 min | 10 min | 422 | 151 |
+| over western Illinois, near Chicago | 1 h 30 min | 15 min | 462 | 153 |
+| over eastern Illinois, near Chicago | 1 h 35 min | 10 min | 422 | 151 |
 | near ORD, where flights climb out or come in to land | 1 h 45 min | 5 min | 2,116 | 291 |
 
 ## When in the year
@@ -70,7 +70,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between DFW and ORD?
 
-Pilots reported moderate bumps most often near ORD, where flights climb out or come in to land (about 1 h 45 min after leaving DFW (5 min after leaving ORD)), and next most over Arkansas (about 40 min after leaving DFW (1 h 5 min after leaving ORD)).
+Pilots reported moderate bumps most often near ORD, where flights climb out or come in to land, about 1 h 45 min after leaving DFW, or 5 min after leaving ORD. The next most were over Arkansas, about 40 min after leaving DFW, or 1 h 5 min after leaving ORD.
 
 ### When is the smoothest time of year to fly DFW to ORD?
 

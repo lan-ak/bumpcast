@@ -2,7 +2,7 @@
 
 > Dallas-Fort Worth (DFW) ⇄ Los Angeles (LAX), both directions. November 2025 to October 2026.
 
-Flights between Dallas-Fort Worth (DFW) and Los Angeles (LAX) fly about 1,230 miles, roughly 2¾ hours in the air. In the past year, pilots near this route reported moderate bumps most often near DFW, and more often in January, February and March. Severe reports were rare: 54 of 8,044.
+Flights between Dallas-Fort Worth (DFW) and Los Angeles (LAX) fly about 1,230 miles, roughly 2¾ hours in the air. In the past year, pilots near this route reported moderate bumps most often near DFW, and more often in January, February and March.
 
 - Distance: 1,230 miles (1,980 km)
 - In the air: about 2 h 40 min (typical jet, still air)
@@ -12,31 +12,31 @@ Flights between Dallas-Fort Worth (DFW) and Los Angeles (LAX) fly about 1,230 mi
 
 ## Where on the route it gets bumpy
 
-Moderate bumps were reported most often near DFW, where flights climb out or come in to land, about 5 min after leaving DFW (2 h 30 min after leaving LAX): 314 of 1,038 reports there. Close to the ground, wind over buildings and land stirs the air, and gusty days at DFW add to it.
+Moderate bumps were reported most often near DFW, where flights climb out or come in to land, about 5 min after leaving DFW, or 2 h 30 min after leaving LAX. There, 314 of 1,038 reports were moderate or stronger. Close to the ground, wind over buildings and land stirs the air, and gusty days at DFW add to it.
 
-The next most were over Texas, about 45 min after leaving DFW (1 h 50 min after leaving LAX): 217 of 633 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+The next most were over western Texas, about 45 min after leaving DFW, or 1 h 50 min after leaving LAX. There, 217 of 633 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
 | Where | From DFW | From LAX | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near DFW, where flights climb out or come in to land | 5 min | 2 h 30 min | 1,038 | 314 |
 | over Texas, near Dallas-Fort Worth | 15 min | 2 h 20 min | 727 | 209 |
-| over or near Texas | 25 min | 2 h 15 min | 1,086 | 228 |
-| over or near Texas | 30 min | 2 h 5 min | 608 | 142 |
-| over Texas | 40 min | 2 h | 785 | 138 |
-| over Texas | 45 min | 1 h 50 min | 633 | 217 |
-| over New Mexico | 55 min | 1 h 45 min | 259 | 124 |
-| over New Mexico | 1 h | 1 h 35 min | 285 | 145 |
-| over New Mexico, near Albuquerque | 1 h 5 min | 1 h 30 min | 228 | 141 |
-| over New Mexico, near Albuquerque | 1 h 15 min | 1 h 20 min | 264 | 119 |
-| over or near Arizona | 1 h 20 min | 1 h 15 min | 156 | 74 |
+| over or near eastern Texas | 25 min | 2 h 15 min | 1,086 | 228 |
+| over or near western Texas | 30 min | 2 h 5 min | 608 | 142 |
+| over eastern Texas | 40 min | 2 h | 785 | 138 |
+| over western Texas | 45 min | 1 h 50 min | 633 | 217 |
+| over eastern New Mexico | 55 min | 1 h 45 min | 259 | 124 |
+| over western New Mexico | 1 h | 1 h 35 min | 285 | 145 |
+| over eastern New Mexico, near Albuquerque | 1 h 5 min | 1 h 30 min | 228 | 141 |
+| over western New Mexico, near Albuquerque | 1 h 15 min | 1 h 20 min | 264 | 119 |
+| over or near eastern Arizona | 1 h 20 min | 1 h 15 min | 156 | 74 |
 | over Arizona | 1 h 30 min | 1 h 5 min | 261 | 123 |
-| over Arizona, near Phoenix | 1 h 35 min | 1 h | 283 | 143 |
-| over Arizona, near Phoenix | 1 h 45 min | 55 min | 308 | 141 |
-| over Arizona, near Phoenix | 1 h 50 min | 45 min | 306 | 140 |
-| over or near Arizona | 2 h | 40 min | 200 | 86 |
-| over California, near Palm Springs | 2 h 5 min | 30 min | 152 | 52 |
-| over California, near Palm Springs | 2 h 15 min | 25 min | 90 | 35 |
-| over California, near Palm Springs | 2 h 20 min | 15 min | 131 | 96 |
+| over eastern Arizona, near Phoenix | 1 h 35 min | 1 h | 283 | 143 |
+| over central Arizona, near Phoenix | 1 h 45 min | 55 min | 308 | 141 |
+| over western Arizona, near Phoenix | 1 h 50 min | 45 min | 306 | 140 |
+| over or near western Arizona | 2 h | 40 min | 200 | 86 |
+| over eastern California, near Palm Springs | 2 h 5 min | 30 min | 152 | 52 |
+| over central California, near Palm Springs | 2 h 15 min | 25 min | 90 | 35 |
+| over western California, near Palm Springs | 2 h 20 min | 15 min | 131 | 96 |
 | near LAX, where flights climb out or come in to land | 2 h 35 min | 5 min | 244 | 173 |
 
 ## When in the year
@@ -70,7 +70,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between DFW and LAX?
 
-Pilots reported moderate bumps most often near DFW, where flights climb out or come in to land (about 5 min after leaving DFW (2 h 30 min after leaving LAX)), and next most over Texas (about 45 min after leaving DFW (1 h 50 min after leaving LAX)).
+Pilots reported moderate bumps most often near DFW, where flights climb out or come in to land, about 5 min after leaving DFW, or 2 h 30 min after leaving LAX. The next most were over western Texas, about 45 min after leaving DFW, or 1 h 50 min after leaving LAX.
 
 ### When is the smoothest time of year to fly DFW to LAX?
 

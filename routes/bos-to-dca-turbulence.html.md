@@ -2,7 +2,7 @@
 
 > Boston (BOS) ⇄ Washington (DCA), both directions. November 2025 to October 2026.
 
-Flights between Boston (BOS) and Washington (DCA) fly about 400 miles, roughly an hour in the air. In the past year, pilots near this route reported moderate bumps most often over New York, and more often in December and October. Severe reports were rare: 55 of 6,451.
+Flights between Boston (BOS) and Washington (DCA) fly about 400 miles, roughly an hour in the air. In the past year, pilots near this route reported moderate bumps most often over eastern New York, and more often in December and October.
 
 - Distance: 400 miles (640 km)
 - In the air: about 1 h 5 min (typical jet, still air)
@@ -12,31 +12,31 @@ Flights between Boston (BOS) and Washington (DCA) fly about 400 miles, roughly a
 
 ## Where on the route it gets bumpy
 
-Moderate bumps were reported most often near New York, about 25 min after leaving BOS (35 min after leaving DCA): 230 of 988 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Moderate bumps were reported most often over eastern New York, about 25 min after leaving BOS, or 35 min after leaving DCA. There, 230 of 988 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
-The next most were over Connecticut, near Hartford, about 15 min after leaving BOS (50 min after leaving DCA): 172 of 548 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+The next most were over eastern Connecticut, near Hartford, about 15 min after leaving BOS, or 50 min after leaving DCA. There, 172 of 548 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
 | Where | From BOS | From DCA | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near BOS, where flights climb out or come in to land | 5 min | 1 h | 262 | 74 |
-| over Rhode Island, near Providence/Warwick | 5 min | 55 min | 309 | 91 |
-| over Rhode Island, near Providence/Warwick | 10 min | 50 min | 284 | 124 |
-| over Connecticut, near Hartford | 15 min | 50 min | 548 | 172 |
-| over Connecticut, near Hartford | 15 min | 45 min | 273 | 67 |
-| over Connecticut, near Hartford | 20 min | 40 min | 429 | 160 |
+| over eastern Rhode Island, near Providence/Warwick | 5 min | 55 min | 309 | 91 |
+| over western Rhode Island, near Providence/Warwick | 10 min | 50 min | 284 | 124 |
+| over eastern Connecticut, near Hartford | 15 min | 50 min | 548 | 172 |
+| over central Connecticut, near Hartford | 15 min | 45 min | 273 | 67 |
+| over western Connecticut, near Hartford | 20 min | 40 min | 429 | 160 |
 | over Connecticut, near New York | 20 min | 40 min | 428 | 98 |
-| near New York | 25 min | 35 min | 988 | 230 |
-| near New York | 25 min | 35 min | 145 | 58 |
+| over eastern New York | 25 min | 35 min | 988 | 230 |
+| over western New York | 25 min | 35 min | 145 | 58 |
 | over New York, near Newark | 30 min | 30 min | 389 | 157 |
-| over New Jersey, near Newark | 30 min | 30 min | 398 | 137 |
-| over New Jersey, near Newark | 35 min | 25 min | 443 | 147 |
+| over eastern New Jersey, near Newark | 30 min | 30 min | 398 | 137 |
+| over western New Jersey, near Newark | 35 min | 25 min | 443 | 147 |
 | over New Jersey, near Philadelphia | 35 min | 25 min | 335 | 121 |
 | over Pennsylvania, near Philadelphia | 40 min | 20 min | 141 | 65 |
-| over Delaware, near Philadelphia | 40 min | 20 min | 289 | 126 |
-| over Delaware, near Philadelphia | 45 min | 15 min | 131 | 75 |
-| over Maryland, near Baltimore | 50 min | 15 min | 171 | 111 |
-| over Maryland, near Baltimore | 50 min | 10 min | 88 | 52 |
-| over Maryland, near Baltimore | 55 min | 5 min | 290 | 138 |
+| over eastern Delaware, near Philadelphia | 40 min | 20 min | 289 | 126 |
+| over western Delaware, near Philadelphia | 45 min | 15 min | 131 | 75 |
+| over eastern Maryland, near Baltimore | 50 min | 15 min | 171 | 111 |
+| over central Maryland, near Baltimore | 50 min | 10 min | 88 | 52 |
+| over western Maryland, near Baltimore | 55 min | 5 min | 290 | 138 |
 | near DCA, where flights climb out or come in to land | 1 h | 5 min | 110 | 52 |
 
 ## When in the year
@@ -70,7 +70,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between BOS and DCA?
 
-Pilots reported moderate bumps most often near New York (about 25 min after leaving BOS (35 min after leaving DCA)), and next most over Connecticut, near Hartford (about 15 min after leaving BOS (50 min after leaving DCA)).
+Pilots reported moderate bumps most often over eastern New York, about 25 min after leaving BOS, or 35 min after leaving DCA. The next most were over eastern Connecticut, near Hartford, about 15 min after leaving BOS, or 50 min after leaving DCA.
 
 ### When is the smoothest time of year to fly BOS to DCA?
 

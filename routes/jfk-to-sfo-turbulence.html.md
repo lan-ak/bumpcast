@@ -2,7 +2,7 @@
 
 > New York (JFK) ⇄ San Francisco (SFO), both directions. November 2025 to October 2026.
 
-Flights between New York (JFK) and San Francisco (SFO) fly about 2,580 miles, roughly 5¼ hours in the air. In the past year, pilots near this route reported moderate bumps most often near Cleveland. Severe reports were rare: 114 of 32,267.
+Flights between New York (JFK) and San Francisco (SFO) fly about 2,580 miles, roughly 5¼ hours in the air. In the past year, pilots near this route reported moderate bumps most often near Cleveland.
 
 - Distance: 2,580 miles (4,150 km)
 - In the air: about 5 h 20 min (typical jet, still air)
@@ -12,9 +12,9 @@ Flights between New York (JFK) and San Francisco (SFO) fly about 2,580 miles, ro
 
 ## Where on the route it gets bumpy
 
-Moderate bumps were reported most often near Cleveland, about 1 h after leaving JFK (4 h 15 min after leaving SFO): 1,110 of 1,515 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Moderate bumps were reported most often near Cleveland, about 1 h after leaving JFK, or 4 h 15 min after leaving SFO. There, 1,110 of 1,515 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
-The next most were near JFK, where flights climb out or come in to land, about 10 min after leaving JFK (5 h 5 min after leaving SFO): 793 of 1,849 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+The next most were near JFK, where flights climb out or come in to land, about 10 min after leaving JFK, or 5 h 5 min after leaving SFO. There, 793 of 1,849 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
 | Where | From JFK | From SFO | Reports | Moderate or stronger |
 |---|---|---|---|---|
@@ -28,14 +28,14 @@ The next most were near JFK, where flights climb out or come in to land, about 1
 | over Iowa, near Des Moines | 2 h | 3 h 15 min | 2,568 | 593 |
 | over Iowa, near Omaha | 2 h 15 min | 3 h | 3,085 | 757 |
 | over Nebraska, near Omaha | 2 h 30 min | 2 h 45 min | 2,943 | 736 |
-| over Nebraska | 2 h 45 min | 2 h 30 min | 1,842 | 490 |
-| over Nebraska | 3 h | 2 h 15 min | 1,758 | 467 |
+| over eastern Nebraska | 2 h 45 min | 2 h 30 min | 1,842 | 490 |
+| over western Nebraska | 3 h | 2 h 15 min | 1,758 | 467 |
 | over Wyoming, near Denver | 3 h 15 min | 2 h | 1,706 | 439 |
 | over Wyoming | 3 h 30 min | 1 h 45 min | 2,181 | 400 |
 | over Utah | 3 h 45 min | 1 h 30 min | 816 | 359 |
 | over Utah, near Salt Lake City | 4 h | 1 h 15 min | 376 | 255 |
-| over Nevada | 4 h 15 min | 1 h | 424 | 266 |
-| over Nevada | 4 h 30 min | 45 min | 299 | 194 |
+| over eastern Nevada | 4 h 15 min | 1 h | 424 | 266 |
+| over western Nevada | 4 h 30 min | 45 min | 299 | 194 |
 | over Nevada, near Reno | 4 h 45 min | 30 min | 204 | 115 |
 | near SFO, where flights climb out or come in to land | 5 h 5 min | 10 min | 437 | 243 |
 
@@ -70,7 +70,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between JFK and SFO?
 
-Pilots reported moderate bumps most often near Cleveland (about 1 h after leaving JFK (4 h 15 min after leaving SFO)), and next most near JFK, where flights climb out or come in to land (about 10 min after leaving JFK (5 h 5 min after leaving SFO)).
+Pilots reported moderate bumps most often near Cleveland, about 1 h after leaving JFK, or 4 h 15 min after leaving SFO. The next most were near JFK, where flights climb out or come in to land, about 10 min after leaving JFK, or 5 h 5 min after leaving SFO.
 
 ### When is the smoothest time of year to fly JFK to SFO?
 

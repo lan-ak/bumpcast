@@ -2,7 +2,7 @@
 
 > Atlanta (ATL) ⇄ New York (LGA), both directions. November 2025 to October 2026.
 
-Flights between Atlanta (ATL) and New York (LGA) fly about 760 miles, roughly 1¾ hours in the air. In the past year, pilots near this route reported moderate bumps most often over North Carolina, and more often in May and June. Severe reports were rare: 70 of 12,454.
+Flights between Atlanta (ATL) and New York (LGA) fly about 760 miles, roughly 1¾ hours in the air. In the past year, pilots near this route reported moderate bumps most often over central North Carolina, and more often in May and June.
 
 - Distance: 760 miles (1,220 km)
 - In the air: about 1 h 45 min (typical jet, still air)
@@ -12,9 +12,9 @@ Flights between Atlanta (ATL) and New York (LGA) fly about 760 miles, roughly 1�
 
 ## Where on the route it gets bumpy
 
-Moderate bumps were reported most often over North Carolina, near Charlotte, about 30 min after leaving ATL (1 h 10 min after leaving LGA): 331 of 1,993 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Moderate bumps were reported most often over central North Carolina, near Charlotte, about 30 min after leaving ATL, or 1 h 10 min after leaving LGA. There, 331 of 1,993 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
-The next most were over Virginia, near Greensboro, about 45 min after leaving ATL (1 h after leaving LGA): 270 of 883 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+The next most were over western Virginia, near Greensboro, about 45 min after leaving ATL, or 1 h after leaving LGA. There, 270 of 883 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
 | Where | From ATL | From LGA | Reports | Moderate or stronger |
 |---|---|---|---|---|
@@ -22,16 +22,16 @@ The next most were over Virginia, near Greensboro, about 45 min after leaving AT
 | over Georgia, near Atlanta | 10 min | 1 h 30 min | 662 | 94 |
 | over Georgia, near Knoxville/Maryville | 15 min | 1 h 25 min | 1,005 | 162 |
 | over South Carolina, near Knoxville/Maryville | 20 min | 1 h 20 min | 615 | 98 |
-| over North Carolina, near Charlotte | 25 min | 1 h 15 min | 1,715 | 304 |
-| over North Carolina, near Charlotte | 30 min | 1 h 10 min | 1,993 | 331 |
-| over North Carolina, near Charlotte | 35 min | 1 h 5 min | 710 | 177 |
+| over western North Carolina, near Charlotte | 25 min | 1 h 15 min | 1,715 | 304 |
+| over central North Carolina, near Charlotte | 30 min | 1 h 10 min | 1,993 | 331 |
+| over eastern North Carolina, near Charlotte | 35 min | 1 h 5 min | 710 | 177 |
 | over North Carolina, near Greensboro | 40 min | 1 h | 1,352 | 287 |
-| over Virginia, near Greensboro | 45 min | 1 h | 883 | 270 |
-| over Virginia, near Greensboro | 50 min | 55 min | 347 | 211 |
-| over Virginia, near Richmond | 55 min | 50 min | 254 | 171 |
-| over Virginia, near Richmond | 1 h | 45 min | 358 | 243 |
-| over Virginia, near Dulles | 1 h | 40 min | 276 | 185 |
-| over Virginia, near Dulles | 1 h 5 min | 35 min | 244 | 156 |
+| over western Virginia, near Greensboro | 45 min | 1 h | 883 | 270 |
+| over eastern Virginia, near Greensboro | 50 min | 55 min | 347 | 211 |
+| over western Virginia, near Richmond | 55 min | 50 min | 254 | 171 |
+| over eastern Virginia, near Richmond | 1 h | 45 min | 358 | 243 |
+| over western Virginia, near Dulles | 1 h | 40 min | 276 | 185 |
+| over eastern Virginia, near Dulles | 1 h 5 min | 35 min | 244 | 156 |
 | over Maryland, near Washington | 1 h 10 min | 30 min | 147 | 93 |
 | over Maryland, near Baltimore | 1 h 15 min | 25 min | 128 | 73 |
 | over Delaware, near Philadelphia | 1 h 20 min | 20 min | 216 | 137 |
@@ -70,7 +70,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between ATL and LGA?
 
-Pilots reported moderate bumps most often over North Carolina, near Charlotte (about 30 min after leaving ATL (1 h 10 min after leaving LGA)), and next most over Virginia, near Greensboro (about 45 min after leaving ATL (1 h after leaving LGA)).
+Pilots reported moderate bumps most often over central North Carolina, near Charlotte, about 30 min after leaving ATL, or 1 h 10 min after leaving LGA. The next most were over western Virginia, near Greensboro, about 45 min after leaving ATL, or 1 h after leaving LGA.
 
 ### When is the smoothest time of year to fly ATL to LGA?
 

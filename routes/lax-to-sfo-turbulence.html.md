@@ -2,7 +2,7 @@
 
 > Los Angeles (LAX) ⇄ San Francisco (SFO), both directions. November 2025 to October 2026.
 
-Flights between Los Angeles (LAX) and San Francisco (SFO) fly about 340 miles, roughly an hour in the air. In the past year, pilots near this route reported moderate bumps most often near LAX, and more often in December and March. Severe reports were rare: 13 of 823.
+Flights between Los Angeles (LAX) and San Francisco (SFO) fly about 340 miles, roughly an hour in the air. In the past year, pilots near this route reported moderate bumps most often near LAX, and more often in December and March.
 
 - Distance: 340 miles (540 km)
 - In the air: about 1 h (typical jet, still air)
@@ -12,29 +12,29 @@ Flights between Los Angeles (LAX) and San Francisco (SFO) fly about 340 miles, r
 
 ## Where on the route it gets bumpy
 
-Moderate bumps were reported most often near LAX, where flights climb out or come in to land, about 5 min after leaving LAX (55 min after leaving SFO): 73 of 158 reports there. Close to the ground, wind over buildings and land stirs the air.
+Moderate bumps were reported most often near LAX, where flights climb out or come in to land, about 5 min after leaving LAX, or 55 min after leaving SFO. There, 73 of 158 reports were moderate or stronger. Close to the ground, wind over buildings and land stirs the air.
 
 | Where | From LAX | From SFO | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near LAX, where flights climb out or come in to land | 5 min | 55 min | 158 | 73 |
-| over California, near Burbank | 5 min | 50 min | 82 | 65 |
-| over California, near Burbank | 10 min | 45 min | 34 | 18 |
-| over California, near Burbank | 10 min | 40 min | 26 | 18 |
-| over California, near Burbank | 15 min | 40 min | 14 | 7 |
-| over California, near Burbank | 15 min | 35 min | 32 | 13 |
+| over eastern California, near Burbank | 5 min | 50 min | 82 | 65 |
+| over east-central California, near Burbank | 10 min | 45 min | 34 | 18 |
+| over central California, near Burbank | 10 min | 40 min | 26 | 18 |
+| over west-central California, near Burbank | 15 min | 40 min | 14 | 7 |
+| over western California, near Burbank | 15 min | 35 min | 32 | 13 |
 | over California | 20 min | 35 min | 37 | 17 |
-| over California, near Fresno | 20 min | 30 min | 27 | 11 |
-| over California, near Fresno | 25 min | 30 min | 27 | 18 |
-| over California, near Fresno | 25 min | 30 min | 36 | 23 |
-| over California, near Fresno | 25 min | 25 min | 43 | 29 |
-| over California, near Fresno | 30 min | 25 min | 15 | 10 |
+| over California, near Fresno (part 1 of 6) | 20 min | 30 min | 27 | 11 |
+| over California, near Fresno (part 2 of 6) | 25 min | 30 min | 27 | 18 |
+| over California, near Fresno (part 3 of 6) | 25 min | 30 min | 36 | 23 |
+| over California, near Fresno (part 4 of 6) | 25 min | 25 min | 43 | 29 |
+| over California, near Fresno (part 5 of 6) | 30 min | 25 min | 15 | 10 |
 | near Fresno | 30 min | 20 min | 14 | 8 |
-| over California, near Fresno | 35 min | 20 min | 21 | 10 |
-| over California, near San Jose | 35 min | 15 min | 35 | 17 |
-| over California, near San Jose | 40 min | 15 min | 49 | 27 |
-| over California, near San Jose | 40 min | 10 min | 35 | 22 |
-| over California, near San Jose | 45 min | 10 min | 61 | 39 |
-| over California, near San Jose | 50 min | 5 min | 35 | 17 |
+| over California, near Fresno (part 6 of 6) | 35 min | 20 min | 21 | 10 |
+| over eastern California, near San Jose | 35 min | 15 min | 35 | 17 |
+| over east-central California, near San Jose | 40 min | 15 min | 49 | 27 |
+| over central California, near San Jose | 40 min | 10 min | 35 | 22 |
+| over west-central California, near San Jose | 45 min | 10 min | 61 | 39 |
+| over western California, near San Jose | 50 min | 5 min | 35 | 17 |
 | near SFO, where flights climb out or come in to land | 55 min | 5 min | 42 | 23 |
 
 ## When in the year
@@ -68,7 +68,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between LAX and SFO?
 
-Pilots reported moderate bumps most often near LAX, where flights climb out or come in to land (about 5 min after leaving LAX (55 min after leaving SFO)).
+Pilots reported moderate bumps most often near LAX, where flights climb out or come in to land, about 5 min after leaving LAX, or 55 min after leaving SFO.
 
 ### When is the smoothest time of year to fly LAX to SFO?
 

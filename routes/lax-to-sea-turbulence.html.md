@@ -2,7 +2,7 @@
 
 > Los Angeles (LAX) ⇄ Seattle (SEA), both directions. November 2025 to October 2026.
 
-Flights between Los Angeles (LAX) and Seattle (SEA) fly about 960 miles, roughly 2¼ hours in the air. In the past year, pilots near this route reported moderate bumps most often near LAX, and more often in December. Severe reports were rare: 17 of 2,883.
+Flights between Los Angeles (LAX) and Seattle (SEA) fly about 960 miles, roughly 2¼ hours in the air. In the past year, pilots near this route reported moderate bumps most often near LAX, and more often in December.
 
 - Distance: 960 miles (1,540 km)
 - In the air: about 2 h 10 min (typical jet, still air)
@@ -12,30 +12,30 @@ Flights between Los Angeles (LAX) and Seattle (SEA) fly about 960 miles, roughly
 
 ## Where on the route it gets bumpy
 
-Moderate bumps were reported most often near LAX, where flights climb out or come in to land, about 5 min after leaving LAX (2 h after leaving SEA): 181 of 305 reports there. Close to the ground, wind over buildings and land stirs the air.
+Moderate bumps were reported most often near LAX, where flights climb out or come in to land, about 5 min after leaving LAX, or 2 h after leaving SEA. There, 181 of 305 reports were moderate or stronger. Close to the ground, wind over buildings and land stirs the air.
 
-The next most were over California, about 1 h 10 min after leaving LAX (55 min after leaving SEA): 128 of 209 reports there. The ground below is high, and wind over mountains makes waves that reach cruising height.
+The next most were over northern California, about 1 h 10 min after leaving LAX, or 55 min after leaving SEA. There, 128 of 209 reports were moderate or stronger. The ground below is high, and wind over mountains makes waves that reach cruising height.
 
 | Where | From LAX | From SEA | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near LAX, where flights climb out or come in to land | 5 min | 2 h | 305 | 181 |
 | over California, near Burbank | 15 min | 1 h 50 min | 43 | 19 |
-| over California, near Fresno | 20 min | 1 h 45 min | 84 | 42 |
-| over California, near Fresno | 25 min | 1 h 40 min | 60 | 31 |
-| over California, near Fresno | 30 min | 1 h 35 min | 83 | 47 |
-| over California, near Fresno | 35 min | 1 h 30 min | 64 | 43 |
-| over California, near Reno | 40 min | 1 h 20 min | 92 | 50 |
-| over Nevada, near Reno | 50 min | 1 h 15 min | 75 | 42 |
-| over Nevada, near Reno | 55 min | 1 h 10 min | 114 | 67 |
-| over California, near Reno | 1 h | 1 h 5 min | 70 | 41 |
-| over California | 1 h 5 min | 1 h | 145 | 95 |
-| over California | 1 h 10 min | 55 min | 209 | 128 |
-| over Oregon | 1 h 15 min | 50 min | 231 | 121 |
+| over southern California, near Fresno | 20 min | 1 h 45 min | 84 | 42 |
+| over south-central California, near Fresno | 25 min | 1 h 40 min | 60 | 31 |
+| over north-central California, near Fresno | 30 min | 1 h 35 min | 83 | 47 |
+| over northern California, near Fresno | 35 min | 1 h 30 min | 64 | 43 |
+| over southern California, near Reno | 40 min | 1 h 20 min | 92 | 50 |
+| over southern Nevada, near Reno | 50 min | 1 h 15 min | 75 | 42 |
+| over northern Nevada, near Reno | 55 min | 1 h 10 min | 114 | 67 |
+| over northern California, near Reno | 1 h | 1 h 5 min | 70 | 41 |
+| over southern California | 1 h 5 min | 1 h | 145 | 95 |
+| over northern California | 1 h 10 min | 55 min | 209 | 128 |
+| over southern Oregon | 1 h 15 min | 50 min | 231 | 121 |
 | over or near Oregon | 1 h 20 min | 40 min | 123 | 59 |
-| over Oregon | 1 h 30 min | 35 min | 204 | 107 |
-| over Oregon, near Portland | 1 h 35 min | 30 min | 198 | 111 |
-| over Oregon, near Portland | 1 h 40 min | 25 min | 131 | 89 |
-| over Oregon, near Portland | 1 h 45 min | 20 min | 192 | 123 |
+| over northern Oregon | 1 h 30 min | 35 min | 204 | 107 |
+| over southern Oregon, near Portland | 1 h 35 min | 30 min | 198 | 111 |
+| over central Oregon, near Portland | 1 h 40 min | 25 min | 131 | 89 |
+| over northern Oregon, near Portland | 1 h 45 min | 20 min | 192 | 123 |
 | over Washington, near Portland | 1 h 50 min | 15 min | 110 | 70 |
 | near SEA, where flights climb out or come in to land | 2 h | 5 min | 350 | 91 |
 
@@ -70,7 +70,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between LAX and SEA?
 
-Pilots reported moderate bumps most often near LAX, where flights climb out or come in to land (about 5 min after leaving LAX (2 h after leaving SEA)), and next most over California (about 1 h 10 min after leaving LAX (55 min after leaving SEA)).
+Pilots reported moderate bumps most often near LAX, where flights climb out or come in to land, about 5 min after leaving LAX, or 2 h after leaving SEA. The next most were over northern California, about 1 h 10 min after leaving LAX, or 55 min after leaving SEA.
 
 ### When is the smoothest time of year to fly LAX to SEA?
 

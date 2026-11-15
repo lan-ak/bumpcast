@@ -2,7 +2,7 @@
 
 > Atlanta (ATL) ⇄ Boston (BOS), both directions. November 2025 to October 2026.
 
-Flights between Atlanta (ATL) and Boston (BOS) fly about 940 miles, roughly 2¼ hours in the air. In the past year, pilots near this route reported moderate bumps most often over Virginia, and more often in June. Severe reports were rare: 72 of 15,695.
+Flights between Atlanta (ATL) and Boston (BOS) fly about 940 miles, roughly 2¼ hours in the air. In the past year, pilots near this route reported moderate bumps most often over western Virginia, and more often in June.
 
 - Distance: 940 miles (1,520 km)
 - In the air: about 2 h 10 min (typical jet, still air)
@@ -12,31 +12,31 @@ Flights between Atlanta (ATL) and Boston (BOS) fly about 940 miles, roughly 2¼ 
 
 ## Where on the route it gets bumpy
 
-Moderate bumps were reported most often over Virginia, near Greensboro, about 40 min after leaving ATL (1 h 20 min after leaving BOS): 486 of 1,994 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Moderate bumps were reported most often over western Virginia, near Greensboro, about 40 min after leaving ATL, or 1 h 20 min after leaving BOS. There, 486 of 1,994 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
-The next most were over Connecticut, near Hartford, about 1 h 45 min after leaving ATL (20 min after leaving BOS): 373 of 1,310 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+The next most were over western Connecticut, near Hartford, about 1 h 45 min after leaving ATL, or 20 min after leaving BOS. There, 373 of 1,310 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
 | Where | From ATL | From BOS | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near ATL, where flights climb out or come in to land | 5 min | 2 h | 503 | 84 |
 | over Georgia, near Atlanta | 15 min | 1 h 50 min | 601 | 99 |
 | over South Carolina, near Knoxville/Maryville | 20 min | 1 h 45 min | 1,364 | 204 |
-| over North Carolina, near Charlotte | 25 min | 1 h 40 min | 1,849 | 339 |
-| over North Carolina, near Charlotte | 30 min | 1 h 35 min | 2,015 | 328 |
+| over western North Carolina, near Charlotte | 25 min | 1 h 40 min | 1,849 | 339 |
+| over eastern North Carolina, near Charlotte | 30 min | 1 h 35 min | 2,015 | 328 |
 | over North Carolina, near Greensboro | 35 min | 1 h 25 min | 902 | 224 |
-| over Virginia, near Greensboro | 40 min | 1 h 20 min | 1,994 | 486 |
-| over Virginia, near Greensboro | 45 min | 1 h 15 min | 342 | 214 |
-| over Virginia, near Richmond | 55 min | 1 h 10 min | 474 | 322 |
-| over Virginia, near Richmond | 1 h | 1 h 5 min | 346 | 228 |
+| over western Virginia, near Greensboro | 40 min | 1 h 20 min | 1,994 | 486 |
+| over eastern Virginia, near Greensboro | 45 min | 1 h 15 min | 342 | 214 |
+| over western Virginia, near Richmond | 55 min | 1 h 10 min | 474 | 322 |
+| over eastern Virginia, near Richmond | 1 h | 1 h 5 min | 346 | 228 |
 | over Virginia, near Dulles | 1 h 5 min | 1 h | 286 | 189 |
 | over Virginia, near Washington | 1 h 10 min | 55 min | 203 | 125 |
 | over Maryland, near Baltimore | 1 h 15 min | 45 min | 141 | 78 |
 | over Delaware, near Philadelphia | 1 h 20 min | 40 min | 422 | 174 |
 | over Pennsylvania, near Philadelphia | 1 h 25 min | 35 min | 374 | 141 |
 | over New Jersey, near Newark | 1 h 35 min | 30 min | 937 | 314 |
-| near New York | 1 h 40 min | 25 min | 807 | 208 |
-| over Connecticut, near Hartford | 1 h 45 min | 20 min | 1,310 | 373 |
-| over Connecticut, near Hartford | 1 h 50 min | 15 min | 476 | 174 |
+| over New York | 1 h 40 min | 25 min | 807 | 208 |
+| over western Connecticut, near Hartford | 1 h 45 min | 20 min | 1,310 | 373 |
+| over eastern Connecticut, near Hartford | 1 h 50 min | 15 min | 476 | 174 |
 | near BOS, where flights climb out or come in to land | 2 h | 5 min | 349 | 101 |
 
 ## When in the year
@@ -70,7 +70,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between ATL and BOS?
 
-Pilots reported moderate bumps most often over Virginia, near Greensboro (about 40 min after leaving ATL (1 h 20 min after leaving BOS)), and next most over Connecticut, near Hartford (about 1 h 45 min after leaving ATL (20 min after leaving BOS)).
+Pilots reported moderate bumps most often over western Virginia, near Greensboro, about 40 min after leaving ATL, or 1 h 20 min after leaving BOS. The next most were over western Connecticut, near Hartford, about 1 h 45 min after leaving ATL, or 20 min after leaving BOS.
 
 ### When is the smoothest time of year to fly ATL to BOS?
 

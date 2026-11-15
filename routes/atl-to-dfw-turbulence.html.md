@@ -2,7 +2,7 @@
 
 > Atlanta (ATL) ⇄ Dallas-Fort Worth (DFW), both directions. November 2025 to October 2026.
 
-Flights between Atlanta (ATL) and Dallas-Fort Worth (DFW) fly about 730 miles, roughly 1¾ hours in the air. In the past year, pilots near this route reported moderate bumps most often over Alabama, and more often in April and May. Severe reports were rare: 47 of 10,903.
+Flights between Atlanta (ATL) and Dallas-Fort Worth (DFW) fly about 730 miles, roughly 1¾ hours in the air. In the past year, pilots near this route reported moderate bumps most often over central Alabama, and more often in April and May.
 
 - Distance: 730 miles (1,170 km)
 - In the air: about 1 h 45 min (typical jet, still air)
@@ -12,31 +12,31 @@ Flights between Atlanta (ATL) and Dallas-Fort Worth (DFW) fly about 730 miles, r
 
 ## Where on the route it gets bumpy
 
-Moderate bumps were reported most often over Alabama, near Birmingham, about 20 min after leaving ATL (1 h 20 min after leaving DFW): 312 of 1,234 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Moderate bumps were reported most often over central Alabama, near Birmingham, about 20 min after leaving ATL, or 1 h 20 min after leaving DFW. There, 312 of 1,234 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
-The next most were over Mississippi, about 35 min after leaving ATL (1 h 5 min after leaving DFW): 235 of 436 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+The next most were over eastern Mississippi, about 35 min after leaving ATL, or 1 h 5 min after leaving DFW. There, 235 of 436 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
 | Where | From ATL | From DFW | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near ATL, where flights climb out or come in to land | 5 min | 1 h 35 min | 293 | 87 |
 | over Georgia, near Atlanta | 10 min | 1 h 30 min | 875 | 172 |
-| over Alabama, near Birmingham | 15 min | 1 h 25 min | 525 | 142 |
-| over Alabama, near Birmingham | 20 min | 1 h 20 min | 1,234 | 312 |
-| over Alabama, near Birmingham | 25 min | 1 h 15 min | 574 | 217 |
+| over eastern Alabama, near Birmingham | 15 min | 1 h 25 min | 525 | 142 |
+| over central Alabama, near Birmingham | 20 min | 1 h 20 min | 1,234 | 312 |
+| over western Alabama, near Birmingham | 25 min | 1 h 15 min | 574 | 217 |
 | over Mississippi, near Birmingham | 30 min | 1 h 10 min | 231 | 140 |
-| over Mississippi | 35 min | 1 h 5 min | 436 | 235 |
-| over Mississippi | 40 min | 1 h | 159 | 98 |
-| over Mississippi | 45 min | 55 min | 311 | 183 |
-| over Mississippi | 45 min | 50 min | 310 | 181 |
-| over Mississippi | 50 min | 45 min | 292 | 144 |
-| over Arkansas | 55 min | 40 min | 534 | 191 |
-| over Arkansas | 1 h | 40 min | 783 | 221 |
-| over Arkansas | 1 h 5 min | 35 min | 1,051 | 225 |
-| over Arkansas | 1 h 10 min | 30 min | 1,003 | 190 |
-| over Texas | 1 h 15 min | 25 min | 940 | 210 |
-| over Texas | 1 h 20 min | 20 min | 404 | 106 |
-| over Texas, near Dallas | 1 h 25 min | 15 min | 356 | 115 |
-| over Texas, near Dallas | 1 h 30 min | 10 min | 348 | 98 |
+| over eastern Mississippi | 35 min | 1 h 5 min | 436 | 235 |
+| over east-central Mississippi | 40 min | 1 h | 159 | 98 |
+| over central Mississippi | 45 min | 55 min | 311 | 183 |
+| over west-central Mississippi | 45 min | 50 min | 310 | 181 |
+| over western Mississippi | 50 min | 45 min | 292 | 144 |
+| over eastern Arkansas | 55 min | 40 min | 534 | 191 |
+| over east-central Arkansas | 1 h | 40 min | 783 | 221 |
+| over west-central Arkansas | 1 h 5 min | 35 min | 1,051 | 225 |
+| over western Arkansas | 1 h 10 min | 30 min | 1,003 | 190 |
+| over eastern Texas | 1 h 15 min | 25 min | 940 | 210 |
+| over western Texas | 1 h 20 min | 20 min | 404 | 106 |
+| over eastern Texas, near Dallas | 1 h 25 min | 15 min | 356 | 115 |
+| over western Texas, near Dallas | 1 h 30 min | 10 min | 348 | 98 |
 | near DFW, where flights climb out or come in to land | 1 h 35 min | 5 min | 244 | 95 |
 
 ## When in the year
@@ -70,7 +70,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between ATL and DFW?
 
-Pilots reported moderate bumps most often over Alabama, near Birmingham (about 20 min after leaving ATL (1 h 20 min after leaving DFW)), and next most over Mississippi (about 35 min after leaving ATL (1 h 5 min after leaving DFW)).
+Pilots reported moderate bumps most often over central Alabama, near Birmingham, about 20 min after leaving ATL, or 1 h 20 min after leaving DFW. The next most were over eastern Mississippi, about 35 min after leaving ATL, or 1 h 5 min after leaving DFW.
 
 ### When is the smoothest time of year to fly ATL to DFW?
 

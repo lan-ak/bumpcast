@@ -2,7 +2,7 @@
 
 > Denver (DEN) ⇄ San Francisco (SFO), both directions. November 2025 to October 2026.
 
-Flights between Denver (DEN) and San Francisco (SFO) fly about 960 miles, roughly 2¼ hours in the air. In the past year, pilots near this route reported moderate bumps most often near DEN, and more often in December and June. Severe reports were rare: 108 of 15,177.
+Flights between Denver (DEN) and San Francisco (SFO) fly about 960 miles, roughly 2¼ hours in the air. In the past year, pilots near this route reported moderate bumps most often near DEN, and more often in December and June.
 
 - Distance: 960 miles (1,550 km)
 - In the air: about 2 h 10 min (typical jet, still air)
@@ -12,25 +12,25 @@ Flights between Denver (DEN) and San Francisco (SFO) fly about 960 miles, roughl
 
 ## Where on the route it gets bumpy
 
-Moderate bumps were reported most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN (2 h after leaving SFO): 2,098 of 5,803 reports there. Close to the ground, wind over the mountains stirs the air, and gusty days at DEN add to it.
+Moderate bumps were reported most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN, or 2 h after leaving SFO. There, 2,098 of 5,803 reports were moderate or stronger. Close to the ground, wind over the mountains stirs the air, and gusty days at DEN add to it.
 
 | Where | From DEN | From SFO | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near DEN, where flights climb out or come in to land | 5 min | 2 h | 5,803 | 2,098 |
 | over Colorado, near Denver | 15 min | 1 h 55 min | 3,107 | 526 |
-| over Colorado | 20 min | 1 h 45 min | 1,595 | 313 |
-| over Colorado | 25 min | 1 h 40 min | 917 | 147 |
-| over Colorado | 30 min | 1 h 35 min | 1,178 | 208 |
-| over Utah | 35 min | 1 h 30 min | 506 | 175 |
-| over Utah | 45 min | 1 h 25 min | 260 | 157 |
-| over Utah | 50 min | 1 h 15 min | 114 | 72 |
-| over Utah | 55 min | 1 h 10 min | 167 | 118 |
-| over Utah | 1 h | 1 h 5 min | 163 | 101 |
-| over Nevada | 1 h 5 min | 1 h | 213 | 135 |
-| over Nevada | 1 h 10 min | 55 min | 185 | 121 |
+| over eastern Colorado | 20 min | 1 h 45 min | 1,595 | 313 |
+| over central Colorado | 25 min | 1 h 40 min | 917 | 147 |
+| over western Colorado | 30 min | 1 h 35 min | 1,178 | 208 |
+| over eastern Utah | 35 min | 1 h 30 min | 506 | 175 |
+| over east-central Utah | 45 min | 1 h 25 min | 260 | 157 |
+| over central Utah | 50 min | 1 h 15 min | 114 | 72 |
+| over west-central Utah | 55 min | 1 h 10 min | 167 | 118 |
+| over western Utah | 1 h | 1 h 5 min | 163 | 101 |
+| over eastern Nevada | 1 h 5 min | 1 h | 213 | 135 |
+| over east-central Nevada | 1 h 10 min | 55 min | 185 | 121 |
 | over or near Nevada | 1 h 15 min | 50 min | 101 | 69 |
-| over Nevada | 1 h 25 min | 45 min | 126 | 82 |
-| over Nevada | 1 h 30 min | 35 min | 154 | 91 |
+| over west-central Nevada | 1 h 25 min | 45 min | 126 | 82 |
+| over western Nevada | 1 h 30 min | 35 min | 154 | 91 |
 | over Nevada, near Reno | 1 h 35 min | 30 min | 63 | 30 |
 | over California, near Reno | 1 h 40 min | 25 min | 70 | 42 |
 | over California, near Sacramento | 1 h 45 min | 20 min | 102 | 60 |
@@ -68,7 +68,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between DEN and SFO?
 
-Pilots reported moderate bumps most often near DEN, where flights climb out or come in to land (about 5 min after leaving DEN (2 h after leaving SFO)).
+Pilots reported moderate bumps most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN, or 2 h after leaving SFO.
 
 ### When is the smoothest time of year to fly DEN to SFO?
 

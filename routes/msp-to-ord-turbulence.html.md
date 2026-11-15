@@ -2,7 +2,7 @@
 
 > Minneapolis (MSP) ⇄ Chicago (ORD), both directions. November 2025 to October 2026.
 
-Flights between Minneapolis (MSP) and Chicago (ORD) fly about 330 miles, roughly an hour in the air. In the past year, pilots near this route reported moderate bumps most often over Wisconsin, and more often in April, May and June. Severe reports were rare: 23 of 5,323.
+Flights between Minneapolis (MSP) and Chicago (ORD) fly about 330 miles, roughly an hour in the air. In the past year, pilots near this route reported moderate bumps most often over Wisconsin (part 6 of 6), and more often in April, May and June.
 
 - Distance: 330 miles (540 km)
 - In the air: about 55 min (typical jet, still air)
@@ -12,29 +12,29 @@ Flights between Minneapolis (MSP) and Chicago (ORD) fly about 330 miles, roughly
 
 ## Where on the route it gets bumpy
 
-Moderate bumps were reported most often over Wisconsin, about 30 min after leaving MSP (25 min after leaving ORD): 172 of 837 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Moderate bumps were reported most often over Wisconsin (part 6 of 6), about 30 min after leaving MSP, or 25 min after leaving ORD. There, 172 of 837 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
-The next most were near ORD, where flights climb out or come in to land, about 55 min after leaving MSP (5 min after leaving ORD): 104 of 904 reports there. Close to the ground, wind over buildings and land stirs the air, and gusty days at ORD add to it.
+The next most were near ORD, where flights climb out or come in to land, about 55 min after leaving MSP, or 5 min after leaving ORD. There, 104 of 904 reports were moderate or stronger. Close to the ground, wind over buildings and land stirs the air, and gusty days at ORD add to it.
 
 | Where | From MSP | From ORD | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near MSP, where flights climb out or come in to land | 5 min | 55 min | 225 | 48 |
-| over Minnesota, near Minneapolis | 5 min | 50 min | 129 | 34 |
-| over Minnesota, near Minneapolis | 10 min | 45 min | 168 | 30 |
-| over Minnesota, near Minneapolis | 10 min | 40 min | 106 | 24 |
-| over Minnesota, near Minneapolis | 15 min | 40 min | 296 | 55 |
-| over Minnesota, near Minneapolis | 15 min | 35 min | 100 | 16 |
-| over Wisconsin | 20 min | 35 min | 447 | 71 |
-| over Wisconsin | 20 min | 30 min | 212 | 40 |
-| over Wisconsin | 25 min | 30 min | 48 | 12 |
-| over Wisconsin | 25 min | 25 min | 147 | 32 |
-| over Wisconsin | 25 min | 25 min | 127 | 29 |
-| over Wisconsin | 30 min | 25 min | 837 | 172 |
-| over Wisconsin, near Milwaukee | 30 min | 20 min | 105 | 22 |
-| over Wisconsin, near Milwaukee | 35 min | 20 min | 159 | 43 |
-| over Wisconsin, near Milwaukee | 35 min | 15 min | 106 | 31 |
-| over Wisconsin, near Milwaukee | 40 min | 15 min | 170 | 40 |
-| over Wisconsin, near Milwaukee | 40 min | 10 min | 372 | 99 |
+| over western Minnesota, near Minneapolis | 5 min | 50 min | 129 | 34 |
+| over west-central Minnesota, near Minneapolis | 10 min | 45 min | 168 | 30 |
+| over central Minnesota, near Minneapolis | 10 min | 40 min | 106 | 24 |
+| over east-central Minnesota, near Minneapolis | 15 min | 40 min | 296 | 55 |
+| over eastern Minnesota, near Minneapolis | 15 min | 35 min | 100 | 16 |
+| over Wisconsin (part 1 of 6) | 20 min | 35 min | 447 | 71 |
+| over Wisconsin (part 2 of 6) | 20 min | 30 min | 212 | 40 |
+| over Wisconsin (part 3 of 6) | 25 min | 30 min | 48 | 12 |
+| over Wisconsin (part 4 of 6) | 25 min | 25 min | 147 | 32 |
+| over Wisconsin (part 5 of 6) | 25 min | 25 min | 127 | 29 |
+| over Wisconsin (part 6 of 6) | 30 min | 25 min | 837 | 172 |
+| over western Wisconsin, near Milwaukee | 30 min | 20 min | 105 | 22 |
+| over west-central Wisconsin, near Milwaukee | 35 min | 20 min | 159 | 43 |
+| over central Wisconsin, near Milwaukee | 35 min | 15 min | 106 | 31 |
+| over east-central Wisconsin, near Milwaukee | 40 min | 15 min | 170 | 40 |
+| over eastern Wisconsin, near Milwaukee | 40 min | 10 min | 372 | 99 |
 | over Wisconsin, near Chicago | 45 min | 10 min | 245 | 76 |
 | over Illinois, near Chicago | 50 min | 5 min | 420 | 81 |
 | near ORD, where flights climb out or come in to land | 55 min | 5 min | 904 | 104 |
@@ -70,7 +70,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between MSP and ORD?
 
-Pilots reported moderate bumps most often over Wisconsin (about 30 min after leaving MSP (25 min after leaving ORD)), and next most near ORD, where flights climb out or come in to land (about 55 min after leaving MSP (5 min after leaving ORD)).
+Pilots reported moderate bumps most often over Wisconsin (part 6 of 6), about 30 min after leaving MSP, or 25 min after leaving ORD. The next most were near ORD, where flights climb out or come in to land, about 55 min after leaving MSP, or 5 min after leaving ORD.
 
 ### When is the smoothest time of year to fly MSP to ORD?
 

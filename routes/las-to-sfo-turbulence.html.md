@@ -2,7 +2,7 @@
 
 > Las Vegas (LAS) ⇄ San Francisco (SFO), both directions. November 2025 to October 2026.
 
-Flights between Las Vegas (LAS) and San Francisco (SFO) fly about 410 miles, roughly an hour in the air. In the past year, pilots near this route reported moderate bumps most often over California, and more often in December. Severe reports were rare: 4 of 952.
+Flights between Las Vegas (LAS) and San Francisco (SFO) fly about 410 miles, roughly an hour in the air. In the past year, pilots near this route reported moderate bumps most often over east-central California, and more often in December.
 
 - Distance: 410 miles (660 km)
 - In the air: about 1 h 5 min (typical jet, still air)
@@ -12,31 +12,31 @@ Flights between Las Vegas (LAS) and San Francisco (SFO) fly about 410 miles, rou
 
 ## Where on the route it gets bumpy
 
-Moderate bumps were reported most often over California, near San Jose, about 50 min after leaving LAS (15 min after leaving SFO): 79 of 130 reports there. Close to the ground, wind over buildings and land stirs the air, and gusty days at SFO add to it.
+Moderate bumps were reported most often over east-central California, near San Jose, about 50 min after leaving LAS, or 15 min after leaving SFO. There, 79 of 130 reports were moderate or stronger. Close to the ground, wind over buildings and land stirs the air, and gusty days at SFO add to it.
 
-The next most were near LAS, where flights climb out or come in to land, about 5 min after leaving LAS (1 h 5 min after leaving SFO): 48 of 179 reports there. Close to the ground, wind over buildings and land stirs the air, and gusty days at LAS add to it.
+The next most were near LAS, where flights climb out or come in to land, about 5 min after leaving LAS, or 1 h 5 min after leaving SFO. There, 48 of 179 reports were moderate or stronger. Close to the ground, wind over buildings and land stirs the air, and gusty days at LAS add to it.
 
 | Where | From LAS | From SFO | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near LAS, where flights climb out or come in to land | 5 min | 1 h 5 min | 179 | 48 |
-| over Nevada, near Las Vegas | 5 min | 55 min | 61 | 26 |
-| over Nevada, near Las Vegas | 10 min | 50 min | 20 | 12 |
-| over Nevada, near Las Vegas | 15 min | 50 min | 8 | 4 |
-| over Nevada, near Las Vegas | 15 min | 45 min | 18 | 8 |
+| over eastern Nevada, near Las Vegas | 5 min | 55 min | 61 | 26 |
+| over east-central Nevada, near Las Vegas | 10 min | 50 min | 20 | 12 |
+| over west-central Nevada, near Las Vegas | 15 min | 50 min | 8 | 4 |
+| over western Nevada, near Las Vegas | 15 min | 45 min | 18 | 8 |
 | over or near California | 20 min | 45 min | 11 | 4 |
 | over California | 20 min | 40 min | 25 | 15 |
-| over California, near Fresno | 25 min | 35 min | 26 | 7 |
-| over California, near Fresno | 25 min | 35 min | 11 | 6 |
-| over California, near Fresno | 30 min | 30 min | 23 | 10 |
-| over California, near Fresno | 30 min | 30 min | 22 | 13 |
-| over California, near Fresno | 35 min | 25 min | 37 | 28 |
-| over California, near Fresno | 35 min | 25 min | 50 | 31 |
-| over California, near Fresno | 40 min | 20 min | 19 | 12 |
-| over California, near Fresno | 45 min | 20 min | 49 | 28 |
-| over California, near San Jose | 45 min | 15 min | 67 | 29 |
-| over California, near San Jose | 50 min | 15 min | 130 | 79 |
-| over California, near San Jose | 55 min | 10 min | 81 | 47 |
-| over California, near San Jose | 55 min | 5 min | 71 | 43 |
+| over California, near Fresno (part 1 of 8) | 25 min | 35 min | 26 | 7 |
+| over California, near Fresno (part 2 of 8) | 25 min | 35 min | 11 | 6 |
+| over California, near Fresno (part 3 of 8) | 30 min | 30 min | 23 | 10 |
+| over California, near Fresno (part 4 of 8) | 30 min | 30 min | 22 | 13 |
+| over California, near Fresno (part 5 of 8) | 35 min | 25 min | 37 | 28 |
+| over California, near Fresno (part 6 of 8) | 35 min | 25 min | 50 | 31 |
+| over California, near Fresno (part 7 of 8) | 40 min | 20 min | 19 | 12 |
+| over California, near Fresno (part 8 of 8) | 45 min | 20 min | 49 | 28 |
+| over eastern California, near San Jose | 45 min | 15 min | 67 | 29 |
+| over east-central California, near San Jose | 50 min | 15 min | 130 | 79 |
+| over west-central California, near San Jose | 55 min | 10 min | 81 | 47 |
+| over western California, near San Jose | 55 min | 5 min | 71 | 43 |
 | near SFO, where flights climb out or come in to land | 1 h 5 min | 5 min | 44 | 23 |
 
 ## When in the year
@@ -70,7 +70,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between LAS and SFO?
 
-Pilots reported moderate bumps most often over California, near San Jose (about 50 min after leaving LAS (15 min after leaving SFO)), and next most near LAS, where flights climb out or come in to land (about 5 min after leaving LAS (1 h 5 min after leaving SFO)).
+Pilots reported moderate bumps most often over east-central California, near San Jose, about 50 min after leaving LAS, or 15 min after leaving SFO. The next most were near LAS, where flights climb out or come in to land, about 5 min after leaving LAS, or 1 h 5 min after leaving SFO.
 
 ### When is the smoothest time of year to fly LAS to SFO?
 

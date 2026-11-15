@@ -2,7 +2,7 @@
 
 > Los Angeles (LAX) ⇄ Chicago (ORD), both directions. November 2025 to October 2026.
 
-Flights between Los Angeles (LAX) and Chicago (ORD) fly about 1,740 miles, roughly 3¾ hours in the air. In the past year, pilots near this route reported moderate bumps most often over Colorado, and more often in May, June and October. Severe reports were rare: 89 of 26,088.
+Flights between Los Angeles (LAX) and Chicago (ORD) fly about 1,740 miles, roughly 3¾ hours in the air. In the past year, pilots near this route reported moderate bumps most often over central Colorado, and more often in May, June and October.
 
 - Distance: 1,740 miles (2,800 km)
 - In the air: about 3 h 40 min (typical jet, still air)
@@ -12,7 +12,7 @@ Flights between Los Angeles (LAX) and Chicago (ORD) fly about 1,740 miles, rough
 
 ## Where on the route it gets bumpy
 
-Moderate bumps were reported most often over Colorado, near Colorado Springs, about 1 h 45 min after leaving LAX (1 h 55 min after leaving ORD): 863 of 2,423 reports there. The ground below is high, and wind over mountains makes waves that reach cruising height.
+Moderate bumps were reported most often over central Colorado, near Colorado Springs, about 1 h 45 min after leaving LAX, or 1 h 55 min after leaving ORD. There, 863 of 2,423 reports were moderate or stronger. The ground below is high, and wind over mountains makes waves that reach cruising height.
 
 | Where | From LAX | From ORD | Reports | Moderate or stronger |
 |---|---|---|---|---|
@@ -21,19 +21,19 @@ Moderate bumps were reported most often over Colorado, near Colorado Springs, ab
 | over Arizona, near Las Vegas | 30 min | 3 h 5 min | 147 | 53 |
 | near Las Vegas | 40 min | 2 h 55 min | 116 | 49 |
 | over Arizona | 50 min | 2 h 45 min | 581 | 144 |
-| over Utah | 1 h | 2 h 35 min | 1,002 | 243 |
-| over Utah | 1 h 10 min | 2 h 25 min | 1,624 | 409 |
+| over western Utah | 1 h | 2 h 35 min | 1,002 | 243 |
+| over eastern Utah | 1 h 10 min | 2 h 25 min | 1,624 | 409 |
 | over Colorado | 1 h 20 min | 2 h 15 min | 1,105 | 348 |
-| over Colorado, near Colorado Springs | 1 h 30 min | 2 h 5 min | 2,429 | 736 |
-| over Colorado, near Colorado Springs | 1 h 45 min | 1 h 55 min | 2,423 | 863 |
-| over Colorado, near Colorado Springs | 1 h 55 min | 1 h 45 min | 1,692 | 608 |
-| over Kansas | 2 h 5 min | 1 h 30 min | 1,404 | 410 |
-| over Kansas | 2 h 15 min | 1 h 20 min | 2,149 | 465 |
+| over western Colorado, near Colorado Springs | 1 h 30 min | 2 h 5 min | 2,429 | 736 |
+| over central Colorado, near Colorado Springs | 1 h 45 min | 1 h 55 min | 2,423 | 863 |
+| over eastern Colorado, near Colorado Springs | 1 h 55 min | 1 h 45 min | 1,692 | 608 |
+| over western Kansas | 2 h 5 min | 1 h 30 min | 1,404 | 410 |
+| over eastern Kansas | 2 h 15 min | 1 h 20 min | 2,149 | 465 |
 | over Nebraska | 2 h 25 min | 1 h 10 min | 1,379 | 446 |
 | over Nebraska, near Omaha | 2 h 35 min | 1 h | 1,274 | 444 |
 | over Iowa, near Omaha | 2 h 45 min | 50 min | 1,110 | 380 |
-| over Iowa, near Des Moines | 2 h 55 min | 40 min | 1,341 | 442 |
-| over Iowa, near Des Moines | 3 h 5 min | 30 min | 1,878 | 446 |
+| over western Iowa, near Des Moines | 2 h 55 min | 40 min | 1,341 | 442 |
+| over eastern Iowa, near Des Moines | 3 h 5 min | 30 min | 1,878 | 446 |
 | over Iowa | 3 h 15 min | 20 min | 1,503 | 391 |
 | near ORD, where flights climb out or come in to land | 3 h 30 min | 10 min | 2,446 | 480 |
 
@@ -68,7 +68,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between LAX and ORD?
 
-Pilots reported moderate bumps most often over Colorado, near Colorado Springs (about 1 h 45 min after leaving LAX (1 h 55 min after leaving ORD)).
+Pilots reported moderate bumps most often over central Colorado, near Colorado Springs, about 1 h 45 min after leaving LAX, or 1 h 55 min after leaving ORD.
 
 ### When is the smoothest time of year to fly LAX to ORD?
 

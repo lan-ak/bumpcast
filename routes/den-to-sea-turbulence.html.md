@@ -2,7 +2,7 @@
 
 > Denver (DEN) ⇄ Seattle (SEA), both directions. November 2025 to October 2026.
 
-Flights between Denver (DEN) and Seattle (SEA) fly about 1,020 miles, roughly 2¼ hours in the air. In the past year, pilots near this route reported moderate bumps most often near DEN, and more often in December. Severe reports were rare: 83 of 11,594.
+Flights between Denver (DEN) and Seattle (SEA) fly about 1,020 miles, roughly 2¼ hours in the air. In the past year, pilots near this route reported moderate bumps most often near DEN, and more often in December.
 
 - Distance: 1,020 miles (1,640 km)
 - In the air: about 2 h 15 min (typical jet, still air)
@@ -12,28 +12,28 @@ Flights between Denver (DEN) and Seattle (SEA) fly about 1,020 miles, roughly 2�
 
 ## Where on the route it gets bumpy
 
-Moderate bumps were reported most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN (2 h 10 min after leaving SEA): 1,388 of 4,792 reports there. Close to the ground, wind over the mountains stirs the air, and gusty days at DEN add to it.
+Moderate bumps were reported most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN, or 2 h 10 min after leaving SEA. There, 1,388 of 4,792 reports were moderate or stronger. Close to the ground, wind over the mountains stirs the air, and gusty days at DEN add to it.
 
 | Where | From DEN | From SEA | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near DEN, where flights climb out or come in to land | 5 min | 2 h 10 min | 4,792 | 1,388 |
 | over Colorado, near Denver | 15 min | 2 h | 2,045 | 418 |
-| over Wyoming | 20 min | 1 h 50 min | 1,240 | 228 |
-| over Wyoming | 25 min | 1 h 45 min | 641 | 149 |
-| over Wyoming | 35 min | 1 h 40 min | 308 | 160 |
-| over Wyoming | 40 min | 1 h 35 min | 200 | 130 |
-| over Wyoming | 45 min | 1 h 25 min | 204 | 124 |
-| over Wyoming | 50 min | 1 h 20 min | 186 | 121 |
-| over Idaho | 55 min | 1 h 15 min | 209 | 96 |
-| over Idaho | 1 h 5 min | 1 h 10 min | 153 | 85 |
+| over Wyoming (part 1 of 6) | 20 min | 1 h 50 min | 1,240 | 228 |
+| over Wyoming (part 2 of 6) | 25 min | 1 h 45 min | 641 | 149 |
+| over Wyoming (part 3 of 6) | 35 min | 1 h 40 min | 308 | 160 |
+| over Wyoming (part 4 of 6) | 40 min | 1 h 35 min | 200 | 130 |
+| over Wyoming (part 5 of 6) | 45 min | 1 h 25 min | 204 | 124 |
+| over Wyoming (part 6 of 6) | 50 min | 1 h 20 min | 186 | 121 |
+| over eastern Idaho | 55 min | 1 h 15 min | 209 | 96 |
+| over east-central Idaho | 1 h 5 min | 1 h 10 min | 153 | 85 |
 | over or near Idaho | 1 h 10 min | 1 h 5 min | 105 | 60 |
-| over Idaho | 1 h 15 min | 55 min | 142 | 73 |
-| over Idaho | 1 h 20 min | 50 min | 106 | 61 |
-| over Idaho | 1 h 30 min | 45 min | 161 | 91 |
+| over central Idaho | 1 h 15 min | 55 min | 142 | 73 |
+| over west-central Idaho | 1 h 20 min | 50 min | 106 | 61 |
+| over western Idaho | 1 h 30 min | 45 min | 161 | 91 |
 | over Oregon | 1 h 35 min | 40 min | 175 | 109 |
-| over Washington | 1 h 40 min | 30 min | 137 | 84 |
-| over Washington | 1 h 45 min | 25 min | 167 | 112 |
-| over Washington | 1 h 50 min | 20 min | 154 | 95 |
+| over eastern Washington | 1 h 40 min | 30 min | 137 | 84 |
+| over central Washington | 1 h 45 min | 25 min | 167 | 112 |
+| over western Washington | 1 h 50 min | 20 min | 154 | 95 |
 | over Washington, near Seattle | 2 h | 15 min | 117 | 74 |
 | near SEA, where flights climb out or come in to land | 2 h 10 min | 5 min | 352 | 94 |
 
@@ -68,7 +68,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between DEN and SEA?
 
-Pilots reported moderate bumps most often near DEN, where flights climb out or come in to land (about 5 min after leaving DEN (2 h 10 min after leaving SEA)).
+Pilots reported moderate bumps most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN, or 2 h 10 min after leaving SEA.
 
 ### When is the smoothest time of year to fly DEN to SEA?
 

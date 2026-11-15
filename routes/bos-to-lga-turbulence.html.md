@@ -2,7 +2,7 @@
 
 > Boston (BOS) ⇄ New York (LGA), both directions. November 2025 to October 2026.
 
-Flights between Boston (BOS) and New York (LGA) fly about 180 miles, roughly 40 minutes in the air. In the past year, pilots near this route reported moderate bumps most often over Connecticut, and more often in November and October. Severe reports were rare: 22 of 2,695.
+Flights between Boston (BOS) and New York (LGA) fly about 180 miles, roughly 40 minutes in the air. In the past year, pilots near this route reported moderate bumps most often over Connecticut, and more often in November and October.
 
 - Distance: 180 miles (300 km)
 - In the air: about 40 min (typical jet, still air)
@@ -12,29 +12,29 @@ Flights between Boston (BOS) and New York (LGA) fly about 180 miles, roughly 40 
 
 ## Where on the route it gets bumpy
 
-Moderate bumps were reported most often over Connecticut, near Hartford, about 15 min after leaving BOS (20 min after leaving LGA): 145 of 440 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Moderate bumps were reported most often over Connecticut, near Hartford (part 2 of 7), about 15 min after leaving BOS, or 20 min after leaving LGA. There, 145 of 440 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
 | Where | From BOS | From LGA | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near BOS, where flights climb out or come in to land | 0 min | 35 min | 202 | 48 |
-| over Massachusetts, near Boston | 5 min | 35 min | 54 | 21 |
-| over Massachusetts, near Boston | 5 min | 30 min | 90 | 32 |
-| over Rhode Island, near Providence/Warwick | 10 min | 30 min | 270 | 73 |
-| over Rhode Island, near Providence/Warwick | 10 min | 25 min | 164 | 69 |
-| over Rhode Island, near Providence/Warwick | 10 min | 25 min | 153 | 63 |
+| over eastern Massachusetts, near Boston | 5 min | 35 min | 54 | 21 |
+| over western Massachusetts, near Boston | 5 min | 30 min | 90 | 32 |
+| over eastern Rhode Island, near Providence/Warwick | 10 min | 30 min | 270 | 73 |
+| over central Rhode Island, near Providence/Warwick | 10 min | 25 min | 164 | 69 |
+| over western Rhode Island, near Providence/Warwick | 10 min | 25 min | 153 | 63 |
 | over Connecticut, near Providence/Warwick | 10 min | 25 min | 31 | 15 |
-| over Connecticut, near Hartford | 15 min | 20 min | 66 | 20 |
-| over Connecticut, near Hartford | 15 min | 20 min | 440 | 145 |
-| over Connecticut, near Hartford | 15 min | 20 min | 144 | 43 |
-| over Connecticut, near Hartford | 20 min | 15 min | 89 | 37 |
-| over Connecticut, near Hartford | 20 min | 15 min | 81 | 30 |
-| over Connecticut, near Hartford | 20 min | 15 min | 195 | 67 |
-| over Connecticut, near Hartford | 25 min | 10 min | 83 | 31 |
-| over Connecticut, near New York | 25 min | 10 min | 80 | 31 |
-| over Connecticut, near New York | 25 min | 10 min | 233 | 85 |
-| near New York | 30 min | 10 min | 83 | 28 |
-| near New York | 30 min | 5 min | 30 | 15 |
-| near New York | 35 min | 5 min | 57 | 22 |
+| over Connecticut, near Hartford (part 1 of 7) | 15 min | 20 min | 66 | 20 |
+| over Connecticut, near Hartford (part 2 of 7) | 15 min | 20 min | 440 | 145 |
+| over Connecticut, near Hartford (part 3 of 7) | 15 min | 20 min | 144 | 43 |
+| over Connecticut, near Hartford (part 4 of 7) | 20 min | 15 min | 89 | 37 |
+| over Connecticut, near Hartford (part 5 of 7) | 20 min | 15 min | 81 | 30 |
+| over Connecticut, near Hartford (part 6 of 7) | 20 min | 15 min | 195 | 67 |
+| over Connecticut, near Hartford (part 7 of 7) | 25 min | 10 min | 83 | 31 |
+| over eastern Connecticut, near New York | 25 min | 10 min | 80 | 31 |
+| over western Connecticut, near New York | 25 min | 10 min | 233 | 85 |
+| over eastern New York | 30 min | 10 min | 83 | 28 |
+| over central New York | 30 min | 5 min | 30 | 15 |
+| over western New York | 35 min | 5 min | 57 | 22 |
 | near LGA, where flights climb out or come in to land | 35 min | 0 min | 150 | 58 |
 
 ## When in the year
@@ -68,7 +68,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between BOS and LGA?
 
-Pilots reported moderate bumps most often over Connecticut, near Hartford (about 15 min after leaving BOS (20 min after leaving LGA)).
+Pilots reported moderate bumps most often over Connecticut, near Hartford (part 2 of 7), about 15 min after leaving BOS, or 20 min after leaving LGA.
 
 ### When is the smoothest time of year to fly BOS to LGA?
 

@@ -2,7 +2,7 @@
 
 > Newark (EWR) ⇄ San Francisco (SFO), both directions. November 2025 to October 2026.
 
-Flights between Newark (EWR) and San Francisco (SFO) fly about 2,560 miles, roughly 5¼ hours in the air. In the past year, pilots near this route reported moderate bumps most often over Pennsylvania. Severe reports were rare: 114 of 31,734.
+Flights between Newark (EWR) and San Francisco (SFO) fly about 2,560 miles, roughly 5¼ hours in the air. In the past year, pilots near this route reported moderate bumps most often over Pennsylvania.
 
 - Distance: 2,560 miles (4,120 km)
 - In the air: about 5 h 15 min (typical jet, still air)
@@ -12,9 +12,9 @@ Flights between Newark (EWR) and San Francisco (SFO) fly about 2,560 miles, roug
 
 ## Where on the route it gets bumpy
 
-Moderate bumps were reported most often over Pennsylvania, near Pittsburgh, about 45 min after leaving EWR (4 h 30 min after leaving SFO): 1,029 of 1,458 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Moderate bumps were reported most often over Pennsylvania, near Pittsburgh, about 45 min after leaving EWR, or 4 h 30 min after leaving SFO. There, 1,029 of 1,458 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
-The next most were over Nebraska, near Omaha, about 2 h 30 min after leaving EWR (2 h 45 min after leaving SFO): 724 of 2,916 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+The next most were over Nebraska, near Omaha, about 2 h 30 min after leaving EWR, or 2 h 45 min after leaving SFO. There, 724 of 2,916 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
 | Where | From EWR | From SFO | Reports | Moderate or stronger |
 |---|---|---|---|---|
@@ -28,14 +28,14 @@ The next most were over Nebraska, near Omaha, about 2 h 30 min after leaving EWR
 | over Iowa, near Des Moines | 2 h | 3 h 15 min | 2,927 | 699 |
 | over Iowa, near Omaha | 2 h 15 min | 3 h | 2,678 | 641 |
 | over Nebraska, near Omaha | 2 h 30 min | 2 h 45 min | 2,916 | 724 |
-| over Nebraska | 2 h 45 min | 2 h 30 min | 1,850 | 493 |
-| over Nebraska | 3 h | 2 h 15 min | 1,758 | 468 |
+| over eastern Nebraska | 2 h 45 min | 2 h 30 min | 1,850 | 493 |
+| over western Nebraska | 3 h | 2 h 15 min | 1,758 | 468 |
 | over Wyoming, near Denver | 3 h 15 min | 2 h | 1,722 | 439 |
 | over Wyoming | 3 h 30 min | 1 h 45 min | 2,185 | 404 |
 | over Utah | 3 h 45 min | 1 h 30 min | 798 | 358 |
 | over Utah, near Salt Lake City | 4 h | 1 h 15 min | 380 | 255 |
-| over Nevada | 4 h 15 min | 1 h | 417 | 264 |
-| over Nevada | 4 h 30 min | 45 min | 299 | 194 |
+| over eastern Nevada | 4 h 15 min | 1 h | 417 | 264 |
+| over western Nevada | 4 h 30 min | 45 min | 299 | 194 |
 | over Nevada, near Reno | 4 h 45 min | 30 min | 205 | 110 |
 | near SFO, where flights climb out or come in to land | 5 h | 10 min | 423 | 237 |
 
@@ -70,7 +70,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between EWR and SFO?
 
-Pilots reported moderate bumps most often over Pennsylvania, near Pittsburgh (about 45 min after leaving EWR (4 h 30 min after leaving SFO)), and next most over Nebraska, near Omaha (about 2 h 30 min after leaving EWR (2 h 45 min after leaving SFO)).
+Pilots reported moderate bumps most often over Pennsylvania, near Pittsburgh, about 45 min after leaving EWR, or 4 h 30 min after leaving SFO. The next most were over Nebraska, near Omaha, about 2 h 30 min after leaving EWR, or 2 h 45 min after leaving SFO.
 
 ### When is the smoothest time of year to fly EWR to SFO?
 

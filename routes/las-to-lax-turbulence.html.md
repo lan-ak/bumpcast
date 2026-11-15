@@ -2,7 +2,7 @@
 
 > Las Vegas (LAS) ⇄ Los Angeles (LAX), both directions. November 2025 to October 2026.
 
-Flights between Las Vegas (LAS) and Los Angeles (LAX) fly about 240 miles, roughly 45 minutes in the air. In the past year, pilots near this route reported moderate bumps most often over Nevada, and more often in January, February and March. Severe reports were rare: 18 of 1,071.
+Flights between Las Vegas (LAS) and Los Angeles (LAX) fly about 240 miles, roughly 45 minutes in the air. In the past year, pilots near this route reported moderate bumps most often over eastern Nevada, and more often in January, February and March.
 
 - Distance: 240 miles (380 km)
 - In the air: about 45 min (typical jet, still air)
@@ -12,31 +12,31 @@ Flights between Las Vegas (LAS) and Los Angeles (LAX) fly about 240 miles, rough
 
 ## Where on the route it gets bumpy
 
-Moderate bumps were reported most often over Nevada, near Las Vegas, about 5 min after leaving LAS (40 min after leaving LAX): 80 of 207 reports there. Close to the ground, wind over buildings and land stirs the air, and gusty days at LAS add to it.
+Moderate bumps were reported most often over eastern Nevada, near Las Vegas, about 5 min after leaving LAS, or 40 min after leaving LAX. There, 80 of 207 reports were moderate or stronger. Close to the ground, wind over buildings and land stirs the air, and gusty days at LAS add to it.
 
-The next most were over California, near Ontario, about 35 min after leaving LAS (10 min after leaving LAX): 76 of 93 reports there. Close to the ground, wind over buildings and land stirs the air.
+The next most were over western California, near Ontario, about 35 min after leaving LAS, or 10 min after leaving LAX. There, 76 of 93 reports were moderate or stronger. Close to the ground, wind over buildings and land stirs the air.
 
 | Where | From LAS | From LAX | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near LAS, where flights climb out or come in to land | 0 min | 45 min | 176 | 55 |
-| over Nevada, near Las Vegas | 5 min | 40 min | 207 | 80 |
-| over Nevada, near Las Vegas | 5 min | 35 min | 131 | 44 |
-| over Nevada, near Las Vegas | 10 min | 35 min | 40 | 20 |
-| over California, near Las Vegas | 10 min | 30 min | 16 | 12 |
-| over California, near Las Vegas | 15 min | 30 min | 5 | 1 |
-| over California, near Las Vegas | 15 min | 25 min | 5 | 2 |
-| over California, near Las Vegas | 15 min | 25 min | 14 | 2 |
-| over California, near San Bernardino | 20 min | 25 min | 14 | 2 |
-| over California, near San Bernardino | 20 min | 20 min | 9 | 4 |
-| over California, near San Bernardino | 20 min | 20 min | 21 | 7 |
-| over California, near San Bernardino | 25 min | 20 min | 13 | 3 |
-| over California, near San Bernardino | 25 min | 15 min | 10 | 5 |
-| over California, near San Bernardino | 25 min | 15 min | 20 | 18 |
-| over California, near Ontario | 30 min | 15 min | 59 | 55 |
-| over California, near Ontario | 30 min | 10 min | 56 | 52 |
-| over California, near Ontario | 35 min | 10 min | 93 | 76 |
-| over California, near Burbank | 35 min | 5 min | 69 | 60 |
-| over California, near Burbank | 40 min | 5 min | 43 | 29 |
+| over eastern Nevada, near Las Vegas | 5 min | 40 min | 207 | 80 |
+| over central Nevada, near Las Vegas | 5 min | 35 min | 131 | 44 |
+| over western Nevada, near Las Vegas | 10 min | 35 min | 40 | 20 |
+| over eastern California, near Las Vegas | 10 min | 30 min | 16 | 12 |
+| over east-central California, near Las Vegas | 15 min | 30 min | 5 | 1 |
+| over west-central California, near Las Vegas | 15 min | 25 min | 5 | 2 |
+| over western California, near Las Vegas | 15 min | 25 min | 14 | 2 |
+| over California, near San Bernardino (part 1 of 6) | 20 min | 25 min | 14 | 2 |
+| over California, near San Bernardino (part 2 of 6) | 20 min | 20 min | 9 | 4 |
+| over California, near San Bernardino (part 3 of 6) | 20 min | 20 min | 21 | 7 |
+| over California, near San Bernardino (part 4 of 6) | 25 min | 20 min | 13 | 3 |
+| over California, near San Bernardino (part 5 of 6) | 25 min | 15 min | 10 | 5 |
+| over California, near San Bernardino (part 6 of 6) | 25 min | 15 min | 20 | 18 |
+| over eastern California, near Ontario | 30 min | 15 min | 59 | 55 |
+| over central California, near Ontario | 30 min | 10 min | 56 | 52 |
+| over western California, near Ontario | 35 min | 10 min | 93 | 76 |
+| over eastern California, near Burbank | 35 min | 5 min | 69 | 60 |
+| over western California, near Burbank | 40 min | 5 min | 43 | 29 |
 | near LAX, where flights climb out or come in to land | 45 min | 0 min | 70 | 33 |
 
 ## When in the year
@@ -70,7 +70,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between LAS and LAX?
 
-Pilots reported moderate bumps most often over Nevada, near Las Vegas (about 5 min after leaving LAS (40 min after leaving LAX)), and next most over California, near Ontario (about 35 min after leaving LAS (10 min after leaving LAX)).
+Pilots reported moderate bumps most often over eastern Nevada, near Las Vegas, about 5 min after leaving LAS, or 40 min after leaving LAX. The next most were over western California, near Ontario, about 35 min after leaving LAS, or 10 min after leaving LAX.
 
 ### When is the smoothest time of year to fly LAS to LAX?
 

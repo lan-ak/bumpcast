@@ -2,7 +2,7 @@
 
 > Calgary (YYC) ⇄ Toronto (YYZ), both directions. November 2025 to October 2026.
 
-Flights between Calgary (YYC) and Toronto (YYZ) fly about 1,670 miles, roughly 3½ hours in the air. In the past year, pilots near this route reported moderate bumps most often over Michigan, and more often in April, June and August. Severe reports were rare: 7 of 2,203.
+Flights between Calgary (YYC) and Toronto (YYZ) fly about 1,670 miles, roughly 3½ hours in the air. In the past year, pilots near this route reported moderate bumps most often over eastern Michigan, and more often in April, June and August.
 
 - Distance: 1,670 miles (2,690 km)
 - In the air: about 3 h 30 min (typical jet, still air)
@@ -12,30 +12,30 @@ Flights between Calgary (YYC) and Toronto (YYZ) fly about 1,670 miles, roughly 3
 
 ## Where on the route it gets bumpy
 
-Moderate bumps were reported most often over Michigan, about 3 h after leaving YYC (30 min after leaving YYZ): 80 of 271 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+Moderate bumps were reported most often over eastern Michigan, about 3 h after leaving YYC, or 30 min after leaving YYZ. There, 80 of 271 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
-The next most were over Minnesota, about 2 h 10 min after leaving YYC (1 h 20 min after leaving YYZ): 68 of 335 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+The next most were over western Michigan, about 2 h 30 min after leaving YYC, or 1 h after leaving YYZ. There, 69 of 263 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
 | Where | From YYC | From YYZ | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near YYC, where flights climb out or come in to land | 10 min | 3 h 20 min | 1 | 1 |
 | over Alberta | 20 min | 3 h 10 min | 2 | 1 |
-| over Saskatchewan | 30 min | 3 h | 1 | 1 |
-| over Saskatchewan | 40 min | 2 h 50 min | 0 | 0 |
-| over Saskatchewan | 50 min | 2 h 40 min | 0 | 0 |
-| over Saskatchewan | 1 h | 2 h 30 min | 0 | 0 |
+| over western Saskatchewan | 30 min | 3 h | 1 | 1 |
+| over west-central Saskatchewan | 40 min | 2 h 50 min | 0 | 0 |
+| over east-central Saskatchewan | 50 min | 2 h 40 min | 0 | 0 |
+| over eastern Saskatchewan | 1 h | 2 h 30 min | 0 | 0 |
 | over or near Saskatchewan | 1 h 10 min | 2 h 20 min | 7 | 1 |
 | over Manitoba | 1 h 20 min | 2 h 10 min | 20 | 6 |
 | over Manitoba, near Winnipeg | 1 h 30 min | 2 h | 40 | 9 |
 | over Minnesota, near Winnipeg | 1 h 40 min | 1 h 50 min | 166 | 18 |
-| over Minnesota | 1 h 50 min | 1 h 40 min | 272 | 40 |
-| over Minnesota | 2 h | 1 h 30 min | 242 | 32 |
-| over Minnesota | 2 h 10 min | 1 h 20 min | 335 | 68 |
+| over western Minnesota | 1 h 50 min | 1 h 40 min | 272 | 40 |
+| over central Minnesota | 2 h | 1 h 30 min | 242 | 32 |
+| over eastern Minnesota | 2 h 10 min | 1 h 20 min | 335 | 68 |
 | over or near Minnesota | 2 h 20 min | 1 h 10 min | 128 | 28 |
-| over Michigan | 2 h 30 min | 1 h | 263 | 69 |
-| over Michigan | 2 h 40 min | 50 min | 132 | 31 |
-| over Michigan | 2 h 50 min | 40 min | 248 | 72 |
-| over Michigan | 3 h | 30 min | 271 | 80 |
+| over western Michigan | 2 h 30 min | 1 h | 263 | 69 |
+| over west-central Michigan | 2 h 40 min | 50 min | 132 | 31 |
+| over east-central Michigan | 2 h 50 min | 40 min | 248 | 72 |
+| over eastern Michigan | 3 h | 30 min | 271 | 80 |
 | over Ontario | 3 h 10 min | 20 min | 20 | 11 |
 | near YYZ, where flights climb out or come in to land | 3 h 20 min | 10 min | 55 | 28 |
 
@@ -70,7 +70,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between YYC and YYZ?
 
-Pilots reported moderate bumps most often over Michigan (about 3 h after leaving YYC (30 min after leaving YYZ)), and next most over Minnesota (about 2 h 10 min after leaving YYC (1 h 20 min after leaving YYZ)).
+Pilots reported moderate bumps most often over eastern Michigan, about 3 h after leaving YYC, or 30 min after leaving YYZ. The next most were over western Michigan, about 2 h 30 min after leaving YYC, or 1 h after leaving YYZ.
 
 ### When is the smoothest time of year to fly YYC to YYZ?
 

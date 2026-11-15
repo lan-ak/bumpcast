@@ -2,7 +2,7 @@
 
 > Denver (DEN) ⇄ Las Vegas (LAS), both directions. November 2025 to October 2026.
 
-Flights between Denver (DEN) and Las Vegas (LAS) fly about 630 miles, roughly 1½ hours in the air. In the past year, pilots near this route reported moderate bumps most often near DEN, and more often in December and June. Severe reports were rare: 102 of 14,632.
+Flights between Denver (DEN) and Las Vegas (LAS) fly about 630 miles, roughly 1½ hours in the air. In the past year, pilots near this route reported moderate bumps most often near DEN, and more often in December and June.
 
 - Distance: 630 miles (1,010 km)
 - In the air: about 1 h 30 min (typical jet, still air)
@@ -12,28 +12,28 @@ Flights between Denver (DEN) and Las Vegas (LAS) fly about 630 miles, roughly 1�
 
 ## Where on the route it gets bumpy
 
-Moderate bumps were reported most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN (1 h 25 min after leaving LAS): 1,190 of 3,978 reports there. Close to the ground, wind over the mountains stirs the air, and gusty days at DEN add to it.
+Moderate bumps were reported most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN, or 1 h 25 min after leaving LAS. There, 1,190 of 3,978 reports were moderate or stronger. Close to the ground, wind over the mountains stirs the air, and gusty days at DEN add to it.
 
 | Where | From DEN | From LAS | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near DEN, where flights climb out or come in to land | 5 min | 1 h 25 min | 3,978 | 1,190 |
-| over Colorado, near Denver | 10 min | 1 h 20 min | 2,766 | 1,053 |
-| over Colorado, near Denver | 15 min | 1 h 15 min | 1,554 | 236 |
-| over Colorado | 20 min | 1 h 10 min | 952 | 218 |
-| over Colorado | 20 min | 1 h 5 min | 564 | 127 |
-| over Colorado | 25 min | 1 h | 927 | 169 |
-| over Colorado | 30 min | 55 min | 585 | 173 |
-| over Colorado | 35 min | 55 min | 877 | 152 |
-| over Utah | 40 min | 50 min | 615 | 162 |
-| over Utah | 40 min | 45 min | 239 | 92 |
-| over Utah | 45 min | 40 min | 241 | 99 |
-| over Utah | 50 min | 35 min | 205 | 98 |
-| over Utah | 55 min | 35 min | 282 | 85 |
-| over Utah | 55 min | 30 min | 368 | 122 |
-| over Utah | 1 h | 25 min | 45 | 21 |
+| over eastern Colorado, near Denver | 10 min | 1 h 20 min | 2,766 | 1,053 |
+| over western Colorado, near Denver | 15 min | 1 h 15 min | 1,554 | 236 |
+| over eastern Colorado | 20 min | 1 h 10 min | 952 | 218 |
+| over east-central Colorado | 20 min | 1 h 5 min | 564 | 127 |
+| over central Colorado | 25 min | 1 h | 927 | 169 |
+| over west-central Colorado | 30 min | 55 min | 585 | 173 |
+| over western Colorado | 35 min | 55 min | 877 | 152 |
+| over Utah (part 1 of 7) | 40 min | 50 min | 615 | 162 |
+| over Utah (part 2 of 7) | 40 min | 45 min | 239 | 92 |
+| over Utah (part 3 of 7) | 45 min | 40 min | 241 | 99 |
+| over Utah (part 4 of 7) | 50 min | 35 min | 205 | 98 |
+| over Utah (part 5 of 7) | 55 min | 35 min | 282 | 85 |
+| over Utah (part 6 of 7) | 55 min | 30 min | 368 | 122 |
+| over Utah (part 7 of 7) | 1 h | 25 min | 45 | 21 |
 | over Arizona | 1 h 5 min | 20 min | 102 | 59 |
-| over Utah, near Las Vegas | 1 h 10 min | 20 min | 35 | 18 |
-| over Utah, near Las Vegas | 1 h 15 min | 15 min | 33 | 20 |
+| over eastern Utah, near Las Vegas | 1 h 10 min | 20 min | 35 | 18 |
+| over western Utah, near Las Vegas | 1 h 15 min | 15 min | 33 | 20 |
 | over Nevada, near Las Vegas | 1 h 20 min | 10 min | 94 | 39 |
 | near LAS, where flights climb out or come in to land | 1 h 25 min | 5 min | 170 | 38 |
 
@@ -68,7 +68,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between DEN and LAS?
 
-Pilots reported moderate bumps most often near DEN, where flights climb out or come in to land (about 5 min after leaving DEN (1 h 25 min after leaving LAS)).
+Pilots reported moderate bumps most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN, or 1 h 25 min after leaving LAS.
 
 ### When is the smoothest time of year to fly DEN to LAS?
 

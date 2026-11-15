@@ -2,7 +2,7 @@
 
 > Denver (DEN) ⇄ Dallas-Fort Worth (DFW), both directions. November 2025 to October 2026.
 
-Flights between Denver (DEN) and Dallas-Fort Worth (DFW) fly about 640 miles, roughly 1½ hours in the air. In the past year, pilots near this route reported moderate bumps most often near DEN, and more often in December. Severe reports were rare: 57 of 13,137.
+Flights between Denver (DEN) and Dallas-Fort Worth (DFW) fly about 640 miles, roughly 1½ hours in the air. In the past year, pilots near this route reported moderate bumps most often near DEN, and more often in December.
 
 - Distance: 640 miles (1,030 km)
 - In the air: about 1 h 35 min (typical jet, still air)
@@ -12,29 +12,29 @@ Flights between Denver (DEN) and Dallas-Fort Worth (DFW) fly about 640 miles, ro
 
 ## Where on the route it gets bumpy
 
-Moderate bumps were reported most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN (1 h 25 min after leaving DFW): 869 of 3,733 reports there. Close to the ground, wind over the mountains stirs the air, and gusty days at DEN add to it.
+Moderate bumps were reported most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN, or 1 h 25 min after leaving DFW. There, 869 of 3,733 reports were moderate or stronger. Close to the ground, wind over the mountains stirs the air, and gusty days at DEN add to it.
 
 | Where | From DEN | From DFW | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near DEN, where flights climb out or come in to land | 5 min | 1 h 25 min | 3,733 | 869 |
-| over Colorado, near Colorado Springs | 10 min | 1 h 20 min | 957 | 354 |
-| over Colorado, near Colorado Springs | 15 min | 1 h 15 min | 916 | 321 |
-| over Colorado, near Colorado Springs | 20 min | 1 h 10 min | 536 | 222 |
-| over Colorado | 25 min | 1 h 5 min | 538 | 227 |
-| over Colorado | 25 min | 1 h | 805 | 276 |
-| over Kansas | 30 min | 1 h | 340 | 159 |
-| over Kansas | 35 min | 55 min | 475 | 209 |
-| over Kansas | 40 min | 50 min | 458 | 202 |
-| over Texas | 40 min | 45 min | 325 | 156 |
-| over Texas | 45 min | 40 min | 289 | 142 |
-| over Texas | 50 min | 40 min | 544 | 216 |
+| over western Colorado, near Colorado Springs | 10 min | 1 h 20 min | 957 | 354 |
+| over central Colorado, near Colorado Springs | 15 min | 1 h 15 min | 916 | 321 |
+| over eastern Colorado, near Colorado Springs | 20 min | 1 h 10 min | 536 | 222 |
+| over western Colorado | 25 min | 1 h 5 min | 538 | 227 |
+| over eastern Colorado | 25 min | 1 h | 805 | 276 |
+| over western Kansas | 30 min | 1 h | 340 | 159 |
+| over central Kansas | 35 min | 55 min | 475 | 209 |
+| over eastern Kansas | 40 min | 50 min | 458 | 202 |
+| over western Texas | 40 min | 45 min | 325 | 156 |
+| over central Texas | 45 min | 40 min | 289 | 142 |
+| over eastern Texas | 50 min | 40 min | 544 | 216 |
 | over Oklahoma | 55 min | 35 min | 666 | 202 |
-| over Oklahoma, near Oklahoma City | 1 h | 30 min | 684 | 161 |
-| over Oklahoma, near Oklahoma City | 1 h | 25 min | 525 | 119 |
-| over Oklahoma, near Oklahoma City | 1 h 5 min | 20 min | 333 | 91 |
+| over western Oklahoma, near Oklahoma City | 1 h | 30 min | 684 | 161 |
+| over central Oklahoma, near Oklahoma City | 1 h | 25 min | 525 | 119 |
+| over eastern Oklahoma, near Oklahoma City | 1 h 5 min | 20 min | 333 | 91 |
 | over Texas, near Oklahoma City | 1 h 10 min | 20 min | 292 | 104 |
-| over Texas, near Dallas-Fort Worth | 1 h 15 min | 15 min | 209 | 47 |
-| over Texas, near Dallas-Fort Worth | 1 h 20 min | 10 min | 313 | 102 |
+| over western Texas, near Dallas-Fort Worth | 1 h 15 min | 15 min | 209 | 47 |
+| over eastern Texas, near Dallas-Fort Worth | 1 h 20 min | 10 min | 313 | 102 |
 | near DFW, where flights climb out or come in to land | 1 h 30 min | 5 min | 199 | 63 |
 
 ## When in the year
@@ -68,7 +68,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between DEN and DFW?
 
-Pilots reported moderate bumps most often near DEN, where flights climb out or come in to land (about 5 min after leaving DEN (1 h 25 min after leaving DFW)).
+Pilots reported moderate bumps most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN, or 1 h 25 min after leaving DFW.
 
 ### When is the smoothest time of year to fly DEN to DFW?
 

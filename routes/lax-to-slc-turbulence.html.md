@@ -2,7 +2,7 @@
 
 > Los Angeles (LAX) ⇄ Salt Lake City (SLC), both directions. November 2025 to October 2026.
 
-Flights between Los Angeles (LAX) and Salt Lake City (SLC) fly about 590 miles, roughly 1½ hours in the air. In the past year, pilots near this route reported moderate bumps most often over California, and more often in March. Severe reports were rare: 18 of 1,765.
+Flights between Los Angeles (LAX) and Salt Lake City (SLC) fly about 590 miles, roughly 1½ hours in the air. In the past year, pilots near this route reported moderate bumps most often over California, and more often in March.
 
 - Distance: 590 miles (950 km)
 - In the air: about 1 h 25 min (typical jet, still air)
@@ -12,31 +12,31 @@ Flights between Los Angeles (LAX) and Salt Lake City (SLC) fly about 590 miles, 
 
 ## Where on the route it gets bumpy
 
-Moderate bumps were reported most often over California, near Burbank, about 10 min after leaving LAX (1 h 15 min after leaving SLC): 146 of 180 reports there. Close to the ground, wind over buildings and land stirs the air.
+Moderate bumps were reported most often over California, near Burbank, about 10 min after leaving LAX, or 1 h 15 min after leaving SLC. There, 146 of 180 reports were moderate or stronger. Close to the ground, wind over buildings and land stirs the air.
 
-The next most were near SLC, where flights climb out or come in to land, about 1 h 20 min after leaving LAX (5 min after leaving SLC): 109 of 307 reports there. Close to the ground, wind over the mountains stirs the air, and gusty days at SLC add to it.
+The next most were near SLC, where flights climb out or come in to land, about 1 h 20 min after leaving LAX, or 5 min after leaving SLC. There, 109 of 307 reports were moderate or stronger. Close to the ground, wind over the mountains stirs the air, and gusty days at SLC add to it.
 
 | Where | From LAX | From SLC | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near LAX, where flights climb out or come in to land | 5 min | 1 h 20 min | 200 | 124 |
 | over California, near Burbank | 10 min | 1 h 15 min | 180 | 146 |
 | over California, near Ontario | 15 min | 1 h 10 min | 55 | 41 |
-| over California, near San Bernardino | 15 min | 1 h 5 min | 41 | 12 |
-| over California, near San Bernardino | 20 min | 1 h | 28 | 4 |
+| over southern California, near San Bernardino | 15 min | 1 h 5 min | 41 | 12 |
+| over northern California, near San Bernardino | 20 min | 1 h | 28 | 4 |
 | over California, near Las Vegas | 25 min | 55 min | 15 | 5 |
-| over Nevada, near Las Vegas | 30 min | 55 min | 20 | 8 |
-| over Nevada, near Las Vegas | 30 min | 50 min | 134 | 71 |
-| over Nevada, near Las Vegas | 35 min | 45 min | 12 | 4 |
+| over southern Nevada, near Las Vegas | 30 min | 55 min | 20 | 8 |
+| over central Nevada, near Las Vegas | 30 min | 50 min | 134 | 71 |
+| over northern Nevada, near Las Vegas | 35 min | 45 min | 12 | 4 |
 | near Las Vegas | 40 min | 45 min | 11 | 6 |
-| over Nevada | 45 min | 40 min | 23 | 14 |
-| over Nevada | 45 min | 35 min | 39 | 25 |
-| over or near Nevada | 50 min | 30 min | 113 | 79 |
-| over or near Nevada | 55 min | 30 min | 135 | 89 |
-| over or near Utah | 55 min | 25 min | 168 | 97 |
-| over or near Utah | 1 h | 20 min | 89 | 69 |
-| over Utah, near Salt Lake City | 1 h 5 min | 20 min | 56 | 41 |
-| over Utah, near Salt Lake City | 1 h 10 min | 15 min | 23 | 17 |
-| over Utah, near Salt Lake City | 1 h 15 min | 10 min | 116 | 71 |
+| over southern Nevada | 45 min | 40 min | 23 | 14 |
+| over northern Nevada | 45 min | 35 min | 39 | 25 |
+| over or near southern Nevada | 50 min | 30 min | 113 | 79 |
+| over or near northern Nevada | 55 min | 30 min | 135 | 89 |
+| over or near southern Utah | 55 min | 25 min | 168 | 97 |
+| over or near northern Utah | 1 h | 20 min | 89 | 69 |
+| over southern Utah, near Salt Lake City | 1 h 5 min | 20 min | 56 | 41 |
+| over central Utah, near Salt Lake City | 1 h 10 min | 15 min | 23 | 17 |
+| over northern Utah, near Salt Lake City | 1 h 15 min | 10 min | 116 | 71 |
 | near SLC, where flights climb out or come in to land | 1 h 20 min | 5 min | 307 | 109 |
 
 ## When in the year
@@ -70,7 +70,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between LAX and SLC?
 
-Pilots reported moderate bumps most often over California, near Burbank (about 10 min after leaving LAX (1 h 15 min after leaving SLC)), and next most near SLC, where flights climb out or come in to land (about 1 h 20 min after leaving LAX (5 min after leaving SLC)).
+Pilots reported moderate bumps most often over California, near Burbank, about 10 min after leaving LAX, or 1 h 15 min after leaving SLC. The next most were near SLC, where flights climb out or come in to land, about 1 h 20 min after leaving LAX, or 5 min after leaving SLC.
 
 ### When is the smoothest time of year to fly LAX to SLC?
 

@@ -2,7 +2,7 @@
 
 > New York (JFK) ⇄ Los Angeles (LAX), both directions. November 2025 to October 2026.
 
-Flights between New York (JFK) and Los Angeles (LAX) fly about 2,470 miles, roughly 5 hours in the air. In the past year, pilots near this route reported moderate bumps most often over Colorado. Severe reports were rare: 120 of 35,528.
+Flights between New York (JFK) and Los Angeles (LAX) fly about 2,470 miles, roughly 5 hours in the air. In the past year, pilots near this route reported moderate bumps most often over Colorado.
 
 - Distance: 2,470 miles (3,970 km)
 - In the air: about 5 h 5 min (typical jet, still air)
@@ -12,9 +12,9 @@ Flights between New York (JFK) and Los Angeles (LAX) fly about 2,470 miles, roug
 
 ## Where on the route it gets bumpy
 
-Moderate bumps were reported most often over Colorado, near Colorado Springs, about 3 h 20 min after leaving JFK (1 h 40 min after leaving LAX): 1,072 of 2,964 reports there. The ground below is high, and wind over mountains makes waves that reach cruising height.
+Moderate bumps were reported most often over Colorado, near Colorado Springs, about 3 h 20 min after leaving JFK, or 1 h 40 min after leaving LAX. There, 1,072 of 2,964 reports were moderate or stronger. The ground below is high, and wind over mountains makes waves that reach cruising height.
 
-The next most were over Pennsylvania, near Pittsburgh, about 40 min after leaving JFK (4 h 20 min after leaving LAX): 1,056 of 1,571 reports there. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
+The next most were over Pennsylvania, near Pittsburgh, about 40 min after leaving JFK, or 4 h 20 min after leaving LAX. There, 1,056 of 1,571 reports were moderate or stronger. At cruising height, bumps usually come from clear-air turbulence near the jet stream, or from clouds and storms.
 
 | Where | From JFK | From LAX | Reports | Moderate or stronger |
 |---|---|---|---|---|
@@ -28,11 +28,11 @@ The next most were over Pennsylvania, near Pittsburgh, about 40 min after leavin
 | over Iowa | 1 h 55 min | 3 h 5 min | 994 | 406 |
 | over Missouri, near Kansas City | 2 h 10 min | 2 h 50 min | 1,050 | 417 |
 | over Kansas, near Kansas City | 2 h 25 min | 2 h 35 min | 978 | 395 |
-| over Kansas | 2 h 35 min | 2 h 25 min | 1,204 | 452 |
-| over Kansas | 2 h 50 min | 2 h 10 min | 2,025 | 575 |
-| over Colorado | 3 h 5 min | 1 h 55 min | 2,219 | 829 |
+| over eastern Kansas | 2 h 35 min | 2 h 25 min | 1,204 | 452 |
+| over western Kansas | 2 h 50 min | 2 h 10 min | 2,025 | 575 |
+| over eastern Colorado | 3 h 5 min | 1 h 55 min | 2,219 | 829 |
 | over Colorado, near Colorado Springs | 3 h 20 min | 1 h 40 min | 2,964 | 1,072 |
-| over Colorado | 3 h 35 min | 1 h 25 min | 1,826 | 530 |
+| over western Colorado | 3 h 35 min | 1 h 25 min | 1,826 | 530 |
 | over or near Colorado | 3 h 50 min | 1 h 10 min | 1,655 | 411 |
 | over Arizona | 4 h 5 min | 55 min | 1,307 | 288 |
 | over Arizona, near Las Vegas | 4 h 20 min | 40 min | 180 | 71 |
@@ -70,7 +70,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between JFK and LAX?
 
-Pilots reported moderate bumps most often over Colorado, near Colorado Springs (about 3 h 20 min after leaving JFK (1 h 40 min after leaving LAX)), and next most over Pennsylvania, near Pittsburgh (about 40 min after leaving JFK (4 h 20 min after leaving LAX)).
+Pilots reported moderate bumps most often over Colorado, near Colorado Springs, about 3 h 20 min after leaving JFK, or 1 h 40 min after leaving LAX. The next most were over Pennsylvania, near Pittsburgh, about 40 min after leaving JFK, or 4 h 20 min after leaving LAX.
 
 ### When is the smoothest time of year to fly JFK to LAX?
 

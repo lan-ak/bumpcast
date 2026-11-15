@@ -2,7 +2,7 @@
 
 > Denver (DEN) ⇄ Phoenix (PHX), both directions. November 2025 to October 2026.
 
-Flights between Denver (DEN) and Phoenix (PHX) fly about 600 miles, roughly 1½ hours in the air. In the past year, pilots near this route reported moderate bumps most often near DEN, and more often in December and June. Severe reports were rare: 87 of 12,775.
+Flights between Denver (DEN) and Phoenix (PHX) fly about 600 miles, roughly 1½ hours in the air. In the past year, pilots near this route reported moderate bumps most often near DEN, and more often in December and June.
 
 - Distance: 600 miles (970 km)
 - In the air: about 1 h 30 min (typical jet, still air)
@@ -12,29 +12,29 @@ Flights between Denver (DEN) and Phoenix (PHX) fly about 600 miles, roughly 1½ 
 
 ## Where on the route it gets bumpy
 
-Moderate bumps were reported most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN (1 h 20 min after leaving PHX): 925 of 3,697 reports there. Close to the ground, wind over the mountains stirs the air, and gusty days at DEN add to it.
+Moderate bumps were reported most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN, or 1 h 20 min after leaving PHX. There, 925 of 3,697 reports were moderate or stronger. Close to the ground, wind over the mountains stirs the air, and gusty days at DEN add to it.
 
 | Where | From DEN | From PHX | Reports | Moderate or stronger |
 |---|---|---|---|---|
 | near DEN, where flights climb out or come in to land | 5 min | 1 h 20 min | 3,697 | 925 |
 | over Colorado, near Denver | 10 min | 1 h 15 min | 1,817 | 881 |
-| over Colorado, near Colorado Springs | 15 min | 1 h 10 min | 1,482 | 232 |
-| over Colorado, near Colorado Springs | 20 min | 1 h 5 min | 973 | 266 |
-| over Colorado, near Colorado Springs | 20 min | 1 h | 754 | 260 |
-| over Colorado | 25 min | 1 h | 830 | 193 |
-| over Colorado | 30 min | 55 min | 490 | 213 |
-| over Colorado | 35 min | 50 min | 224 | 85 |
-| over Colorado | 35 min | 45 min | 299 | 78 |
-| over New Mexico | 40 min | 45 min | 878 | 174 |
-| over New Mexico | 45 min | 40 min | 242 | 86 |
-| over Arizona | 45 min | 35 min | 106 | 43 |
-| over Arizona | 50 min | 30 min | 170 | 71 |
-| over Arizona | 55 min | 30 min | 175 | 74 |
-| over Arizona | 1 h | 25 min | 187 | 88 |
-| over Arizona | 1 h | 20 min | 211 | 112 |
-| over Arizona, near Phoenix | 1 h 5 min | 20 min | 72 | 39 |
-| over Arizona, near Phoenix | 1 h 10 min | 15 min | 43 | 28 |
-| over Arizona, near Phoenix | 1 h 15 min | 10 min | 78 | 57 |
+| over eastern Colorado, near Colorado Springs | 15 min | 1 h 10 min | 1,482 | 232 |
+| over central Colorado, near Colorado Springs | 20 min | 1 h 5 min | 973 | 266 |
+| over western Colorado, near Colorado Springs | 20 min | 1 h | 754 | 260 |
+| over eastern Colorado | 25 min | 1 h | 830 | 193 |
+| over east-central Colorado | 30 min | 55 min | 490 | 213 |
+| over west-central Colorado | 35 min | 50 min | 224 | 85 |
+| over western Colorado | 35 min | 45 min | 299 | 78 |
+| over eastern New Mexico | 40 min | 45 min | 878 | 174 |
+| over western New Mexico | 45 min | 40 min | 242 | 86 |
+| over eastern Arizona | 45 min | 35 min | 106 | 43 |
+| over east-central Arizona | 50 min | 30 min | 170 | 71 |
+| over central Arizona | 55 min | 30 min | 175 | 74 |
+| over west-central Arizona | 1 h | 25 min | 187 | 88 |
+| over western Arizona | 1 h | 20 min | 211 | 112 |
+| over eastern Arizona, near Phoenix | 1 h 5 min | 20 min | 72 | 39 |
+| over central Arizona, near Phoenix | 1 h 10 min | 15 min | 43 | 28 |
+| over western Arizona, near Phoenix | 1 h 15 min | 10 min | 78 | 57 |
 | near PHX, where flights climb out or come in to land | 1 h 25 min | 5 min | 47 | 23 |
 
 ## When in the year
@@ -68,7 +68,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between DEN and PHX?
 
-Pilots reported moderate bumps most often near DEN, where flights climb out or come in to land (about 5 min after leaving DEN (1 h 20 min after leaving PHX)).
+Pilots reported moderate bumps most often near DEN, where flights climb out or come in to land, about 5 min after leaving DEN, or 1 h 20 min after leaving PHX.
 
 ### When is the smoothest time of year to fly DEN to PHX?
 

@@ -2,7 +2,7 @@
 
 > Los Angeles (LAX) ⇄ Phoenix (PHX), both directions. November 2025 to October 2026.
 
-Flights between Los Angeles (LAX) and Phoenix (PHX) fly about 370 miles, roughly an hour in the air. In the past year, pilots near this route reported moderate bumps most often over California, and more often in January, March and May. Severe reports were rare: 16 of 629.
+Flights between Los Angeles (LAX) and Phoenix (PHX) fly about 370 miles, roughly an hour in the air. In the past year, pilots near this route reported moderate bumps most often over California, and more often in January, March and May.
 
 - Distance: 370 miles (590 km)
 - In the air: about 1 h (typical jet, still air)
@@ -12,7 +12,7 @@ Flights between Los Angeles (LAX) and Phoenix (PHX) fly about 370 miles, roughly
 
 ## Where on the route it gets bumpy
 
-Moderate bumps were reported most often over California, near Santa Ana, about 5 min after leaving LAX (55 min after leaving PHX): 53 of 74 reports there. Close to the ground, wind over buildings and land stirs the air.
+Moderate bumps were reported most often over California, near Santa Ana, about 5 min after leaving LAX, or 55 min after leaving PHX. There, 53 of 74 reports were moderate or stronger. Close to the ground, wind over buildings and land stirs the air.
 
 | Where | From LAX | From PHX | Reports | Moderate or stronger |
 |---|---|---|---|---|
@@ -20,21 +20,21 @@ Moderate bumps were reported most often over California, near Santa Ana, about 5
 | over California, near Santa Ana | 5 min | 55 min | 74 | 53 |
 | over California, near Ontario | 10 min | 50 min | 70 | 51 |
 | over California, near San Bernardino | 10 min | 45 min | 53 | 39 |
-| over California, near Palm Springs | 15 min | 40 min | 33 | 16 |
-| over California, near Palm Springs | 20 min | 40 min | 37 | 18 |
-| over California, near Palm Springs | 20 min | 35 min | 23 | 10 |
-| over California, near Palm Springs | 20 min | 35 min | 41 | 18 |
-| over California, near Palm Springs | 25 min | 30 min | 19 | 6 |
-| over California, near Palm Springs | 25 min | 30 min | 16 | 8 |
-| over California, near Palm Springs | 30 min | 25 min | 17 | 5 |
-| over California | 30 min | 25 min | 30 | 14 |
-| over California | 35 min | 20 min | 39 | 16 |
-| over California | 35 min | 20 min | 15 | 11 |
+| over California, near Palm Springs (part 1 of 7) | 15 min | 40 min | 33 | 16 |
+| over California, near Palm Springs (part 2 of 7) | 20 min | 40 min | 37 | 18 |
+| over California, near Palm Springs (part 3 of 7) | 20 min | 35 min | 23 | 10 |
+| over California, near Palm Springs (part 4 of 7) | 20 min | 35 min | 41 | 18 |
+| over California, near Palm Springs (part 5 of 7) | 25 min | 30 min | 19 | 6 |
+| over California, near Palm Springs (part 6 of 7) | 25 min | 30 min | 16 | 8 |
+| over California, near Palm Springs (part 7 of 7) | 30 min | 25 min | 17 | 5 |
+| over western California | 30 min | 25 min | 30 | 14 |
+| over central California | 35 min | 20 min | 39 | 16 |
+| over eastern California | 35 min | 20 min | 15 | 11 |
 | near Phoenix | 40 min | 20 min | 34 | 16 |
-| over Arizona, near Phoenix | 40 min | 15 min | 12 | 6 |
-| over Arizona, near Phoenix | 45 min | 10 min | 15 | 10 |
-| over Arizona, near Phoenix | 50 min | 10 min | 11 | 7 |
-| over Arizona, near Phoenix | 55 min | 5 min | 9 | 4 |
+| over western Arizona, near Phoenix | 40 min | 15 min | 12 | 6 |
+| over west-central Arizona, near Phoenix | 45 min | 10 min | 15 | 10 |
+| over east-central Arizona, near Phoenix | 50 min | 10 min | 11 | 7 |
+| over eastern Arizona, near Phoenix | 55 min | 5 min | 9 | 4 |
 | near PHX, where flights climb out or come in to land | 1 h | 5 min | 22 | 9 |
 
 ## When in the year
@@ -68,7 +68,7 @@ Most flights see light chop at most. From November 2025 to October 2026, pilots 
 
 ### Where is it bumpiest between LAX and PHX?
 
-Pilots reported moderate bumps most often over California, near Santa Ana (about 5 min after leaving LAX (55 min after leaving PHX)).
+Pilots reported moderate bumps most often over California, near Santa Ana, about 5 min after leaving LAX, or 55 min after leaving PHX.
 
 ### When is the smoothest time of year to fly LAX to PHX?
 
