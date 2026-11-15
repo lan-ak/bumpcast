@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>After-departure relaunch</title>
+<style>
+:root { --bg:#f6f4f1; --card:#fff; --ink:#1d2733; --ink2:#5b6673; --line:#e3ded7; --accent:#2a7385; --warn:#9a5b13; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#10161f; --card:#18212c; --ink:#e8edf2; --ink2:#9aa7b4; --line:#2a3542; --accent:#7cc3d3; --warn:#e0a458; } }
+:root[data-theme="dark"] { --bg:#10161f; --card:#18212c; --ink:#e8edf2; --ink2:#9aa7b4; --line:#2a3542; --accent:#7cc3d3; --warn:#e0a458; }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.5 -apple-system, system-ui, sans-serif; }
+main { max-width: 1080px; margin: 0 auto; padding: 28px 16px 60px; }
+h1 { font-size: 26px; margin: 0 0 4px; }
+h2 { font-size: 18px; margin: 34px 0 10px; }
+.sub { color: var(--ink2); margin: 0 0 18px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; }
+.flow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 14px; }
+.step { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; }
+.step b { display:block; }
+.step span { color: var(--ink2); font-size: 13px; }
+.arrow { color: var(--ink2); }
+.shots { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 16px; }
+figure { margin: 0; }
+figure img { width: 100%; height: auto; border-radius: 18px; border: 1px solid var(--line); display:block; }
+figcaption { font-size: 13px; color: var(--ink2); margin-top: 6px; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+td, th { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { color: var(--ink2); font-weight: 600; }
+code { font: 13px ui-monospace, Menlo, monospace; background: color-mix(in srgb, var(--accent) 12%, transparent); padding: 1px 5px; border-radius: 5px; }
+.q { border-left: 3px solid var(--accent); padding-left: 12px; margin: 10px 0; }
+.warn { color: var(--warn); }
+.scroll { overflow-x: auto; }
+</style>
+</head>
+<body>
+<main>
+<h1>After-departure relaunch</h1>
+<p class="sub">Nov 7. A change to onboarding-near only, built locally in the studio. Nothing is pushed and no campaign has changed.</p>
+
+<div class="card">
+<b>Problem.</b> Someone who quits on the hard offer gets it again on every launch until 12 h after departure. 0BDB7267 (Meta ad, DFW→MIA 12:05 UTC) tapped the boarding notification and then the landing notification. Both times the hard offer covered their flight, and both times they closed the app within 2 s. The second time, their flight had already landed.
+</div>
+
+<h2>What changes</h2>
+<div class="scroll"><table>
+<tr><th>Relaunch after quitting on the hard offer</th><th>Now (live v5)</th><th>Proposed</th></tr>
+<tr><td>Before scheduled departure</td><td>Hard offer (1)</td><td>Hard offer (1), unchanged</td></tr>
+<tr><td>Departure to 12 h after</td><td>Hard offer (1)</td><td><b>Closable Plans (2)</b>: one tap on ✕ and they see their flight</td></tr>
+<tr><td>More than 12 h after</td><td>All the questions again, ending soft</td><td><b>Closable Plans (2)</b></td></tr>
+</table></div>
+
+<h2>Screens</h2>
+<div class="shots">
+<figure><img src="after-departure/1-hard-offer-resume.png" alt="Hard offer"><figcaption>1 · Hard offer on resume (forecast check failed, so subscription only). What 0BDB7267 saw on both notification taps.</figcaption></figure>
+<figure><img src="after-departure/2-after-departure-new.png" alt="Closable Plans"><figcaption>2 · Proposed after departure: the existing closable Plans, using 0BDB7267's real attributes.</figcaption></figure>
+</div>
+<p class="sub">Plans is the existing page and isn't redesigned, so there are no new dark-mode or iPhone SE shots.</p>
+
+<h2>Notes</h2>
+<ul>
+<li>Code: <code>components/near.ts</code> (<code>savedHardFlight</code> now stops at departure; new <code>leftHardOffer</code>) and <code>app/index.tsx</code>.</li>
+<li>"Departure" means the scheduled time. If a flight is delayed, the offer stops early, while they're still at the gate.</li>
+<li>Forecast moments stay held while the offer is open. Once it has passed, the flow clears <code>onboarding_hard_open</code>, the same as today.</li>
+<li>Not part of this change: the forecast check failing on a cold launch from a notification (the app probably answers before it has loaded the flight). That needs an app update.</li>
+</ul>
+
+<h2>To build it</h2>
+<p>Push onboarding-near as v6 and promote it. Add audience "[07/11] Claude v1 Review - near-flier, offer ends at departure" to Onboarding 113534 and pause 199841.</p>
+</main>
+</body>
+</html>

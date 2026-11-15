@@ -344,3 +344,164 @@ Spent $299.87 of $450 so far.
 - Launched 02-turbulence: back on for the weekend run.
 - Launched 10-turbulence: back on for the weekend run.
 - Budgets: turbulence budget $50.00/day (Weekend).
+
+## Sat Nov 7
+
+Spent $344.96 of $450 so far.
+
+| Ad | Spend | Shown | Tap rate | Installs | Per install | Trials | Paid | Live |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| 01-standard | $0.17 | 12 | 0.00% | 0 | – | 0 | 0 | no |
+| 08-standard | $119.10 | 5,103 | 2.39% | 20 | $5.96 | 1 | 0 | no |
+| 11-standard | $0.03 | 2 | 0.00% | 0 | – | 0 | 0 | no |
+| 16-standard | $1.65 | 75 | 1.33% | 0 | – | 0 | 0 | no |
+| 01-tracker | $14.35 | 559 | 4.83% | 0 | – | 0 | 0 | no |
+| 04-tracker | $18.20 | 582 | 1.89% | 0 | – | 0 | 0 | no |
+| 05-tracker | $3.81 | 199 | 6.03% | 0 | – | 0 | 0 | no |
+| 12-tracker | $0.53 | 23 | 4.35% | 0 | – | 0 | 0 | no |
+| 13-tracker | $5.63 | 208 | 2.40% | 0 | – | 0 | 0 | no |
+| 14-tracker | $5.86 | 179 | 3.35% | 0 | – | 0 | 0 | no |
+| 01-turbulence | $4.94 | 208 | 2.40% | 1 | $4.94 | 1 | 0 | no |
+| 02-turbulence | $138.48 | 7,828 | 2.52% | 29 | $4.78 | 2 | 4 | yes |
+| 07-turbulence | $0.21 | 15 | 6.67% | 0 | – | 0 | 0 | no |
+| 10-turbulence | $32.01 | 1,332 | 1.50% | 5 | $6.40 | 0 | 0 | yes |
+
+- Winners: 02-turbulence: $4.78 per install (29 installs from $138.48, 2 trials, 4 paid, 2.5% taps); 01-turbulence: $4.94 per install (1 installs from $4.94, 1 trials, 2.4% taps).
+- Losers: 04-tracker: no installs from $18.20 (1.9% taps); 13-tracker: no installs from $5.63 (2.4% taps).
+- Taps to installs: turbulence 35/223 (15.7%), tracker 0/62 (0.0%), standard 20/123 (16.3%); overall 55/408 (13.5%).
+- No ads paused or launched.
+- Budgets: turbulence budget $50.00/day (Weekend).
+- Weekend run on turbulence so far: $45.10, 9 installs, $5.01 each, 0 paid.
+
+## Sun Nov 8
+
+Spent $391.72 of $450 so far.
+
+| Ad | Spend | Shown | Tap rate | Installs | Per install | Trials | Paid | Live |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| 01-standard | $0.17 | 12 | 0.00% | 0 | – | 0 | 0 | no |
+| 08-standard | $119.10 | 5,103 | 2.39% | 20 | $5.96 | 1 | 0 | no |
+| 11-standard | $0.03 | 2 | 0.00% | 0 | – | 0 | 0 | no |
+| 16-standard | $1.65 | 75 | 1.33% | 0 | – | 0 | 0 | no |
+| 01-tracker | $14.35 | 559 | 4.83% | 0 | – | 0 | 0 | no |
+| 04-tracker | $18.20 | 582 | 1.89% | 0 | – | 0 | 0 | no |
+| 05-tracker | $3.81 | 199 | 6.03% | 0 | – | 0 | 0 | no |
+| 12-tracker | $0.53 | 23 | 4.35% | 0 | – | 0 | 0 | no |
+| 13-tracker | $5.63 | 208 | 2.40% | 0 | – | 0 | 0 | no |
+| 14-tracker | $5.86 | 179 | 3.35% | 0 | – | 0 | 0 | no |
+| 01-turbulence | $4.94 | 208 | 2.40% | 1 | $4.94 | 1 | 0 | no |
+| 02-turbulence | $184.74 | 10,394 | 2.44% | 38 | $4.86 | 2 | 5 | yes |
+| 07-turbulence | $0.21 | 15 | 6.67% | 0 | – | 0 | 0 | no |
+| 10-turbulence | $32.50 | 1,361 | 1.47% | 5 | $6.50 | 0 | 0 | yes |
+
+- Winners: 02-turbulence: $4.86 per install (38 installs from $184.74, 2 trials, 5 paid, 2.4% taps); 01-turbulence: $4.94 per install (1 installs from $4.94, 1 trials, 2.4% taps).
+- Losers: 04-tracker: no installs from $18.20 (1.9% taps); 13-tracker: no installs from $5.63 (2.4% taps).
+- Taps to installs: turbulence 44/280 (15.7%), tracker 0/62 (0.0%), standard 20/123 (16.3%); overall 64/465 (13.8%).
+- No ads paused or launched.
+- Budgets: turbulence budget $50.00/day (Weekend).
+- Weekend run on turbulence so far: $91.85, 18 installs, $5.10 each, 1 paid.
+
+## Mon Nov 9
+
+Spent $432.62 of $450 so far.
+
+| Ad | Spend | Shown | Tap rate | Installs | Per install | Trials | Paid | Live |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| 01-standard | $0.17 | 12 | 0.00% | 0 | – | 0 | 0 | no |
+| 08-standard | $119.10 | 5,103 | 2.39% | 20 | $5.96 | 1 | 0 | no |
+| 11-standard | $0.03 | 2 | 0.00% | 0 | – | 0 | 0 | no |
+| 16-standard | $1.65 | 75 | 1.33% | 0 | – | 0 | 0 | no |
+| 01-tracker | $14.35 | 559 | 4.83% | 0 | – | 0 | 0 | no |
+| 04-tracker | $18.20 | 582 | 1.89% | 0 | – | 0 | 0 | no |
+| 05-tracker | $3.81 | 199 | 6.03% | 0 | – | 0 | 0 | no |
+| 12-tracker | $0.53 | 23 | 4.35% | 0 | – | 0 | 0 | no |
+| 13-tracker | $5.63 | 208 | 2.40% | 0 | – | 0 | 0 | no |
+| 14-tracker | $5.86 | 179 | 3.35% | 0 | – | 0 | 0 | no |
+| 01-turbulence | $4.94 | 208 | 2.40% | 1 | $4.94 | 1 | 0 | no |
+| 02-turbulence | $225.51 | 13,026 | 2.21% | 46 | $4.90 | 2 | 5 | yes |
+| 07-turbulence | $0.21 | 15 | 6.67% | 0 | – | 0 | 0 | no |
+| 10-turbulence | $32.64 | 1,370 | 1.46% | 5 | $6.53 | 0 | 0 | yes |
+
+- Winners: 02-turbulence: $4.90 per install (46 installs from $225.51, 2 trials, 5 paid, 2.2% taps); 01-turbulence: $4.94 per install (1 installs from $4.94, 1 trials, 2.4% taps).
+- Losers: 04-tracker: no installs from $18.20 (1.9% taps); 13-tracker: no installs from $5.63 (2.4% taps).
+- Taps to installs: turbulence 52/314 (16.6%), tracker 0/62 (0.0%), standard 20/123 (16.3%); overall 72/499 (14.4%).
+- Paused 02-turbulence: the campaign has ended.
+- Paused 10-turbulence: the campaign has ended.
+
+## Tue Nov 10
+
+Spent $432.70 of $450 so far.
+
+| Ad | Spend | Shown | Tap rate | Installs | Per install | Trials | Paid | Live |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| 01-standard | $0.17 | 12 | 0.00% | 0 | – | 0 | 0 | no |
+| 08-standard | $119.10 | 5,103 | 2.39% | 20 | $5.96 | 1 | 0 | no |
+| 11-standard | $0.03 | 2 | 0.00% | 0 | – | 0 | 0 | no |
+| 16-standard | $1.65 | 75 | 1.33% | 0 | – | 0 | 0 | no |
+| 01-tracker | $14.35 | 559 | 4.83% | 0 | – | 0 | 0 | no |
+| 04-tracker | $18.20 | 582 | 1.89% | 0 | – | 0 | 0 | no |
+| 05-tracker | $3.81 | 199 | 6.03% | 0 | – | 0 | 0 | no |
+| 12-tracker | $0.53 | 23 | 4.35% | 0 | – | 0 | 0 | no |
+| 13-tracker | $5.63 | 208 | 2.40% | 0 | – | 0 | 0 | no |
+| 14-tracker | $5.86 | 179 | 3.35% | 0 | – | 0 | 0 | no |
+| 01-turbulence | $4.94 | 208 | 2.40% | 1 | $4.94 | 1 | 0 | no |
+| 02-turbulence | $225.59 | 13,032 | 2.21% | 46 | $4.90 | 2 | 5 | no |
+| 07-turbulence | $0.21 | 15 | 6.67% | 0 | – | 0 | 0 | no |
+| 10-turbulence | $32.64 | 1,370 | 1.46% | 5 | $6.53 | 0 | 0 | no |
+
+- Winners: 02-turbulence: $4.90 per install (46 installs from $225.59, 2 trials, 5 paid, 2.2% taps); 01-turbulence: $4.94 per install (1 installs from $4.94, 1 trials, 2.4% taps).
+- Losers: 04-tracker: no installs from $18.20 (1.9% taps); 13-tracker: no installs from $5.63 (2.4% taps).
+- Taps to installs: turbulence 52/314 (16.6%), tracker 0/62 (0.0%), standard 20/123 (16.3%); overall 72/499 (14.4%).
+- No ads paused or launched.
+
+## Wed Nov 11
+
+Spent $432.70 of $450 so far.
+
+| Ad | Spend | Shown | Tap rate | Installs | Per install | Trials | Paid | Live |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| 01-standard | $0.17 | 12 | 0.00% | 0 | – | 0 | 0 | no |
+| 08-standard | $119.10 | 5,103 | 2.39% | 20 | $5.96 | 1 | 0 | no |
+| 11-standard | $0.03 | 2 | 0.00% | 0 | – | 0 | 0 | no |
+| 16-standard | $1.65 | 75 | 1.33% | 0 | – | 0 | 0 | no |
+| 01-tracker | $14.35 | 559 | 4.83% | 0 | – | 0 | 0 | no |
+| 04-tracker | $18.20 | 582 | 1.89% | 0 | – | 0 | 0 | no |
+| 05-tracker | $3.81 | 199 | 6.03% | 0 | – | 0 | 0 | no |
+| 12-tracker | $0.53 | 23 | 4.35% | 0 | – | 0 | 0 | no |
+| 13-tracker | $5.63 | 208 | 2.40% | 0 | – | 0 | 0 | no |
+| 14-tracker | $5.86 | 179 | 3.35% | 0 | – | 0 | 0 | no |
+| 01-turbulence | $4.94 | 208 | 2.40% | 1 | $4.94 | 1 | 0 | no |
+| 02-turbulence | $225.59 | 13,032 | 2.21% | 46 | $4.90 | 2 | 5 | no |
+| 07-turbulence | $0.21 | 15 | 6.67% | 0 | – | 0 | 0 | no |
+| 10-turbulence | $32.64 | 1,370 | 1.46% | 5 | $6.53 | 0 | 0 | no |
+
+- Winners: 02-turbulence: $4.90 per install (46 installs from $225.59, 2 trials, 5 paid, 2.2% taps); 01-turbulence: $4.94 per install (1 installs from $4.94, 1 trials, 2.4% taps).
+- Losers: 04-tracker: no installs from $18.20 (1.9% taps); 13-tracker: no installs from $5.63 (2.4% taps).
+- Taps to installs: turbulence 52/314 (16.6%), tracker 0/62 (0.0%), standard 20/123 (16.3%); overall 72/499 (14.4%).
+- No ads paused or launched.
+
+## Thu Nov 12
+
+Spent $432.70 of $450 so far.
+
+| Ad | Spend | Shown | Tap rate | Installs | Per install | Trials | Paid | Live |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| 01-standard | $0.17 | 12 | 0.00% | 0 | – | 0 | 0 | no |
+| 08-standard | $119.10 | 5,103 | 2.39% | 20 | $5.96 | 1 | 0 | no |
+| 11-standard | $0.03 | 2 | 0.00% | 0 | – | 0 | 0 | no |
+| 16-standard | $1.65 | 75 | 1.33% | 0 | – | 0 | 0 | no |
+| 01-tracker | $14.35 | 559 | 4.83% | 0 | – | 0 | 0 | no |
+| 04-tracker | $18.20 | 582 | 1.89% | 0 | – | 0 | 0 | no |
+| 05-tracker | $3.81 | 199 | 6.03% | 0 | – | 0 | 0 | no |
+| 12-tracker | $0.53 | 23 | 4.35% | 0 | – | 0 | 0 | no |
+| 13-tracker | $5.63 | 208 | 2.40% | 0 | – | 0 | 0 | no |
+| 14-tracker | $5.86 | 179 | 3.35% | 0 | – | 0 | 0 | no |
+| 01-turbulence | $4.94 | 208 | 2.40% | 1 | $4.94 | 1 | 0 | no |
+| 02-turbulence | $225.59 | 13,032 | 2.21% | 46 | $4.90 | 2 | 5 | no |
+| 07-turbulence | $0.21 | 15 | 6.67% | 0 | – | 0 | 0 | no |
+| 10-turbulence | $32.64 | 1,370 | 1.46% | 5 | $6.53 | 0 | 0 | no |
+
+- Winners: 02-turbulence: $4.90 per install (46 installs from $225.59, 2 trials, 5 paid, 2.2% taps); 01-turbulence: $4.94 per install (1 installs from $4.94, 1 trials, 2.4% taps).
+- Losers: 04-tracker: no installs from $18.20 (1.9% taps); 13-tracker: no installs from $5.63 (2.4% taps).
+- Taps to installs: turbulence 52/314 (16.6%), tracker 0/62 (0.0%), standard 20/123 (16.3%); overall 72/499 (14.4%).
+- No ads paused or launched.

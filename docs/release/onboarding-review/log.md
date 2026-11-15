@@ -266,3 +266,666 @@ Run at 17:11 UTC. 24h = Nov 5 17:11 → Nov 6 17:11. Excluded: 33 `$SuperwallAli
 **Recommendations (need Lanre's OK)**
 1. **Hold the near-flier test.** 1 hard-trial viewer in 41 h, and 0 trial starts. About 10 viewers are needed to judge it, more than a week at this rate. The near cohort is still converting (3 of 22) through Pro paywalls, so nothing is broken.
 2. **Watch, no change:** the timeline page → forecast-moment pass path produced today's sale. If a second "declined timeline → bought pass later" case shows up, consider adding the $9.99 pass to the timeline page (onboarding-near `flight` page for flights more than 24 h out). That would need a design review first.
+
+## Nov 7: hard offer ends at departure (onboarding-near v6)
+
+**Why:** 0BDB7267 (Meta "02 countdown · turbulence", iPhone19,3, DFW→MIA 12:05 UTC) quit on the hard offer. Tapping the boarding notification (11:05) and then the landing notification (15:22) brought the hard offer back over the flight each time, and both times they closed the app in about 2 s. In both relaunches the `flight_forecast` check failed in under 3 s (no result logged), so the offer showed without the pass. That's probably the app answering before it has loaded the flight on a cold launch from a notification, and it needs an app update. It was the first real-device run of 200113, which correctly held back first_grade_viewed.
+
+**Change (Lanre's yes):** review page `after-departure.html`.
+- onboarding-near 289001 → **v6**: `savedHardFlight` resumes the hard offer only until scheduled departure. A relaunch after departure goes straight to the closable Plans (`leftHardOffer`, `app/index.tsx`) instead of the questions. The ≤24 h hard offer in the first run is unchanged.
+- Onboarding 113534: new top audience **200805** "[07/11] Claude v1 Review - near-flier, offer ends at departure" (no entitlements, 289001 100%), enabled at ~15:52 UTC. **199841 paused** for comparison. Backup: `docs/release/backups/2026-11-07-campaign-113534-before.json`.
+- The daily review task now expects 200805 and checks after-departure relaunches.
+
+**Same day, v7: the forecast-check failure was in the paywall, not the app.** On both relaunches Superwall preloaded the onboarding page at launch. The page's index resumed straight to `checking`, which asked `flight_forecast` about 1 s *before* the app registered the `onboarding` placement, whose handler answers custom callbacks (11:05:39.39 vs 11:05:40.36; 15:22:06.67 vs 15:22:07.54). With no handler, it failed at once. v7 (`app/index.tsx`) resumes only once `paywall_open` has arrived (`snapshot.paywall`), and shows an empty sky until then instead of a flash of the welcome. No app update needed. (The pass is never offered on a resume, by design, because `add_flight` is skipped.) It's in the same audience, 200805, as a bug fix to v6 from 30 minutes earlier.
+
+## Day Sat Nov 7
+
+Run at 17:03 UTC. 24h = Nov 6 17:03 → Nov 7 17:03. Excluded: 50 `$SuperwallAlias:` ids. No review devices, simulators or Lanre's phone.
+
+**Health: OK.**
+- Campaigns match the setup:
+  - 113534: 200805 (289001 100%) live, 199841 paused. 200805 has had 2 onboarding opens since ~15:52 (experiment 200962).
+  - 113535: 200113 skip → 199842 skip → 199843 forecast-moment 100%.
+  - 113536: 200212 → 199276, both pro-features 100%. The old paused audiences are no longer listed (deleted Nov 6, per SUPERWALL.md).
+- Versions: near v7, soft v8, hard v24, pass-first v12. Forecast-moment is **v15** and pro-features **v14** (were v14/v13). That's explained: Lanre locked them on Nov 6 (commit f75f779).
+- 24h: 17 installs, all 17 got onboarding (19 onboarding users). 0 webview, product-load or transaction failures.
+- 3 `onboarding_fell_back` reason=timeout on 2 *existing* devices (6771A75A ×2, variant "hard"; 77DB1563, also timed out Nov 5). No new install was affected. Watch only.
+- Pricing: every onboarding and Pro paywall open showed $49.99 Yearly. Pro opens had no trial and the $9.99 pass. The trial flag shows only on onboarding-near, which still carries `bumpcast_pro_annual_3999_3d`.
+- The only trial transaction was 8F6712DF on `bumpcast_pro_annual_3999_3d` via onboarding-near. That's the test's intended trial, not a problem.
+- **No after-departure relaunches yet since v6/v7, and no forecast-check failures since v7** (16:20 UTC). The one earlier case, 341EA8C9, was at 02:39 UTC, before the fix: it relaunched before departure and went index → checking → plans in 2 s with no flight result.
+- **Task context is stale:** since v4 (Nov 6 ~22:00), new near users see the hard page as Yearly $49.99 or $9.99 pass, not the $39.99 trial. They're tagged `onboarding_near_offer = annual_or_pass` and variant `near-offer`.
+
+**Onboarding funnel**
+
+| | 24h | Since change (Nov 3 21:00) |
+|---|---|---|
+| Installs | 17 | 69 |
+| Onboarding users | 19 (all near) | 73 (41 near, 19 soft, 12 both, 1 hard) |
+| Reached source / find | 19 / 19 | 72 / 72 |
+| Notifications page | 18 | 67 |
+| Tapped Add flight | 17 | 58 |
+| Saved a flight in the flow | 14 | 38 |
+| Flight page / Plans page | 13 / 7 | 35 / 35 |
+| Notifications granted / not-now / denied | **14** / 3 / 1 | 42 / 22 / 3 |
+| Median feeling→source | 25 s | 29 s |
+| Onboarding purchases | 1 trial (cancelled) | 2 paid + 1 trial |
+
+- **Best day yet for add-flight and notifications.** 14 of 19 saved a flight (yesterday 1 of 13), and 14 of 19 granted notifications. The baseline was about 30%.
+- next_flight_window (24h): 24h 8, later 7, week 4.
+
+**Near-flier test (289001, since Nov 4 23:50)**
+- Hard page viewers: **7 ever**, 6 of them in the last 24h.
+  - Trial version ($39.99, 3-day trial), 4 viewers: 230F2DA0, 8F6712DF, C06FCE91, 2B70C9E1.
+  - annual_or_pass version (v4+), 3 viewers: 8FE0A5A4, 341EA8C9, 3D094D33.
+- Trial starts: **1, 8F6712DF.**
+  - Installed Nov 6 18:49 and saw the trial page at 18:50. They left the app, came back about an hour later, and started the trial at 19:51.
+  - They **cancelled at 19:52, 1 minute later**. The trial will lapse on Nov 9 19:51 at $0.
+  - Their answers: calm, monthly-plus, social, 24h (EWR→DCA), notifications granted.
+- annual_or_pass: 0 Yearly or passes bought from 3 viewers. 3D094D33's flight (DRO→DEN) leaves Nov 8 00:55, so it's still open.
+- Relaunches that got the hard page again: 8F6712DF, where it converted to the trial. 341EA8C9 hit the pre-v7 bug and got Plans.
+- Timeline soft page: 9 users ever, 6 in 24h. 0 Yearly or Monthly bought there.
+- Near cohort paid: still 3, all outside onboarding (095E482E Yearly, 96972F16 Monthly, 8954E777 pass), plus 1 trial cancelled. The soft baseline (193398) was 2 paid of ~40, both in onboarding.
+- 30-min cap (199842): skipped 2 in 24h (DFDE3659 ×2, forecast_ready_opened) and 3 ever. 200113: 1 skip ever (0BDB7267, Nov 7 11:05), 0 new.
+
+**Purchases**
+- 24h: 8F6712DF trial start and a cancellation within 1 minute. No paid purchase, refund or renewal.
+- Since change, paid is unchanged: 2 Yearly $49.99 (3A575EBF; 095E482E with auto-renew off), 3 Monthly $6.99, 1 pass $9.99. Gross $93.92 / proceeds about $79.83 at 85%.
+- 0 of 33 "later" fliers have bought.
+
+**Pro paywalls (24h opens = users)**
+- forecast-moment: first_grade_viewed 3, timeline_locked 3. pro-features: flight_limit_reached 1, live_activity_locked 1. 0 transactions.
+- Since Nov 3 21:30: forecast-moment 15 / 4 / 11 (first_grade_viewed / forecast_ready_opened / timeline_locked). pro-features: upgrade 3, pilot reports 4, live activity 3, flight limit 2. Purchases unchanged: 1 pass, 1 Yearly, 2 Monthly.
+- Every trigger_fire for a free user presented a paywall or a holdout. No silent misses.
+- Still never fired: update_opened, updates_locked, live_status_locked, email_import_locked.
+
+**Recommendations (need Lanre's OK)**
+1. **Hold the near test.** annual_or_pass has 3 viewers and 0 buys. About 10 viewers are needed to judge it, roughly 3–4 more days at today's rate of ~6 hard-page viewers a day. The trial arm's one start cancelled in 1 minute, the same pattern as the 6 of 7 cancelled trials in the baseline.
+2. **Update this task's context:** near hard page = Yearly $49.99 or $9.99 pass (`annual_or_pass`, v4+). Count Yearly and pass buys on it, and stop expecting trial starts. Only the scheduled-task file changes.
+
+## Day Sun Nov 8
+
+Run at 17:12 UTC. 24h = Nov 7 17:12 → Nov 8 17:12. Excluded: 11 `$SuperwallAlias:` ids in 24h (58 since the change). No review devices, simulators or Lanre's phone.
+
+**Health: OK.**
+- Campaigns match the setup:
+  - 113534: 200805 (289001 100%) live, 199841 paused. All 19 onboarding triggers in 24h went to 200805 and presented.
+  - 113535: 200113 skip → 199842 skip → 199843 forecast-moment 100%.
+  - 113536: 200212 → 199276, both pro-features 100%.
+- Versions: near v7, soft v8, hard v24, forecast-moment v15, pro-features v14, pass-first v12. All explained (Nov 6–7 changes). 281985 is archived, as SUPERWALL.md says.
+- 24h: 15 installs, all got onboarding (19 onboarding users). 0 webview, product-load or transaction failures. 25 triggers presented and 3 held out, none silently missed.
+- `onboarding_fell_back`: 1 timeout on 77DB1563, the same existing device as Nov 5 and Nov 7. Watch only.
+- processTerminated was 16, background preloads on existing devices (6771A75A, 6692D835…). Harmless.
+- Pricing: every onboarding and Pro paywall open showed $49.99 Yearly, no trial and the $9.99 pass. No trial transaction in 24h.
+- **v7 resume works.** 3D094D33 relaunched from a notification at Nov 7 17:26, before departure: index → checking → hard page in 3 s, with a flight result. 0 forecast-check failures across 30 near users since v7. This was also the 200113 skip working (first_grade_viewed and forecast_ready_opened both held back).
+- After-departure relaunches: **0 so far**, so index → plans is still unmeasured.
+- 2AA5B120 (iPad17,2, Nov 5) is the second install that never got onboarding: `no_rule_match`, then `skipped`. One case, not repeated. Not a problem.
+- **Correction:** the "Gross $93.92 / proceeds about $79.83" in the Nov 6 and Nov 7 entries was wrong. Those 6 purchases add up to $130.94 gross.
+
+**Onboarding funnel**
+
+| | 24h | Since change (Nov 3 21:00) |
+|---|---|---|
+| Installs | 15 | 84 |
+| Onboarding users | 19 (all near) | 90 (58 near, 31 soft, 1 hard) |
+| Reached source / find | 17 / 17 | 88 / 88 |
+| Notifications page | 15 | 81 |
+| Tapped Add flight | 12 | 70 |
+| Saved a flight in the flow | 7 | 45 |
+| Flight page / Plans page | 8 / 8 | 41 / 42 |
+| Notifications granted / not-now / denied | 11 / 4 / 1 | 52 / 26 / 3 |
+| Median feeling→source | 30 s | 29 s |
+| Onboarding purchases | **2 paid** | 4 paid + 1 trial |
+
+- Add-flight fell back to 7 of 19 (yesterday 14 of 19, the day before 1 of 13). Noisy day to day. Notifications held up at 11 of 19.
+- next_flight_window (24h): 24h 8, 3d 6, later 4, unanswered 1.
+
+**Near-flier test (289001, since Nov 4 23:50, 58 users)**
+- Hard page viewers: **10 ever**, 2 new in 24h (981BC733, FC6BF9BA) plus the 3D094D33 relaunch.
+  - Trial version ($39.99, 3-day trial), 4 viewers: 1 trial start (8F6712DF, cancelled after 1 minute, lapses Nov 9 19:51 at $0). No conversions.
+  - annual_or_pass (v4+), 6 viewers: **0 Yearly or passes bought.** Two are still open: 981BC733 (TPA→LAX 20:55 UTC today) and FC6BF9BA (DEN→BOS 21:00 UTC today).
+  - 981BC733 saw the timeline page on Nov 7, when the flight was 29 h out. They re-ran the questions today and got the hard page 8 h before departure.
+- Timeline soft page: 13 users ever, 5 in 24h. **First sale on it:** 6692D835, Monthly $6.99, 2 minutes after install.
+- Cap 199842: 1 skip in 24h (CBBB36A4), 4 ever. 200113: 2 skips in 24h, 3 ever.
+- Cohort paid: near **6 of 58** (10%), soft **3 of 31** (10%). The soft cohort has had longer to buy. The near page itself has not sold: of the 6 near buyers, 1 bought on the timeline page, 1 on Plans, 4 on Pro paywalls.
+
+**Purchases**
+- 24h, 4 paid, all new:
+  - **6771A75A: Yearly $49.99 on onboarding-near Plans**, Nov 7 18:18. An existing user (installed before Nov 3). Nervous, few a year, app store, notifications granted, "later": the **first "later" flier to buy**. They saved a flight that had left 5 h earlier right after buying.
+  - **6692D835: Monthly $6.99 on the timeline page**, Nov 7 22:28, 2 minutes after install. A little uneasy, monthly-plus, 3d, social, granted.
+  - **065B30BE: Monthly $7.31 on forecast-moment / timeline_locked**, Nov 7 21:51, 3 minutes after install. **Turned off auto-renew 12 minutes later.** Calm, monthly-plus, 3d, other, denied. Declined Plans, saved a flight about to leave, hit timeline_locked and bought.
+  - **86C919AE: Flight Pass $9.99 on forecast-moment / timeline_locked**, Nov 8 11:58, 4.3 days after install. Very anxious, yearly or less, week, app store, granted. Soft cohort. Declined the flight page on Nov 4. Later declined the paywall for a second flight, since the pass covers one.
+- Since change, paid: 3 Yearly $49.99, 5 Monthly, 2 passes $9.99. **Gross $205.22 / proceeds about $174.44 at 85%**, from 10 users. Excludes the 59952292 $39.99 renewal.
+- 9 of 10 buyers fly within a week. No refunds.
+
+**Segments since change** (n=90; small)
+- By next_flight_window: 3d 4 of 11, 24h 3 of 26, week 1 of 14, later 1 of 37.
+- By notifications: granted 8 of 52, not-now 0 of 26, denied 1 of 3.
+- By source: social 5 of 38, app store 3 of 29, other 1 of 16, friend 0 of 5.
+- By feeling: very anxious 4 of 18, calm 3 of 43, uneasy 1 of 15, nervous 1 of 13.
+- **Later fliers (37):** 24 saved a flight, 6 came back on a second day, 2 opened a forecast-ready alert, 4 saw forecast-moment, 1 bought.
+- 21 of the 67 users older than 30 h came back on a second day.
+
+**Pro paywalls** (opens = users)
+
+| Paywall / placement | 24h opens | Since Nov 3 21:30 opens | Purchases since |
+|---|---|---|---|
+| forecast-moment / first_grade_viewed | 1 | 16 | 0 |
+| forecast-moment / forecast_ready_opened | 0 | 4 | 0 |
+| forecast-moment / timeline_locked | 2 | 12 | **2 passes $9.99, 1 Monthly** |
+| pro-features / upgrade_from_settings | 2 | 5 | Yearly $49.99 + Monthly |
+| pro-features / pilot_reports_locked | 0 | 4 | Monthly |
+| pro-features / live_activity_locked | 0 | 2 | 0 |
+| pro-features / flight_limit_reached | 0 | 2 | 0 |
+
+- **timeline_locked is the Pro paywall that sells:** 3 of 12 openers bought, against 0 of 20 on first_grade_viewed and forecast_ready_opened (1 pass started and abandoned on first_grade_viewed, Nov 5).
+- Has a flight (200212): 1 trigger since Nov 5, 0 pass purchases from the link.
+- Still never fired: update_opened, updates_locked, live_status_locked, email_import_locked.
+
+**Recommendations (need Lanre's OK)**
+1. **Hold the near test.** annual_or_pass has 6 viewers and 0 buys, with 2 still open today. About 4 more viewers reach the 10 needed, roughly 2 days at today's rate. If it's still 0 of 10, the next proposal is to make that page closable, since hard-page viewers have produced 0 paid so far (10 viewers, trial arm included).
+2. **Design review: add the $9.99 pass to the timeline page** (`superwall/paywalls/onboarding-near/components/soft.tsx`, Yearly and Monthly today). Yesterday's trigger is met: two users declined a flight page, then bought a pass later (8954E777, 86C919AE). It might bring those sales forward by days, or trade some Yearly sales for passes. Show the design first, new audience if approved.
+3. **Update this task's context** (still open from Nov 7): near hard page = Yearly $49.99 or $9.99 pass (`annual_or_pass`, v4+); versions now 7, 8, 24, 15, 14, 12.
+
+## Day Mon Nov 9
+
+Run at 17:11 UTC. 24h = Nov 8 17:11 → Nov 9 17:11. Excluded: no review devices, simulators or Lanre's phone; 0 `$SuperwallAlias:` ids in 24h and 3 since the change, counted on funnel events only (config and attribute events weren't pulled this run, so this isn't comparable with the 58 in the Nov 8 entry).
+
+**Health: OK, one small bug below.**
+- Campaigns match the setup:
+  - 113534: 200805 (289001 100%) live, 199841 paused. All 14 onboarding triggers in 24h went to 200805 and presented.
+  - 113535: 200113 skip → 199842 skip → 199843 forecast-moment 100%.
+  - 113536: 200212 → 199276, both pro-features 100%.
+- Versions unchanged: near v7, soft v8, hard v24, forecast-moment v15, pro-features v14, pass-first v12.
+- 24h: 14 installs, all 14 got onboarding. 30 triggers presented = 30 paywall opens, 1 held out, none silently missed. 0 webview, product-load or transaction failures, 0 `onboarding_fell_back`.
+- processTerminated was 10, harmless as before.
+- Pricing: every onboarding and Pro paywall open in 24h showed $49.99 Yearly, no trial and the $9.99 pass. No trial transaction in 24h.
+- Forecast-check failures before departure since v7: **0**. The one checking → plans under 4 s (18E2CB32, Nov 8) had a flight result, out of coverage, and wasn't a relaunch.
+- After-departure relaunches: **still 0**, so index → plans is unmeasured. Of 12 hard-offer users, 10DF3876 (paid) reopened after departure and got no onboarding, which is correct; the rest haven't come back since v6.
+- **Small bug: `onboarding_hard_open` can stay true for good.** `offer.tsx` sets it when the hard page opens; only the flow's index clears it, and a user who finishes the flow never gets that page again. So 200113 would skip that user's first_grade_viewed and forecast_ready_opened on every later flight. 13539E94 is the live case today. 8F6712DF joins once their trial lapses (they have it set and finished the flow). 0 wrong skips so far.
+
+**Onboarding funnel**
+
+| | 24h | Since change (Nov 3 21:00) |
+|---|---|---|
+| Installs | 14 | 98 |
+| Onboarding users | 14 (all near) | 104 (72 near, 31 soft, 1 hard) |
+| Reached source / find | 14 / 14 | 102 / 102 |
+| Notifications page | 13 | 94 |
+| Tapped Add flight | 9 | 79 |
+| Saved a flight in the flow | 7 | 52 |
+| Flight page / Plans page | 7 / 7 | 48 / 50 |
+| Notifications granted / not-now / denied | 10 / 3 / 0 | 62 / 29 / 3 |
+| Median feeling→source | 31 s | 30 s |
+| Onboarding purchases | **1 paid** | 5 paid + 1 trial |
+
+- Add-flight: 7 of 14 (yesterday 7 of 19). Notifications: 10 of 14 granted (yesterday 11 of 19), against the ~30% baseline.
+- next_flight_window (24h): later 6, 3d 4, 24h 3, week 1.
+
+**Near-flier test (289001, since Nov 4 23:50, 72 users)**
+- Hard offer tagged: **12 ever**, 2 new in 24h (10DF3876, 13539E94).
+  - Trial version, 4 viewers: 1 trial start (8F6712DF, cancelled after 1 minute, lapses Nov 9 19:51 UTC at $0, after this run). No conversions.
+  - annual_or_pass, 8 tagged, **7 really saw it**. 13539E94 added a flight that had left 20 minutes earlier: flight page → Plans in the same second, then declined.
+  - **First sale on the hard page: 10DF3876, Yearly $49.99, Nov 8 17:57.** 1 of 7 (small). Installed 2 minutes earlier, EWR→PHX leaving 4.5 h later. Nervous, few a year, social, granted. No cancellation so far; took off and opened flight alerts.
+- Relaunches that got the hard page again: 0 new in 24h.
+- Timeline soft page: 18 users ever, 5 in 24h, 0 bought in 24h. 1 sale ever (6692D835).
+- Cap 199842: 1 skip in 24h (892724CF), 5 ever. 200113: 0 in 24h, 3 ever.
+- Cohort paid: near **7 of 72** (10%), soft **3 of 31** (10%). Of the 7 near buyers, 1 hard page, 1 timeline, 1 Plans, 4 on Pro paywalls.
+
+**Purchases**
+- 24h: 1 paid, 10DF3876 Yearly $49.99. No cancellations, refunds or renewals.
+- Since change, paid: **4 Yearly $49.99, 5 Monthly, 2 passes $9.99**. Gross $255.21 / proceeds about $216.93 at 85%, from 11 users. Excludes the 59952292 $39.99 renewal.
+- 10 of 11 buyers fly within a week. No refunds.
+
+**Segments since change** (n=104; small)
+- By next_flight_window: 3d 4 of 15, 24h 4 of 29, week 1 of 15, later 1 of 43.
+- By notifications: granted 9 of 62, not-now 0 of 29, denied 1 of 3.
+- By source: social 6 of 44, app store 3 of 32, other 1 of 20, friend 0 of 6.
+- By feeling: very anxious 4 of 24, nervous 2 of 14, calm 3 of 50, uneasy 1 of 15.
+- By frequency: monthly-plus 5 of 43, few a year 4 of 42, yearly or less 1 of 17.
+- **Later fliers (43):** 26 saved a flight, 7 came back on a second day, 2 opened a forecast-ready alert, 5 saw forecast-moment, 1 bought.
+- 25 of the 85 users older than 30 h came back on a second day.
+
+**Pro paywalls** (opens = users)
+
+| Paywall / placement | 24h opens | Since Nov 3 21:30 opens | Purchases since |
+|---|---|---|---|
+| forecast-moment / first_grade_viewed | 4 | 20 | 0 |
+| forecast-moment / forecast_ready_opened | 0 | 4 | 0 |
+| forecast-moment / timeline_locked | 4 | 15 | **2 passes $9.99, 1 Monthly** |
+| pro-features / upgrade_from_settings | 0 | 5 | Yearly $49.99 + Monthly |
+| pro-features / pilot_reports_locked | 0 | 4 | Monthly |
+| pro-features / live_activity_locked | 1 | 3 | 0 |
+| pro-features / flight_limit_reached | 2 | 4 | 0 |
+
+- 0 transactions on Pro paywalls in 24h. timeline_locked is still the one that sells: 3 of 15 openers bought, against 0 of 24 on first_grade_viewed and forecast_ready_opened.
+- Has a flight (200212): 2 triggers in 24h, 3 since Nov 5, 0 pass purchases from the link.
+- Still never fired: update_opened, updates_locked, live_status_locked, email_import_locked.
+
+**Recommendations (need Lanre's OK)**
+1. **Hold the near test.** annual_or_pass is now 1 of 7, the first hard-page sale. About 3 more viewers reach 10, roughly 2–3 days at today's rate. The Nov 8 idea of making the page closable no longer has its trigger.
+2. **Fix `onboarding_hard_open` staying true after a free finish.** Clear it when the flow finishes without a purchase, or don't set it for a flight that's already left (`superwall/paywalls/onboarding-near/components/offer.tsx`). Effect: those users see Forecast moments again on later flights. 1 user is affected today, 2 after tonight. Needs a push and a new audience.
+3. **Design review: add the $9.99 pass to the timeline page** (open from Nov 8, `superwall/paywalls/onboarding-near/components/soft.tsx`). No new evidence today: 5 more timeline viewers, 0 bought.
+
+Task context is still stale (near hard page = Yearly $49.99 or $9.99 pass; versions 7, 8, 24, 15, 14, 12). Only the scheduled-task file needs changing.
+
+## Nov 9: hard-open flag fix (onboarding-near v8)
+
+**Why:** `onboarding_hard_open` could stay true after the flow finished, and 200113 would then skip that user's first_grade_viewed and forecast_ready_opened on later flights (13539E94, today).
+
+**Change (Lanre's yes), live ~17:56 UTC:**
+- onboarding-near 289001 → **v8**, published alone (`--id onboarding-near`). Nothing else under `superwall/` had changed since v7. `components/offer.tsx`: the flag is no longer set for a flight that has already left, and buying or restoring clears it.
+- Onboarding 113534: new audience **201414** "[09/11] Claude v1 Review - near-flier, hard-open flag fix" (no entitlements, 289001 100%), enabled. **200805 paused.** Backup: `docs/release/backups/2026-11-09-campaign-113534-before.json`.
+- Not fixed by this: 13539E94 and 8F6712DF keep the flag, because their flow won't run again.
+- Not tested on a device. Check in the data: a free user finishing on a departed flight should have the flag false or unset, and a buyer on the hard page should have it false.
+- Unchanged: a flight that has already left still goes flight page → Plans in the same second, though SUPERWALL.md describes a hard page. Probably `app/index.tsx`'s `leftHardOffer` reacting to the attribute the page just set (not confirmed).
+
+## Day Tue Nov 10
+
+Run at 17:12 UTC. 24h = Nov 9 17:12 → Nov 10 17:12. Excluded: 5 `$SuperwallAlias:` ids in 24h (75 since the change, raw events). No review devices, simulators or Lanre's phone.
+
+**Health: OK.**
+- Campaigns match the setup:
+  - 113534: 201414 (289001 100%) live; 200805 and 199841 paused. All 8 onboarding triggers in 24h went to 201414 and presented.
+  - 113535: 200113 skip → 199842 skip → 199843 forecast-moment 100%.
+  - 113536: 200212 → 199276, both pro-features 100%.
+- Versions: near v8, soft v8, hard v24, forecast-moment v15, pro-features v14, pass-first v12 (archived). All as expected.
+- 24h: 31 triggers, 30 presented = 30 paywall opens, 1 held out (200113), none silently missed. 0 webview, product-load or transaction failures. processTerminated 15 (6 devices), harmless as before.
+- Pricing: every onboarding and Pro open in 24h showed $49.99 Yearly, no trial and the $9.99 pass. No trial transaction.
+- `onboarding_fell_back` 2, both timeouts on existing devices: 77DB1563 (4th time, watch only) and F2B43881 (installed Nov 4, first time).
+- 1 of 7 installs never got onboarding: A1A8ABE3 (iPhone16,2, Nov 9 18:35) closed the app 2 s after install, before any trigger. Third such case (230F2DA0, 2AA5B120). Not repeated in a pattern; not a problem.
+- **v8 hard-open fix: PASS.** Since 17:56 Nov 9: 3E11602F bought on the hard page and has the flag false. E3416FFA didn't buy and their flight hadn't left, so true is correct. No departed flights added since. 13539E94 and 8F6712DF are the known leftovers.
+- Forecast-check failures before departure: **0** (still 0 since v7). E3416FFA relaunched twice before departure (21:43 and 00:15, 1 h before LAX→CDG): checking → hard page in 2–3 s with a flight result each time.
+- After-departure relaunches: **still 0**, so index → plans is unmeasured. E3416FFA hasn't opened since departure.
+
+**Onboarding funnel**
+
+| | 24h | Since change (Nov 3 21:00) |
+|---|---|---|
+| Installs | 7 | 105 |
+| Onboarding users | 6 (all near) | 110 (78 near, 31 soft, 1 hard) |
+| Reached source / find | 5 / 5 | 107 / 107 |
+| Notifications page | 5 | 99 |
+| Tapped Add flight | 5 | 84 |
+| Saved a flight in the flow | 4 | 56 |
+| Flight page / Plans page | 4 / 1 | 52 / 51 |
+| Notifications granted / not-now / denied | 4 / 1 / 0 | 66 / 30 / 3 |
+| Median feeling→source | 26 s | 30 s |
+| Onboarding purchases | **1 paid** | 6 paid + 1 trial |
+
+- Installs halved (7 vs 14). Likely the Apple Ads stop (Nov 9 evening) and the end of the Meta weekend run.
+- Small day, but the flow did its job: 4 of 6 saved a flight, 4 of 6 granted notifications.
+- next_flight_window (24h): 24h 2, week 2, later 1, unanswered 1.
+
+**Near-flier test (289001, since Nov 4 23:50, 78 users)**
+- Hard offer tagged annual_or_pass: 10 ever, **9 really saw it** (13539E94's flight had already left). 2 new in 24h:
+  - **3E11602F: Yearly $49.99 on the hard page**, Nov 10 14:58, 2 minutes after install. DFW→SLC leaving 2 h later. Very anxious, monthly-plus, other, granted. One abandoned attempt first, then bought 10 s later. Opened the flight 5 times since.
+  - E3416FFA (LAX→CDG, 3.5 h out): restore failed, then 2 relaunches back to the hard page. A Yearly purchase started at 21:44 (after tapping a forecast-ready notification) with no complete or abandon recorded. No revenue. Calm, monthly-plus, social.
+- **annual_or_pass: 2 Yearly from 9 viewers, 0 passes** (yesterday 1 of 7). Trial arm (4 viewers): no change, closed.
+- Relaunches that got the hard offer again: 2 in 24h (both E3416FFA), 3 ever.
+- Timeline soft page: 20 users ever, 2 in 24h, 0 bought in 24h. 1 sale ever (6692D835).
+- Cap 199842: 0 skips in 24h, 5 ever. 200113: 1 skip in 24h (E3416FFA first_grade_viewed, offer still open: correct), 4 ever.
+- Cohort paid: near **8 of 78** (10%), soft **3 of 31** (10%). Soft baseline window was 2 of ~40. Of the 8 near buyers: 2 hard page, 1 timeline, 1 Plans, 4 Pro paywalls.
+
+**Purchases**
+- 24h: 1 paid, 3E11602F Yearly $49.99 (onboarding-near hard page). No cancellations, refunds or renewals.
+- Since change, paid: **5 Yearly $49.99, 5 Monthly, 2 passes $9.99** from 12 users. Gross $305.20 / proceeds about $259.42 at 85%. Excludes the 59952292 $39.99 renewal.
+- Cancellations stay at 2 (095E482E Yearly within 18 s, 065B30BE Monthly within 12 min), both still paid. No refunds.
+- 11 of 12 buyers fly within a week; 5 of 12 within 24 h.
+
+**Segments since change** (n=110; small)
+- By next_flight_window: 3d 4 of 15, 24h 5 of 31, week 1 of 17, later 1 of 44.
+- By notifications: granted 10 of 66, not-now 0 of 30, denied 1 of 3.
+- By source: social 6 of 48, app store 3 of 32, other 2 of 21, friend 0 of 6.
+- By feeling: very anxious 5 of 26, nervous 2 of 16, calm 3 of 51, uneasy 1 of 15.
+- By frequency: monthly-plus 6 of 45, few a year 4 of 45, yearly or less 1 of 17.
+- **Later fliers (44):** 27 saved a flight, 9 came back on a second day, 3 opened a forecast-ready alert, 6 saw forecast-moment, 1 bought.
+- 34 of the 103 users older than 30 h came back on a second day.
+
+**Pro paywalls** (opens = users)
+
+| Paywall / placement | 24h opens | Since Nov 3 21:30 opens | Purchases since |
+|---|---|---|---|
+| forecast-moment / first_grade_viewed | 3 | 23 | 0 |
+| forecast-moment / forecast_ready_opened | 0 | 4 | 0 |
+| forecast-moment / timeline_locked | 5 | 18 | **2 passes $9.99, 1 Monthly** |
+| pro-features / upgrade_from_settings | 0 | 5 | Yearly $49.99 + Monthly |
+| pro-features / pilot_reports_locked | 0 | 4 | Monthly |
+| pro-features / live_activity_locked | 2 | 5 | 0 |
+| pro-features / flight_limit_reached | 0 | 4 | 0 |
+| pro-features / updates_locked | **1 (first ever)** | 1 | 0 |
+
+- 0 transactions on Pro paywalls in 24h (2nd day running). timeline_locked: 3 of 18 openers bought, against 0 of 27 on first_grade_viewed and forecast_ready_opened.
+- timeline_locked fired 15 times for 5 users in 24h: 24078B42 hit it 6 times overnight (plus live_activity_locked twice), 467E53A4 4 times in one minute. Neither bought.
+- **updates_locked fired for the first time** (892724CF, 3d flier, via Has a flight 200212, pass shown as third product). Declined. Has a flight: 4 triggers in 24h, 7 since Nov 5, 0 passes from the link.
+- Still never fired: update_opened, live_status_locked, email_import_locked.
+
+**Recommendations (need Lanre's OK)**
+1. **Hold the near test one more viewer.** annual_or_pass is 2 Yearly from 9 viewers (22%), against 10% for the soft flow's onboarding users. At 10 viewers, decide whether to keep the hard page as the default for near fliers. No change needed now.
+2. **Design review: add the $9.99 pass to the timeline page** (open from Nov 8, `superwall/paywalls/onboarding-near/components/soft.tsx`). No new evidence today: 2 timeline viewers, 0 bought.
+3. Hold on Pro paywalls: 2 days with no Pro sale, but only 11 openers in 24h. Needs ~20 more timeline_locked openers before judging a change.
+
+Task context is current (versions 8, 8, 24, 15, 14, 12; audience 201414).
+
+## Day Wed Nov 11
+
+Run at 17:11 UTC. 24h = Nov 10 17:11 → Nov 11 17:11. Excluded: 3 `$SuperwallAlias:` ids (7-day pull). No review devices, simulators or Lanre's phone. "Since change" totals = yesterday's plus today's 24h, because Nov 3 21:00 is now past the 7-day query cap.
+
+**Health: OK. Watch: installs down to 1.**
+- Campaigns match the setup:
+  - 113534: 201414 (289001 100%) live; 200805 and 199841 paused.
+  - 113535: 200113 skip → 199842 skip → 199843 forecast-moment 100%.
+  - 113536: 200212 → 199276, both pro-features 100%.
+- Versions: near v8, soft v8, hard v24, forecast-moment v15, pro-features v14, pass-first v12 (archived). All as expected.
+- 24h: 10 triggers, 10 presented = 10 paywall opens (1 onboarding, 9 Pro), 0 held out, none missed. 0 webview, product-load or transaction failures, 0 `onboarding_fell_back`, 0 restore failures. processTerminated 19 (5 devices), harmless as before.
+- Pricing: every open in 24h showed $49.99 Yearly, no trial, $9.99 pass. No trial transaction.
+- **Installs: 1 in 24h** (yesterday 7, Nov 9 14). By day: Nov 7 20, Nov 8 16, Nov 9 10, Nov 10 3, Nov 11 1 so far. The one install got onboarding, so the flow isn't broken; traffic dried up. The Apple Ads "(Nov 10)" restart should be delivering, so worth a look in the ads review.
+- Forecast-check failures before departure: 0 (no hard-offer relaunches). After-departure relaunches: still 0, index → plans still unmeasured.
+- v8 hard-open fix: no new hard-page buyers, restorers or departed flights in 24h, nothing to check. Flag still true for 12 users (10DF3876 paid; E3416FFA's offer ran to its Nov 10 departure; the rest from before v8). 0 skips by 200113 in 24h.
+
+**Onboarding funnel**
+
+| | 24h | Since change (Nov 3 21:00) |
+|---|---|---|
+| Installs | 1 | 106 |
+| Onboarding users | 1 (near) | 111 (79 near, 31 soft, 1 hard) |
+| Reached source / find | 1 / 1 | 108 / 108 |
+| Notifications page | 0 | 99 |
+| Tapped Add flight | 0 | 84 |
+| Saved a flight in the flow | 0 | 56 |
+| Flight page / Plans page | 0 / 0 | 52 / 51 |
+| Notifications granted / not-now / denied | 0 / 0 / 0 | 66 / 30 / 3 |
+| Median feeling→source | 85 s (n=1) | ~30 s |
+| Onboarding purchases | 0 | 6 paid + 1 trial |
+
+- The one user, B56D18A1 (app 1.0.3, iPhone17,1, nervous, monthly-plus, **24h flier**, social), went back and forth through feeling/reassure/how/help several times, reached Find at 11:39 and left the app 45 s later without adding a flight. Not seen since.
+
+**Near-flier test (289001, since Nov 4 23:50, 79 users)**
+- No new hard-offer viewers in 24h. annual_or_pass stays **2 Yearly from 9 viewers, 0 passes**. Trial arm: no change, closed.
+- Relaunches that got the hard offer again: 0 in 24h, 3 ever.
+- Timeline soft page: 0 new viewers, 0 sales in 24h; 1 sale ever (6692D835).
+- Cap 199842: 0 skips in 24h, 5 ever. 200113: 0 in 24h, 4 ever.
+- Cohort paid: near 8 of 79 (10%), soft 3 of 31 (10%).
+
+**Purchases**
+- 24h: none. No cancellations, refunds or renewals.
+- Since change, paid: 5 Yearly $49.99, 5 Monthly, 2 passes $9.99 from 12 users. Gross $305.20 / proceeds about $259.42 at 85%. Unchanged.
+
+**Segments since change** (n=111; small; only change is the one new 24h flier)
+- By next_flight_window: 3d 4 of 15, 24h 5 of 32, week 1 of 17, later 1 of 44.
+- Later fliers: not recomputed (no new later fliers).
+
+**Pro paywalls** (24h; 7-day columns are Nov 4 17:00 → now)
+
+| Paywall / placement | 24h opens (users) | 7d opens | 7d purchases |
+|---|---|---|---|
+| forecast-moment / first_grade_viewed | 1 | 21 | 0 (1 pass abandoned) |
+| forecast-moment / forecast_ready_opened | 2 | 3 | 0 |
+| forecast-moment / timeline_locked | 1 | 16 | 2 passes $9.99, 1 Monthly |
+| pro-features / live_activity_locked | 2 | 5 | 0 |
+| pro-features / pilot_reports_locked | 1 | 3 | 1 Monthly |
+| pro-features / flight_limit_reached | 1 (AB054BCB, twice) | 4 | 0 |
+| pro-features / upgrade_from_settings | 0 | 5 | Yearly + Monthly |
+| pro-features / updates_locked | 0 | 1 | 0 |
+
+- 5 users, 9 opens, 0 transactions (3rd day without a Pro sale). All existing users from Nov 8–9 installs, plus AB054BCB (the Nov 2 pass refund).
+- Still never fired: update_opened, live_status_locked, email_import_locked.
+
+**Recommendations (need Lanre's OK)**
+1. **Hold everything.** 1 new user in 24h gives no signal on onboarding, the near test (needs 1 more hard-offer viewer to reach 10) or Pro paywalls (~20 more timeline_locked openers).
+2. **Check why installs fell to 1/day** (ads review, not a paywall change): Apple Ads "(Nov 10)" restart should be running; with no traffic, none of these tests move.
+3. Design review: $9.99 pass on the timeline page (open since Nov 8, `superwall/paywalls/onboarding-near/components/soft.tsx`). No new evidence.
+
+Task context is current (versions 8, 8, 24, 15, 14, 12; audience 201414).
+
+## Day Thu Nov 12
+
+Run at 17:12 UTC. 24h = Nov 11 17:00 → Nov 12 17:12. Excluded: 4 `$SuperwallAlias:` ids. No review devices, simulators or Lanre's phone. "Since change" = yesterday's totals + today's 24h (Nov 3 21:00 is past the 7-day cap). Pro 7-day columns = Nov 5 17:00 → now.
+
+**Health: OK.**
+- Campaigns match the setup:
+  - 113534: 201414 (289001 100%) live; 200805 and 199841 paused.
+  - 113535: 200113 skip → 199842 skip → 199843 forecast-moment 100%.
+  - 113536: 200212 → 199276, both pro-features 100%.
+- Versions: near v8, soft v8, hard v24, forecast-moment v15, pro-features v14, pass-first v12 (archived). All as expected.
+- 24h: 18 triggers = 16 presented (7 onboarding, 9 Pro) + 2 `no_rule_match` for C25B9E04, 0 held out. 0 webview, product-load, transaction or restore failures. processTerminated 27 (5 devices), harmless as before.
+- `onboarding_fell_back` 1: C25B9E04 (iPad8,12, new install) already had an active `pro` entitlement (bumpcast_pro_annual since Oct 28, so a Trybe comp, family share or reinstall). The no-entitlement rule correctly skipped the paywall; they answered the native questions and added DFW→HND. Not a problem.
+- Pricing: every open in 24h showed $49.99 Yearly, no trial, $9.99 pass. All 4 purchases periodType NORMAL. No trial transaction.
+- Installs back up: **6 in 24h** (yesterday 1).
+- Forecast-check failures before departure: **0**. E68187E4 relaunched 30 s after their first hard view (JFK→LAX, leaves today 22:59 UTC): index → checking → flight with a flight result. Still 0 since v7.
+- After-departure relaunches: still 0 (E3416FFA no opens). E68187E4 is the next chance after 22:59 UTC tonight.
+- v8 hard-open fix: no hard-page buyers, restorers or departed flights in 24h. E68187E4 true is correct (offer open). Today's two onboarding buyers bought on Plans and have no flag. 0 skips by 200113.
+
+**Onboarding funnel**
+
+| | 24h | Since change (Nov 3 21:00) |
+|---|---|---|
+| Installs | 6 | 112 |
+| Onboarding users (paywall) | 6 (5 new + 8D8CCC4B restarting, all near) | 116 (84 near, 31 soft, 1 hard) |
+| Reached source / find | 4 / 4 | 112 / 112 |
+| Notifications page | 4 | 103 |
+| Tapped Add flight in the flow | 1 | 85 |
+| Saved a flight in the flow | 1 | 57 |
+| Flight page / Plans page | 1 / 3 | 53 / 54 |
+| Notifications granted / not-now / denied | 3 / 1 / 0 | 69 / 31 / 3 |
+| Median feeling→source | 35 s (n=4) | ~30 s |
+| Onboarding purchases | **2 paid** | 8 paid + 1 trial |
+
+- BAB17CF0 (new) and 8D8CCC4B (Nov 5 install) both quit after the feeling page, 2 minutes apart.
+- 3 of 4 who reached Find skipped adding a flight and went to Plans; 2 of those 3 bought there.
+
+**Near-flier test (289001, since Nov 4 23:50, 84 users)**
+- **Hard offer reached 10 real viewers.** New: E68187E4 (calm, monthly-plus, 24h, app store, granted; JFK→LAX ~19 h out). Started Yearly, abandoned after 4 s, no buy yet; offer open until 22:59 UTC.
+- annual_or_pass: **2 Yearly from 10 viewers (20%), 0 passes.** Trial arm: no change.
+- Relaunches that got the hard offer again: 1 in 24h (E68187E4), 4 ever.
+- Timeline soft page: 0 new viewers in 24h. 1 timeline sale ever (6692D835). But 8954E777, a timeline-page viewer from Nov 5, bought a $9.99 pass on forecast-moment today.
+- Cap 199842: 0 skips in 24h, 5 ever. 200113: 0 in 24h, 4 ever.
+- Cohort paid: near **11 of 84** (13%), soft 3 of 31 (10%).
+
+**Purchases**
+
+| User | Product | Price | Where | From install | Answers |
+|---|---|---|---|---|---|
+| 8D9BE4F6 (GB) | Monthly | £ (= $9.28) | onboarding-near **Plans**, no flight | 1.5 min | uneasy, monthly-plus, week, social, not-now; added MAN→JFK right after |
+| 762FE51C | **Yearly $49.99** | $49.99 | onboarding-near **Plans**, no flight | 53 s | very anxious, monthly-plus, **later**, social, granted |
+| 8954E777 | **Pass $9.99** | $9.99 | forecast-moment / timeline_locked | 7 days | very anxious, few-a-year, 3d, social, granted; added LAX→SLC 2 min before |
+| AB054BCB | Monthly | $6.99 | forecast-moment / timeline_locked (4th open in an hour) | 14 days | very anxious, yearly-or-less, 3d, app store, not-now; Nov 2 pass refunder; declined updates_locked too |
+
+- No cancellations, refunds or renewals in 24h.
+- Since change, paid: **6 Yearly, 7 Monthly, 3 passes from 16 users.** Gross ~$381.45 / proceeds ~$324 at 85%.
+- Best Superwall day so far: 4 buyers.
+
+**Segments since change** (n=116; small; yesterday's counts + today)
+- By next_flight_window: 3d 5 of 15, 24h 5 of 33, week 2 of 18, **later 2 of 46** (762FE51C is the 2nd later-flier buyer, on Plans without a flight).
+- By notifications: granted 12 of 69, not-now **1 of 31** (first not-now buyer), denied 1 of 3.
+- By feeling: very anxious 7 of 27, uneasy 2 of 16, nervous 2 of 17, calm 3 of 52.
+- By source: social 9 of 51, app store 3 of 33, other 2 of 21, friend 0 of 6.
+- Later fliers: not recomputed beyond the 2 new (762FE51C bought, 91996DF1 declined Plans).
+
+**Pro paywalls**
+
+| Paywall / placement | 24h opens (users) | 7d openers | 7d buyers |
+|---|---|---|---|
+| forecast-moment / first_grade_viewed | 1 (1) | 15 | **0** |
+| forecast-moment / forecast_ready_opened | 0 (fired once, already presented) | 2 | 0 |
+| forecast-moment / timeline_locked | 7 (3) | 13 | **4** (2 passes, 2 Monthly) |
+| pro-features / updates_locked | 1 (AB054BCB) | 2 | 0 |
+| pro-features / live_activity_locked | 0 | 5 | 0 |
+| pro-features / flight_limit_reached | 0 | 3 | 0 |
+| pro-features / upgrade_from_settings | 0 | 3 | 0 |
+| pro-features / pilot_reports_locked | 0 | 1 | 0 |
+
+- Pro sales back after 3 days: 2 in 24h, both on timeline_locked.
+- 7 days: timeline_locked 4 of 13 openers bought (31%); first_grade_viewed 0 of 15.
+- Has a flight (200212): 1 trigger (AB054BCB updates_locked), declined, 0 passes from the link.
+- Still never fired: update_opened, live_status_locked, email_import_locked.
+
+**Recommendations (need Lanre's OK)**
+1. **Near test decision (10 viewers reached): keep the hard page for near fliers.** 2 Yearly from 10 hard viewers (20%) vs 10% for soft-flow onboarding users. No setting changes; rename 201414 to drop "test" if you want it to read as the default. Recheck after E68187E4's departure tonight.
+2. **Test a 50% holdout on first_grade_viewed** (campaign 113535, new "[12/11] Claude v1 Review - first grade holdout" audience above 199843). 0 of 15 bought there in 7 days (0 of ~23 since Nov 3) while timeline_locked converts 4 of 13. Expected: fewer early dismissals before people hit the timeline, without lost sales. Check timeline_locked conversion by arm after ~30 users.
+3. Design review: $9.99 pass on the timeline onboarding page (`superwall/paywalls/onboarding-near/components/soft.tsx`). New weak evidence: a timeline-page viewer bought a pass a week later.
+
+Task context is current (versions 8, 8, 24, 15, 14, 12; audience 201414).
+
+## Day Fri Nov 13
+
+Run at 18:11 UTC. 24h = Nov 12 18:11 → Nov 13 18:11. Excluded: 5 `$SuperwallAlias:` ids in 24h (49 in the 7-day pull). No review devices, simulators or Lanre's phone. "Since change" = yesterday's totals + today's 24h (Nov 3 21:00 is past the 7-day cap). Pro 7-day columns = Nov 6 18:00 → now.
+
+**Health: OK.**
+- Campaigns match the setup:
+  - 113534: 201414 (289001 100%) live; 200805 and 199841 paused.
+  - 113535: 200113 skip → 199842 skip → 199843 forecast-moment 100%.
+  - 113536: 200212 → 199276, both pro-features 100%.
+- Versions: near v8, soft v8, hard v24, forecast-moment v15, pro-features v14, pass-first v12 (archived). All as expected.
+- 24h: 11 triggers, 11 presented (5 onboarding, 6 Pro), 0 held out, none missed. 0 webview, product-load, transaction or restore failures. processTerminated 11 (5 devices), harmless as before. 4 `paywallProductsLoad_retry` were background preloads for 8D9BE4F6 (a subscriber, no paywall shown).
+- Pricing: every open in 24h showed $49.99 Yearly, no trial, $9.99 pass. Both purchases periodType NORMAL. No trial transaction.
+- `onboarding_fell_back` 1: AEECADCC (bought Monthly yesterday) got the onboarding again today, fell back with reason `offline` and finished the native flow. They're a subscriber, so no paywall was due. Not a problem; noted because a paying user re-entering onboarding is odd.
+- Forecast-check failures before departure: **0**. F28DF23E relaunched 1.5 min after their first hard view: index → checking → flight in 3 s with a flight result. Still 0 since v7.
+- After-departure relaunches: **still 0.** E68187E4 (left Nov 12 22:59) and F28DF23E (left Nov 13 16:55) haven't opened since. index → plans still unmeasured.
+- v8 hard-open fix: no hard-page buyers, restorers or departed flights in 24h. E68187E4 and F28DF23E still true (offer expired, but the flag clears only when the flow restarts, and they haven't relaunched). Expected, not a v8 failure. 0 skips by 200113.
+
+**Onboarding funnel**
+
+| | 24h | Since change (Nov 3 21:00) |
+|---|---|---|
+| Installs | 4 | 116 |
+| Onboarding users (paywall) | 4 (all near) | 120 (88 near, 31 soft, 1 hard) |
+| Reached source / find | 4 / 4 | 116 / 116 |
+| Notifications page | 4 | 107 |
+| Saved a flight in the flow | 3 | 60 |
+| Flight page / Plans page | 3 / 1 | 56 / 55 |
+| Notifications granted / not-now / denied | **0 / 4 / 0** | 69 / 35 / 3 |
+| Median feeling→source | 22 s (n=4) | ~30 s |
+| Onboarding purchases | **1 paid** | 9 paid + 1 trial |
+
+- Good flow day: 4 of 4 reached Find, 3 of 4 saved a flight.
+- All 4 picked "not now" on notifications (usual rate ~30%). n=4, likely noise; AEECADCC granted later from Add flight. Watch tomorrow.
+- next_flight_window: 24h 3, week 1.
+
+**Near-flier test (289001, since Nov 4 23:50, 88 users)**
+- **Hard offer: 11 real viewers.** New: F28DF23E (nervous, yearly-or-less, 24h, social, not-now; ISP→RSW ~14 h out). Saw it twice (relaunch), no purchase attempt. E68187E4 (yesterday) left without buying.
+- annual_or_pass: **2 Yearly from 11 viewers (18%), 0 passes.** Last 3 viewers: 0 buys. Trial arm: no change.
+- Relaunches that got the hard offer again: 1 in 24h (F28DF23E), 5 ever.
+- Timeline soft page: 2 new viewers (67D4544A YYC→OGG 29 h out; 06A899D3 week flier, forecast too early), 0 bought on the page. But **6913763D, a timeline-page viewer from Nov 8, bought Monthly on forecast-moment today**: the 2nd timeline-page viewer to buy later on Pro (8954E777 yesterday).
+- Cap 199842: 0 skips in 24h, 5 ever. 200113: 0 in 24h, 4 ever.
+- Cohort paid: near **13 of 88** (15%), soft 3 of 31 (10%).
+
+**Purchases**
+
+| User | Product | Price | Where | From install | Answers |
+|---|---|---|---|---|---|
+| AEECADCC | Monthly | $6.99 | onboarding-near **Plans**, no flight | 40 s | uneasy, few-a-year, 24h, app store, not-now (in-flow answers); then added 9+ flights in 3 h (crew-like use) |
+| 6913763D | Monthly | $6.99 | forecast-moment / timeline_locked (2nd open, 10 s after the 1st) | 4.8 days | very anxious, yearly-or-less, 3d, social, granted; saw timeline page Nov 8 |
+
+- No cancellations, refunds or renewals in 24h.
+- Since change, paid: **6 Yearly, 9 Monthly, 3 passes from 18 users.** Gross ~$395.43 / proceeds ~$336 at 85%.
+- 3rd Plans-page buyer in 2 days (8D9BE4F6, 762FE51C, AEECADCC): all skipped adding a flight and bought within 2 min of install.
+
+**Segments since change** (n=120; small; carried forward + today)
+- By next_flight_window: 3d 6 of 15, 24h 6 of 36, week 2 of 19, later 2 of 46.
+- By notifications: granted 13 of 69, not-now 2 of 35, denied 1 of 3.
+- By feeling: very anxious 8 of 27, uneasy 3 of 17, nervous 2 of 20, calm 3 of 52.
+- By source: social 10 of 52, app store 4 of 34, other 2 of 23, friend 0 of 6.
+- Later fliers: no new later fliers; still 2 of 46.
+
+**Pro paywalls**
+
+| Paywall / placement | 24h opens (users) | 7d openers | 7d buyers |
+|---|---|---|---|
+| forecast-moment / timeline_locked | 4 (2) | 14 | **5** (2 passes, 3 Monthly) |
+| forecast-moment / first_grade_viewed | 0 (didn't fire) | 13 | **0** |
+| forecast-moment / forecast_ready_opened | 2 (2) | 4 | 0 |
+| pro-features / live_activity_locked | 0 | 5 | 0 |
+| pro-features / flight_limit_reached | 0 | 3 | 0 |
+| pro-features / upgrade_from_settings | 0 | 2 | 0 |
+| pro-features / updates_locked | 0 | 2 | 0 |
+| pro-features / pilot_reports_locked | 0 | 1 | 0 |
+
+- 7 days: timeline_locked **5 of 14 openers bought (36%)**; first_grade_viewed 0 of 13; every other placement 0 of 17.
+- 24h declines: 67D4544A (timeline_locked, 3 min after onboarding), D0B7BB36 and 3BDAC7E9 (forecast_ready_opened, 3 s and 36 s).
+- Has a flight (200212): 0 triggers in 24h. Still never fired: update_opened, live_status_locked, email_import_locked.
+
+**Recommendations (need Lanre's OK)**
+1. **Still open from yesterday: 50% holdout on first_grade_viewed** (campaign 113535, new "[13/11] Claude v1 Review - first grade holdout" audience above 199843, event first_grade_viewed, holdout 50 / forecast-moment 50). Evidence stronger: 0 of 13 there vs 5 of 14 on timeline_locked in 7 days. Expected: no lost sales, fewer early dismissals. Read timeline_locked conversion by arm after ~30 users.
+2. **Near test: keep the hard page, but stop calling it a win.** 2 of 11 (18%) with the last 3 viewers at 0. Soft-flow onboarding users are 10%; the near cohort overall is 15% (much of it from Plans and Pro). No change; recheck at 15 viewers.
+3. **Hold the timeline-page pass idea** (`superwall/paywalls/onboarding-near/components/soft.tsx`): timeline viewers are buying later on timeline_locked (2 in 2 days), so the page may be doing its job by leading into the app. No change.
+
+Task context is current (versions 8, 8, 24, 15, 14, 12; audience 201414).
+
+## Day Sat Nov 14
+
+Run at 17:11 UTC. 24h = Nov 13 17:00 → Nov 14 17:11. Excluded: 1 `$SuperwallAlias:` id and EA298607 (Lanre's own account, opened onboarding-soft preload only). No review devices, simulators or Lanre's phone. "Since change" = yesterday's totals + today's 24h. Pro 7-day columns = Nov 7 17:00 → now.
+
+**Health: OK.**
+- Campaigns match the setup:
+  - 113534: 201414 (289001 100%) live; 200805 and 199841 paused.
+  - 113535: 200113 skip → 199842 skip → 199843 forecast-moment 100%.
+  - 113536: 200212 → 199276, both pro-features 100%.
+- Versions: near v8, soft v8, hard v24, forecast-moment v15, pro-features v14, pass-first v12 (archived). All as expected.
+- 24h: 7 triggers, 7 presented (3 onboarding, 4 Pro), 0 held out, none missed. 0 webview, product-load or transaction failures. 1 `restore_fail` (EAF16DB3, Settings restore with nothing to restore; then opened upgrade_from_settings and left). processTerminated 26 (8 devices), harmless as before.
+- Pricing: every open in 24h showed $49.99 Yearly, no trial, $9.99 pass. No transactions at all, so no trial.
+- Forecast-check failures before departure: **0** (no before-departure relaunches today). Still 0 since v7.
+- After-departure relaunches: **still 0 measured.** E68187E4, F28DF23E and AAF78A05 haven't reopened since their flights left.
+- v8 hard-open fix: no hard-page buyers, restorers or departed flights in 24h. AAF78A05 true (flight left 13:20 today, no relaunch yet), expected. 3E11602F (Nov 10 hard buyer) still false. 0 skips by 200113.
+- **Watch: 2nd paying user re-entering onboarding.** 3E11602F (Yearly since Nov 10, uses the app daily) logged `onboarding_fell_back` reason `offline` at 00:56 today, same as AEECADCC yesterday (Monthly buyer). Both bought inside the onboarding paywall. Looks like an in-flow purchase may not mark onboarding as done in the app, so a later launch starts the onboarding loader again (`ios/BumpCast/Services/Onboarding.swift` fallBack path). Harmless when online (no-entitlement rule skips the paywall), but worth a code check. Not verified.
+
+**Onboarding funnel**
+
+| | 24h | Since change (Nov 3 21:00) |
+|---|---|---|
+| Installs | 3 | 119 |
+| Onboarding users (paywall) | 3 (all near, all new) | 123 (91 near, 31 soft, 1 hard) |
+| Reached source / find | 3 / 3 | 119 / 119 |
+| Notifications page | 2 | 109 |
+| Saved a flight in the flow | 1 | 61 |
+| Flight page / Plans page | 1 / 1 | 57 / 56 |
+| Notifications granted / not-now / denied | 2 / 0 / 0 | 71 / 35 / 3 |
+| Median feeling→source | 33 s (n=3) | ~30 s |
+| Onboarding purchases | **0** | 9 paid + 1 trial |
+
+- 3C605CAA (later flier) tapped Add flight on Find and stopped there (no flight saved, no further events).
+- D0875B68 (later flier) skipped adding, declined Plans in 6 s, then tapped Add flight in the app.
+- Notifications back to normal: 2 of 2 granted (yesterday 0 of 4).
+
+**Near-flier test (289001, since Nov 4 23:50, 91 users)**
+- **Hard offer: 12 real viewers.** New: AAF78A05 (calm, few-a-year, 24h, social, granted; EWR→POP, ~18 h out). Saw the flight page, no purchase attempt, didn't reopen before departure.
+- annual_or_pass: **2 Yearly from 12 viewers (17%), 0 passes.** Last 4 viewers: 0 buys, 0 transaction starts. Trial arm: no change.
+- Relaunches that got the hard offer again: 0 in 24h, 5 ever.
+- Timeline soft page: 0 new viewers. 58A51583 (timeline viewer, week flier) hit first_grade_viewed (declined 19 s) and timeline_locked today, no buy.
+- Cap 199842: 0 skips in 24h, 5 ever. 200113: 0 in 24h, 4 ever.
+- Cohort paid: near **13 of 91** (14%), soft 3 of 31 (10%).
+
+**Purchases**
+- **0 purchases in 24h** (first zero day since Nov 10).
+- **Cancellation: AEECADCC turned off renewal on Monthly $6.99** at 01:33 today, ~30 h after buying on Plans (reason UNSUBSCRIBE). Uneasy, few-a-year, 24h, app store, not-now. They added 9+ flights in 3 h on day one (crew-like use). Pro stays active to the end of the month.
+- Since change, paid: 6 Yearly, 9 Monthly (1 now cancelling), 3 passes from 18 users. Gross ~$395.43 / proceeds ~$336 at 85%.
+
+**Segments since change** (n=123; small; carried forward + today)
+- By next_flight_window: 3d 6 of 15, 24h 6 of 37, week 2 of 19, later **2 of 48**.
+- By notifications: granted 13 of 71, not-now 2 of 35, denied 1 of 3.
+- By feeling: very anxious 8 of 28, uneasy 3 of 18, nervous 2 of 20, calm 3 of 53.
+- By source: social 10 of 53, app store 4 of 36, other 2 of 23, friend 0 of 6.
+- Later fliers: 2 new, 0 flights saved in the flow, 0 bought.
+
+**Pro paywalls**
+
+| Paywall / placement | 24h opens (users) | 7d openers | 7d buyers |
+|---|---|---|---|
+| forecast-moment / timeline_locked | 2 (2) | 13 | **5** |
+| forecast-moment / first_grade_viewed | 1 (1) | 11 | **0** |
+| forecast-moment / forecast_ready_opened | 0 | 4 | 0 |
+| pro-features / live_activity_locked | 0 | 5 | 0 |
+| pro-features / upgrade_from_settings | 1 (EAF16DB3) | 3 | 0 |
+| pro-features / updates_locked | 0 | 2 | 0 |
+| pro-features / flight_limit_reached | 0 | 2 | 0 |
+| pro-features / pilot_reports_locked | 0 | 1 | 0 |
+
+- 24h: 4 opens, 0 transaction starts. C3A8C2FA declined timeline_locked in 4 s; 58A51583 declined first_grade_viewed in 19 s.
+- 7 days: timeline_locked 5 of 13 openers bought (38%); first_grade_viewed 0 of 11; all other placements 0 of 17.
+- Has a flight (200212): 0 triggers. Still never fired: update_opened, live_status_locked, email_import_locked.
+
+**Recommendations (need Lanre's OK)**
+1. **Still open: 50% holdout on first_grade_viewed** (campaign 113535, new "[14/11] Claude v1 Review - first grade holdout" audience above 199843, event first_grade_viewed, holdout 50 / forecast-moment 50). Evidence unchanged in direction: 0 of 11 vs timeline_locked 5 of 13 in 7 days. Read timeline_locked conversion by arm after ~30 users.
+2. **Check whether an in-onboarding purchase marks onboarding done** (`ios/BumpCast/Services/Onboarding.swift`): 2 paying users (3E11602F, AEECADCC) re-entered the onboarding loader on later launches. Read-only check in your session; app update only if confirmed.
+3. **Near test: hold.** 2 of 12 (17%), 0 of the last 4. No change; recheck at 15 viewers.
+
+Task context is current (versions 8, 8, 24, 15, 14, 12; audience 201414).
